@@ -1,6 +1,6 @@
 ﻿{
   "compilerOptions": {
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "strictNullChecks": true,
     "sourceMap": true,
     "moduleResolution": "node",
@@ -10,8 +10,7 @@
     "jsx": "react",
     "allowJs": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true
   },
-  "include": ["Content/**/*.ts", "Content/**/*.tsx"],
+  "include": ["Content/**/*.ts", "Content/**/*.tsx", "Content/**/**/*.ts", "Content/**/**/*.tsx"],
   "exclude": ["node_modules", "wwwroot"]
 }
