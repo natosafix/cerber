@@ -1,0 +1,17 @@
+﻿{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "module": "CommonJS",
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "jsx": "react",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
+  },
+  "include": ["Content/**/*.ts", "Content/**/*.tsx"],
+  "exclude": ["node_modules", "wwwroot"]
+}

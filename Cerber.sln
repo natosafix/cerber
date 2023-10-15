@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cerber", "Cerber\Cerber.csproj", "{CABCD899-974C-4256-9E39-84EE163EF05C}"
 EndProject
 Global
@@ -12,5 +15,11 @@ Global
 		{CABCD899-974C-4256-9E39-84EE163EF05C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CABCD899-974C-4256-9E39-84EE163EF05C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CABCD899-974C-4256-9E39-84EE163EF05C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {344FFA77-8840-4F2D-9653-4A1673EC13CD}
 	EndGlobalSection
 EndGlobal
