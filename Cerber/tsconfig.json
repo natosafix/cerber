@@ -11,6 +11,6 @@
     "allowJs": true,
     "resolveJsonModule": true,
   },
-  "include": ["Content/**/*.ts", "Content/**/*.tsx", "Content/**/**/*.ts", "Content/**/**/*.tsx"],
+  "include": ["Content/**/*.ts", "Content/**/*.tsx", "Content/**/**/*.ts", "Content/**/**/*.tsx", "declaration.d.ts"],
   "exclude": ["node_modules", "wwwroot"]
 }
