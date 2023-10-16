@@ -1,0 +1,26 @@
+﻿{
+  "tabWidth": 4,
+  "printWidth": 120,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "overrides": [
+    {
+      "files": "*.scss",
+      "options": {
+        "singleQuote": false
+      }
+    },
+    {
+      "files": "package.json",
+      "options": {
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": "Scripts/app/**/*.js",
+      "options": {
+        "trailingComma": "none"
+      }
+    }
+  ]
+}

@@ -1,4 +1,14 @@
 ﻿import * as React from 'react';
 import * as ReactDom from 'react-dom';
+import { onDomContentLoaded } from '../../Components/utils/domHelpers';
+import { Header } from '../../Components/header/header';
 
-ReactDom.render(<h1>.....fes....!</h1>, document.getElementById("index"));
+onDomContentLoaded(() =>
+    ReactDom.render(
+        <>
+            <Header />
+            Hello, World!!
+        </>,
+        document.getElementById('index'),
+    ),
+);

@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const OUTPUT_PATH = `${__dirname}/wwwroot`;
@@ -6,11 +6,11 @@ const OUTPUT_PATH = `${__dirname}/wwwroot`;
 module.exports = {
     mode: 'development',
     entry: {
-        index: "./Content/entries/pages/index.tsx"
+        index: './Content/entries/pages/index.tsx',
     },
     output: {
-        path: `${OUTPUT_PATH}/js`,
-        filename: "reactApp.js"
+        path: `${OUTPUT_PATH}`,
+        filename: 'js/[name].js',
     },
     watch: true,
     devtool: 'source-map',
