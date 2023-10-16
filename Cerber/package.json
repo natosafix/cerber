@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "tsc": "./node_modules/typescript/bin/tsc",
-    "start": "webpack --config webpack.config.js"
+    "startDev": "webpack --config webpack.config.js --mode development",
+    "startProd": "webpack --config webpack.config.js --mode production"    
   },
   "repository": {
     "type": "git",

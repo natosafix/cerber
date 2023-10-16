@@ -1,7 +1,8 @@
 ﻿'use strict';
 
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const OUTPUT_PATH = `${__dirname}/wwwroot`;
+const path = require('path');
+const OUTPUT_PATH = path.join(__dirname, 'wwwroot');
 
 module.exports = {
     mode: 'development',
@@ -9,8 +10,8 @@ module.exports = {
         index: './Content/entries/pages/index.tsx',
     },
     output: {
-        path: `${OUTPUT_PATH}`,
-        filename: 'js/[name].js',
+        path: OUTPUT_PATH,
+        filename: path.join('js', '[name].js'),
     },
     watch: true,
     devtool: 'source-map',
@@ -22,11 +23,9 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
-                exclude: /node_modules/
+                exclude: /node_modules/,
             },
-        ]
+        ],
     },
-    plugins: [
-        new CleanWebpackPlugin([OUTPUT_PATH])
-    ]
-}
+    plugins: [new CleanWebpackPlugin([OUTPUT_PATH])],
+};
