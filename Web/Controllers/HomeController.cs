@@ -1,16 +1,16 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Cerber.Models;
+using Web.Models;
 
-namespace Cerber.Controllers;
+namespace Web.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<HomeController> logger;
 
     public HomeController(ILogger<HomeController> logger)
     {
-        _logger = logger;
+        this.logger = logger;
     }
 
     [HttpGet("/[controller]/index")]

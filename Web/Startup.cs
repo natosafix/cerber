@@ -1,4 +1,4 @@
-﻿namespace Cerber;
+﻿namespace Web;
 
 public class Startup
 {
