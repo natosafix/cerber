@@ -1,6 +1,7 @@
 ﻿'use strict';
 
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 const OUTPUT_PATH = path.join(__dirname, 'wwwroot');
 
@@ -27,9 +28,28 @@ module.exports = {
             },
             {
                 test: /\.(scss|css)$/,
-                use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: path.resolve(__dirname, 'wwwroot', 'css'),
+                        },
+                    },
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: {
+                                mode: 'global',
+                            },
+                        },
+                    },
+                    'postcss-loader',
+                ],
             },
         ],
     },
-    plugins: [new CleanWebpackPlugin([OUTPUT_PATH])],
+    plugins: [
+        new CleanWebpackPlugin([OUTPUT_PATH]),
+        new MiniCssExtractPlugin({ filename: path.join('css', '[name].css') }),
+    ],
 };
