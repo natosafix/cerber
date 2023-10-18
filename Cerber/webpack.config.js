@@ -27,24 +27,23 @@ module.exports = {
                 exclude: /node_modules/,
             },
             {
-                test: /\.(scss|css)$/,
+                test: /\.(s(a|c)ss)$/,
                 use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            publicPath: path.resolve(__dirname, 'wwwroot', 'css'),
-                        },
-                    },
+                    MiniCssExtractPlugin.loader,
                     {
                         loader: 'css-loader',
                         options: {
-                            modules: {
-                                mode: 'global',
-                            },
+                            sourceMap: true,
+                            modules: true,
                         },
                     },
                     'postcss-loader',
-                    'sass-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: true,
+                        },
+                    },
                 ],
             },
         ],
