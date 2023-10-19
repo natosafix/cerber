@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import { Group, Button, Textarea, Link, Gapped } from '@skbkontur/react-ui';
+import { Button, Gapped } from '@skbkontur/react-ui';
 
 import styles from './header.scss';
 
