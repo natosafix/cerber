@@ -14,11 +14,3 @@ onDomContentLoaded(() =>
     ),
 );
 
-// let place = document.getElementById('index');
-// let root = createRoot(place!);
-// root.render(
-//     <>
-//         <Header />
-//         Hello, World!!
-//     </>,
-// );
