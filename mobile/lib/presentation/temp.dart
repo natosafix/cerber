@@ -21,7 +21,7 @@ class Temp extends StatelessWidget {
           Text("Main screen; token: $token"),
           FilledButton(
             onPressed: () {
-              context.read<AuthenticationBloc>().add(AuthenticationLogOutEvent());
+              context.read<AuthenticationBloc>().add(Unauthenticate());
             },
             child: const Text("Выйти"),
           ),

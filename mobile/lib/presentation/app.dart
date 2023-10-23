@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'authentication/authentication_bloc/authentication_bloc.dart';
-import 'authentication/signup_or_login_screen.dart';
-import 'splash_page.dart';
+import 'authentication/initial_screen.dart';
+import 'authentication/splash_page.dart';
 import 'temp.dart';
 
 class MainApp extends StatefulWidget {
@@ -21,7 +21,11 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       navigatorKey: _navigatorKey,
+      theme: ThemeData(),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.system,
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
@@ -33,7 +37,7 @@ class _MainAppState extends State<MainApp> {
                 );
               case Unauthenticated():
                 _navigator.pushAndRemoveUntil(
-                  SignUpOrLogInScreen.route(),
+                  InitialScreen.route(),
                   (route) => false,
                 );
               case Unknown():

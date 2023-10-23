@@ -12,12 +12,12 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   static const _tokenKey = 'token';
 
   AuthenticationBloc() : super(Unknown()) {
-    on<AuthenticationCheck>(_onAuthenticationCheck);
-    on<AuthenticationLogInEvent>(_onLogIn);
-    on<AuthenticationLogOutEvent>(_onLogOut);
+    on<CheckAuthentication>(_onCheckAuthentication);
+    on<Authenticate>(_onAuthenticate);
+    on<Unauthenticate>(_onUnauthenticate);
   }
 
-  void _onAuthenticationCheck(AuthenticationCheck event, Emitter<AuthenticationState> emit) async {
+  void _onCheckAuthentication(CheckAuthentication event, Emitter<AuthenticationState> emit) async {
     final savedToken = await _storage.read(key: _tokenKey);
 
     if (savedToken == null) {
@@ -27,7 +27,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     emit(Authenticated(token: savedToken));
   }
 
-  void _onLogIn(AuthenticationLogInEvent event, Emitter<AuthenticationState> emit) async {
+  void _onAuthenticate(Authenticate event, Emitter<AuthenticationState> emit) async {
     final token = event.token;
 
     await _storage.write(key: _tokenKey, value: token);
@@ -35,9 +35,9 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     emit(Authenticated(token: token));
   }
 
-  void _onLogOut(AuthenticationLogOutEvent event, Emitter<AuthenticationState> emit) async {
+  void _onUnauthenticate(Unauthenticate event, Emitter<AuthenticationState> emit) async {
     await _storage.delete(key: _tokenKey);
-    
+
     emit(Unauthenticated());
   }
 }

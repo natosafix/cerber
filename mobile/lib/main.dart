@@ -7,12 +7,12 @@ import 'presentation/app.dart';
 import 'presentation/authentication/authentication_bloc/authentication_bloc.dart';
 
 void main() async {
-  final authenticationRepository = MockAuthRepo();
+  final mockAuthRepo = MockAuthRepo();
 
   final app = RepositoryProvider<AuthenticationRepository>.value(
-    value: authenticationRepository,
+    value: mockAuthRepo,
     child: BlocProvider(
-      create: (context) => AuthenticationBloc()..add(AuthenticationCheck()),
+      create: (context) => AuthenticationBloc()..add(CheckAuthentication()),
       child: const MainApp(),
     ),
   );

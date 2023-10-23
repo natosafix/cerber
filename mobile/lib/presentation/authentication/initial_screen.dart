@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:project/presentation/authentication/login_signup/login_signup_screen.dart';
 
-import 'log_in_screen.dart';
-
-class SignUpOrLogInScreen extends StatelessWidget {
-  const SignUpOrLogInScreen({super.key});
+class InitialScreen extends StatelessWidget {
+  const InitialScreen({super.key});
 
   static Route route() {
-    return MaterialPageRoute(builder: (context) => const SignUpOrLogInScreen());
+    return MaterialPageRoute(builder: (context) => const InitialScreen());
   }
 
   @override
@@ -43,11 +42,15 @@ class SignUpOrLogInScreen extends StatelessWidget {
     );
   }
 
-  void _signUpPressed(BuildContext context) {}
+  void _signUpPressed(BuildContext context) {
+    Navigator.of(context).push(
+      LoginSignupScreen.route(withName: true),
+    );
+  }
 
   void _logInPressed(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const LogInScreen()),
+      LoginSignupScreen.route(withName: false),
     );
   }
 }
