@@ -48,14 +48,14 @@ class LoginSignupBloc extends Bloc<LoginSignupEvent, LoginSignupState> {
   }
 
   Future<Result<String, DioException>> finish() async {
-    final email = state.email.value;
-    final password = state.password.value;
+    final email = state.email.value.trim();
+    final password = state.password.value.trim();
 
     if (_withName) {
       final res = await _authenticationRepository.signUp(SignUpRequest(
         email: email,
         password: password,
-        name: state.name!.value,
+        name: state.name!.value.trim(),
       ));
 
       if (res.isSuccess) return Success(res.success.token);
@@ -63,7 +63,7 @@ class LoginSignupBloc extends Bloc<LoginSignupEvent, LoginSignupState> {
       return Failure(res.failure);
     }
 
-    final res = await _authenticationRepository.logIn(LoginRequest(
+    final res = await _authenticationRepository.logIn(LogInRequest(
       email: email,
       password: password,
     ));

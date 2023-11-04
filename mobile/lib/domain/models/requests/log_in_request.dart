@@ -3,16 +3,16 @@ import 'package:json_annotation/json_annotation.dart';
 part 'log_in_request.g.dart';
 
 @JsonSerializable()
-class LoginRequest {
+class LogInRequest {
   final String email;
   final String password;
 
-  LoginRequest({
+  LogInRequest({
     required this.email,
     required this.password,
   });
 
-  factory LoginRequest.fromJson(Map<String, dynamic> json) => _$LogInRequestFromJson(json);
+  factory LogInRequest.fromJson(Map<String, dynamic> json) => _$LogInRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$LogInRequestToJson(this);
 }

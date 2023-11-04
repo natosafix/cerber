@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/repositories/authentication_repository.dart';
+import '../../../utils/theme_util.dart';
 import '../authentication_bloc/authentication_bloc.dart';
 import 'login_signup_bloc/login_signup_bloc.dart';
 
@@ -45,7 +46,7 @@ class _LoginSignupViewState extends State<_LoginSignupView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        foregroundColor: MediaQuery.of(context).platformBrightness == Brightness.light ? Colors.black : Colors.white,
+        foregroundColor: ThemeUtil.isLight(context) ? Colors.black : Colors.white,
         elevation: 0,
         title: Text(widget.withName ? "Создать аккаунт" : "Войти в аккаунт"),
         centerTitle: true,

@@ -8,7 +8,7 @@ import '../../utils/result.dart';
 
 class MockAuthRepo implements AuthenticationRepository {
   @override
-  Future<Result<AuthenticationResponse, DioException>> logIn(LoginRequest logInRequest) async {
+  Future<Result<AuthenticationResponse, DioException>> logIn(LogInRequest logInRequest) async {
     await Future.delayed(const Duration(seconds: 1));
 
     return Success(AuthenticationResponse(token: "LogInToken"));
