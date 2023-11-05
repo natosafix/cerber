@@ -107,4 +107,8 @@
       <Folder Include="wwwroot\js" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    </ItemGroup>
+
 </Project>
