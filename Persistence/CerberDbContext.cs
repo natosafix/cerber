@@ -1,10 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistence;
 
-public class CerberDbContext : DbContext
+public sealed class CerberDbContext : IdentityDbContext<IdentityUser>
 {
-    public CerberDbContext(DbContextOptions<CerberDbContext> options) : base(options) { }
+    public CerberDbContext(DbContextOptions<CerberDbContext> options) : base(options)
+    {
+        Database.EnsureCreated();
+    }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
