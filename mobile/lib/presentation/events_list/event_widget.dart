@@ -41,7 +41,7 @@ class EventWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 7),
                   Text(
-                    event.description,
+                    event.location,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),

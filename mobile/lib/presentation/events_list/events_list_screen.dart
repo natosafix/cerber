@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/repositories/mock_events_repo.dart';
 import '../authentication/authentication_bloc/authentication_bloc.dart';
+import '../event_detail/event_detail_screen.dart';
 import 'event_widget.dart';
 import 'events_bloc/events_bloc.dart';
 
@@ -46,7 +47,7 @@ class _EventsListViewState extends State<_EventsListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar( // temp appbar
+      appBar: AppBar(
         actions: [
           IconButton(
             onPressed: () {
@@ -58,7 +59,7 @@ class _EventsListViewState extends State<_EventsListView> {
       ),
       body: BlocBuilder<EventsBloc, EventsState>(
         builder: (context, state) {
-          if (state.events.isEmpty && state.hasReachedMax) {
+          if (state.hasReachedMax && state.events.isEmpty) {
             return const Center(
               child: Text("У вас нет мероприятий"),
             );
@@ -78,10 +79,13 @@ class _EventsListViewState extends State<_EventsListView> {
                   ),
                 );
               }
-
+              final event = state.events[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: EventWidget(state.events[index]),
+                child: GestureDetector(
+                  onTap: () => Navigator.of(context).push(EventDetailScreen.route(event)),
+                  child: EventWidget(event),
+                ),
               );
             },
           );
