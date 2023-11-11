@@ -9,6 +9,7 @@ module.exports = {
     mode: 'development',
     entry: {
         index: './Content/entries/pages/index.tsx',
+        eventAdmin: './Content/entries/pages/eventAdmin.tsx',
     },
     output: {
         path: OUTPUT_PATH,

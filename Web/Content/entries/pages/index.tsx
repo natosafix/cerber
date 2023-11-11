@@ -2,7 +2,7 @@
 import * as ReactDom from 'react-dom';
 import { onDomContentLoaded } from '../../Components/utils/domHelpers';
 import { Header } from '../../Components/header/header';
-import { CerberThemeProvider } from '../Shared/CerberThemeProvider';
+import { CerberThemeProvider } from '../Shared/ThemeProvider/CerberThemeProvider';
 
 
 onDomContentLoaded(() =>
