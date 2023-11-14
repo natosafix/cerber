@@ -12,6 +12,7 @@
         padding: 15px 5px;
         border-radius: 10px;
         width: 210px;
+        height: 100%;
     }
     
     .contentWrapper {
@@ -19,12 +20,17 @@
         margin: auto;
         
         .questionLabel {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: bold;
         }
 
         .questionInput {
             width: 70%;
+        }
+        
+        .imagePreview {
+            width: 100%;
+            height: auto;
         }
     }
 }

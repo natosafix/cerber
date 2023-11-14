@@ -4,6 +4,8 @@ import { Button, Gapped, Input } from '@skbkontur/react-ui';
 import styles from './eventAdmin.scss';
 import { LocalStorageSaver } from '../../Helpers/LocalStorageSaver/LocalStorageSaver';
 import { SingleStringQuestion } from './questions/singleStringQuestion';
+import { MultiStringQuestion } from './questions/multiStringQuestion';
+import { ImageLoader } from './questions/imageLoader';
 
 
 export const EventCoverSheet: React.FC = () => {
@@ -16,7 +18,8 @@ export const EventCoverSheet: React.FC = () => {
             <ValidationContainer>
                 <Gapped gap={30} vertical={true}>
                     <SingleStringQuestion storageSaver={localStorageSaver} title={'Название'} />
-                    <SingleStringQuestion storageSaver={localStorageSaver} title={'Описание'} />
+                    <MultiStringQuestion storageSaver={localStorageSaver} title={'Подробное описание'} />
+                    <ImageLoader storageSaver={localStorageSaver} title={'Обложка'} />
                 </Gapped>
                 <Button type={'submit'}>Отправить</Button>
             </ValidationContainer>
