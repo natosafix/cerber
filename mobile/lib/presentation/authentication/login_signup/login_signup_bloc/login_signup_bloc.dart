@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
-import '../../../../domain/models/requests/log_in_request.dart';
-import '../../../../domain/models/requests/sign_up_request.dart';
-import '../../../../domain/repositories/authentication_repository.dart';
+import '../../../../domain/repositories/authentication_repository/authentication_repository.dart';
+import '../../../../domain/repositories/authentication_repository/requests/log_in_request.dart';
+import '../../../../domain/repositories/authentication_repository/requests/sign_up_request.dart';
 import '../../../../utils/result.dart';
 import 'formz_inputs/email.dart';
 import 'formz_inputs/name.dart';

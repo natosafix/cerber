@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../../domain/models/models/event.dart';
+import '../../domain/models/event.dart';
 import '../../domain/repositories/events_remote_repository.dart';
 import '../../utils/result.dart';
 

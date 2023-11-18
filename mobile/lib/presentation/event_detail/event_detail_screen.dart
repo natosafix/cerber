@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/models/models/event.dart';
+import '../../domain/models/event.dart';
 
 class EventDetailScreen extends StatefulWidget {
   const EventDetailScreen(this.event, {super.key});
@@ -157,16 +157,14 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     super.initState();
     _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        _buttonsHeight = (_buttonsKey.currentContext?.findRenderObject() as RenderBox).size.height;
-      });
+      final height = (_buttonsKey.currentContext?.findRenderObject() as RenderBox).size.height;
+      setState(() => _buttonsHeight = height);
     });
   }
 
   void _onScroll() {
-    setState(() {
-      showTitle = _scrollController.hasClients && _scrollController.offset < (200 - kToolbarHeight);
-    });
+    final newValue = _scrollController.hasClients && _scrollController.offset < (200 - kToolbarHeight);
+    if (showTitle != newValue) setState(() => showTitle = newValue);
   }
 
   @override

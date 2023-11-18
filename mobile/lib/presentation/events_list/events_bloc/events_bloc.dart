@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/transformers.dart';
 
-import '../../../domain/models/models/event.dart';
+import '../../../domain/models/event.dart';
 import '../../../domain/repositories/events_remote_repository.dart';
 
 part 'events_event.dart';

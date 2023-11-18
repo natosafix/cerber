@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 
-import '../../domain/models/requests/log_in_request.dart';
-import '../../domain/models/requests/sign_up_request.dart';
-import '../../domain/models/responses/authentication_response.dart';
-import '../../domain/repositories/authentication_repository.dart';
+import '../../domain/repositories/authentication_repository/authentication_repository.dart';
+import '../../domain/repositories/authentication_repository/requests/log_in_request.dart';
+import '../../domain/repositories/authentication_repository/requests/sign_up_request.dart';
+import '../../domain/repositories/authentication_repository/responses/authentication_response.dart';
 import '../../utils/result.dart';
 
 class MockAuthRepo implements AuthenticationRepository {

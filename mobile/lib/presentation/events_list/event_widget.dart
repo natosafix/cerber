@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
-import '../../domain/models/models/event.dart';
+import '../../domain/models/event.dart';
 import '../../utils/theme_util.dart';
 
 class EventWidget extends StatelessWidget {
