@@ -1,9 +1,9 @@
-﻿import { onDomContentLoaded } from '../../Components/utils/domHelpers';
-import * as ReactDom from 'react-dom';
+﻿import * as ReactDom from 'react-dom';
 import { CerberThemeProvider } from '../Shared/ThemeProvider/CerberThemeProvider';
-import { Header } from '../../Components/header/header';
 import * as React from 'react';
 import { EventAdmin } from '../../Components/eventAdmin/eventAdmin';
+import { Header } from '../Shared/header/header';
+import { onDomContentLoaded } from '../../Helpers/domHelpers';
 
 onDomContentLoaded(() =>
     ReactDom.render(
