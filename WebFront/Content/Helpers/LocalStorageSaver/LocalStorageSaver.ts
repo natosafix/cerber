@@ -31,4 +31,21 @@
         localStorage.setItem(this.formsKeys, JSON.stringify(savedForms));
     }
 
+    delete(key: string): boolean {
+        let savedForms = JSON.parse(localStorage.getItem(this.formsKeys) || 'false');
+        if (!savedForms || !(this.formName in savedForms)) {
+            return false;
+        }
+
+        let form = savedForms[this.formName];
+        if (!(key in form)) {
+            return false;
+        }
+
+        delete form[key];
+
+        localStorage.setItem(this.formsKeys, JSON.stringify(savedForms));
+        
+        return true;
+    }
 }
