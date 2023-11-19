@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Persistence;
+using Web.Mapping;
+using Web.Persistence;
 
 namespace Web;
 
@@ -22,6 +23,8 @@ public class Startup
         services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<CerberDbContext>()
             .AddDefaultTokenProviders();
+
+        services.AddAutoMapper(typeof(MappingProfile));
         
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

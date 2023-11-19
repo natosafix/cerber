@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -11,11 +12,11 @@ namespace Web.Controllers;
 public class AuthController : Controller
 {
     private readonly ILogger<AuthController> logger;
-    private readonly UserManager<IdentityUser> userManager;
+    private readonly UserManager<User> userManager;
     private readonly RoleManager<IdentityRole> roleManager;
     private readonly IConfiguration config;
 
-    public AuthController(ILogger<AuthController> logger, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration config)
+    public AuthController(ILogger<AuthController> logger, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration config)
     {
         this.logger = logger;
         this.userManager = userManager;
@@ -33,7 +34,7 @@ public class AuthController : Controller
         if (userExists != null)
             return BadRequest("User already exists");*/
 
-        IdentityUser user = new()
+        User user = new()
         {
             Email = model.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
