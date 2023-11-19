@@ -29,7 +29,7 @@ class EventWidget extends StatelessWidget {
           // if (event.photoBlob != null) _eventPhoto(event.photoBlob!),
           _eventPhotoMock(context),
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.only(top: 15, bottom: 30, right: 20, left: 20),
             child: Align(
               alignment: Alignment.topLeft,
               child: Column(
@@ -96,7 +96,7 @@ class EventWidget extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(20)),
         child: SizedBox(
           width: double.infinity,
-          height: 170,
+          height: 240,
           child: Image.network(
             "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
             fit: BoxFit.fitWidth,

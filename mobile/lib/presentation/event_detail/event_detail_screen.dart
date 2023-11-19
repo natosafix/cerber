@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/models/event.dart';
+import '../visitors_list/visitors_list_screen.dart';
 
 class EventDetailScreen extends StatefulWidget {
   const EventDetailScreen(this.event, {super.key});
@@ -18,9 +19,6 @@ class EventDetailScreen extends StatefulWidget {
 class _EventDetailScreenState extends State<EventDetailScreen> {
   final _scrollController = ScrollController();
   var showTitle = true;
-
-  final _buttonsKey = GlobalKey();
-  var _buttonsHeight = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                   titlePadding: const EdgeInsets.all(8),
                   title: Text(
                     widget.event.name,
-                    style: TextStyle(color: showTitle ? null : Colors.transparent),
+                    style: showTitle ? null : const TextStyle(color: Colors.transparent),
                   ),
                   background: Stack(
                     fit: StackFit.expand,
@@ -105,21 +103,14 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                         widget.event.description,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
-                      SizedBox(height: _buttonsHeight),
-                      // SizedBox(
-                      //   width: double.infinity,
-                      //   child: FilledButton(
-                      //     onPressed: () {},
-                      //     child: const Text("Скачать базу"),
-                      //   ),
-                      // ),
+                      const SizedBox(height: 12),
+                      _buttons(),
                     ],
                   ),
                 ),
               ),
             ],
           ),
-          _buttons(),
         ],
       ),
     );
@@ -127,23 +118,19 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
 
   Widget _buttons() {
     return Container(
-      key: _buttonsKey,
       color: Theme.of(context).canvasColor,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: Row(
         children: [
-          SizedBox(
-            width: double.infinity,
+          Expanded(
             child: FilledButton(
               onPressed: () {},
               child: const Text("Скачать базу"),
             ),
           ),
-          SizedBox(
-            width: double.infinity,
+          const SizedBox(width: 10),
+          Expanded(
             child: FilledButton(
-              onPressed: () {},
+              onPressed: _startCheckingPressed,
               child: const Text("Начать проверку"),
             ),
           ),
@@ -152,14 +139,14 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     );
   }
 
+  void _startCheckingPressed() {
+    Navigator.of(context).push(VisitorsListScreen.route(widget.event));
+  }
+
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final height = (_buttonsKey.currentContext?.findRenderObject() as RenderBox).size.height;
-      setState(() => _buttonsHeight = height);
-    });
   }
 
   void _onScroll() {
