@@ -3,12 +3,13 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
-const OUTPUT_PATH = path.join(__dirname, 'wwwroot');
+const OUTPUT_PATH = path.join(__dirname, '..', 'Web', 'wwwroot');
 
 module.exports = {
     mode: 'development',
     entry: {
         index: './Content/entries/pages/index.tsx',
+        eventAdmin: './Content/entries/pages/eventAdmin.tsx',
     },
     output: {
         path: OUTPUT_PATH,

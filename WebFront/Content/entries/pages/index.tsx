@@ -1,15 +1,15 @@
 ﻿import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { onDomContentLoaded } from '../../Components/utils/domHelpers';
-import { Header } from '../../Components/header/header';
-import { createRoot } from 'react-dom/client';
+import { Header } from '../Shared/header/header';
+import { CerberThemeProvider } from '../Shared/ThemeProvider/CerberThemeProvider';
+import { onDomContentLoaded } from '../../Helpers/domHelpers';
+
 
 onDomContentLoaded(() =>
     ReactDom.render(
-        <>
+        <CerberThemeProvider>
             <Header />
-            Hello, World!!
-        </>,
+        </CerberThemeProvider>,
         document.getElementById('index'),
     ),
 );
