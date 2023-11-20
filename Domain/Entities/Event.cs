@@ -2,7 +2,7 @@
 
 public class Event
 {
-    public Guid Id;
+    public int Id;
     
     public string Name;
 
@@ -21,11 +21,15 @@ public class Event
     
     public DateTimeOffset To;
     
-    public int QuizId { get; set; }
-    public Quiz Quiz { get; set; }
+    public string OwnerId { get; set; }
+    public User Owner { get; set; }
     
     public int CategoryId { get; set; }
     public Category Category { get; set; }
     
     public List<Ticket> Tickets { get; set; }
+    
+    public List<Question> Questions { get; set; }
+    
+    public List<User> Inspectors { get; set; }
 }

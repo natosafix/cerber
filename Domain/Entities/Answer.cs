@@ -9,5 +9,5 @@ public class Answer
     public Question Question { get; set; }
     
     public int OrderId { get; set; }
-    public Question Order { get; set; }
+    public Order Order { get; set; }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Web.Persistence;
@@ -11,9 +12,11 @@ using Web.Persistence;
 namespace Web.Migrations
 {
     [DbContext(typeof(CerberDbContext))]
-    partial class CerberDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231120094306_Entities")]
+    partial class Entities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,9 +209,6 @@ namespace Web.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("EventId")
-                        .HasColumnType("integer");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
 
@@ -243,8 +243,6 @@ namespace Web.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EventId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -416,7 +414,7 @@ namespace Web.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.User", "Owner")
-                        .WithMany("OwnedEvents")
+                        .WithMany("Events")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
@@ -452,17 +450,6 @@ namespace Web.Migrations
                 {
                     b.HasOne("Domain.Entities.Event", "Event")
                         .WithMany("Tickets")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-                });
-
-            modelBuilder.Entity("Domain.Entities.User", b =>
-                {
-                    b.HasOne("Domain.Entities.Event", "Event")
-                        .WithMany("Inspectors")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
@@ -528,8 +515,6 @@ namespace Web.Migrations
 
             modelBuilder.Entity("Domain.Entities.Event", b =>
                 {
-                    b.Navigation("Inspectors");
-
                     b.Navigation("Questions");
 
                     b.Navigation("Tickets");
@@ -552,7 +537,7 @@ namespace Web.Migrations
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
-                    b.Navigation("OwnedEvents");
+                    b.Navigation("Events");
                 });
 #pragma warning restore 612, 618
         }
