@@ -6,6 +6,8 @@ public class Ticket
     
     public int Price { get; set; }
     
+    public int EventId { get; set; }
     public Event Event { get; set; }
-    public List<Order> Order { get; set; }
+
+    public List<Order> Orders { get; set; }
 }

@@ -8,12 +8,12 @@ public class Question
     
     public QuestionType Type { get; set; }
     
-    public Quiz Quiz { get; set; }
-    public int QuizId { get; set; }
-    
     public string Content { get; set; }
     
     public bool Required { get; set; }
-
+    
+    public Event Event { get; set; }
+    public int EventId { get; set; }
+    
     public List<Answer> Answers { get; set; } = new();
 }
