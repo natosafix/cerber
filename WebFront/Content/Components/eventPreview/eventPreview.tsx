@@ -1,13 +1,20 @@
-import { EventsClient } from '../../api/eventsClient';
 import * as React from 'react';
+import { useEffect } from 'react';
+import Events from './Events';
+import { useEvents } from './event-context';
 
-import styles from './eventPreview.scss';
 
 export const EventPreview: React.FC = () => {
-    const events = EventsClient.getEvent("23");
-    
+    const { events, fetchEvents } = useEvents();
+
+    useEffect(() => {
+        fetchEvents();
+    }, [fetchEvents]);
+
     return (
-        <div className={styles.eventPreviewWrapper}>
+        <div>
+            <p>Мероприятий найдено: {events?.length}</p>
+            <Events events={events} />
         </div>
-    )
+    );
 }
