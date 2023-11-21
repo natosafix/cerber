@@ -52,7 +52,6 @@ export const ImageLoader: React.FC<IImageLoaderQuestion> = ({ title, storageSave
     }, []);
     
     useEffect(() => {
-        alert(JSON.stringify(localStorage));
         if (firstRender.current) {
             firstRender.current = false;
             return;

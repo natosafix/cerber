@@ -13,9 +13,9 @@ interface ISingleStringQuestion {
 
 function validate(value: string): Nullable<ValidationInfo> {
     if (value === null || value.length == 0) {
-        return { message: 'Поле обязательно для заполнения', type: 'lostfocus' };
+        return { message: 'Поле обязательно для заполнения', type: 'submit' };
     } else if (value.length >= 100) {
-        return { message: 'Не более 100 символов', type: 'lostfocus' };
+        return { message: 'Не более 100 символов', type: 'submit' };
     }
 
     return null;
