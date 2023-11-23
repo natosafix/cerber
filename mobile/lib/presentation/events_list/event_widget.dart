@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 
 import '../../domain/models/event.dart';
@@ -10,23 +8,27 @@ class EventWidget extends StatelessWidget {
 
   final Event event;
 
+  static const double borderRadius = 20;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: ThemeUtil.isLight(context) ? Colors.white : null,
-        borderRadius: BorderRadius.circular(20),
+        color: ThemeUtil.isLight(context) ? Colors.white : const Color.fromARGB(255, 58, 58, 58),
+        borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
+            color: ThemeUtil.isLight(context)
+                ? Colors.grey.withOpacity(0.15)
+                : const Color.fromARGB(255, 15, 15, 15).withOpacity(0.3),
+            spreadRadius: 2.5,
+            blurRadius: 5,
             offset: const Offset(0, 1),
           )
         ],
       ),
       child: Column(
         children: [
-          // if (event.photoBlob != null) _eventPhoto(event.photoBlob!),
           _eventPhotoMock(context),
           Padding(
             padding: const EdgeInsets.only(top: 15, bottom: 30, right: 20, left: 20),
@@ -58,45 +60,23 @@ class EventWidget extends StatelessWidget {
     );
   }
 
-  Widget _eventPhoto(BuildContext context, Uint8List photoBlob) {
-    return Container(
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-          color: ThemeUtil.isLight(context) ? Colors.grey.withOpacity(0.4) : Colors.black26,
-          spreadRadius: 5,
-          blurRadius: 25,
-          offset: const Offset(0, 5),
-        )
-      ]),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-        child: SizedBox(
-          width: double.infinity,
-          height: 170,
-          child: Image.memory(
-            photoBlob,
-            fit: BoxFit.fitWidth,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _eventPhotoMock(BuildContext context) {
     return Container(
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
-          color: ThemeUtil.isLight(context) ? Colors.grey.withOpacity(0.4) : Colors.black26,
+          color: ThemeUtil.isLight(context) ? Colors.grey.withOpacity(0.2) : Colors.black26,
           spreadRadius: 5,
-          blurRadius: 25,
-          offset: const Offset(0, 5),
+          blurRadius: 9,
+          offset: const Offset(0, 4),
         )
       ]),
       child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-        child: SizedBox(
+        borderRadius: const BorderRadius.all(Radius.circular(borderRadius)),
+        child: Container(
+          constraints: const BoxConstraints(
+            maxHeight: 250,
+          ),
           width: double.infinity,
-          height: 240,
           child: Image.network(
             "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
             fit: BoxFit.fitWidth,

@@ -1,3 +1,4 @@
+import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/models/event.dart';
@@ -17,9 +18,6 @@ class EventDetailScreen extends StatefulWidget {
 }
 
 class _EventDetailScreenState extends State<EventDetailScreen> {
-  final _scrollController = ScrollController();
-  var showTitle = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,13 +25,13 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
         alignment: Alignment.bottomCenter,
         children: [
           CustomScrollView(
-            controller: _scrollController,
             physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             slivers: [
               SliverAppBar(
                 backgroundColor: Colors.transparent,
                 stretch: true,
                 expandedHeight: 250,
+                collapsedHeight: kToolbarHeight * 2,
                 flexibleSpace: FlexibleSpaceBar(
                   stretchModes: const [
                     StretchMode.zoomBackground,
@@ -41,10 +39,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                   ],
                   centerTitle: true,
                   titlePadding: const EdgeInsets.all(8),
-                  title: Text(
-                    widget.event.name,
-                    style: showTitle ? null : const TextStyle(color: Colors.transparent),
-                  ),
+                  title: Text(widget.event.name),
                   background: Stack(
                     fit: StackFit.expand,
                     children: [
@@ -99,8 +94,14 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      Text(
+                      ExpandableText(
                         widget.event.description,
+                        expandText: "больше",
+                        collapseText: "меньше",
+                        collapseOnTextTap: true,
+                        linkEllipsis: false,
+                        animation: true,
+                        maxLines: 5,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       const SizedBox(height: 12),
@@ -119,16 +120,18 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
   Widget _buttons() {
     return Container(
       color: Theme.of(context).canvasColor,
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
+          SizedBox(
+            width: double.infinity,
             child: FilledButton(
               onPressed: () {},
               child: const Text("Скачать базу"),
             ),
           ),
           const SizedBox(width: 10),
-          Expanded(
+          SizedBox(
+            width: double.infinity,
             child: FilledButton(
               onPressed: _startCheckingPressed,
               child: const Text("Начать проверку"),
@@ -141,24 +144,5 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
 
   void _startCheckingPressed() {
     Navigator.of(context).push(VisitorsListScreen.route(widget.event));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    final newValue = _scrollController.hasClients && _scrollController.offset < (200 - kToolbarHeight);
-    if (showTitle != newValue) setState(() => showTitle = newValue);
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-    super.dispose();
   }
 }

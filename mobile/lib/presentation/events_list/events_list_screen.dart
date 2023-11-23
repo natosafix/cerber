@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/repositories/mock_events_repo.dart';
+import '../../utils/theme_util.dart';
 import '../authentication/authentication_bloc/authentication_bloc.dart';
 import '../event_detail/event_detail_screen.dart';
 import 'event_widget.dart';
@@ -48,6 +49,10 @@ class _EventsListViewState extends State<_EventsListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text("Мероприятия"),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: ThemeUtil.isLight(context) ? Colors.black : Colors.white,
         actions: [
           IconButton(
             onPressed: () {

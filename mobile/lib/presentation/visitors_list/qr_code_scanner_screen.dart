@@ -52,7 +52,7 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
             child: IconButton(
               icon: Icon(icon),
               color: Colors.black,
-              onPressed: () => scannerController.toggleTorch(),
+              onPressed: scannerController.toggleTorch,
             ),
           );
         },

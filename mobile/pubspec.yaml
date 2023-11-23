@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   dio: ^5.3.3
+  expandable_text: ^2.3.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.3

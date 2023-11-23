@@ -34,9 +34,12 @@ class Password extends FormzInput<String, PasswordValidationError> {
     var hasDigit = false;
 
     for (final c in trimmed.runes) {
-      final letter = String.fromCharCode(c);
-      if (!hasCapital && letter == letter.toUpperCase()) hasCapital = true;
-      if (!hasDigit && int.tryParse(letter) != null) hasDigit = true;
+      final char = String.fromCharCode(c);
+      final isInt = int.tryParse(char) != null;
+
+      if (isInt) hasDigit = true;
+
+      if (!isInt && char == char.toUpperCase()) hasCapital = true;
     }
 
     if (!hasCapital) return PasswordValidationError.noCapitalLetter;
