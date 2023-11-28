@@ -19,7 +19,7 @@ class Event {
     Event(
       id: "4",
       name: "QEw",
-      description: "description1",
+      description: "changed desctioption",
       startDate: DateTime.now().add(const Duration(days: 2)),
       location: 'Ekb',
       photoUrl: "",
@@ -89,7 +89,7 @@ class Event {
       name: "Ивент2",
       description: "description1 lorem ipsum kofs jiosdf sdff sd",
       startDate: DateTime.now().add(const Duration(days: 2, hours: 2)),
-      location: 'Polkjh',
+      location: 'POIFugf',
       photoUrl: "",
     ),
   ];

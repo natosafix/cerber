@@ -23,6 +23,7 @@ class _VisitorsListScreenState extends State<VisitorsListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
+        // TODO: call getVisitors and add pagination
         itemCount: Visitor.mock.length,
         itemBuilder: (context, index) {
           return ListTile(
