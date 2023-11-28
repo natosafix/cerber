@@ -39,6 +39,24 @@ const VisitorCollectionSchema = CollectionSchema(
   deserializeProp: _visitorCollectionDeserializeProp,
   idName: r'isarId',
   indexes: {
+    r'visitorId_eventId': IndexSchema(
+      id: -1333239492455269434,
+      name: r'visitorId_eventId',
+      unique: true,
+      replace: true,
+      properties: [
+        IndexPropertySchema(
+          name: r'visitorId',
+          type: IndexType.hash,
+          caseSensitive: true,
+        ),
+        IndexPropertySchema(
+          name: r'eventId',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    ),
     r'eventId': IndexSchema(
       id: -2707901133518603130,
       name: r'eventId',
@@ -128,6 +146,97 @@ List<IsarLinkBase<dynamic>> _visitorCollectionGetLinks(
 void _visitorCollectionAttach(
     IsarCollection<dynamic> col, Id id, VisitorCollection object) {}
 
+extension VisitorCollectionByIndex on IsarCollection<VisitorCollection> {
+  Future<VisitorCollection?> getByVisitorIdEventId(
+      String visitorId, String eventId) {
+    return getByIndex(r'visitorId_eventId', [visitorId, eventId]);
+  }
+
+  VisitorCollection? getByVisitorIdEventIdSync(
+      String visitorId, String eventId) {
+    return getByIndexSync(r'visitorId_eventId', [visitorId, eventId]);
+  }
+
+  Future<bool> deleteByVisitorIdEventId(String visitorId, String eventId) {
+    return deleteByIndex(r'visitorId_eventId', [visitorId, eventId]);
+  }
+
+  bool deleteByVisitorIdEventIdSync(String visitorId, String eventId) {
+    return deleteByIndexSync(r'visitorId_eventId', [visitorId, eventId]);
+  }
+
+  Future<List<VisitorCollection?>> getAllByVisitorIdEventId(
+      List<String> visitorIdValues, List<String> eventIdValues) {
+    final len = visitorIdValues.length;
+    assert(eventIdValues.length == len,
+        'All index values must have the same length');
+    final values = <List<dynamic>>[];
+    for (var i = 0; i < len; i++) {
+      values.add([visitorIdValues[i], eventIdValues[i]]);
+    }
+
+    return getAllByIndex(r'visitorId_eventId', values);
+  }
+
+  List<VisitorCollection?> getAllByVisitorIdEventIdSync(
+      List<String> visitorIdValues, List<String> eventIdValues) {
+    final len = visitorIdValues.length;
+    assert(eventIdValues.length == len,
+        'All index values must have the same length');
+    final values = <List<dynamic>>[];
+    for (var i = 0; i < len; i++) {
+      values.add([visitorIdValues[i], eventIdValues[i]]);
+    }
+
+    return getAllByIndexSync(r'visitorId_eventId', values);
+  }
+
+  Future<int> deleteAllByVisitorIdEventId(
+      List<String> visitorIdValues, List<String> eventIdValues) {
+    final len = visitorIdValues.length;
+    assert(eventIdValues.length == len,
+        'All index values must have the same length');
+    final values = <List<dynamic>>[];
+    for (var i = 0; i < len; i++) {
+      values.add([visitorIdValues[i], eventIdValues[i]]);
+    }
+
+    return deleteAllByIndex(r'visitorId_eventId', values);
+  }
+
+  int deleteAllByVisitorIdEventIdSync(
+      List<String> visitorIdValues, List<String> eventIdValues) {
+    final len = visitorIdValues.length;
+    assert(eventIdValues.length == len,
+        'All index values must have the same length');
+    final values = <List<dynamic>>[];
+    for (var i = 0; i < len; i++) {
+      values.add([visitorIdValues[i], eventIdValues[i]]);
+    }
+
+    return deleteAllByIndexSync(r'visitorId_eventId', values);
+  }
+
+  Future<Id> putByVisitorIdEventId(VisitorCollection object) {
+    return putByIndex(r'visitorId_eventId', object);
+  }
+
+  Id putByVisitorIdEventIdSync(VisitorCollection object,
+      {bool saveLinks = true}) {
+    return putByIndexSync(r'visitorId_eventId', object, saveLinks: saveLinks);
+  }
+
+  Future<List<Id>> putAllByVisitorIdEventId(List<VisitorCollection> objects) {
+    return putAllByIndex(r'visitorId_eventId', objects);
+  }
+
+  List<Id> putAllByVisitorIdEventIdSync(List<VisitorCollection> objects,
+      {bool saveLinks = true}) {
+    return putAllByIndexSync(r'visitorId_eventId', objects,
+        saveLinks: saveLinks);
+  }
+}
+
 extension VisitorCollectionQueryWhereSort
     on QueryBuilder<VisitorCollection, VisitorCollection, QWhere> {
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhere> anyIsarId() {
@@ -204,6 +313,96 @@ extension VisitorCollectionQueryWhere
         upper: upperIsarId,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhereClause>
+      visitorIdEqualToAnyEventId(String visitorId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'visitorId_eventId',
+        value: [visitorId],
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhereClause>
+      visitorIdNotEqualToAnyEventId(String visitorId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'visitorId_eventId',
+              lower: [],
+              upper: [visitorId],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'visitorId_eventId',
+              lower: [visitorId],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'visitorId_eventId',
+              lower: [visitorId],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'visitorId_eventId',
+              lower: [],
+              upper: [visitorId],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhereClause>
+      visitorIdEventIdEqualTo(String visitorId, String eventId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'visitorId_eventId',
+        value: [visitorId, eventId],
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhereClause>
+      visitorIdEqualToEventIdNotEqualTo(String visitorId, String eventId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'visitorId_eventId',
+              lower: [visitorId],
+              upper: [visitorId, eventId],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'visitorId_eventId',
+              lower: [visitorId, eventId],
+              includeLower: false,
+              upper: [visitorId],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'visitorId_eventId',
+              lower: [visitorId, eventId],
+              includeLower: false,
+              upper: [visitorId],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'visitorId_eventId',
+              lower: [visitorId],
+              upper: [visitorId, eventId],
+              includeUpper: false,
+            ));
+      }
     });
   }
 

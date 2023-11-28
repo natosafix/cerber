@@ -20,11 +20,15 @@ class DatabaseAdapter {
   }
 
   Future<void> addEvents(List<EventCollection> events) async {
-    await _events.putAll(events);
+    await _isar.writeTxn(() async {
+      await _events.putAll(events);
+    });
   }
 
   Future<void> deleteEvent(EventCollection event) async {
-    await _events.delete(event.isarId);
+    await _isar.writeTxn(() async {
+      await _events.delete(event.isarId);
+    });
   }
 
   Future<List<VisitorCollection>> getVisitors(String eventId, int limit, int offset) async {
@@ -32,6 +36,8 @@ class DatabaseAdapter {
   }
 
   Future<void> addVisitors(List<VisitorCollection> visitors) async {
-    await _visitors.putAll(visitors);
+    await _isar.writeTxn(() async {
+      await _visitors.putAll(visitors);
+    });
   }
 }

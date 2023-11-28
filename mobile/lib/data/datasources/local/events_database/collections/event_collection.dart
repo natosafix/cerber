@@ -38,6 +38,18 @@ class EventCollection with FastHashMixin {
       location: event.location,
       description: event.description,
       startDate: event.startDate,
+      photoUrl: event.photoUrl,
+    );
+  }
+
+  factory EventCollection.fromModel(Event event) {
+    return EventCollection(
+      eventId: event.id,
+      name: event.name,
+      location: event.location,
+      description: event.description,
+      startDate: event.startDate,
+      photoUrl: event.photoUrl,
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/repositories/mock_events_repo.dart';
+import '../../domain/repositories/events_repository/events_repository.dart';
 import '../../utils/theme_util.dart';
 import '../authentication/authentication_bloc/authentication_bloc.dart';
 import '../event_detail/event_detail_screen.dart';
@@ -22,10 +22,8 @@ class EventsListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final remoteRepo = MockEventsRepo();
-
     return BlocProvider(
-      create: (context) => EventsBloc(remoteRepo)..add(GetEvents()),
+      create: (context) => EventsBloc(context.read<EventsRepository>())..add(GetEvents()),
       child: _EventsListView(),
     );
   }

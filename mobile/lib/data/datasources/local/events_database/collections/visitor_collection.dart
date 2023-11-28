@@ -9,6 +9,7 @@ part 'visitor_collection.g.dart';
 class VisitorCollection with FastHashMixin {
   Id get isarId => fastHash(visitorId);
 
+  @Index(composite: [CompositeIndex("eventId")], unique: true, replace: true)
   String visitorId;
 
   @Index()
@@ -25,6 +26,14 @@ class VisitorCollection with FastHashMixin {
   static Visitor toModel(VisitorCollection visitor) {
     return Visitor(
       id: visitor.visitorId,
+      name: visitor.name,
+    );
+  }
+
+  factory VisitorCollection.fromModel(Visitor visitor, String eventId) {
+    return VisitorCollection(
+      visitorId: visitor.id,
+      eventId: eventId,
       name: visitor.name,
     );
   }
