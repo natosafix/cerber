@@ -2,11 +2,11 @@ import 'package:dio/dio.dart';
 
 import '../../domain/models/event.dart';
 import '../../domain/models/visitor.dart';
-import '../../domain/repositories/events_remote_repository/events_remote_repository.dart';
-import '../../domain/repositories/events_remote_repository/requests/get_visitors_request.dart';
+import '../../domain/repositories/events_repository/events_repository.dart';
+import '../../domain/repositories/events_repository/requests/get_visitors_request.dart';
 import '../../utils/result.dart';
 
-class MockEventsRepo implements EventsRemoteRepository {
+class MockEventsRepo implements EventsRepository {
   @override
   Future<Result<List<Event>, DioException>> getEvents(int limit, int offset) async {
     await Future.delayed(const Duration(seconds: 1));
