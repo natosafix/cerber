@@ -5,24 +5,24 @@ import '../../domain/repositories/local_events_repository/local_event_repository
 import '../../utils/result.dart';
 import '../datasources/local/events_database/collections/event_collection.dart';
 import '../datasources/local/events_database/collections/visitor_collection.dart';
-import '../datasources/local/events_database/database_adapter.dart';
+import '../datasources/local/events_database/events_database.dart';
 
 class LocalEventsRepositoryImpl implements LocalEventsRepository {
   LocalEventsRepositoryImpl({
-    required DatabaseAdapter databaseAdapter,
-  }) : _databaseAdapter = databaseAdapter;
+    required EventsDatabase eventsDatabase,
+  }) : _eventsDatabase = eventsDatabase;
 
-  final DatabaseAdapter _databaseAdapter;
+  final EventsDatabase _eventsDatabase;
 
   @override
   Future<Result<List<Event>, Exception>> getEvents(int limit, int offset) async {
-    final events = await _databaseAdapter.getEvents(limit, offset);
+    final events = await _eventsDatabase.getEvents(limit, offset);
     return Success(events.map(EventCollection.toModel).toList());
   }
 
   @override
   Future<Result<List<Visitor>, Exception>> getVisitors(GetVisitorsRequest request) async {
-    final visitors = await _databaseAdapter.getVisitors(
+    final visitors = await _eventsDatabase.getVisitors(
       request.eventId,
       request.limit,
       request.offset,
@@ -33,11 +33,11 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
 
   @override
   void saveEvents(List<Event> events) async {
-    _databaseAdapter.addEvents(events.map(EventCollection.fromModel).toList());
+    _eventsDatabase.addEvents(events.map(EventCollection.fromModel).toList());
   }
 
   @override
   void saveVisitors(List<Visitor> visitors, String eventId) async {
-    _databaseAdapter.addVisitors(visitors.map((e) => VisitorCollection.fromModel(e, eventId)).toList());
+    _eventsDatabase.addVisitors(visitors.map((e) => VisitorCollection.fromModel(e, eventId)).toList());
   }
 }

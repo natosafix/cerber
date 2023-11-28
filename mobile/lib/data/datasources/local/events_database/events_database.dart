@@ -3,8 +3,8 @@ import 'package:isar/isar.dart';
 import 'collections/event_collection.dart';
 import 'collections/visitor_collection.dart';
 
-class DatabaseAdapter {
-  DatabaseAdapter({required Isar isar}) : _isar = isar;
+class EventsDatabase {
+  EventsDatabase({required Isar isar}) : _isar = isar;
 
   final Isar _isar;
 

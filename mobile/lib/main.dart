@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'data/datasources/local/events_database/collections/event_collection.dart';
 import 'data/datasources/local/events_database/collections/visitor_collection.dart';
-import 'data/datasources/local/events_database/database_adapter.dart';
+import 'data/datasources/local/events_database/events_database.dart';
 import 'data/repositories/compound_events_repo.dart';
 import 'data/repositories/local_events_repository_impl.dart';
 import 'data/repositories/mock_auth_repo.dart';
@@ -29,7 +29,7 @@ void main() async {
     directory: dir.path,
   );
 
-  final localRepo = LocalEventsRepositoryImpl(databaseAdapter: DatabaseAdapter(isar: isar));
+  final localRepo = LocalEventsRepositoryImpl(eventsDatabase: EventsDatabase(isar: isar));
 
   final compoundRepo = CompoundEventsRepository(remoteEventsRepo: remoteRepo, localEventsRepo: localRepo);
   await compoundRepo.init();
