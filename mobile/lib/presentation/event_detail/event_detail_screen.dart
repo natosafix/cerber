@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 
@@ -43,8 +44,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                   background: Stack(
                     fit: StackFit.expand,
                     children: [
-                      Image.network(
-                        'https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg',
+                      CachedNetworkImage(
+                        imageUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
                         fit: BoxFit.cover,
                       ),
                       const DecoratedBox(
@@ -101,7 +102,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                         collapseOnTextTap: true,
                         linkEllipsis: false,
                         animation: true,
-                        maxLines: 5,
+                        maxLines: 7,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       const SizedBox(height: 12),

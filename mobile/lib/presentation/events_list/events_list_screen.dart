@@ -70,6 +70,7 @@ class _EventsListViewState extends State<_EventsListView> {
             );
           }
           return ListView.builder(
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             controller: _scrollController,
             itemCount: state.events.length + (state.hasReachedMax ? 0 : 1),
             itemBuilder: (context, index) {

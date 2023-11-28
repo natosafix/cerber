@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/models/event.dart';
@@ -29,7 +30,7 @@ class EventWidget extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _eventPhotoMock(context),
+          _eventImage(context),
           Padding(
             padding: const EdgeInsets.only(top: 15, bottom: 30, right: 20, left: 20),
             child: Align(
@@ -60,7 +61,7 @@ class EventWidget extends StatelessWidget {
     );
   }
 
-  Widget _eventPhotoMock(BuildContext context) {
+  Widget _eventImage(BuildContext context) {
     return Container(
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
@@ -77,9 +78,11 @@ class EventWidget extends StatelessWidget {
             maxHeight: 250,
           ),
           width: double.infinity,
-          child: Image.network(
-            "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
+          child: CachedNetworkImage(
+            imageUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
             fit: BoxFit.fitWidth,
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+            fadeInDuration: Duration.zero,
           ),
         ),
       ),
