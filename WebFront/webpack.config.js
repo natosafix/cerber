@@ -8,8 +8,8 @@ const OUTPUT_PATH = path.join(__dirname, '..', 'Web', 'wwwroot');
 module.exports = {
     mode: 'development',
     entry: {
-        index: './Content/entries/pages/index.tsx',
-        eventAdmin: './Content/entries/pages/eventAdmin.tsx',
+        index: './Content/Entries/Pages/Index.tsx',
+        eventAdmin: './Content/Entries/Pages/EventAdmin.tsx',
     },
     output: {
         path: OUTPUT_PATH,

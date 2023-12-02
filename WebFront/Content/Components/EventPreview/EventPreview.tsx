@@ -1,4 +1,4 @@
-import { EventsClient } from '../../api/eventsClient';
+import { EventsClient } from '../../Api/EventsClient';
 import * as React from 'react';
 
 import styles from './eventPreview.scss';

@@ -1,8 +1,8 @@
 ﻿import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { Header } from '../Shared/header/header';
+import { Header } from '../Shared/Header/Header';
 import { CerberThemeProvider } from '../Shared/ThemeProvider/CerberThemeProvider';
-import { onDomContentLoaded } from '../../Helpers/domHelpers';
+import { onDomContentLoaded } from '../../Helpers/DomHelpers';
 
 
 onDomContentLoaded(() =>

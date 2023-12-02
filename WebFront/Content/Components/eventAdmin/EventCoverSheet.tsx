@@ -1,11 +1,11 @@
 ﻿import React, { useContext, useRef, useState } from 'react';
 import { ValidationContainer } from '@skbkontur/react-ui-validations';
 import { Button, Gapped, Input } from '@skbkontur/react-ui';
-import styles from './eventAdmin.scss';
+import styles from './EventAdmin.scss';
 import { LocalStorageSaver } from '../../Helpers/LocalStorageSaver/LocalStorageSaver';
-import { SingleStringQuestion } from './questions/singleStringQuestion';
-import { MultiStringQuestion } from './questions/multiStringQuestion';
-import { ImageLoader } from './questions/imageLoader';
+import { SingleStringQuestion } from './Questions/SingleStringQuestion';
+import { MultiStringQuestion } from './Questions/MultiStringQuestion';
+import { ImageLoader } from './Questions/ImageLoader';
 
 
 export const EventCoverSheet: React.FC = () => {

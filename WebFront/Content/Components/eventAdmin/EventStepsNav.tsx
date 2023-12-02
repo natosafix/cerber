@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import styles from './eventAdmin.scss';
+import styles from './EventAdmin.scss';
 import { Button } from '@skbkontur/react-ui';
 
 
