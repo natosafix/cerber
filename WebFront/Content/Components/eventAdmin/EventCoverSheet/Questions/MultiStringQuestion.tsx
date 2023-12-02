@@ -1,5 +1,5 @@
-﻿import styles from '../EventAdmin.scss';
-import variables from '../EventAdminVariables.scss';
+﻿import styles from '../../EventAdmin.scss';
+import variables from '../../EventAdminVariables.scss';
 import { Gapped, Textarea } from '@skbkontur/react-ui';
 import React, { useEffect, useState } from 'react';
 

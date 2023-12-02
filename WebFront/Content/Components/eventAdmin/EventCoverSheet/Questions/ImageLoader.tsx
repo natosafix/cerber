@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
-import styles from '../EventAdmin.scss';
-import variables from '../EventAdminVariables.scss';
+import styles from '../../EventAdmin.scss';
+import variables from '../../EventAdminVariables.scss';
 import { FileUploader, FileUploaderAttachedFile, Gapped } from '@skbkontur/react-ui';
 
 
