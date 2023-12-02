@@ -5,9 +5,14 @@ import { LocalStorageSaver } from '../../../Helpers/LocalStorageSaver/LocalStora
 import { SingleStringQuestion } from './Questions/SingleStringQuestion';
 import { MultiStringQuestion } from './Questions/MultiStringQuestion';
 import { ImageLoader } from './Questions/ImageLoader';
+import { EventAdminSaveBtn } from '../EventStepsNav/EventAdminSaveBtn';
 
 
-export const EventCoverSheet: React.FC = () => {
+interface Props {
+    onSave: () => void;
+}
+
+export const EventCoverSheet: React.FC<Props> = ({ onSave }) => {
     let localStorageSaver = new LocalStorageSaver('Draft');
 
     const [eventName, setEventName] = useState('');
@@ -16,7 +21,10 @@ export const EventCoverSheet: React.FC = () => {
 
     let onClickHandle = async () => {
         if (validWrapper.current) {
-            await validWrapper.current.validate();
+            const isValid = await validWrapper.current.validate();
+            if (isValid) {
+                onSave();
+            }
         }
     };
 
@@ -27,6 +35,7 @@ export const EventCoverSheet: React.FC = () => {
                 <SingleStringQuestion storageSaver={localStorageSaver} title={'Название2'} />
                 <MultiStringQuestion storageSaver={localStorageSaver} title={'Подробное описание'} />
                 <ImageLoader storageSaver={localStorageSaver} title={'Обложка'} />
+                <EventAdminSaveBtn onSave={onClickHandle} />
             </Gapped>
         </ValidationContainer>
     );

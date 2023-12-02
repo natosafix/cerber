@@ -28,21 +28,14 @@ export const EventAdmin: React.FC = () => {
             <div className={styles.contentWrapper}>
                 <Gapped gap={30} vertical={true}>
                     {step === EventAdminPageNav.EventCoverSheet && (
-                        <EventCoverSheet />
+                        <EventCoverSheet onSave={onSave} />
                     )}
                     {step === EventAdminPageNav.EventQuizCreator && (
-                        <EventQuizCreator />
+                        <EventQuizCreator onSave={onSave} />
                     )}
                     {step === EventAdminPageNav.EventPublish && (
-                        <EventPublish />
+                        <EventPublish onSave={onSave} />
                     )}
-                    
-                    <Button use={'primary'}
-                            size={'medium'}
-                            onClick={onSave}
-                    >
-                        Сохранить
-                    </Button>
                 </Gapped>
             </div>
         </div>);
