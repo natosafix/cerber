@@ -1,10 +1,15 @@
 ﻿import React from 'react';
+import { EventAdminSaveBtn } from '../EventStepsNav/EventAdminSaveBtn';
 
-export const EventPublish: React.FC = () => {
+interface Props {
+    onSave: () => void;
+}
 
+export const EventPublish: React.FC<Props> = ({onSave}) => {
     return (
         <div>
             EventPublish
+            <EventAdminSaveBtn onSave={onSave} />
         </div>
     );
 };
