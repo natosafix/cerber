@@ -21,4 +21,9 @@ export class Question {
         this.type = type;
         return this;
     }
+    
+    public withAnswerChoices(choices: string[]): Question {
+        this.answerChoices = choices;
+        return this;
+    }
 }

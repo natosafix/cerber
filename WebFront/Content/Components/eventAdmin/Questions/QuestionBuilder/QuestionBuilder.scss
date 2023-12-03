@@ -1,0 +1,26 @@
+﻿.choicesCreatorWrapper {
+    width: 70%;
+    
+    .lineWrapper {
+        display: flex;
+        
+        .inputWrapper {
+            width: 65%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .input {
+                width: 100%;
+            }
+        }
+
+        .deleteBtnWrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+    
+}

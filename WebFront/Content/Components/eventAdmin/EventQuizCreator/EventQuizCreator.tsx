@@ -1,10 +1,10 @@
-﻿import React, { useRef, useState } from 'react';
+﻿import React, { useState } from 'react';
 import { EventAdminSaveBtn } from '../EventStepsNav/EventAdminSaveBtn';
-import { SingleStringQuestion } from '../EventCoverSheet/Questions/SingleStringQuestion';
+import { SingleStringQuestion } from '../Questions/SingleStringQuestion';
 import { LocalStorageSaver } from '../../../Helpers/LocalStorageSaver/LocalStorageSaver';
 import { Button, Gapped } from '@skbkontur/react-ui';
-import { QuestionBuilder } from '../EventCoverSheet/Questions/QuestionBuilder/QuestionBuilder';
-import { Question } from '../EventCoverSheet/Questions/QuestionBuilder/Question';
+import { QuestionBuilder } from '../Questions/QuestionBuilder/QuestionBuilder';
+import { Question } from '../Questions/QuestionBuilder/Question';
 
 interface Props {
     onSave: () => void;
@@ -34,7 +34,8 @@ export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
         return (
             <div key={question.key}>
                 <Button onClick={() => onDeleteQuestion(question.key)}>Удалить</Button>
-                <QuestionBuilder storageSaver={localStorageSaver} onQuestionUpdate={onUpdateQuestion}
+                <QuestionBuilder storageSaver={localStorageSaver} 
+                                 onQuestionUpdate={onUpdateQuestion}
                                  question={question} />
             </div>
         );
@@ -61,7 +62,7 @@ export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
                                   placeholder={'Введите вашу фамилию'}
                                   size={'medium'}
             />
-            {questions.map((question, idx) =>
+            {questions.map((question) =>
                 Create(question),
             )}
             <EventAdminSaveBtn onSave={onSave} />

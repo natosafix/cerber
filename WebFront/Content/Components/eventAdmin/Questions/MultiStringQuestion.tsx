@@ -1,8 +1,8 @@
-﻿import styles from '../../EventAdmin.scss';
-import variables from '../../EventAdminVariables.scss';
+﻿import styles from '../EventAdmin.scss';
+import variables from '../EventAdminVariables.scss';
 import { Gapped, Textarea } from '@skbkontur/react-ui';
 import React, { useEffect, useState } from 'react';
-import { Label } from '../../../../Entries/Shared/Label/Label';
+import { Label } from '../../../Entries/Shared/Label/Label';
 
 interface IMultiStringQuestion {
     storageSaver: ILocalStorageSaver;
