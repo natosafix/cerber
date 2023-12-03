@@ -14,9 +14,9 @@ export const EventAdmin: React.FC = () => {
 
     const onSave = () => {
         if (step === EventAdminPageNav.EventPublish) {
-            alert('Save all form');
+            // alert('Save all form');
         } else {
-            alert('Save current page');
+            // alert('Save current page');
             setStep(step + 1);
         }
     };
@@ -24,7 +24,7 @@ export const EventAdmin: React.FC = () => {
     return (
         <div className={styles.mainWrapper}>
             <EventStepsNav step={step} setStepNav={setStep} />
-
+            
             <div className={styles.contentWrapper}>
                 <Gapped gap={30} vertical={true}>
                     {step === EventAdminPageNav.EventCoverSheet && (

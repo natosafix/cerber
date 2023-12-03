@@ -2,6 +2,7 @@
 import styles from '../../EventAdmin.scss';
 import variables from '../../EventAdminVariables.scss';
 import { FileUploader, FileUploaderAttachedFile, Gapped } from '@skbkontur/react-ui';
+import { Label } from '../../../../Entries/Shared/Label/Label';
 
 
 interface IImageLoaderQuestion {
@@ -92,7 +93,7 @@ export const ImageLoader: React.FC<IImageLoaderQuestion> = ({ title, storageSave
         <Gapped gap={Number.parseInt(variables.titleContentGap)}
                 vertical={true}
                 className={styles.questionInput}>
-            <div className={styles.questionLabel}>{title}</div>
+            <Label label={title} size={"large"} />
             <FileUploader accept={'image/*'} onValueChange={onFileLoad} />
             {preview && (
                 <img src={preview} alt={'loaded image'} className={styles.imagePreview} />

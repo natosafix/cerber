@@ -5,10 +5,16 @@ import { Gapped, Input } from '@skbkontur/react-ui';
 import React, { useEffect, useState } from 'react';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
+import { Label } from '../../../../Entries/Shared/Label/Label';
 
-interface ISingleStringQuestion {
-    storageSaver: ILocalStorageSaver;
+interface Props {
+    storageSaver?: ILocalStorageSaver;
     title: string;
+    disabled?: boolean;
+    placeholder?: string;
+    size?: "small" | "medium" | "large";
+    onValueChange?: (string) => void;
+    defaultValue?: string;
 }
 
 function validate(value: string): Nullable<ValidationInfo> {
@@ -21,26 +27,53 @@ function validate(value: string): Nullable<ValidationInfo> {
     return null;
 }
 
-export const SingleStringQuestion: React.FC<ISingleStringQuestion> = ({ title, storageSaver }) => {
-    const [value, setValue] = useState('');
+export const SingleStringQuestion: React.FC<Props> = (
+    {
+        title,
+        onValueChange = null,
+        storageSaver = null,
+        disabled = false,
+        placeholder= '',
+        size= "large",
+        defaultValue = ''
+    },
+) => {
+    const [value, setValue] = useState(defaultValue);
+    
+    const changeValue = (v: string) => {
+        setValue(v);
+        if (onValueChange) {
+            onValueChange(v);
+        }
+    }
 
     useEffect(() => {
-        let savedValue = storageSaver.load(title);
+        let savedValue = storageSaver?.load(title);
         if (savedValue && savedValue !== value) {
-            setValue(savedValue);
+            changeValue(savedValue);
         }
     }, []);
 
     let saveStorage = () => {
-        storageSaver.save(title, value);
+        storageSaver?.save(title, value);
     };
 
     return (
         <Gapped gap={Number.parseInt(variables.titleContentGap)} vertical={true}>
-            <div className={styles.questionLabel}>{title}</div>
+            <Label label={title} size={size} />
             <ValidationWrapper validationInfo={validate(value)}>
-                <Input className={styles.questionInput} value={value} onValueChange={setValue} onBlur={saveStorage} />
+                <Input className={styles.questionInput}
+                       value={value} 
+                       onValueChange={changeValue} 
+                       onBlur={saveStorage}
+                       placeholder={placeholder}
+                       disabled={disabled} />
             </ValidationWrapper>
         </Gapped>
     );
+};
+
+SingleStringQuestion.defaultProps = {
+    placeholder: '',
+    disabled: false
 };

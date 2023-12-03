@@ -32,7 +32,6 @@ export const EventCoverSheet: React.FC<Props> = ({ onSave }) => {
         <ValidationContainer ref={validWrapper}>
             <Gapped gap={30} vertical={true}>
                 <SingleStringQuestion storageSaver={localStorageSaver} title={'Название'} />
-                <SingleStringQuestion storageSaver={localStorageSaver} title={'Название2'} />
                 <MultiStringQuestion storageSaver={localStorageSaver} title={'Подробное описание'} />
                 <ImageLoader storageSaver={localStorageSaver} title={'Обложка'} />
                 <EventAdminSaveBtn onSave={onClickHandle} />
