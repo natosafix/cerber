@@ -4,6 +4,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 const OUTPUT_PATH = path.join(__dirname, '..', 'Web', 'wwwroot');
+const PUBLIC_PATH = path.join('/assets');
 
 module.exports = {
     mode: 'development',
@@ -13,6 +14,7 @@ module.exports = {
     },
     output: {
         path: OUTPUT_PATH,
+        publicPath: PUBLIC_PATH,
         filename: path.join('js', '[name].js'),
     },
     watch: true,
@@ -43,6 +45,19 @@ module.exports = {
                         loader: 'sass-loader',
                         options: {
                             sourceMap: true,
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.(png|jpg|gif)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            publicPath: PUBLIC_PATH,
+                            outputPath: 'assets',
+                            name: '[path][name].[ext]'
                         },
                     },
                 ],

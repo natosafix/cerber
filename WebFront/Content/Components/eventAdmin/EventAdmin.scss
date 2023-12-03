@@ -15,22 +15,26 @@
         height: 100%;
     }
     
-    .contentWrapper {
+    .contentPageWrapper {
         width: 70%;
         margin: auto;
         
-        .questionLabel {
-            font-size: 1.75rem;
-            font-weight: bold;
-        }
-
-        .questionInput {
+        .contentWrapper {
             width: 70%;
-        }
-        
-        .imagePreview {
-            width: 100%;
-            height: auto;
+            
+            .questionLabel {
+                font-size: 1.75rem;
+                font-weight: bold;
+            }
+
+            .questionInput {
+                width: 100%;
+            }
+
+            .imagePreview {
+                width: 100%;
+                height: auto;
+            }
         }
     }
 }

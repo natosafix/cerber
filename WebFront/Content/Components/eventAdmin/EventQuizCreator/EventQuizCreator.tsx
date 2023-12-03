@@ -5,6 +5,7 @@ import { LocalStorageSaver } from '../../../Helpers/LocalStorageSaver/LocalStora
 import { Button, Gapped } from '@skbkontur/react-ui';
 import { QuestionBuilder } from '../Questions/QuestionBuilder/QuestionBuilder';
 import { Question } from '../Questions/QuestionBuilder/Question';
+import { BinButton } from '../../../Entries/Shared/BinButton';
 
 interface Props {
     onSave: () => void;
@@ -33,7 +34,8 @@ export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
     const Create: React.FC<Question> = (question) => {
         return (
             <div key={question.key}>
-                <Button onClick={() => onDeleteQuestion(question.key)}>Удалить</Button>
+                <BinButton />
+                {/*<Button onClick={() => onDeleteQuestion(question.key)}>Удалить</Button>*/}
                 <QuestionBuilder storageSaver={localStorageSaver} 
                                  onQuestionUpdate={onUpdateQuestion}
                                  question={question} />
