@@ -44,7 +44,6 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(@event => @event.Inspectors)
-            .WithOne(user => user.Event)
-            .OnDelete(DeleteBehavior.SetNull);
+            .WithMany(user => user.InspectedEvents);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System.Text;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Web.Mapping;
@@ -20,15 +22,23 @@ public class Startup
     {
         services.AddPersistence(config);
         
-        services.AddIdentity<IdentityUser, IdentityRole>()
+        services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddEntityFrameworkStores<CerberDbContext>()
             .AddDefaultTokenProviders();
 
         services.AddAutoMapper(typeof(MappingProfile));
         
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        services.AddAuthorization(options =>
+        {
+            options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build();
+        });
+        
+        services.AddAuthentication()
             .AddJwtBearer(options =>
             {
+                options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -40,6 +50,7 @@ public class Startup
                     ValidateIssuerSigningKey = true
                 };
             });
+        
         services.AddControllersWithViews();
         services.AddSwaggerGen();
     }

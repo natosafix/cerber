@@ -206,9 +206,6 @@ namespace Web.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("EventId")
-                        .HasColumnType("integer");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
 
@@ -244,8 +241,6 @@ namespace Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -254,6 +249,21 @@ namespace Web.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("EventUser", b =>
+                {
+                    b.Property<int>("InspectedEventsId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("InspectorsId")
+                        .HasColumnType("text");
+
+                    b.HasKey("InspectedEventsId", "InspectorsId");
+
+                    b.HasIndex("InspectorsId");
+
+                    b.ToTable("EventUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -459,15 +469,19 @@ namespace Web.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("Domain.Entities.User", b =>
+            modelBuilder.Entity("EventUser", b =>
                 {
-                    b.HasOne("Domain.Entities.Event", "Event")
-                        .WithMany("Inspectors")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                    b.HasOne("Domain.Entities.Event", null)
+                        .WithMany()
+                        .HasForeignKey("InspectedEventsId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Event");
+                    b.HasOne("Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("InspectorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -528,8 +542,6 @@ namespace Web.Migrations
 
             modelBuilder.Entity("Domain.Entities.Event", b =>
                 {
-                    b.Navigation("Inspectors");
-
                     b.Navigation("Questions");
 
                     b.Navigation("Tickets");
