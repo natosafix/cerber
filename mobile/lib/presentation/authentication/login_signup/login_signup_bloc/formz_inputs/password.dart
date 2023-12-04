@@ -23,6 +23,12 @@ class Password extends FormzInput<String, PasswordValidationError> {
   const Password.dirty([super.value = '']) : super.dirty();
 
   static const minPasswordLength = 8;
+  
+  static final List<int> _allowedChars = [
+    ...List.generate(26, (i) => i + 'a'.codeUnitAt(0)), // 'a' to 'z'
+    ...List.generate(26, (i) => i + 'A'.codeUnitAt(0)), // 'A' to 'Z'
+    ...List.generate(10, (i) => i + '0'.codeUnitAt(0)), // '0' to '9'
+  ];
 
   @override
   PasswordValidationError? validator(String value) {
@@ -37,9 +43,11 @@ class Password extends FormzInput<String, PasswordValidationError> {
 
       final char = String.fromCharCode(c);
 
-      if (int.tryParse(char) != null) hasDigit = true;
+      final isInt = int.tryParse(char) != null;
 
-      if (char == char.toUpperCase()) hasCapital = true;
+      if (isInt) hasDigit = true;
+
+      if (!isInt && char == char.toUpperCase()) hasCapital = true;
 
       length++;
     }
@@ -51,10 +59,4 @@ class Password extends FormzInput<String, PasswordValidationError> {
 
     return null;
   }
-
-  static final List<int> _allowedChars = [
-    ...List.generate(26, (i) => i + 'a'.codeUnitAt(0)), // 'a' to 'z'
-    ...List.generate(26, (i) => i + 'A'.codeUnitAt(0)), // 'A' to 'Z'
-    ...List.generate(10, (i) => i + '0'.codeUnitAt(0)), // '0' to '9'
-  ];
 }
