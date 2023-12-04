@@ -1,13 +1,12 @@
 import 'package:isar/isar.dart';
-
-import '../../../../../domain/models/visitor.dart';
-import '../fast_hash_mixin.dart';
+import 'package:project/domain/models/visitor.dart';
+import 'package:project/utils/fast_hash_x.dart';
 
 part 'visitor_collection.g.dart';
 
 @collection
-class VisitorCollection with FastHashMixin {
-  Id get isarId => fastHash(visitorId);
+class VisitorCollection {
+  Id get isarId => visitorId.fastHash();
 
   @Index(composite: [CompositeIndex("eventId")], unique: true, replace: true)
   String visitorId;

@@ -1,7 +1,7 @@
 import '../../domain/models/event.dart';
 import '../../domain/models/visitor.dart';
 import '../../domain/repositories/events_repository/requests/get_visitors_request.dart';
-import '../../domain/repositories/local_events_repository/local_event_repository.dart';
+import '../../domain/repositories/local_events_repository/local_events_repository.dart';
 import '../../utils/result.dart';
 import '../datasources/local/events_database/collections/event_collection.dart';
 import '../datasources/local/events_database/collections/visitor_collection.dart';

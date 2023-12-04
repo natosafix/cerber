@@ -1,7 +1,6 @@
 import 'package:isar/isar.dart';
-
-import 'collections/event_collection.dart';
-import 'collections/visitor_collection.dart';
+import 'package:project/data/datasources/local/events_database/collections/event_collection.dart';
+import 'package:project/data/datasources/local/events_database/collections/visitor_collection.dart';
 
 class EventsDatabase {
   EventsDatabase({required Isar isar}) : _isar = isar;

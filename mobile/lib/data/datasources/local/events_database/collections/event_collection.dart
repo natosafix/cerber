@@ -1,13 +1,12 @@
 import 'package:isar/isar.dart';
-
-import '../../../../../domain/models/event.dart';
-import '../fast_hash_mixin.dart';
+import 'package:project/domain/models/event.dart';
+import 'package:project/utils/fast_hash_x.dart';
 
 part 'event_collection.g.dart';
 
 @collection
-class EventCollection with FastHashMixin {
-  Id get isarId => fastHash(eventId);
+class EventCollection {
+  Id get isarId => eventId.fastHash();
 
   @Index(unique: true, replace: true)
   String eventId;
