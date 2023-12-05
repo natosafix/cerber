@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project/l10n/generated/l10n.dart';
 
 import '../../domain/repositories/events_repository/events_repository.dart';
 import '../../utils/theme_util.dart';
@@ -47,7 +48,7 @@ class _EventsListViewState extends State<_EventsListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Мероприятия"),
+        title: Text(L10n.current.events),
         elevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: ThemeUtil.isLight(context) ? Colors.black : Colors.white,
@@ -63,8 +64,8 @@ class _EventsListViewState extends State<_EventsListView> {
       body: BlocBuilder<EventsBloc, EventsState>(
         builder: (context, state) {
           if (state.hasReachedMax && state.events.isEmpty) {
-            return const Center(
-              child: Text("У вас нет мероприятий"),
+            return Center(
+              child: Text(L10n.current.youHaveNoEvents),
             );
           }
           return ListView.builder(

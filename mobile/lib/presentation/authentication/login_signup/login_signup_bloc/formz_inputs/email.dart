@@ -1,4 +1,5 @@
 import 'package:formz/formz.dart';
+import 'package:project/l10n/generated/l10n.dart';
 
 enum EmailValidationError {
   empty,
@@ -6,8 +7,8 @@ enum EmailValidationError {
 
   String get errorMessage {
     return switch (this) {
-      EmailValidationError.empty => "Не должно быть пустым",
-      EmailValidationError.invalid => "Некорректный адрес",
+      EmailValidationError.empty => L10n.current.shouldntBeEmpty,
+      EmailValidationError.invalid => L10n.current.invalidEmailAddress,
     };
   }
 }
@@ -23,6 +24,6 @@ class Email extends FormzInput<String, EmailValidationError> with FormzInputErro
   }
 
   static final _emailRegex = RegExp(
-    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$'
+    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
   );
 }

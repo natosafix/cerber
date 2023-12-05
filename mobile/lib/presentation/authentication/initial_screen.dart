@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project/l10n/generated/l10n.dart';
 
 import 'login_signup/login_signup_screen.dart';
 
@@ -26,7 +27,7 @@ class InitialScreen extends StatelessWidget {
               width: double.infinity,
               child: FilledButton(
                 onPressed: () => _signUpPressed(context),
-                child: const Text("Зарегаться"),
+                child: Text(L10n.current.signUp),
               ),
             ),
             const SizedBox(height: 8),
@@ -34,7 +35,7 @@ class InitialScreen extends StatelessWidget {
               width: double.infinity,
               child: FilledButton(
                 onPressed: () => _logInPressed(context),
-                child: const Text("Войти"),
+                child: Text(L10n.current.logIn),
               ),
             ),
           ],

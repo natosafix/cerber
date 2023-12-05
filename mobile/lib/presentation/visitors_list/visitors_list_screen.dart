@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project/l10n/generated/l10n.dart';
 
 import '../../domain/models/event.dart';
 import '../../domain/models/visitor.dart';
@@ -35,14 +36,14 @@ class _VisitorsListScreenState extends State<VisitorsListScreen> {
         backgroundColor: Colors.transparent,
         foregroundColor: ThemeUtil.isLight(context) ? Colors.black : Colors.white,
         elevation: 0,
-        title: const Text("Посетители"),
+        title: Text(L10n.current.visitors),
         actions: [
-          TextButton.icon(onPressed: () {}, icon: const Icon(Icons.add), label: const Text("Добавить")),
+          TextButton.icon(onPressed: () {}, icon: const Icon(Icons.add), label: Text(L10n.current.add)),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _scanQrCodePressed,
-        tooltip: "Сканировать QR-код посетителя",
+        tooltip: L10n.current.scanVisitorsQrCode,
         child: const Icon(Icons.qr_code_2),
       ),
     );

@@ -1,0 +1,33 @@
+{
+    "events": "Мероприятия",
+    "youHaveNoEvents": "У вас нет мероприятий",
+    "where": "Где",
+    "when": "Когда",
+    "more": "больше",
+    "less": "меньше",
+    "downloadDatabase": "Скачать базу",
+    "beginChecking": "Начать проверку",
+    "logIn": "Войти",
+    "signUp": "Зарегаться",
+    "name": "Имя",
+    "email": "Почта",
+    "password": "Пароль",
+    "createAccount": "Создать аккаунт",
+    "logIntoAccount": "Войти в аккаунт",
+    "shouldntBeEmpty": "Не должно быть пустым",
+    "invalidEmailAddress": "Некорректный адрес",
+    "visitors": "Посетители",
+    "add": "Добавить",
+    "scanVisitorsQrCode": "Сканировать QR-код посетителя",
+    "passwordMustHaveAtLeastNChars": "Должен иметь минимум {minLength} символов",
+    "@passwordMustHaveAtLeastNChars": {
+        "placeholders": {
+            "minLength": {
+                "type": "num"
+            }
+        }
+    },
+    "passwordMustHaveAtLeast1CapitalLetter": "Должен иметь минимум 1 заглавную букву",
+    "passwordMustConsistOfLettersAndNumbers": "Должен состоять из латинских букв и цифр",
+    "passwordMustHaveAtLeast1Digit": "Должен иметь минимум 1 цифру"
+}

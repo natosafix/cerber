@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project/l10n/generated/l10n.dart';
 
 import '../../../domain/repositories/authentication_repository/authentication_repository.dart';
 import '../../../utils/theme_util.dart';
@@ -48,7 +49,7 @@ class _LoginSignupViewState extends State<_LoginSignupView> {
         backgroundColor: Colors.transparent,
         foregroundColor: ThemeUtil.isLight(context) ? Colors.black : Colors.white,
         elevation: 0,
-        title: Text(widget.withName ? "Создать аккаунт" : "Войти в аккаунт"),
+        title: Text(widget.withName ? L10n.current.createAccount : L10n.current.logIntoAccount),
         centerTitle: true,
       ),
       body: Padding(
@@ -80,7 +81,7 @@ class _LoginSignupViewState extends State<_LoginSignupView> {
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
-            hintText: 'Почта',
+            hintText: L10n.current.email,
             errorText: state.email.displayError?.errorMessage,
           ),
           onChanged: (value) => context.read<LoginSignupBloc>().add(EmailChanged(value)),
@@ -96,7 +97,7 @@ class _LoginSignupViewState extends State<_LoginSignupView> {
         return TextField(
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
-            hintText: 'Имя',
+            hintText: L10n.current.name,
             errorText: state.name!.displayError?.errorMessage,
           ),
           onChanged: (value) => context.read<LoginSignupBloc>().add(NameChanged(value)),
@@ -115,7 +116,7 @@ class _LoginSignupViewState extends State<_LoginSignupView> {
           autocorrect: false,
           decoration: InputDecoration(
             border: const UnderlineInputBorder(),
-            hintText: 'Пароль',
+            hintText: L10n.current.password,
             errorText: state.password.displayError?.errorMessage,
             suffixIcon: IconButton(
               icon: Icon(hidePassword ? Icons.visibility : Icons.visibility_off),
@@ -139,7 +140,7 @@ class _LoginSignupViewState extends State<_LoginSignupView> {
           width: double.infinity,
           child: FilledButton(
             onPressed: state.isValid ? () => _finishPressed(context) : null,
-            child: Text(state.name == null ? "Войти" : "Зарегаться"),
+            child: Text(state.name == null ? L10n.current.logIn : L10n.current.signUp),
           ),
         );
       },

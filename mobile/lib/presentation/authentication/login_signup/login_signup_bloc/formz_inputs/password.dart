@@ -1,4 +1,5 @@
 import 'package:formz/formz.dart';
+import 'package:project/l10n/generated/l10n.dart';
 
 enum PasswordValidationError {
   empty,
@@ -9,11 +10,11 @@ enum PasswordValidationError {
 
   String get errorMessage {
     return switch (this) {
-      PasswordValidationError.empty => "Не должно быть пустым",
-      PasswordValidationError.tooShort => "Должен иметь минимум ${Password.minPasswordLength} символов",
-      PasswordValidationError.noCapitalLetter => "Должен иметь минимум 1 заглавную букву",
-      PasswordValidationError.disallowedChars => "Должен состоять из латинских букв и цифр",
-      PasswordValidationError.noDigit => "Должен иметь минимум 1 цифру",
+      PasswordValidationError.empty => L10n.current.shouldntBeEmpty,
+      PasswordValidationError.tooShort => L10n.current.passwordMustHaveAtLeastNChars(Password.minPasswordLength),
+      PasswordValidationError.noCapitalLetter => L10n.current.passwordMustHaveAtLeast1CapitalLetter,
+      PasswordValidationError.disallowedChars => L10n.current.passwordMustConsistOfLettersAndNumbers,
+      PasswordValidationError.noDigit => L10n.current.passwordMustHaveAtLeast1Digit,
     };
   }
 }

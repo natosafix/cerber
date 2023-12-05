@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:project/l10n/generated/l10n.dart';
 
 import '../../domain/models/event.dart';
 import '../visitors_list/visitors_list_screen.dart';
@@ -70,7 +71,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                     style: Theme.of(context).textTheme.titleLarge,
                     TextSpan(
                       children: [
-                        const TextSpan(text: "Где: "),
+                        TextSpan(text: "${L10n.current.where}: "),
                         TextSpan(
                           text: widget.event.location,
                           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -83,7 +84,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                     style: Theme.of(context).textTheme.titleLarge,
                     TextSpan(
                       children: [
-                        const TextSpan(text: "Когда: "),
+                        TextSpan(text: "${L10n.current.when}: "),
                         TextSpan(
                           text: widget.event.startDate.toString(),
                           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -94,8 +95,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                   const SizedBox(height: 12),
                   ExpandableText(
                     widget.event.description,
-                    expandText: "больше",
-                    collapseText: "меньше",
+                    expandText: L10n.current.more,
+                    collapseText: L10n.current.less,
                     collapseOnTextTap: true,
                     linkEllipsis: false,
                     animation: true,
@@ -120,7 +121,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
           width: double.infinity,
           child: FilledButton(
             onPressed: () {},
-            child: const Text("Скачать базу"),
+            child: Text(L10n.current.downloadDatabase),
           ),
         ),
         const SizedBox(width: 10),
@@ -128,7 +129,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
           width: double.infinity,
           child: FilledButton(
             onPressed: _startCheckingPressed,
-            child: const Text("Начать проверку"),
+            child: Text(L10n.current.beginChecking),
           ),
         ),
       ],

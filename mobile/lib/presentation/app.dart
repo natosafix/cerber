@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:project/l10n/generated/l10n.dart';
 
 import 'authentication/authentication_bloc/authentication_bloc.dart';
 import 'authentication/initial_screen.dart';
@@ -26,6 +28,13 @@ class _MainAppState extends State<MainApp> {
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.system,
+      localizationsDelegates: const [
+        L10n.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: L10n.delegate.supportedLocales,
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {

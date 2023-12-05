@@ -1,0 +1,33 @@
+{
+    "events": "Events",
+    "youHaveNoEvents": "You don''t have any events",
+    "where": "Where",
+    "when": "When",
+    "more": "more",
+    "less": "less",
+    "downloadDatabase": "Download database",
+    "beginChecking": "Begin checking",
+    "logIn": "Log In",
+    "signUp": "Sign Up",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "createAccount": "Create Account",
+    "logIntoAccount": "Log Into Account",
+    "shouldntBeEmpty": "Shouldn''t be empty",
+    "invalidEmailAddress": "Invalid email address",
+    "visitors": "Visitors",
+    "add": "Add",
+    "scanVisitorsQrCode": "Scan visitor''s QR code",
+    "passwordMustHaveAtLeastNChars": "Must have at least {minLength} characters",
+    "@passwordMustHaveAtLeastNChars": {
+        "placeholders": {
+            "minLength": {
+                "type": "num"
+            }
+        }
+    },
+    "passwordMustHaveAtLeast1CapitalLetter": "Must have at least 1 capital letter",
+    "passwordMustConsistOfLettersAndNumbers": "Must consist of letters and numbers",
+    "passwordMustHaveAtLeast1Digit": "Must have at least 1 digit"
+}
