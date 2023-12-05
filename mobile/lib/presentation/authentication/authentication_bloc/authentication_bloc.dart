@@ -10,7 +10,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     on<Authenticate>(_onAuthenticate);
     on<Unauthenticate>(_onUnauthenticate);
   }
-
+  // TODO: Remove this from here and use SecureStorage to save token and then retrieve it 
+  // in DioInterceptor on every request to EventsRepo
   final _storage = const FlutterSecureStorage(
     aOptions: AndroidOptions(encryptedSharedPreferences: true),
   );
