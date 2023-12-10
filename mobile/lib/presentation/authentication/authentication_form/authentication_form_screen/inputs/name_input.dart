@@ -15,6 +15,7 @@ class NameInput extends StatelessWidget {
             border: const UnderlineInputBorder(),
             hintText: L10n.current.name,
             errorText: state.name!.displayError?.errorMessage,
+            errorMaxLines: 2,
           ),
           enabled: !state.isProcessing,
           onChanged: (value) => context.read<AuthenticationFormBloc>().add(NameChanged(value)),

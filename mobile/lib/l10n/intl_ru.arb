@@ -28,6 +28,14 @@
         }
     },
     "passwordMustHaveAtLeast1CapitalLetter": "Должен иметь минимум 1 заглавную букву",
-    "passwordMustConsistOfLettersAndNumbers": "Должен состоять из латинских букв и цифр",
-    "passwordMustHaveAtLeast1Digit": "Должен иметь минимум 1 цифру"
+    "passwordMustConsistOfLettersAndNumbers": "Должен состоять из латинских букв и цифр, и специальных символов",
+    "passwordMustHaveAtLeast1Digit": "Должен иметь минимум 1 цифру",
+    "passwordMustHaveAtLeast1SpecialChar": "Должен иметь минимум 1 из специальных символов: {specialChars}",
+    "@passwordMustHaveAtLeast1SpecialChar": {
+        "placeholders": {
+            "specialChars": {
+                "type": "String"
+            }
+        }
+    }
 }

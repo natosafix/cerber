@@ -28,6 +28,14 @@
         }
     },
     "passwordMustHaveAtLeast1CapitalLetter": "Must have at least 1 capital letter",
-    "passwordMustConsistOfLettersAndNumbers": "Must consist of letters and numbers",
-    "passwordMustHaveAtLeast1Digit": "Must have at least 1 digit"
+    "passwordMustConsistOfLettersAndNumbers": "Must consist of letters, numbers and special characters",
+    "passwordMustHaveAtLeast1Digit": "Must have at least 1 digit",
+    "passwordMustHaveAtLeast1SpecialChar": "Must have at least 1 of the following characters: {specialChars}",
+    "@passwordMustHaveAtLeast1SpecialChar": {
+        "placeholders": {
+            "specialChars": {
+                "type": "String"
+            }
+        }
+    }
 }

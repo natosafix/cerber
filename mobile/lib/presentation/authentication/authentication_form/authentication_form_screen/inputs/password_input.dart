@@ -25,6 +25,7 @@ class _PasswordInputState extends State<PasswordInput> {
             border: const UnderlineInputBorder(),
             hintText: L10n.current.password,
             errorText: state.password.displayError?.errorMessage,
+            errorMaxLines: 2,
             suffixIcon: IconButton(
               icon: Icon(hidePassword ? Icons.visibility : Icons.visibility_off),
               splashColor: Colors.transparent,

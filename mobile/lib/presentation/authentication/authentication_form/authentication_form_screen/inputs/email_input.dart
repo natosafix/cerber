@@ -16,6 +16,7 @@ class EmailInput extends StatelessWidget {
             border: const UnderlineInputBorder(),
             hintText: L10n.current.email,
             errorText: state.email.displayError?.errorMessage,
+            errorMaxLines: 2,
           ),
           enabled: !state.isProcessing,
           onChanged: (value) => context.read<AuthenticationFormBloc>().add(EmailChanged(value)),
