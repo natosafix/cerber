@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models;
 
@@ -13,6 +14,7 @@ public class HomeController : Controller
         this.logger = logger;
     }
 
+    [Authorize]
     [HttpGet("/[controller]/index")]
     public IActionResult Index()
     {

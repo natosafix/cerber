@@ -2,7 +2,7 @@
 
 namespace Web.Persistence.Repositories;
 
-public interface IEventRepository
+public interface IUserRepository
 {
-    Event Create(Event @event);
+    Task<User?> Get(string name);
 }

@@ -30,9 +30,9 @@ public class AuthController : Controller
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        /*var userExists = await userManager.FindByNameAsync(model.Username);
+        var userExists = await userManager.FindByNameAsync(model.Username);
         if (userExists != null)
-            return BadRequest("User already exists");*/
+            return BadRequest("User already exists");
 
         User user = new()
         {
@@ -61,20 +61,18 @@ public class AuthController : Controller
 
             var authClaims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(ClaimTypes.Name, user.UserName),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
-
-            foreach (var userRole in userRoles)
-            {
-                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-            }
+            authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
 
             var token = GetToken(authClaims);
-
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+            
+            Response.Cookies.Append(config["JWT:CookieName"]!, tokenString, new CookieOptions {HttpOnly = true});
             return Ok(new
             {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
+                token = tokenString,
                 expiration = token.ValidTo
             });
         }

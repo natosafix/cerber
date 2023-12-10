@@ -21,4 +21,9 @@ public class CreateEventDto
     public DateTimeOffset From;
     
     public DateTimeOffset To;
+    
+    [Required]
+    public string OwnerId;
+    
+    public string CategoryId;
 }
