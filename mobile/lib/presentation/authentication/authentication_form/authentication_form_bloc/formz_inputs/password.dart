@@ -10,14 +10,14 @@ enum PasswordValidationError {
   noSpecialCharacter;
 
   String get errorMessage {
+    final l10n = L10n.current;
     return switch (this) {
-      PasswordValidationError.empty => L10n.current.shouldntBeEmpty,
-      PasswordValidationError.tooShort => L10n.current.passwordMustHaveAtLeastNChars(Password.minPasswordLength),
-      PasswordValidationError.noCapitalLetter => L10n.current.passwordMustHaveAtLeast1CapitalLetter,
-      PasswordValidationError.disallowedChars => L10n.current.passwordMustConsistOfLettersAndNumbers,
-      PasswordValidationError.noDigit => L10n.current.passwordMustHaveAtLeast1Digit,
-      PasswordValidationError.noSpecialCharacter =>
-        L10n.current.passwordMustHaveAtLeast1SpecialChar(Password.specialChars.join(''))
+      PasswordValidationError.empty => l10n.shouldntBeEmpty,
+      PasswordValidationError.tooShort => l10n.passwordMustHaveAtLeastNChars(Password.minPasswordLength),
+      PasswordValidationError.noCapitalLetter => l10n.passwordMustHaveAtLeast1CapitalLetter,
+      PasswordValidationError.disallowedChars => l10n.passwordMustConsistOfLettersAndNumbers,
+      PasswordValidationError.noDigit => l10n.passwordMustHaveAtLeast1Digit,
+      PasswordValidationError.noSpecialCharacter => l10n.passwordMustHaveAtLeast1SpecialChar(Password.specialChars)
     };
   }
 }
@@ -32,10 +32,10 @@ class Password extends FormzInput<String, PasswordValidationError> {
     ...List.generate(26, (i) => i + 'a'.codeUnitAt(0)), // 'a' to 'z'
     ...List.generate(26, (i) => i + 'A'.codeUnitAt(0)), // 'A' to 'Z'
     ...List.generate(10, (i) => i + '0'.codeUnitAt(0)), // '0' to '9'
-    ...specialChars.map((e) => e.codeUnitAt(0)),        //  special chars
+    ...specialChars.split('').map((e) => e.codeUnitAt(0)), // special chars
   ];
 
-  static final List<String> specialChars = r'!@#$%^&*()?_-'.split('');
+  static const String specialChars = r'!@#$%^&*()?_-';
 
   @override
   PasswordValidationError? validator(String value) {
