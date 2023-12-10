@@ -9,14 +9,17 @@ import '../../utils/result.dart';
 class MockAuthRepo implements AuthenticationRepository {
   @override
   Future<Result<AuthenticationResponse, DioException>> logIn(LogInRequest logInRequest) async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 3));
+
+    // return Failure(DioException.badResponse(
+    //     statusCode: 100, requestOptions: RequestOptions(), response: Response(requestOptions: RequestOptions())));
 
     return Success(AuthenticationResponse(token: "LogInToken"));
   }
 
   @override
   Future<Result<AuthenticationResponse, DioException>> signUp(SignUpRequest signUpRequest) async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 3));
 
     return Success(AuthenticationResponse(token: "SignUpToken"));
   }

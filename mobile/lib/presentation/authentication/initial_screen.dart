@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
 import 'package:project/l10n/generated/l10n.dart';
-
-import 'login_signup/login_signup_screen.dart';
+import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/log_in_bloc.dart';
+import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/sign_up_bloc.dart';
+import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/authentication_form_screen.dart';
+import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/inputs/email_input.dart';
+import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/inputs/name_input.dart';
+import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/inputs/password_input.dart';
 
 class InitialScreen extends StatelessWidget {
   const InitialScreen({super.key});
@@ -46,13 +52,31 @@ class InitialScreen extends StatelessWidget {
 
   void _signUpPressed(BuildContext context) {
     Navigator.of(context).push(
-      LoginSignupScreen.route(withName: true),
+      MaterialPageRoute(
+        builder: (context) {
+          return AuthenticationFormScreenBase(
+            authenticationFormBloc: SignUpBloc(authenticationRepository: context.read<AuthenticationRepository>()),
+            inputFields: const [EmailInput(), NameInput(), PasswordInput()],
+            title: L10n.current.createAccount,
+            finishButtonText: L10n.current.signUp,
+          );
+        },
+      ),
     );
   }
 
   void _logInPressed(BuildContext context) {
     Navigator.of(context).push(
-      LoginSignupScreen.route(withName: false),
+      MaterialPageRoute(
+        builder: (context) {
+          return AuthenticationFormScreenBase(
+            authenticationFormBloc: LogInBloc(authenticationRepository: context.read<AuthenticationRepository>()),
+            inputFields: const [EmailInput(), PasswordInput()],
+            title: L10n.current.logIntoAccount,
+            finishButtonText: L10n.current.logIn,
+          );
+        },
+      ),
     );
   }
 }

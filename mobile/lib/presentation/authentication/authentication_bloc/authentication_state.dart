@@ -7,9 +7,7 @@ final class Unknown extends AuthenticationState {}
 final class Authenticated extends AuthenticationState {
   final String token;
 
-  Authenticated({
-    required this.token,
-  });
+  Authenticated({required this.token});
 }
 
 final class Unauthenticated extends AuthenticationState {}
