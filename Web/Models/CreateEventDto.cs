@@ -5,25 +5,25 @@ namespace Web.Models;
 public class CreateEventDto
 {
     [Required]
-    public string Name;
+    public string Name { get; set; }
 
     [Required]
-    public string ShortDescription;
+    public string ShortDescription { get; set; }
 
-    public string Description;
-
-    [Required]
-    public string City;
+    public string Description { get; set; }
 
     [Required]
-    public string Address;
+    public string City { get; set; }
 
-    public DateTimeOffset From;
+    [Required]
+    public string Address { get; set; }
+
+    public DateTimeOffset From { get; set; }
     
-    public DateTimeOffset To;
+    public DateTimeOffset To { get; set; }
     
     [Required]
-    public string OwnerId;
+    public string OwnerId { get; set; }
     
-    public string CategoryId;
+    public string CategoryId { get; set; }
 }

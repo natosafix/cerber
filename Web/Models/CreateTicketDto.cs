@@ -5,8 +5,8 @@ namespace Web.Models;
 public class CreateTicketDto
 {
     [Required]
-    public string Price;
+    public string Price { get; set; }
 
     [Required]
-    public string EventId;
+    public string EventId { get; set; }
 }

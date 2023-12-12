@@ -6,10 +6,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Web.Extensions;
 using Web.Mapping;
 using Web.Persistence;
-using Web.Persistence.Repositories;
-using Web.Services;
 
 namespace Web;
 
@@ -25,13 +24,8 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddPersistence(config);
-        services.AddScoped<IEventsService, EventsService>();
-        services.AddScoped<IEventsRepository, EventsRepository>();
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<ITicketsService, TicketsService>();
-        services.AddScoped<ITicketsRepository, TicketsRepository>();
-        services.AddScoped<IOrdersService, OrdersService>();
-        services.AddScoped<IOrdersRepository, OrdersRepository>();
+        services.AddRepositories();
+        services.AddServices();
         
         services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddEntityFrameworkStores<CerberDbContext>()

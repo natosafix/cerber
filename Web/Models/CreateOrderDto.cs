@@ -5,5 +5,5 @@ namespace Web.Models;
 public class CreateOrderDto
 {
     [Required]
-    public string TicketId;
+    public string TicketId { get; set; }
 }
