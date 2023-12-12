@@ -6,7 +6,7 @@ public class CreateQuestionDto
     
     public string Content { get; set; }
     
-    public bool Required { get; set; }
+    public string Required { get; set; }
     
-    public int EventId { get; set; }
+    public string EventId { get; set; }
 }

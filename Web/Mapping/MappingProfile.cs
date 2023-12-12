@@ -13,5 +13,7 @@ public class MappingProfile : Profile
         CreateMap<CreateOrderDto, Order>();
         CreateMap<CreateAnswerDto, Answer>();
         CreateMap<CreateQuestionDto, Question>();
+        
+        CreateMap<Event, EventResponseDto>();
     }
 }

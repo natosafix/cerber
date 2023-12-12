@@ -2,7 +2,8 @@
 
 namespace Web.Persistence.Repositories;
 
-public interface IUserRepository
+public interface IUsersRepository
 {
+    Task<User?> Get(Guid id);
     Task<User?> Get(string name);
 }

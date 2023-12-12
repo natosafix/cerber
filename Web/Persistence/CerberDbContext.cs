@@ -16,7 +16,6 @@ public sealed class CerberDbContext : IdentityDbContext<User>
 
     public CerberDbContext(DbContextOptions<CerberDbContext> options) : base(options)
     {
-        Database.EnsureCreated();
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)

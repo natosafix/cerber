@@ -12,8 +12,8 @@ using Web.Persistence;
 namespace Web.Migrations
 {
     [DbContext(typeof(CerberDbContext))]
-    [Migration("20231129195200_Entities")]
-    partial class Entities
+    [Migration("20231212135856_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,8 +37,8 @@ namespace Web.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("integer");
@@ -122,19 +122,14 @@ namespace Web.Migrations
 
             modelBuilder.Entity("Domain.Entities.Order", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
                     b.Property<Guid>("Customer")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<int>("TicketId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("Customer");
 
                     b.HasIndex("TicketId");
 

@@ -4,7 +4,7 @@ public class CreateAnswerDto
 {
     public string Content { get; set; }
 
-    public int QuestionId { get; set; }
+    public string QuestionId { get; set; }
 
-    public int OrderId { get; set; }
+    public string OrderId { get; set; }
 }

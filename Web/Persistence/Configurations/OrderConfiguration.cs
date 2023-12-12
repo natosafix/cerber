@@ -10,10 +10,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
         builder.ToTable("orders");
 
-        builder.HasKey(e => e.Id);
-        
-        builder.Property(e => e.Customer)
-            .IsRequired();
+        builder.HasKey(e => e.Customer);
         
         builder.HasMany(order => order.Answers)
             .WithOne(answer => answer.Order)

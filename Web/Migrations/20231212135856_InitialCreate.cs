@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Web.Migrations
 {
     /// <inheritdoc />
-    public partial class Entities : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -273,14 +273,12 @@ namespace Web.Migrations
                 name: "orders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Customer = table.Column<Guid>(type: "uuid", nullable: false),
                     TicketId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_orders", x => x.Id);
+                    table.PrimaryKey("PK_orders", x => x.Customer);
                     table.ForeignKey(
                         name: "FK_orders_tickets_TicketId",
                         column: x => x.TicketId,
@@ -297,7 +295,7 @@ namespace Web.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Content = table.Column<string>(type: "text", nullable: false),
                     QuestionId = table.Column<int>(type: "integer", nullable: false),
-                    OrderId = table.Column<int>(type: "integer", nullable: false)
+                    OrderId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -306,7 +304,7 @@ namespace Web.Migrations
                         name: "FK_answers_orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "orders",
-                        principalColumn: "Id",
+                        principalColumn: "Customer",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_answers_questions_QuestionId",

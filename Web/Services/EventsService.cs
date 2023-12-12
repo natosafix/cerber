@@ -5,12 +5,12 @@ namespace Web.Services;
 
 public class EventsService : IEventsService
 {
-    private readonly IUserRepository userRepository;
+    private readonly IUsersRepository usersRepository;
     private readonly IEventsRepository eventsRepository;
 
-    public EventsService(IUserRepository userRepository, IEventsRepository eventsRepository)
+    public EventsService(IUsersRepository usersRepository, IEventsRepository eventsRepository)
     {
-        this.userRepository = userRepository;
+        this.usersRepository = usersRepository;
         this.eventsRepository = eventsRepository;
     }
 
@@ -18,10 +18,22 @@ public class EventsService : IEventsService
     {
         return await eventsRepository.Create(@event);
     }
+    
+    public async Task AddInspector(int id, Guid inspectorId)
+    {
+        var inspector = await usersRepository.Get(inspectorId);
+        await eventsRepository.AddInspector(id, inspector);
+    }
 
     public async Task<List<Event>> GetInspected(string username)
     {
-        var user = await userRepository.Get(username);
-        return user?.InspectedEvents ?? new List<Event>();
+        var user = await usersRepository.Get(username);
+        var inspectedEvents = user?.InspectedEvents ?? new List<Event>(); //TODO: кидать ошибку
+        foreach (var e in inspectedEvents)
+        {
+            e.Inspectors = null;
+        }
+
+        return inspectedEvents;
     }
 }

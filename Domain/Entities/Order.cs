@@ -2,8 +2,6 @@
 
 public class Order
 {
-    public int Id { get; set; }
-    
     public Guid Customer { get; set; }
 
     public List<Answer> Answers { get; set; }

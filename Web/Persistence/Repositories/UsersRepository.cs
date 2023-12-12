@@ -3,15 +3,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Web.Persistence.Repositories;
 
-public class UserRepository : IUserRepository
+public class UsersRepository : IUsersRepository
 {
     private readonly CerberDbContext dbContext;
     
-    public UserRepository(CerberDbContext dbContext)
+    public UsersRepository(CerberDbContext dbContext)
     {
         this.dbContext = dbContext;
     }
 
+    public async Task<User?> Get(Guid id)
+    {
+        return await dbContext.Users.FindAsync(id.ToString());
+    }
+    
     public async Task<User?> Get(string username)
     {
         return await dbContext.Users

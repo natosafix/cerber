@@ -2,24 +2,24 @@
 
 public class Event
 {
-    public int Id;
+    public int Id { get; set; }
     
-    public string Name;
+    public string Name { get; set; }
 
-    public string ShortDescription;
+    public string ShortDescription { get; set; }
 
-    public string Description;
+    public string Description { get; set; }
     
     //Тут как то фотка мероприятия будет храниться, пока в мыслях - имя файла
     // Cover
 
-    public string City;
+    public string City { get; set; }
 
-    public string Address;
+    public string Address { get; set; }
 
-    public DateTimeOffset From;
+    public DateTimeOffset From { get; set; }
     
-    public DateTimeOffset To;
+    public DateTimeOffset To { get; set; }
     
     public string OwnerId { get; set; }
     public User Owner { get; set; }

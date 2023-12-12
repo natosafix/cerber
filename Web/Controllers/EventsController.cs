@@ -21,9 +21,9 @@ public class EventsController : Controller
     }
     
     [HttpGet("inspected")]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> GetInspected()
     {
-        return Ok(await eventsService.GetInspected(User.Identity!.Name!));
+        return Ok(mapper.Map<List<EventResponseDto>>(await eventsService.GetInspected(User.Identity!.Name!)));
     }
     
     [HttpPost("")]
@@ -36,4 +36,15 @@ public class EventsController : Controller
         return Ok(await eventsService.Create(mapper.Map<Event>(createEventDto)));
     }
     
+    [HttpPut("{id}/inspector")]
+    public async Task<IActionResult> AddInspector([FromRoute] int id, [FromBody] SetInspectorDto setInspectorDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var inspectorId = Guid.Parse(setInspectorDto.Id);
+        await eventsService.AddInspector(id, inspectorId);
+        
+        return NoContent();
+    }
 }
