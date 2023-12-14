@@ -26,8 +26,8 @@ public class EventsService : IEventsService
         await eventsRepository.AddInspector(id, inspector);
     }
 
-    public PageList<Event> GetInspected(string username, int offset, int limit)
+    public async Task<PageList<Event>> GetInspected(string username, int offset, int limit)
     {
-        return eventsRepository.GetInspected(username, offset, limit);
+        return await eventsRepository.GetInspected(username, offset, limit);
     }
 }

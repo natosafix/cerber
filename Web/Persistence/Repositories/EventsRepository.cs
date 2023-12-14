@@ -31,16 +31,15 @@ public class EventsRepository : IEventsRepository
        await dbContext.SaveChangesAsync();
    }
 
-   public PageList<Event> GetInspected(string username, int offset, int limit)
+   public async Task<PageList<Event>> GetInspected(string username, int offset, int limit)
    {
-       var user = dbContext.Users
-           .Include(u => u.InspectedEvents)
-           .FirstOrDefault(u => u.UserName.Equals(username));
-       var events = user
-           ?.InspectedEvents
+       var events = await dbContext.Users
+           .Where(u => u.UserName.Equals(username))
+           .Select(u => u.InspectedEvents)
            .Skip(offset * limit)
-           .Take(limit);
+           .Take(limit)
+           .FirstOrDefaultAsync();
        
-       return new PageList<Event>(events, offset, limit);
+       return new PageList<Event>(events ?? new List<Event>(), offset, limit);
    }
 }

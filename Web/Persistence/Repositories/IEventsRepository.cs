@@ -9,5 +9,5 @@ public interface IEventsRepository
     
     Task AddInspector(int id, User inspector);
 
-    PageList<Event> GetInspected(string username, int offset, int limit);
+    Task<PageList<Event>> GetInspected(string username, int offset, int limit);
 }
