@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Web.Models;
 using Web.Persistence.Repositories;
 
 namespace Web.Services;
@@ -25,15 +26,8 @@ public class EventsService : IEventsService
         await eventsRepository.AddInspector(id, inspector);
     }
 
-    public async Task<List<Event>> GetInspected(string username)
+    public PageList<Event> GetInspected(string username, int offset, int limit)
     {
-        var user = await usersRepository.Get(username);
-        var inspectedEvents = user?.InspectedEvents ?? new List<Event>(); //TODO: кидать ошибку
-        foreach (var e in inspectedEvents)
-        {
-            e.Inspectors = null;
-        }
-
-        return inspectedEvents;
+        return eventsRepository.GetInspected(username, offset, limit);
     }
 }

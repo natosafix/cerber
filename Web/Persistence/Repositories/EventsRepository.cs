@@ -1,4 +1,6 @@
 ﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Web.Models;
 
 namespace Web.Persistence.Repositories;
 
@@ -27,5 +29,18 @@ public class EventsRepository : IEventsRepository
        @event.Inspectors.Add(inspector);
        dbContext.Events.Update(@event);
        await dbContext.SaveChangesAsync();
+   }
+
+   public PageList<Event> GetInspected(string username, int offset, int limit)
+   {
+       var user = dbContext.Users
+           .Include(u => u.InspectedEvents)
+           .FirstOrDefault(u => u.UserName.Equals(username));
+       var events = user
+           ?.InspectedEvents
+           .Skip(offset * limit)
+           .Take(limit);
+       
+       return new PageList<Event>(events, offset, limit);
    }
 }

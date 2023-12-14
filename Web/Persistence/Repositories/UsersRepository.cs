@@ -14,13 +14,13 @@ public class UsersRepository : IUsersRepository
 
     public async Task<User?> Get(Guid id)
     {
-        return await dbContext.Users.FindAsync(id.ToString());
+        return await dbContext.Users
+            .FindAsync(id.ToString());
     }
     
     public async Task<User?> Get(string username)
     {
         return await dbContext.Users
-            .Include(u => u.InspectedEvents)
             .FirstOrDefaultAsync(u => string.Equals(u.UserName, username));
     }
 }

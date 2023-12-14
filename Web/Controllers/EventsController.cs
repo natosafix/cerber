@@ -21,9 +21,10 @@ public class EventsController : Controller
     }
     
     [HttpGet("inspected")]
-    public async Task<IActionResult> GetInspected()
+    public IActionResult GetInspected([FromQuery] PaginationDto paginationDto)
     {
-        return Ok(mapper.Map<List<EventResponseDto>>(await eventsService.GetInspected(User.Identity!.Name!)));
+        var inspectedEvents = eventsService.GetInspected(User.Identity!.Name!, paginationDto.Offset, paginationDto.Limit);
+        return Ok(mapper.Map<List<EventResponseDto>>(inspectedEvents));
     }
     
     [HttpPost("")]
