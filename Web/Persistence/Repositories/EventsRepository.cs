@@ -33,11 +33,11 @@ public class EventsRepository : IEventsRepository
 
    public async Task<PageList<Event>> GetInspected(string username, int offset, int limit)
    {
-       var events = dbContext.Users
+       var events = (await dbContext.Users
            .Where(u => u.UserName.Equals(username))
            .Select(u => u.InspectedEvents)
-           .First()
-           .Skip(offset * limit)
+           .FirstOrDefaultAsync())
+           ?.Skip(offset)
            .Take(limit);
        
        return new PageList<Event>(events ?? new List<Event>(), offset, limit);
