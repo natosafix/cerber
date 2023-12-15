@@ -12,9 +12,10 @@ interface Props {
     storageSaver: ILocalStorageSaver;
     question: Question;
     onQuestionUpdate: (question: Question) => void;
+    questionNum: number;
 }
 
-export const QuestionBuilder: React.FC<Props> = ({ storageSaver, question, onQuestionUpdate }) => {
+export const QuestionBuilder: React.FC<Props> = ({ storageSaver, question, onQuestionUpdate, questionNum }) => {
     const [type, setType] = useState(question.type);
     
     const onTitleUpdate = (v: string) => {
@@ -32,7 +33,7 @@ export const QuestionBuilder: React.FC<Props> = ({ storageSaver, question, onQue
 
     return (
         <Gapped gap={10} vertical={true}>
-            <Label label={`Вопрос №${question.key}`} size={'medium'} />
+            <Label label={`Вопрос №${questionNum}`} size={'medium'} />
             <SingleStringQuestion title={'Текст вопроса'} size={'small'} 
                                   onValueChange={onTitleUpdate}
                                   defaultValue={question.title} />
