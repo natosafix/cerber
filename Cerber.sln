@@ -5,10 +5,6 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{CABCD899-974C-4256-9E39-84EE163EF05C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{AC5348DF-D361-4C2F-8F1E-7F9B356020DE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{7392C159-300A-48C1-9A37-519A0A9D6833}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{AF350FD4-6146-4FDC-818F-B06409DF079C}"
 EndProject
 Global
@@ -21,14 +17,6 @@ Global
 		{CABCD899-974C-4256-9E39-84EE163EF05C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CABCD899-974C-4256-9E39-84EE163EF05C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CABCD899-974C-4256-9E39-84EE163EF05C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC5348DF-D361-4C2F-8F1E-7F9B356020DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC5348DF-D361-4C2F-8F1E-7F9B356020DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC5348DF-D361-4C2F-8F1E-7F9B356020DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC5348DF-D361-4C2F-8F1E-7F9B356020DE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7392C159-300A-48C1-9A37-519A0A9D6833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7392C159-300A-48C1-9A37-519A0A9D6833}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7392C159-300A-48C1-9A37-519A0A9D6833}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7392C159-300A-48C1-9A37-519A0A9D6833}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AF350FD4-6146-4FDC-818F-B06409DF079C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AF350FD4-6146-4FDC-818F-B06409DF079C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF350FD4-6146-4FDC-818F-B06409DF079C}.Release|Any CPU.ActiveCfg = Release|Any CPU

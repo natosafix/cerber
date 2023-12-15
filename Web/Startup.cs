@@ -1,8 +1,14 @@
 ﻿using System.Text;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Persistence;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Web.Extensions;
+using Web.Mapping;
+using Web.Persistence;
 
 namespace Web;
 
@@ -18,14 +24,26 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddPersistence(config);
+        services.AddRepositories();
+        services.AddServices();
         
-        services.AddIdentity<IdentityUser, IdentityRole>()
+        services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddEntityFrameworkStores<CerberDbContext>()
             .AddDefaultTokenProviders();
+
+        services.AddAutoMapper(typeof(MappingProfile));
         
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        services.AddAuthorization(options =>
+        {
+            options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build();
+        });
+        
+        services.AddAuthentication()
             .AddJwtBearer(options =>
             {
+                options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -36,8 +54,22 @@ public class Startup
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Secret"]!)),
                     ValidateIssuerSigningKey = true
                 };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = c =>
+                    {
+                        c.Token = c.Request.Cookies[config["JWT:CookieName"]!];
+                        return Task.CompletedTask;
+                    }
+                };
             });
-        services.AddControllersWithViews();
+
+        services.AddControllersWithViews()
+            .AddNewtonsoftJson(options =>
+        {
+            options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Populate;
+        });
         services.AddSwaggerGen();
     }
 

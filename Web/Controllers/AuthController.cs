@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -11,11 +12,11 @@ namespace Web.Controllers;
 public class AuthController : Controller
 {
     private readonly ILogger<AuthController> logger;
-    private readonly UserManager<IdentityUser> userManager;
+    private readonly UserManager<User> userManager;
     private readonly RoleManager<IdentityRole> roleManager;
     private readonly IConfiguration config;
 
-    public AuthController(ILogger<AuthController> logger, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration config)
+    public AuthController(ILogger<AuthController> logger, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration config)
     {
         this.logger = logger;
         this.userManager = userManager;
@@ -29,11 +30,11 @@ public class AuthController : Controller
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        /*var userExists = await userManager.FindByNameAsync(model.Username);
+        var userExists = await userManager.FindByNameAsync(model.Username);
         if (userExists != null)
-            return BadRequest("User already exists");*/
+            return BadRequest("User already exists");
 
-        IdentityUser user = new()
+        User user = new()
         {
             Email = model.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
@@ -60,20 +61,18 @@ public class AuthController : Controller
 
             var authClaims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(ClaimTypes.Name, user.UserName),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
-
-            foreach (var userRole in userRoles)
-            {
-                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-            }
+            authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
 
             var token = GetToken(authClaims);
-
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+            
+            Response.Cookies.Append(config["JWT:CookieName"]!, tokenString, new CookieOptions {HttpOnly = true});
             return Ok(new
             {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
+                token = tokenString,
                 expiration = token.ValidTo
             });
         }

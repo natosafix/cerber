@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 
-namespace Persistence;
+namespace Web.Persistence;
 
 public static class DependencyInjection
 {

@@ -1,0 +1,27 @@
+﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Web.Persistence.Configurations;
+
+public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
+{
+    public void Configure(EntityTypeBuilder<Ticket> builder)
+    {
+        builder.ToTable("tickets");
+
+        builder.HasKey(e => e.Id);
+        
+        builder.Property(e => e.Price)
+            .IsRequired();
+
+        builder.HasOne(ticket => ticket.Event)
+            .WithMany(@event => @event.Tickets)
+            .HasForeignKey(ticket => ticket.EventId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.HasMany(ticket => ticket.Orders)
+            .WithOne(order => order.Ticket)
+            .OnDelete(DeleteBehavior.SetNull);
+    }
+}
