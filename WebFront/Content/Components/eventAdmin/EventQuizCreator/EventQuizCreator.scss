@@ -1,0 +1,11 @@
+﻿.questionBuilderWrapper {
+  position: relative;
+  
+  .binBtnWrapper {
+    position: absolute;
+    display: flex;
+    height: 1.4rem;
+    text-align: center;
+    left: -30px;
+  }
+}
