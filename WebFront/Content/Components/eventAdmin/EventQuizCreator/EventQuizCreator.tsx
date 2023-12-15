@@ -5,10 +5,16 @@ import { LocalStorageSaver } from '../../../Helpers/LocalStorageSaver/LocalStora
 import { Button, Gapped } from '@skbkontur/react-ui';
 import { QuestionBuilder } from '../Questions/QuestionBuilder/QuestionBuilder';
 import { Question } from '../Questions/QuestionBuilder/Question';
-import { BinButton } from '../../../Entries/Shared/BinButton';
+import { BinButton } from '../../../Entries/Shared/BinButton/BinButton';
+import styles from './EventQuizCreator.scss'
 
 interface Props {
     onSave: () => void;
+}
+
+interface QuizBuilderCreatorProps {
+    question: Question;
+    num: number;
 }
 
 export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
@@ -31,14 +37,16 @@ export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
         setQuestions(questions);
     };
 
-    const Create: React.FC<Question> = (question) => {
+    const Create: React.FC<QuizBuilderCreatorProps> = ({question, num}) => {
         return (
-            <div key={question.key}>
-                <BinButton />
-                {/*<Button onClick={() => onDeleteQuestion(question.key)}>Удалить</Button>*/}
-                <QuestionBuilder storageSaver={localStorageSaver} 
+            <div key={question.key} className={styles.questionBuilderWrapper}>
+                <div className={styles.binBtnWrapper}>
+                    <BinButton onClick={() => onDeleteQuestion(question.key)} />
+                </div>
+                <QuestionBuilder storageSaver={localStorageSaver}
                                  onQuestionUpdate={onUpdateQuestion}
-                                 question={question} />
+                                 question={question}
+                                 questionNum={num + 4} />
             </div>
         );
     };
@@ -64,8 +72,8 @@ export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
                                   placeholder={'Введите вашу фамилию'}
                                   size={'medium'}
             />
-            {questions.map((question) =>
-                Create(question),
+            {questions.map((question, num) =>
+                Create({question, num})
             )}
             <EventAdminSaveBtn onSave={onSave} />
         </Gapped>
