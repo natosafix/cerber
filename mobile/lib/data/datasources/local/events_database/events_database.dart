@@ -10,12 +10,15 @@ class EventsDatabase {
   IsarCollection<EventCollection> get _events => _isar.collection<EventCollection>();
   IsarCollection<VisitorCollection> get _visitors => _isar.collection<VisitorCollection>();
 
-  Future<List<EventCollection>> getEvents(int limit, int offset) async {
+  Future<List<EventCollection>> getEvents({
+    required int limit,
+    required int offset,
+  }) async {
     return await _events.where().offset(offset).limit(limit).findAll();
   }
 
-  Future<EventCollection?> getEventById(String id) async {
-    return await _events.where().eventIdEqualTo(id).findFirst();
+  Future<List<String>> getAllEventsIds() async {
+    return await _events.where().eventIdProperty().findAll();
   }
 
   Future<void> addEvents(List<EventCollection> events) async {
@@ -24,13 +27,17 @@ class EventsDatabase {
     });
   }
 
-  Future<void> deleteEvent(EventCollection event) async {
+  Future<void> deleteEventsByIds(List<String> eventsIds) async {
     await _isar.writeTxn(() async {
-      await _events.delete(event.isarId);
+      await _events.deleteAllByEventId(eventsIds);
     });
   }
 
-  Future<List<VisitorCollection>> getVisitors(String eventId, int limit, int offset) async {
+  Future<List<VisitorCollection>> getVisitors({
+    required String eventId,
+    required int limit,
+    required int offset,
+  }) async {
     return await _visitors.where().eventIdEqualTo(eventId).offset(offset).limit(limit).findAll();
   }
 

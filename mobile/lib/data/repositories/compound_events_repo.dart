@@ -1,11 +1,10 @@
 import 'dart:io';
 
-import '../../domain/models/event.dart';
-import '../../domain/models/visitor.dart';
-import '../../domain/repositories/events_repository/events_repository.dart';
-import '../../domain/repositories/events_repository/requests/get_visitors_request.dart';
-import '../../domain/repositories/local_events_repository/local_events_repository.dart';
-import '../../utils/result.dart';
+import 'package:project/domain/models/event.dart';
+import 'package:project/domain/models/visitor.dart';
+import 'package:project/domain/repositories/events_repository/events_repository.dart';
+import 'package:project/domain/repositories/local_events_repository/local_events_repository.dart';
+import 'package:project/utils/result.dart';
 
 class CompoundEventsRepository implements EventsRepository {
   CompoundEventsRepository({
@@ -17,13 +16,13 @@ class CompoundEventsRepository implements EventsRepository {
   final EventsRepository _remoteEventsRepo;
   final LocalEventsRepository _localEventsRepo;
 
-  late bool networkAvailable;
+  late final bool _networkAvailable;
 
-  Future init() async {
-    networkAvailable = await checkNetworkAvailability();
+  Future<void> init() async {
+    _networkAvailable = await _checkNetworkAvailability();
   }
 
-  Future<bool> checkNetworkAvailability() async {
+  Future<bool> _checkNetworkAvailability() async {
     try {
       final result = await InternetAddress.lookup('example.com');
       return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
@@ -32,25 +31,71 @@ class CompoundEventsRepository implements EventsRepository {
     }
   }
 
-  @override
-  Future<Result<List<Event>, Exception>> getEvents(int limit, int offset) async {
-    if (networkAvailable) {
-      final result = await _remoteEventsRepo.getEvents(limit, offset);
-      if (result.isSuccess) _localEventsRepo.saveEvents(result.success);
-      return result;
-    }
+  final Set<String> _downloadedEventsIds = {};
 
-    return await _localEventsRepo.getEvents(limit, offset);
+  void _deleteNonexistentEvents() async {
+    final savedEventsIds = (await _localEventsRepo.getAllEventsIds()).toSet();
+
+    final nonExistentEventsIds = savedEventsIds.difference(_downloadedEventsIds);
+
+    _localEventsRepo.deleteEventsByIds(nonExistentEventsIds.toList());
+
+    _downloadedEventsIds.clear();
   }
 
   @override
-  Future<Result<List<Visitor>, Exception>> getVisitors(GetVisitorsRequest getVisitorsRequest) async {
-    if (networkAvailable) {
-      final result = await _remoteEventsRepo.getVisitors(getVisitorsRequest);
-      if (result.isSuccess) _localEventsRepo.saveVisitors(result.success, getVisitorsRequest.eventId);
-      return result;
+  Future<Result<List<Event>, Exception>> getEvents({
+    required int offset,
+    required int limit,
+  }) async {
+    if (!_networkAvailable) {
+      return await _localEventsRepo.getEvents(offset: offset, limit: limit);
     }
 
-    return await _localEventsRepo.getVisitors(getVisitorsRequest);
+    final result = await _remoteEventsRepo.getEvents(
+      offset: offset,
+      limit: limit,
+    );
+
+    if (result.isSuccess) {
+      final events = result.success;
+      final count = events.length;
+
+      _localEventsRepo.saveEvents(events);
+      _downloadedEventsIds.addAll(events.map((e) => e.id));
+
+      if (count < limit) {
+        // local db stores all events that have ever been received from the api
+        // it also includes events that were deleted on the frontend
+        // thus in order to avoid showing them while offline they need to be removed
+        // we do this after we have received all existing events from the api
+        _deleteNonexistentEvents();
+      }
+    }
+
+    return result;
+  }
+
+  @override
+  Future<Result<List<Visitor>, Exception>> getVisitors({
+    required String eventId,
+    required int limit,
+    required int offset,
+  }) async {
+    if (!_networkAvailable) {
+      return await _localEventsRepo.getVisitors(eventId: eventId, limit: limit, offset: offset);
+    }
+    
+    final result = await _remoteEventsRepo.getVisitors(
+      eventId: eventId,
+      limit: limit,
+      offset: offset,
+    );
+
+    if (result.isSuccess) {
+      _localEventsRepo.saveVisitors(result.success, eventId);
+    }
+
+    return result;
   }
 }

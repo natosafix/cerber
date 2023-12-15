@@ -20,7 +20,10 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
-  static String m0(minLength) => "Должен иметь минимум ${minLength} символов";
+  static String m0(specialChars) =>
+      "Должен иметь минимум 1 из специальных символов: ${specialChars}";
+
+  static String m1(minLength) => "Должен иметь минимум ${minLength} символов";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -32,6 +35,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "downloadDatabase":
             MessageLookupByLibrary.simpleMessage("Скачать базу"),
         "email": MessageLookupByLibrary.simpleMessage("Почта"),
+        "eventHasNoVisitors": MessageLookupByLibrary.simpleMessage(
+            "У этого мероприятия нет посетителей"),
         "events": MessageLookupByLibrary.simpleMessage("Мероприятия"),
         "invalidEmailAddress":
             MessageLookupByLibrary.simpleMessage("Некорректный адрес"),
@@ -44,13 +49,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "password": MessageLookupByLibrary.simpleMessage("Пароль"),
         "passwordMustConsistOfLettersAndNumbers":
             MessageLookupByLibrary.simpleMessage(
-                "Должен состоять из латинских букв и цифр"),
+                "Должен состоять из латинских букв и цифр, и специальных символов"),
         "passwordMustHaveAtLeast1CapitalLetter":
             MessageLookupByLibrary.simpleMessage(
                 "Должен иметь минимум 1 заглавную букву"),
         "passwordMustHaveAtLeast1Digit": MessageLookupByLibrary.simpleMessage(
             "Должен иметь минимум 1 цифру"),
-        "passwordMustHaveAtLeastNChars": m0,
+        "passwordMustHaveAtLeast1SpecialChar": m0,
+        "passwordMustHaveAtLeastNChars": m1,
         "scanVisitorsQrCode": MessageLookupByLibrary.simpleMessage(
             "Сканировать QR-код посетителя"),
         "shouldntBeEmpty":

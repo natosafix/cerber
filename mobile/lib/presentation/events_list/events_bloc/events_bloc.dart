@@ -1,33 +1,50 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:project/domain/models/event.dart';
+import 'package:project/domain/repositories/events_repository/events_repository.dart';
 import 'package:rxdart/transformers.dart';
-
-import '../../../domain/models/event.dart';
-import '../../../domain/repositories/events_repository/events_repository.dart';
 
 part 'events_event.dart';
 part 'events_state.dart';
 
 class EventsBloc extends Bloc<EventsEvent, EventsState> {
-  EventsBloc(this._eventsRepository) : super(EventsState(events: [], hasReachedMax: false)) {
+  EventsBloc(this._eventsRepository) : super(EventsState.initial()) {
     on<GetEvents>(
       _onGetEvents,
       transformer: (events, mapper) => events.throttleTime(const Duration(milliseconds: 100)).switchMap(mapper),
     );
+
+    state.pagingController.addPageRequestListener((pageKey) {
+      add(GetEvents(pageKey: pageKey));
+    });
   }
 
   final EventsRepository _eventsRepository;
 
-  static const _limit = 4;
+  static const _limit = 5;
 
-  void _onGetEvents(GetEvents events, Emitter<EventsState> emit) async {
-    if (state.hasReachedMax) return;
+  void _onGetEvents(GetEvents event, Emitter<EventsState> emit) async {
+    final result = await _eventsRepository.getEvents(
+      offset: event.pageKey,
+      limit: _limit,
+    );
 
-    // return emit(EventsState(events: [], hasReachedMax: true));
+    final controller = state.pagingController;
 
-    final result = await _eventsRepository.getEvents(_limit, state.events.length);
+    if (result.isFailure) {
+      controller.error = result.failure;
+      return;
+    }
 
-    final events = result.success;
+    final newEvents = result.success;
 
-    emit(state.copyWith(events: state.events + events, hasReachedMax: events.isEmpty));
+    final isLastPage = newEvents.length < _limit;
+
+    if (isLastPage) {
+      controller.appendLastPage(newEvents);
+    } else {
+      final nextPageKey = event.pageKey + newEvents.length;
+      controller.appendPage(newEvents, nextPageKey);
+    }
   }
 }

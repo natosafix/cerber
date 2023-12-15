@@ -270,10 +270,10 @@ class L10n {
     );
   }
 
-  /// `Must consist of letters and numbers`
+  /// `Must consist of letters, numbers and special characters`
   String get passwordMustConsistOfLettersAndNumbers {
     return Intl.message(
-      'Must consist of letters and numbers',
+      'Must consist of letters, numbers and special characters',
       name: 'passwordMustConsistOfLettersAndNumbers',
       desc: '',
       args: [],
@@ -285,6 +285,26 @@ class L10n {
     return Intl.message(
       'Must have at least 1 digit',
       name: 'passwordMustHaveAtLeast1Digit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Must have at least 1 of the following characters: {specialChars}`
+  String passwordMustHaveAtLeast1SpecialChar(String specialChars) {
+    return Intl.message(
+      'Must have at least 1 of the following characters: $specialChars',
+      name: 'passwordMustHaveAtLeast1SpecialChar',
+      desc: '',
+      args: [specialChars],
+    );
+  }
+
+  /// `This event has no visitors`
+  String get eventHasNoVisitors {
+    return Intl.message(
+      'This event has no visitors',
+      name: 'eventHasNoVisitors',
       desc: '',
       args: [],
     );

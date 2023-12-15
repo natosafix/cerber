@@ -1,44 +1,42 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
+import 'package:project/domain/repositories/authentication_repository/authentication_status.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc() : super(Unknown()) {
+  AuthenticationBloc(this._authenticationRepository) : super(Unknown()) {
+    on<_AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<CheckAuthentication>(_onCheckAuthentication);
     on<Authenticate>(_onAuthenticate);
     on<Unauthenticate>(_onUnauthenticate);
+
+    _authenticationRepository.authenticationStatus.listen((status) {
+      add(_AuthenticationStatusChanged(status));
+    });
   }
-  // TODO: Remove this from here and use SecureStorage to save token and then retrieve it 
-  // in DioInterceptor on every request to EventsRepo
-  final _storage = const FlutterSecureStorage(
-    aOptions: AndroidOptions(encryptedSharedPreferences: true),
-  );
 
-  static const _tokenKey = 'token';
+  final AuthenticationRepository _authenticationRepository;
 
-  void _onCheckAuthentication(CheckAuthentication event, Emitter<AuthenticationState> emit) async {
-    final savedToken = await _storage.read(key: _tokenKey);
-
-    if (savedToken == null) {
-      return emit(Unauthenticated());
+  void _onAuthenticationStatusChanged(_AuthenticationStatusChanged event, Emitter<AuthenticationState> emit) {
+    switch (event.status) {
+      case AuthenticationStatus.authenticated:
+        emit(Authenticated());
+      case AuthenticationStatus.unauthenticated:
+        emit(Unauthenticated());
     }
+  }
 
-    emit(Authenticated(token: savedToken));
+  void _onCheckAuthentication(CheckAuthentication event, Emitter<AuthenticationState> emit) {
+    _authenticationRepository.checkAuthenticationStatus();
   }
 
   void _onAuthenticate(Authenticate event, Emitter<AuthenticationState> emit) {
-    final token = event.token;
-
-    emit(Authenticated(token: token));
-
-    _storage.write(key: _tokenKey, value: token);
+    emit(Authenticated());
   }
 
   void _onUnauthenticate(Unauthenticate event, Emitter<AuthenticationState> emit) {
-    emit(Unauthenticated());
-
-    _storage.delete(key: _tokenKey);
+    _authenticationRepository.logOut();
   }
 }

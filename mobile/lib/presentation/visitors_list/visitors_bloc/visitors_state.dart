@@ -1,5 +1,15 @@
 part of 'visitors_bloc.dart';
 
-sealed class VisitorsState {}
+final class VisitorsState {
+  final PagingController<int, Visitor> pagingController;
 
-final class VisitorsInitial extends VisitorsState {}
+  VisitorsState({
+    required this.pagingController,
+  });
+
+  factory VisitorsState.initial() {
+    return VisitorsState(
+      pagingController: PagingController(firstPageKey: 0),
+    );
+  }
+}

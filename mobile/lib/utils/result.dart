@@ -15,6 +15,14 @@ sealed class Result<S, E extends Exception> {
 
     throw Exception("Not Failure");
   }
+
+  void fold(void Function(S success) onSuccess, void Function(E failure) onFailure) {
+    if (isSuccess) {
+      onSuccess(success);
+    } else {
+      onFailure(failure);
+    }
+  }
 }
 
 final class Success<S, E extends Exception> extends Result<S, E> {
@@ -27,4 +35,7 @@ final class Failure<S, E extends Exception> extends Result<S, E> {
   final E exception;
 }
 
-final class Nothing {} // why: 'void' doesnt work when u dont need to return anything in 'Success'
+// why: 'void' doesnt work when u dont need to return anything in 'Success'
+final class Nothing {
+  const Nothing();
+}

@@ -73,7 +73,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                       children: [
                         TextSpan(text: "${L10n.current.where}: "),
                         TextSpan(
-                          text: widget.event.location,
+                          text: widget.event.address,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],

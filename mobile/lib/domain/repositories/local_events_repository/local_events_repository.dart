@@ -6,4 +6,8 @@ abstract class LocalEventsRepository implements EventsRepository {
   void saveEvents(List<Event> events);
 
   void saveVisitors(List<Visitor> visitors, String eventId);
+
+  void deleteEventsByIds(List<String> ids);
+
+  Future<List<String>> getAllEventsIds();
 }

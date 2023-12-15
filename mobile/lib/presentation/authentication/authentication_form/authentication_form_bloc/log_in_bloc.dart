@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project/domain/repositories/authentication_repository/requests/log_in_request.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_bloc.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_status.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/formz_inputs/email.dart';
@@ -20,10 +19,10 @@ class LogInBloc extends AuthenticationFormBloc {
   void onFinishPressed(FinishPressed event, Emitter<AuthenticationFormState> emit) async {
     emit(state.copyWith(authenticationStatus: const Processing()));
 
-    final res = await authenticationRepository.logIn(LogInRequest(
+    final res = await authenticationRepository.logIn(
       email: state.email.value.trim(),
       password: state.password.value.trim(),
-    ));
+    );
 
     if (res.isSuccess) {
       return emit(state.copyWith(authenticationStatus: const Success()));

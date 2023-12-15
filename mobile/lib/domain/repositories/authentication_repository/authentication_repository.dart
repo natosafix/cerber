@@ -1,12 +1,24 @@
 import 'package:dio/dio.dart';
-
-import '../../../utils/result.dart';
-import 'requests/log_in_request.dart';
-import 'requests/sign_up_request.dart';
-import 'responses/authentication_response.dart';
+import 'package:project/domain/repositories/authentication_repository/authentication_status.dart';
+import 'package:project/utils/result.dart';
 
 abstract class AuthenticationRepository {
-  Future<Result<AuthenticationResponse, DioException>> logIn(LogInRequest logInRequest);
+  Stream<AuthenticationStatus> get authenticationStatus;
 
-  Future<Result<AuthenticationResponse, DioException>> signUp(SignUpRequest signUpRequest);
+  Future<Result<Nothing, DioException>> logIn({
+    required String email,
+    required String password,
+  });
+
+  Future<Result<Nothing, DioException>> signUp({
+    required String email,
+    required String username,
+    required String password,
+  });
+
+  void logOut();
+
+  void checkAuthenticationStatus();
+
+  Future<bool> tryRefreshToken();
 }

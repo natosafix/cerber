@@ -1,9 +1,11 @@
 import 'package:formz/formz.dart';
 import 'package:project/l10n/generated/l10n.dart';
+import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/formz_inputs/validation_error.dart';
 
-enum NameValidationError {
+enum NameValidationError implements ValidationError {
   empty;
 
+  @override
   String get errorMessage {
     return switch (this) {
       NameValidationError.empty => L10n.current.shouldntBeEmpty,

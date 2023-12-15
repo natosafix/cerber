@@ -1,21 +1,9 @@
 part of 'visitors_bloc.dart';
 
-final class VisitorsEvent {
-  final List<Visitor> visitors;
-  final bool hasReachedMax;
+sealed class VisitorsEvent {}
 
-  VisitorsEvent({
-    required this.visitors,
-    required this.hasReachedMax,
-  });
-
-  VisitorsEvent copyWith({
-    List<Visitor>? visitors,
-    bool? hasReachedMax,
-  }) {
-    return VisitorsEvent(
-      visitors: visitors ?? this.visitors,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-    );
-  }
+final class GetVisitors extends VisitorsEvent {
+  GetVisitors({required this.pageKey});
+  
+  final int pageKey;
 }

@@ -37,5 +37,6 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "eventHasNoVisitors": "This event has no visitors"
 }

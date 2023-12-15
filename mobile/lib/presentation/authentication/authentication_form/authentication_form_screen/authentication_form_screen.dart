@@ -4,6 +4,7 @@ import 'package:project/presentation/authentication/authentication_bloc/authenti
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_bloc.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_status.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/finish_button_widget.dart';
+import 'package:project/utils/snackbar_x.dart';
 import 'package:project/utils/theme_util.dart';
 
 class AuthenticationFormScreenBase extends StatelessWidget {
@@ -69,11 +70,11 @@ class AuthenticationFormScreenBase extends StatelessWidget {
         // dismissing keyboard
         FocusManager.instance.primaryFocus?.unfocus();
       case Success():
-        context.read<AuthenticationBloc>().add(Authenticate(token: "REMOVETHIS"));
+        Navigator.of(context).pop();
+        // break;
+        // context.read<AuthenticationBloc>().add(Authenticate());
       case Failure():
-        ScaffoldMessenger.of(context)
-          ..removeCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(status.errorMessage)));
+        context.showSnackbar(status.errorMessage);
       case UnknownStatus():
         break;
     }

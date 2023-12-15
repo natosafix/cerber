@@ -44,7 +44,7 @@ class EventWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 7),
                   Text(
-                    event.location,
+                    event.address,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -79,6 +79,7 @@ class EventWidget extends StatelessWidget {
           ),
           width: double.infinity,
           child: CachedNetworkImage(
+            // TODO: add actual imageurl
             imageUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
             fit: BoxFit.fitWidth,
             errorWidget: (context, url, error) => const Icon(Icons.error),

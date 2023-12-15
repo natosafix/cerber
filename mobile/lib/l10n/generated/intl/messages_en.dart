@@ -20,7 +20,10 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(minLength) => "Must have at least ${minLength} characters";
+  static String m0(specialChars) =>
+      "Must have at least 1 of the following characters: ${specialChars}";
+
+  static String m1(minLength) => "Must have at least ${minLength} characters";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -30,6 +33,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "downloadDatabase":
             MessageLookupByLibrary.simpleMessage("Download database"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "eventHasNoVisitors":
+            MessageLookupByLibrary.simpleMessage("This event has no visitors"),
         "events": MessageLookupByLibrary.simpleMessage("Events"),
         "invalidEmailAddress":
             MessageLookupByLibrary.simpleMessage("Invalid email address"),
@@ -42,13 +47,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "passwordMustConsistOfLettersAndNumbers":
             MessageLookupByLibrary.simpleMessage(
-                "Must consist of letters and numbers"),
+                "Must consist of letters, numbers and special characters"),
         "passwordMustHaveAtLeast1CapitalLetter":
             MessageLookupByLibrary.simpleMessage(
                 "Must have at least 1 capital letter"),
         "passwordMustHaveAtLeast1Digit":
             MessageLookupByLibrary.simpleMessage("Must have at least 1 digit"),
-        "passwordMustHaveAtLeastNChars": m0,
+        "passwordMustHaveAtLeast1SpecialChar": m0,
+        "passwordMustHaveAtLeastNChars": m1,
         "scanVisitorsQrCode":
             MessageLookupByLibrary.simpleMessage("Scan visitor\'\'s QR code"),
         "shouldntBeEmpty":

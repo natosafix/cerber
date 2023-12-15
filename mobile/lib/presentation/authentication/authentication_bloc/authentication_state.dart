@@ -4,10 +4,6 @@ sealed class AuthenticationState {}
 
 final class Unknown extends AuthenticationState {}
 
-final class Authenticated extends AuthenticationState {
-  final String token;
-
-  Authenticated({required this.token});
-}
+final class Authenticated extends AuthenticationState {}
 
 final class Unauthenticated extends AuthenticationState {}

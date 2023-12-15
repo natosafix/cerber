@@ -1,7 +1,8 @@
 import 'package:formz/formz.dart';
 import 'package:project/l10n/generated/l10n.dart';
+import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/formz_inputs/validation_error.dart';
 
-enum PasswordValidationError {
+enum PasswordValidationError implements ValidationError {
   empty,
   tooShort,
   noCapitalLetter,
@@ -9,6 +10,7 @@ enum PasswordValidationError {
   noDigit,
   noSpecialCharacter;
 
+  @override
   String get errorMessage {
     final l10n = L10n.current;
     return switch (this) {

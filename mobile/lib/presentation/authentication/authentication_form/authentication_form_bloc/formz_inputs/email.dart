@@ -1,10 +1,12 @@
 import 'package:formz/formz.dart';
 import 'package:project/l10n/generated/l10n.dart';
+import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/formz_inputs/validation_error.dart';
 
-enum EmailValidationError {
+enum EmailValidationError implements ValidationError {
   empty,
   invalid;
 
+  @override
   String get errorMessage {
     return switch (this) {
       EmailValidationError.empty => L10n.current.shouldntBeEmpty,
@@ -19,6 +21,8 @@ class Email extends FormzInput<String, EmailValidationError> with FormzInputErro
 
   @override
   EmailValidationError? validator(String value) {
+    // TODO:
+    return null;
     if (value.isEmpty) return EmailValidationError.empty;
     return _emailRegex.hasMatch(value) ? null : EmailValidationError.invalid;
   }

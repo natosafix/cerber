@@ -1,21 +1,15 @@
 part of 'events_bloc.dart';
 
 final class EventsState {
-  final List<Event> events;
-  final bool hasReachedMax;
+  final PagingController<int, Event> pagingController;
 
   EventsState({
-    required this.events,
-    required this.hasReachedMax,
+    required this.pagingController,
   });
 
-  EventsState copyWith({
-    List<Event>? events,
-    bool? hasReachedMax,
-  }) {
+  factory EventsState.initial() {
     return EventsState(
-      events: events ?? this.events,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+      pagingController: PagingController(firstPageKey: 0),
     );
   }
 }
