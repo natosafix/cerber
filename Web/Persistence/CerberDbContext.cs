@@ -13,6 +13,7 @@ public sealed class CerberDbContext : IdentityDbContext<User>
     public DbSet<Order> Orders { get; set; } = null!;
     public DbSet<Question> Questions { get; set; } = null!;
     public DbSet<Ticket> Tickets { get; set; } = null!;
+    public DbSet<UserFile> UserFiles { get; set; } = null!;
 
     public CerberDbContext(DbContextOptions<CerberDbContext> options) : base(options)
     {
@@ -27,6 +28,7 @@ public sealed class CerberDbContext : IdentityDbContext<User>
         modelBuilder.ApplyConfiguration(new QuestionConfiguration());
         modelBuilder.ApplyConfiguration(new TicketConfiguration());
         modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new UserFileConfiguration());
         base.OnModelCreating(modelBuilder);
     }
 }

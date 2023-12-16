@@ -85,6 +85,9 @@ namespace Web.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("CoverId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -111,6 +114,9 @@ namespace Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("CoverId")
+                        .IsUnique();
 
                     b.HasIndex("OwnerId");
 
@@ -244,6 +250,27 @@ namespace Web.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("userFiles", (string)null);
                 });
 
             modelBuilder.Entity("EventUser", b =>
@@ -420,6 +447,11 @@ namespace Web.Migrations
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserFile", "Cover")
+                        .WithOne("Event")
+                        .HasForeignKey("Domain.Entities.Event", "CoverId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("Domain.Entities.User", "Owner")
                         .WithMany("OwnedEvents")
                         .HasForeignKey("OwnerId")
@@ -427,6 +459,8 @@ namespace Web.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+
+                    b.Navigation("Cover");
 
                     b.Navigation("Owner");
                 });
@@ -560,6 +594,12 @@ namespace Web.Migrations
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Navigation("OwnedEvents");
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserFile", b =>
+                {
+                    b.Navigation("Event")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

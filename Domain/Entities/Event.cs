@@ -10,8 +10,8 @@ public class Event
 
     public string Description { get; set; }
     
-    //Тут как то фотка мероприятия будет храниться, пока в мыслях - имя файла
-    // Cover
+    public int? CoverId { get; set; }
+    public UserFile? Cover { get; set; }
 
     public string City { get; set; }
 

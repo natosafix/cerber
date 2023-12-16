@@ -13,6 +13,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IOrdersRepository, OrdersRepository>();
         services.AddScoped<IQuestionsRepository, QuestionsRepository>();
         services.AddScoped<IAnswersRepository, AnswersRepository>();
+        services.AddScoped<IUserFilesRepository, UserFilesRepository>();
         return services;
     }
     
@@ -23,6 +24,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IOrdersService, OrdersService>();
         services.AddScoped<IQuestionsService, QuestionsService>();
         services.AddScoped<IAnswersService, AnswersService>();
+        services.AddScoped<IUserFilesService, UserFilesService>();
+        services.AddScoped<IStorageManager, StorageManager>();
+        services.AddScoped<IUserHelper, UserHelper>();
         return services;
     }
 }

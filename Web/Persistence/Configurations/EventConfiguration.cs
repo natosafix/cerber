@@ -47,5 +47,6 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
             .WithMany(user => user.InspectedEvents);
 
         builder.Navigation(e => e.Category).AutoInclude();
+        builder.Navigation(e => e.Cover).AutoInclude();
     }
 }

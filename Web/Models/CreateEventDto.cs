@@ -25,5 +25,9 @@ public class CreateEventDto
     [Required]
     public string OwnerId { get; set; }
     
+    [Required]
     public string CategoryId { get; set; }
+    
+    [Required]
+    public string CoverId { get; set; }
 }

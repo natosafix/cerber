@@ -21,4 +21,6 @@ public class EventResponseDto
     public DateTimeOffset To { get; set; }
     
     public Category Category { get; set; }
+    
+    public UserFile Cover { get; set; }
 }
