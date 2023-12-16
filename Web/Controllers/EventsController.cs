@@ -13,30 +13,52 @@ public class EventsController : Controller
 {
     private readonly IMapper mapper;
     private readonly IEventsService eventsService;
+    private readonly IDraftEventService draftEventService;
+    private readonly IUserHelper userHelper;
 
-    public EventsController(IMapper mapper, IEventsService eventsService)
+    public EventsController(IMapper mapper, IEventsService eventsService, IDraftEventService draftEventService, IUserHelper userHelper)
     {
         this.mapper = mapper;
         this.eventsService = eventsService;
+        this.draftEventService = draftEventService;
+        this.userHelper = userHelper;
     }
-    
+
     [HttpGet("inspected")]
     public async Task<IActionResult> GetInspected([FromQuery] PaginationDto paginationDto)
     {
-        var inspectedEvents = await eventsService.GetInspected(User.Identity!.Name!, paginationDto.Offset, paginationDto.Limit);
+        var inspectedEvents =
+            await eventsService.GetInspected(User.Identity!.Name!, paginationDto.Offset, paginationDto.Limit);
         return Ok(mapper.Map<List<EventResponseDto>>(inspectedEvents));
     }
-    
+
+    [HttpPost("createDraft")]
+    public async Task<IActionResult> CreateDraft()
+    {
+        var user = await userHelper.GetUser();
+        if (user is null)
+            return Unauthorized();
+        
+        var draft = await draftEventService.FindDraftByUserId(user.Id);
+        return Ok();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> PublishDraft()
+    {
+        throw new NotImplementedException();
+    }
+
     [HttpPost("")]
     [Produces("application/json")]
     public async Task<IActionResult> Create([FromBody] CreateEventDto createEventDto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-        
+
         return Ok(await eventsService.Create(mapper.Map<Event>(createEventDto)));
     }
-    
+
     [HttpPut("{id}/inspector")]
     public async Task<IActionResult> AddInspector([FromRoute] int id, [FromBody] SetInspectorDto setInspectorDto)
     {
@@ -45,7 +67,7 @@ public class EventsController : Controller
 
         var inspectorId = Guid.Parse(setInspectorDto.Id);
         await eventsService.AddInspector(id, inspectorId);
-        
+
         return NoContent();
     }
 }

@@ -30,4 +30,9 @@ public class EventsService : IEventsService
     {
         return await eventsRepository.GetInspected(username, offset, limit);
     }
+
+    public async Task Tmp()
+    {
+        
+    }
 }

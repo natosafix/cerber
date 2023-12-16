@@ -7,6 +7,7 @@ namespace Web.Persistence;
 
 public sealed class CerberDbContext : IdentityDbContext<User>
 {
+    public DbSet<DraftEvent> DraftEvents { get; set; } = null!;
     public DbSet<Event> Events { get; set; } = null!;
     public DbSet<Answer> Answers { get; set; } = null!;
     public DbSet<Category> Categories { get; set; } = null!;
@@ -20,6 +21,7 @@ public sealed class CerberDbContext : IdentityDbContext<User>
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfiguration(new DraftEventConfiguration());
         modelBuilder.ApplyConfiguration(new EventConfiguration());
         modelBuilder.ApplyConfiguration(new AnswerConfiguration());
         modelBuilder.ApplyConfiguration(new CategoryConfiguration());

@@ -7,15 +7,21 @@ import { EventAdminPageNav } from './EventStepsNav/EventAdminPageNav';
 import { EventQuizCreator } from './EventQuizCreator/EventQuizCreator';
 import { EventPublish } from './EventPublish/EventPublish';
 import { Button, Gapped } from '@skbkontur/react-ui';
+import { EventAdminClient } from '../../../Api/EventAdmin/EventAdminClient';
 
 
 export const EventAdmin: React.FC = () => {
-    const [step, setStep] = useState(EventAdminPageNav.EventPublish);
-
+    const [step, setStep] = useState(EventAdminPageNav.EventCoverSheet);
+    
     const onSave = () => {
         if (step === EventAdminPageNav.EventPublish) {
             // alert('Save all form');
         } else {
+            alert("Save")
+            EventAdminClient.createDraft()
+                .then((response) => {
+                    alert(response.status);
+                })
             // alert('Save current page');
             setStep(step + 1);
         }
