@@ -2,17 +2,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:project/domain/models/visitor.dart';
 import 'package:project/domain/repositories/events_repository/events_repository.dart';
-import 'package:rxdart/transformers.dart';
 
 part 'visitors_event.dart';
 part 'visitors_state.dart';
 
 class VisitorsBloc extends Bloc<VisitorsEvent, VisitorsState> {
   VisitorsBloc(this._eventsRepository, this._eventId) : super(VisitorsState.initial()) {
-    on<GetVisitors>(
-      _onGetVisitors,
-      transformer: (events, mapper) => events.throttleTime(const Duration(milliseconds: 100)).switchMap(mapper),
-    );
+    on<GetVisitors>(_onGetVisitors);
 
     state.pagingController.addPageRequestListener((pageKey) {
       add(GetVisitors(pageKey: pageKey));
