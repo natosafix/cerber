@@ -8,7 +8,8 @@
         <AssemblyName>Web</AssemblyName>
         <RootNamespace>Web</RootNamespace>
         <LangVersion>latest</LangVersion>
-    </PropertyGroup>
+      <UserSecretsId>adf9185d-3837-455f-87a4-6fb76b3c09c9</UserSecretsId>
+  </PropertyGroup>
 
     <ItemGroup>
       <Content Include="..\.dockerignore">
@@ -23,6 +24,7 @@
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="12.0.1" />
       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+      <PackageReference Include="MailKit" Version="4.3.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.24" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.24" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.25" />

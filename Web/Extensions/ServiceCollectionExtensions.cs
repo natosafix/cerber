@@ -27,6 +27,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserFilesService, UserFilesService>();
         services.AddScoped<IStorageManager, StorageManager>();
         services.AddScoped<IUserHelper, UserHelper>();
+        services.AddScoped<IMailService, MailService>();
         return services;
     }
 }

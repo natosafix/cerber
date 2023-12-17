@@ -6,10 +6,12 @@ namespace Web.Services;
 public class OrdersService : IOrdersService
 {
     private readonly IOrdersRepository ordersRepository;
+    private readonly IMailService mailService;
     
-    public OrdersService(IOrdersRepository ordersRepository)
+    public OrdersService(IOrdersRepository ordersRepository, IMailService mailService)
     {
         this.ordersRepository = ordersRepository;
+        this.mailService = mailService;
     }
 
     public Task<List<Order>> Get(int eventId)
@@ -20,6 +22,8 @@ public class OrdersService : IOrdersService
     public async Task<Order> Create(Order order)
     {
         order.Customer = Guid.NewGuid();
-        return await ordersRepository.Create(order);
+        order = await ordersRepository.Create(order);
+        // await mailService.Send("imya", "mail", order);
+        return order;
     }
 }
