@@ -12,6 +12,11 @@ public class OrdersService : IOrdersService
         this.ordersRepository = ordersRepository;
     }
 
+    public Task<List<Order>> Get(int eventId)
+    {
+        return ordersRepository.Get(eventId);
+    }
+
     public async Task<Order> Create(Order order)
     {
         order.Customer = Guid.NewGuid();

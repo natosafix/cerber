@@ -42,4 +42,16 @@ public class EventsRepository : IEventsRepository
        
        return new PageList<Event>(events ?? new List<Event>(), offset, limit);
    }
+
+   public async Task<PageList<Event>> GetOwned(string username, int offset, int limit)
+   {
+       var events = (await dbContext.Users
+               .Where(u => u.UserName.Equals(username))
+               .Select(u => u.OwnedEvents)
+               .FirstOrDefaultAsync())
+           ?.Skip(offset)
+           .Take(limit);
+       
+       return new PageList<Event>(events ?? new List<Event>(), offset, limit);
+   }
 }

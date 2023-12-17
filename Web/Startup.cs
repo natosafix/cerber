@@ -69,6 +69,7 @@ public class Startup
         {
             options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Populate;
+            options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
         });
         services.AddSwaggerGen();
     }

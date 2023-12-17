@@ -14,18 +14,27 @@ public class EventsController : Controller
 {
     private readonly IMapper mapper;
     private readonly IEventsService eventsService;
+    private readonly IUserHelper userHelper;
 
-    public EventsController(IMapper mapper, IEventsService eventsService)
+    public EventsController(IMapper mapper, IEventsService eventsService, IUserHelper userHelper)
     {
         this.mapper = mapper;
         this.eventsService = eventsService;
+        this.userHelper = userHelper;
     }
     
     [HttpGet("inspected")]
     public async Task<IActionResult> GetInspected([FromQuery] PaginationDto paginationDto)
     {
-        var inspectedEvents = await eventsService.GetInspected(User.Identity!.Name!, paginationDto.Offset, paginationDto.Limit);
+        var inspectedEvents = await eventsService.GetInspected(userHelper.Username, paginationDto.Offset, paginationDto.Limit);
         return Ok(mapper.Map<List<EventResponseDto>>(inspectedEvents));
+    }
+    
+    [HttpGet("owned")]
+    public async Task<IActionResult> GetOwned([FromQuery] PaginationDto paginationDto)
+    {
+        var ownedEvents = await eventsService.GetOwned(userHelper.Username, paginationDto.Offset, paginationDto.Limit);
+        return Ok(mapper.Map<List<EventResponseDto>>(ownedEvents));
     }
     
     [HttpPost("")]

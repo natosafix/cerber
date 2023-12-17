@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Newtonsoft.Json;
 
 namespace Domain.Entities;
 
@@ -15,5 +16,6 @@ public class Question
     public Event Event { get; set; }
     public int EventId { get; set; }
     
+    [JsonIgnore]
     public List<Answer> Answers { get; set; } = new();
 }

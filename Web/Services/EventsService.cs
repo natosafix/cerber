@@ -30,4 +30,9 @@ public class EventsService : IEventsService
     {
         return await eventsRepository.GetInspected(username, offset, limit);
     }
+
+    public async Task<PageList<Event>> GetOwned(string username, int offset, int limit)
+    {
+        return await eventsRepository.GetOwned(username, offset, limit);
+    }
 }

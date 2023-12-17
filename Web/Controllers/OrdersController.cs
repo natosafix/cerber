@@ -20,6 +20,12 @@ public class OrdersController : Controller
         this.mapper = mapper;
     }
 
+    [HttpGet("")]
+    public async Task<IActionResult> Get([FromQuery] int eventId)
+    {
+        return Ok(await ordersService.Get(eventId));
+    }
+
     [HttpPost("")]
     [Produces("application/json")]
     public async Task<IActionResult> Create([FromBody] CreateOrderDto createOrderDto)
