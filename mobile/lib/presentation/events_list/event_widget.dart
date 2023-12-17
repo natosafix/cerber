@@ -1,5 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager_dio/flutter_cache_manager_dio.dart';
+import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
 
 import '../../domain/models/event.dart';
 import '../../utils/theme_util.dart';
@@ -77,13 +80,13 @@ class EventWidget extends StatelessWidget {
           constraints: const BoxConstraints(
             maxHeight: 250,
           ),
-          width: double.infinity,
           child: CachedNetworkImage(
-            // TODO: add actual imageurl
-            imageUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
+            cacheManager: DioCacheManager.instance,
+            imageUrl: event.photoUrl,
             fit: BoxFit.fitWidth,
             errorWidget: (context, url, error) => const Icon(Icons.error),
-            fadeInDuration: Duration.zero,
+            // fadeInDuration: Duration.zero,
+            // httpHeaders: context.read<AuthenticationRepository>().httpHeadersForAuthentication,
           ),
         ),
       ),

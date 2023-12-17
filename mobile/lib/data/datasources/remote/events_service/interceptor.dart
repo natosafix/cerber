@@ -33,6 +33,7 @@ class EventsServiceInterceptor extends Interceptor {
     final isRefreshed = await _authenticationRepository.tryRefreshToken();
 
     if (isRefreshed) {
+      // retrying failed request
       final req = err.requestOptions;
       final response = await _eventsDio.request(
         req.path,

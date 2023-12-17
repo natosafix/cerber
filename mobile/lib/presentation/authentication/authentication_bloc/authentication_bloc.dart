@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_status.dart';
@@ -12,12 +14,14 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     on<Authenticate>(_onAuthenticate);
     on<Unauthenticate>(_onUnauthenticate);
 
-    _authenticationRepository.authenticationStatus.listen((status) {
+    _authStatusSubscription = _authenticationRepository.authenticationStatus.listen((status) {
       add(_AuthenticationStatusChanged(status));
     });
   }
 
   final AuthenticationRepository _authenticationRepository;
+
+  late final StreamSubscription<AuthenticationStatus> _authStatusSubscription;
 
   void _onAuthenticationStatusChanged(_AuthenticationStatusChanged event, Emitter<AuthenticationState> emit) {
     switch (event.status) {
@@ -38,5 +42,11 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   void _onUnauthenticate(Unauthenticate event, Emitter<AuthenticationState> emit) {
     _authenticationRepository.logOut();
+  }
+
+  @override
+  Future<void> close() {
+    _authStatusSubscription.cancel();
+    return super.close();
   }
 }

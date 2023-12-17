@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_cache_manager_dio/flutter_cache_manager_dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
@@ -75,6 +76,8 @@ void setupLocator() async {
     RemoteEventsRepositoryImpl(eventsService: locator<EventsService>()),
     instanceName: 'remote',
   );
+
+  DioCacheManager.initialize(locator<Dio>());
 
   locator.registerSingletonAsync<Isar>(() async {
     final dir = await getApplicationDocumentsDirectory();

@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:project/data/datasources/remote/events_service/responses/category_api_response.dart';
+import 'package:project/data/datasources/remote/events_service/responses/cover_api_response.dart';
 
 part 'event_api_response.g.dart';
 
@@ -14,6 +15,7 @@ class EventApiResponse {
   final DateTime from;
   final DateTime to;
   final CategoryApiResponse category;
+  final CoverApiResponse cover;
 
   EventApiResponse({
     required this.id,
@@ -25,6 +27,7 @@ class EventApiResponse {
     required this.from,
     required this.to,
     required this.category,
+    required this.cover,
   });
 
   factory EventApiResponse.fromJson(Map<String, dynamic> json) => _$EventApiResponseFromJson(json);

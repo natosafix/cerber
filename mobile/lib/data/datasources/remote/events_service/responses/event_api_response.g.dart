@@ -18,4 +18,5 @@ EventApiResponse _$EventApiResponseFromJson(Map<String, dynamic> json) =>
       to: DateTime.parse(json['to'] as String),
       category: CategoryApiResponse.fromJson(
           json['category'] as Map<String, dynamic>),
+      cover: CoverApiResponse.fromJson(json['cover'] as Map<String, dynamic>),
     );
