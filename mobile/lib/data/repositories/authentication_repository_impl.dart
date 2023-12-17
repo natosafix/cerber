@@ -19,7 +19,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   final AuthenticationService _authenticationService;
 
-  final FlutterSecureStorage _secureStorage = locator<FlutterSecureStorage>();
+  final _secureStorage = locator<FlutterSecureStorage>();
 
   final _authenticationController = StreamController<AuthenticationStatus>();
 

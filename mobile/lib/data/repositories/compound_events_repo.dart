@@ -59,12 +59,11 @@ class CompoundEventsRepository implements EventsRepository {
 
     if (result.isSuccess) {
       final events = result.success;
-      final count = events.length;
 
       _localEventsRepo.saveEvents(events);
       _downloadedEventsIds.addAll(events.map((e) => e.id));
 
-      if (count < limit) {
+      if (events.length < limit) {
         // local db stores all events that have ever been received from the api
         // it also includes events that were deleted on the frontend
         // thus in order to avoid showing them while offline they need to be removed

@@ -9,14 +9,14 @@ import 'package:project/utils/locator.dart';
 import 'package:project/utils/result.dart';
 
 class MockAuthRepo implements AuthenticationRepository {
+  final _secureStorage = locator<FlutterSecureStorage>();
+
   final _authenticationController = StreamController<AuthenticationStatus>();
 
   @override
   Stream<AuthenticationStatus> get authenticationStatus async* {
     yield* _authenticationController.stream;
   }
-
-  final FlutterSecureStorage _secureStorage = locator<FlutterSecureStorage>();
 
   @override
   Future<Result<Nothing, DioException>> logIn({
