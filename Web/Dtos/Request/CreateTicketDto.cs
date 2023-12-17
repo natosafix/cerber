@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Web.Models;
+namespace Web.Dtos.Request;
 
 public class CreateTicketDto
 {

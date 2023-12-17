@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Web.Models;
+namespace Web.Dtos.Request;
 
-public class RegisterModel
+public class RegisterDto
 {
     [Required(ErrorMessage = "User Name is required")]
     public string? Username { get; set; }

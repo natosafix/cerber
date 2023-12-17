@@ -5,7 +5,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Web.Models;
+using Web.Dtos.Request;
 
 namespace Web.Controllers;
 
@@ -25,22 +25,22 @@ public class AuthController : Controller
     }
 
     [HttpPost("/[controller]/register")]
-    public async Task<IActionResult> Register([FromBody] RegisterModel model)
+    public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        var userExists = await userManager.FindByNameAsync(model.Username);
+        var userExists = await userManager.FindByNameAsync(dto.Username);
         if (userExists != null)
             return BadRequest("User already exists");
 
         User user = new()
         {
-            Email = model.Email,
+            Email = dto.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
-            UserName = model.Username
+            UserName = dto.Username
         };
-        var result = await userManager.CreateAsync(user, model.Password);
+        var result = await userManager.CreateAsync(user, dto.Password);
         if (!result.Succeeded)
             return StatusCode(StatusCodes.Status500InternalServerError,"User creation failed! Please check user details and try again.");
 
@@ -49,13 +49,13 @@ public class AuthController : Controller
     }
     
     [HttpPost("/[controller]/login")]
-    public async Task<IActionResult> Login([FromBody] LoginModel model)
+    public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        var user = await userManager.FindByNameAsync(model.Username);
-        if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
+        var user = await userManager.FindByNameAsync(dto.Username);
+        if (user != null && await userManager.CheckPasswordAsync(user, dto.Password))
         {
             var userRoles = await userManager.GetRolesAsync(user);
 

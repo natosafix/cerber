@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Web.Models;
+namespace Web.Dtos.Request;
 
-public class LoginModel
+public class LoginDto
 {
     [Required]
     public string? Username { get; set; }

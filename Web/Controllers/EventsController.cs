@@ -3,7 +3,8 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Web.Models;
+using Web.Dtos.Request;
+using Web.Dtos.Response;
 using Web.Services;
 
 namespace Web.Controllers;
@@ -21,6 +22,13 @@ public class EventsController : Controller
         this.mapper = mapper;
         this.eventsService = eventsService;
         this.userHelper = userHelper;
+    }
+    
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetInspected([FromRoute] int id)
+    {
+        var inspectedEvents = await eventsService.Get(id);
+        return Ok(mapper.Map<EventResponseDto>(inspectedEvents));
     }
     
     [HttpGet("inspected")]

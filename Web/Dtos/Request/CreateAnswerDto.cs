@@ -1,4 +1,4 @@
-﻿namespace Web.Models;
+﻿namespace Web.Dtos.Request;
 
 public class CreateAnswerDto
 {

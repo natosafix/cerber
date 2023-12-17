@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Web.Models;
+using Web.Dtos.Request;
 using Web.Services;
 
 namespace Web.Controllers;

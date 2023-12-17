@@ -1,4 +1,4 @@
-﻿namespace Web.Models;
+﻿namespace Web.Dtos.Response;
 
 public class ErrorViewModel
 {

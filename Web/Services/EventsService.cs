@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Web.Models;
+using Domain.Infrastructure;
 using Web.Persistence.Repositories;
 
 namespace Web.Services;
@@ -13,6 +13,11 @@ public class EventsService : IEventsService
     {
         this.usersRepository = usersRepository;
         this.eventsRepository = eventsRepository;
+    }
+
+    public Task<Event> Get(int id)
+    {
+        return eventsRepository.Get(id);
     }
 
     public async Task<Event> Create(Event @event)

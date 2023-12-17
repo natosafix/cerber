@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using Web.Models;
+using Web.Dtos.Request;
+using Web.Dtos.Response;
 
 namespace Web.Mapping;
 

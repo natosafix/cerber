@@ -1,10 +1,12 @@
 ﻿using Domain.Entities;
-using Web.Models;
+using Domain.Infrastructure;
 
 namespace Web.Persistence.Repositories;
 
 public interface IEventsRepository
 {
+    Task<Event> Get(int id);
+    
     Task<Event> Create(Event @event);
     
     Task AddInspector(int id, User inspector);

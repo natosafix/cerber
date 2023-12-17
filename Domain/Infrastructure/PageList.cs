@@ -1,4 +1,4 @@
-﻿namespace Web.Models;
+﻿namespace Domain.Infrastructure;
 
 public class PageList<T> : List<T>
 {

@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
+using Domain.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Web.Models;
 
 namespace Web.Persistence.Repositories;
 
@@ -13,7 +13,12 @@ public class EventsRepository : IEventsRepository
         this.dbContext = dbContext;
     }
 
-   public async Task<Event> Create(Event @event)
+    public async Task<Event> Get(int id)
+    {
+        return await dbContext.Events.FindAsync(id);
+    }
+
+    public async Task<Event> Create(Event @event)
    {
        var entity = (await dbContext.Events
            .AddAsync(@event))

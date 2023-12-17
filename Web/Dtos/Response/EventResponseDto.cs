@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 
-namespace Web.Models;
+namespace Web.Dtos.Response;
 
 public class EventResponseDto
 {
