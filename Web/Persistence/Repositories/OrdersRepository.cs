@@ -23,10 +23,8 @@ public class OrdersRepository : IOrdersRepository
 
     public async Task<Order> Create(Order order)
     {
-        var entity = (await dbContext.Orders
-                .AddAsync(order))
-            .Entity;
+        var result = await dbContext.Orders.AddAsync(order);
         await dbContext.SaveChangesAsync();
-        return entity;
+        return result.Entity;
     }
 }

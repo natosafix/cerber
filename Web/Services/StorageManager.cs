@@ -20,7 +20,7 @@ public class StorageManager : IStorageManager
         var directory = Path.GetDirectoryName(webPath);
         
         if (!Directory.Exists(directory))
-            Directory.CreateDirectory(directory);
+            Directory.CreateDirectory(directory!);
         
         await using (var fileStream = new FileStream(webPath, FileMode.Create))
         {

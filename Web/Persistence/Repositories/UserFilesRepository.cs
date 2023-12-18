@@ -11,7 +11,7 @@ public class UserFilesRepository : IUserFilesRepository
         this.dbContext = dbContext;
     }
 
-    public async Task<UserFile> Get(int id)
+    public async Task<UserFile?> Get(int id)
     {
         return await dbContext.UserFiles.FindAsync(id);
     }

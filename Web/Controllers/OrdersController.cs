@@ -30,6 +30,9 @@ public class OrdersController : Controller
     [Produces("application/json")]
     public async Task<IActionResult> Create([FromBody] CreateOrderDto createOrderDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         var order = await ordersService.Create(mapper.Map<Order>(createOrderDto));
         return Ok(order);
     }

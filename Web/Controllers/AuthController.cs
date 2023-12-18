@@ -11,14 +11,12 @@ namespace Web.Controllers;
 
 public class AuthController : Controller
 {
-    private readonly ILogger<AuthController> logger;
     private readonly UserManager<User> userManager;
     private readonly RoleManager<IdentityRole> roleManager;
     private readonly IConfiguration config;
 
     public AuthController(ILogger<AuthController> logger, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration config)
     {
-        this.logger = logger;
         this.userManager = userManager;
         this.roleManager = roleManager;
         this.config = config;
@@ -41,11 +39,10 @@ public class AuthController : Controller
             UserName = dto.Username
         };
         var result = await userManager.CreateAsync(user, dto.Password);
-        if (!result.Succeeded)
-            return StatusCode(StatusCodes.Status500InternalServerError,"User creation failed! Please check user details and try again.");
-
-        return Ok("User created successfully!");
-
+        return result.Succeeded
+            ? Ok("User created successfully!")
+            : StatusCode(StatusCodes.Status500InternalServerError,
+                "User creation failed! Please check user details and try again.");
     }
     
     [HttpPost("/[controller]/login")]
@@ -54,7 +51,7 @@ public class AuthController : Controller
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        var user = await userManager.FindByNameAsync(dto.Username);
+        var user = await userManager.FindByEmailAsync(dto.Email);
         if (user != null && await userManager.CheckPasswordAsync(user, dto.Password))
         {
             var userRoles = await userManager.GetRolesAsync(user);
@@ -62,6 +59,7 @@ public class AuthController : Controller
             var authClaims = new List<Claim>
             {
                 new(ClaimTypes.Name, user.UserName),
+                new(ClaimTypes.Email, user.Email),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
             authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));

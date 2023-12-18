@@ -32,7 +32,6 @@ public class UserFilesController : Controller
     [HttpPost("")]
     public async Task<IActionResult> Upload(IFormFile file)
     {
-        var request = Request;
         return Ok(await userFilesService.Save(file));
     }
 }

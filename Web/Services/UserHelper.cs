@@ -1,26 +1,25 @@
 ﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Web.Persistence.Repositories;
 
 namespace Web.Services;
 
 public class UserHelper : IUserHelper
 {
-    private readonly IUsersRepository usersRepository;
     private readonly IHttpContextAccessor httpContextAccessor;
+    private readonly UserManager<User> userManager;
 
-    public UserHelper(IUsersRepository usersRepository, IHttpContextAccessor httpContextAccessor)
+    public UserHelper(IUsersRepository usersRepository, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
     {
-        this.usersRepository = usersRepository;
         this.httpContextAccessor = httpContextAccessor;
+        this.userManager = userManager;
     }
 
-    public string Username => httpContextAccessor.HttpContext?.User?.Identity?.Name ?? 
+    public string Username => httpContextAccessor.HttpContext?.User.Identity?.Name ?? 
                               throw new InvalidOperationException("User is not authenticated");
-    
-    public string UserId => throw new NotImplementedException(); // TODO наверное надо из Claim'ов доставать
 
     public async Task<User?> GetUser()
     {
-        return await usersRepository.Get(Username);
+        return await userManager.FindByNameAsync(Username);
     }
 }

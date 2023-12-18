@@ -24,6 +24,9 @@ public class AnswersController : Controller
     [Produces("application/json")]
     public async Task<IActionResult> Create([FromBody] CreateAnswerDto createAnswerDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         return Ok(await answersService.Create(mapper.Map<Answer>(createAnswerDto)));
     }
 }

@@ -20,7 +20,7 @@ public class UserFilesService : IUserFilesService
 
     public async Task<UserFile> Get(int id)
     {
-        return await userFilesRepository.Get(id);
+        return await userFilesRepository.Get(id) ?? throw new BadHttpRequestException($"Not found file with id {id}");
     }
 
     public async Task<byte[]> GetContent(UserFile userFile)

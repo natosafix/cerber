@@ -15,9 +15,9 @@ public class EventsService : IEventsService
         this.eventsRepository = eventsRepository;
     }
 
-    public Task<Event> Get(int id)
+    public async Task<Event> Get(int id)
     {
-        return eventsRepository.Get(id);
+       return await eventsRepository.Get(id) ?? throw new BadHttpRequestException($"Not found event with id {id}");
     }
 
     public async Task<Event> Create(Event @event)
@@ -27,8 +27,9 @@ public class EventsService : IEventsService
     
     public async Task AddInspector(int id, Guid inspectorId)
     {
-        var inspector = await usersRepository.Get(inspectorId);
-        await eventsRepository.AddInspector(id, inspector);
+        var inspector = await usersRepository.Get(inspectorId) ?? throw new BadHttpRequestException($"Not found inspector with id {inspectorId}");
+        var @event = await Get(id);
+        await eventsRepository.AddInspector(@event, inspector);
     }
 
     public async Task<PageList<Event>> GetInspected(string username, int offset, int limit)

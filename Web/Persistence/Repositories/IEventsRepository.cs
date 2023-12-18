@@ -5,11 +5,11 @@ namespace Web.Persistence.Repositories;
 
 public interface IEventsRepository
 {
-    Task<Event> Get(int id);
+    Task<Event?> Get(int id);
     
     Task<Event> Create(Event @event);
     
-    Task AddInspector(int id, User inspector);
+    Task AddInspector(Event @event, User inspector);
 
     Task<PageList<Event>> GetInspected(string username, int offset, int limit);
     

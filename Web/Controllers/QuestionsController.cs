@@ -21,9 +21,11 @@ public class QuestionsController : Controller
     }
 
     [HttpPost("")]
-    [Produces("application/json")]
     public async Task<IActionResult> Create([FromBody] CreateQuestionDto createQuestionDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         return Ok(await questionsService.Create(mapper.Map<Question>(createQuestionDto)));
     }
 }

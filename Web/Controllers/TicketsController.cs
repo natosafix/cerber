@@ -21,9 +21,11 @@ public class TicketsController : Controller
     }
 
     [HttpPost("")]
-    [Produces("application/json")]
     public async Task<IActionResult> Create([FromBody] CreateTicketDto createTicketDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         var ticket = await ticketsService.Create(mapper.Map<Ticket>(createTicketDto));
         return Ok(ticket);
     }

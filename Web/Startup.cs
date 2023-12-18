@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Web.Extensions;
 using Web.Mapping;
+using Web.Middlewares;
 using Web.Persistence;
 
 namespace Web;
@@ -79,7 +80,7 @@ public class Startup
         if (environment.IsDevelopment())
             app.UseDeveloperExceptionPage();
         else
-            app.UseExceptionHandler();
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
         
         app.UseHttpsRedirection();
         app.UseStaticFiles();

@@ -46,7 +46,6 @@ public class EventsController : Controller
     }
     
     [HttpPost("")]
-    [Produces("application/json")]
     public async Task<IActionResult> Create([FromBody] CreateEventDto createEventDto)
     {
         if (!ModelState.IsValid)
