@@ -78,6 +78,8 @@ public class Startup
     {
         if (environment.IsDevelopment())
             app.UseDeveloperExceptionPage();
+        else
+            app.UseExceptionHandler();
         
         app.UseHttpsRedirection();
         app.UseStaticFiles();
