@@ -20,7 +20,7 @@ const VisitorCollectionSchema = CollectionSchema(
     r'eventId': PropertySchema(
       id: 0,
       name: r'eventId',
-      type: IsarType.string,
+      type: IsarType.long,
     ),
     r'name': PropertySchema(
       id: 1,
@@ -52,8 +52,8 @@ const VisitorCollectionSchema = CollectionSchema(
         ),
         IndexPropertySchema(
           name: r'eventId',
-          type: IndexType.hash,
-          caseSensitive: true,
+          type: IndexType.value,
+          caseSensitive: false,
         )
       ],
     ),
@@ -65,8 +65,8 @@ const VisitorCollectionSchema = CollectionSchema(
       properties: [
         IndexPropertySchema(
           name: r'eventId',
-          type: IndexType.hash,
-          caseSensitive: true,
+          type: IndexType.value,
+          caseSensitive: false,
         )
       ],
     )
@@ -85,7 +85,6 @@ int _visitorCollectionEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.eventId.length * 3;
   bytesCount += 3 + object.name.length * 3;
   bytesCount += 3 + object.visitorId.length * 3;
   return bytesCount;
@@ -97,7 +96,7 @@ void _visitorCollectionSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.eventId);
+  writer.writeLong(offsets[0], object.eventId);
   writer.writeString(offsets[1], object.name);
   writer.writeString(offsets[2], object.visitorId);
 }
@@ -109,7 +108,7 @@ VisitorCollection _visitorCollectionDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = VisitorCollection(
-    eventId: reader.readString(offsets[0]),
+    eventId: reader.readLong(offsets[0]),
     name: reader.readString(offsets[1]),
     visitorId: reader.readString(offsets[2]),
   );
@@ -124,7 +123,7 @@ P _visitorCollectionDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
@@ -148,25 +147,24 @@ void _visitorCollectionAttach(
 
 extension VisitorCollectionByIndex on IsarCollection<VisitorCollection> {
   Future<VisitorCollection?> getByVisitorIdEventId(
-      String visitorId, String eventId) {
+      String visitorId, int eventId) {
     return getByIndex(r'visitorId_eventId', [visitorId, eventId]);
   }
 
-  VisitorCollection? getByVisitorIdEventIdSync(
-      String visitorId, String eventId) {
+  VisitorCollection? getByVisitorIdEventIdSync(String visitorId, int eventId) {
     return getByIndexSync(r'visitorId_eventId', [visitorId, eventId]);
   }
 
-  Future<bool> deleteByVisitorIdEventId(String visitorId, String eventId) {
+  Future<bool> deleteByVisitorIdEventId(String visitorId, int eventId) {
     return deleteByIndex(r'visitorId_eventId', [visitorId, eventId]);
   }
 
-  bool deleteByVisitorIdEventIdSync(String visitorId, String eventId) {
+  bool deleteByVisitorIdEventIdSync(String visitorId, int eventId) {
     return deleteByIndexSync(r'visitorId_eventId', [visitorId, eventId]);
   }
 
   Future<List<VisitorCollection?>> getAllByVisitorIdEventId(
-      List<String> visitorIdValues, List<String> eventIdValues) {
+      List<String> visitorIdValues, List<int> eventIdValues) {
     final len = visitorIdValues.length;
     assert(eventIdValues.length == len,
         'All index values must have the same length');
@@ -179,7 +177,7 @@ extension VisitorCollectionByIndex on IsarCollection<VisitorCollection> {
   }
 
   List<VisitorCollection?> getAllByVisitorIdEventIdSync(
-      List<String> visitorIdValues, List<String> eventIdValues) {
+      List<String> visitorIdValues, List<int> eventIdValues) {
     final len = visitorIdValues.length;
     assert(eventIdValues.length == len,
         'All index values must have the same length');
@@ -192,7 +190,7 @@ extension VisitorCollectionByIndex on IsarCollection<VisitorCollection> {
   }
 
   Future<int> deleteAllByVisitorIdEventId(
-      List<String> visitorIdValues, List<String> eventIdValues) {
+      List<String> visitorIdValues, List<int> eventIdValues) {
     final len = visitorIdValues.length;
     assert(eventIdValues.length == len,
         'All index values must have the same length');
@@ -205,7 +203,7 @@ extension VisitorCollectionByIndex on IsarCollection<VisitorCollection> {
   }
 
   int deleteAllByVisitorIdEventIdSync(
-      List<String> visitorIdValues, List<String> eventIdValues) {
+      List<String> visitorIdValues, List<int> eventIdValues) {
     final len = visitorIdValues.length;
     assert(eventIdValues.length == len,
         'All index values must have the same length');
@@ -242,6 +240,14 @@ extension VisitorCollectionQueryWhereSort
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhere> anyIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhere> anyEventId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'eventId'),
+      );
     });
   }
 }
@@ -362,7 +368,7 @@ extension VisitorCollectionQueryWhere
   }
 
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhereClause>
-      visitorIdEventIdEqualTo(String visitorId, String eventId) {
+      visitorIdEventIdEqualTo(String visitorId, int eventId) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
         indexName: r'visitorId_eventId',
@@ -372,7 +378,7 @@ extension VisitorCollectionQueryWhere
   }
 
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhereClause>
-      visitorIdEqualToEventIdNotEqualTo(String visitorId, String eventId) {
+      visitorIdEqualToEventIdNotEqualTo(String visitorId, int eventId) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -407,7 +413,58 @@ extension VisitorCollectionQueryWhere
   }
 
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhereClause>
-      eventIdEqualTo(String eventId) {
+      visitorIdEqualToEventIdGreaterThan(
+    String visitorId,
+    int eventId, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'visitorId_eventId',
+        lower: [visitorId, eventId],
+        includeLower: include,
+        upper: [visitorId],
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhereClause>
+      visitorIdEqualToEventIdLessThan(
+    String visitorId,
+    int eventId, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'visitorId_eventId',
+        lower: [visitorId],
+        upper: [visitorId, eventId],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhereClause>
+      visitorIdEqualToEventIdBetween(
+    String visitorId,
+    int lowerEventId,
+    int upperEventId, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'visitorId_eventId',
+        lower: [visitorId, lowerEventId],
+        includeLower: includeLower,
+        upper: [visitorId, upperEventId],
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhereClause>
+      eventIdEqualTo(int eventId) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
         indexName: r'eventId',
@@ -417,7 +474,7 @@ extension VisitorCollectionQueryWhere
   }
 
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhereClause>
-      eventIdNotEqualTo(String eventId) {
+      eventIdNotEqualTo(int eventId) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -450,63 +507,102 @@ extension VisitorCollectionQueryWhere
       }
     });
   }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhereClause>
+      eventIdGreaterThan(
+    int eventId, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'eventId',
+        lower: [eventId],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhereClause>
+      eventIdLessThan(
+    int eventId, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'eventId',
+        lower: [],
+        upper: [eventId],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterWhereClause>
+      eventIdBetween(
+    int lowerEventId,
+    int upperEventId, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'eventId',
+        lower: [lowerEventId],
+        includeLower: includeLower,
+        upper: [upperEventId],
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension VisitorCollectionQueryFilter
     on QueryBuilder<VisitorCollection, VisitorCollection, QFilterCondition> {
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      eventIdEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+      eventIdEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'eventId',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
       eventIdGreaterThan(
-    String value, {
+    int value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'eventId',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
       eventIdLessThan(
-    String value, {
+    int value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'eventId',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
       eventIdBetween(
-    String lower,
-    String upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -515,77 +611,6 @@ extension VisitorCollectionQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      eventIdStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'eventId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      eventIdEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'eventId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      eventIdContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'eventId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      eventIdMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'eventId',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      eventIdIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'eventId',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      eventIdIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'eventId',
-        value: '',
       ));
     });
   }
@@ -1032,9 +1057,9 @@ extension VisitorCollectionQuerySortThenBy
 extension VisitorCollectionQueryWhereDistinct
     on QueryBuilder<VisitorCollection, VisitorCollection, QDistinct> {
   QueryBuilder<VisitorCollection, VisitorCollection, QDistinct>
-      distinctByEventId({bool caseSensitive = true}) {
+      distinctByEventId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'eventId', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'eventId');
     });
   }
 
@@ -1061,7 +1086,7 @@ extension VisitorCollectionQueryProperty
     });
   }
 
-  QueryBuilder<VisitorCollection, String, QQueryOperations> eventIdProperty() {
+  QueryBuilder<VisitorCollection, int, QQueryOperations> eventIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'eventId');
     });

@@ -28,7 +28,7 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
 
   @override
   Future<Result<List<Visitor>, Exception>> getVisitors({
-    required String eventId,
+    required int eventId,
     required int limit,
     required int offset,
   }) async {
@@ -47,17 +47,17 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
   }
 
   @override
-  void saveVisitors(List<Visitor> visitors, String eventId) async {
+  void saveVisitors(List<Visitor> visitors, int eventId) async {
     _eventsDatabase.addVisitors(visitors.map((e) => VisitorCollection.fromModel(e, eventId)).toList());
   }
 
   @override
-  void deleteEventsByIds(List<String> ids) {
+  void deleteEventsByIds(List<int> ids) {
     _eventsDatabase.deleteEventsByIds(ids);
   }
 
   @override
-  Future<List<String>> getAllEventsIds() async {
+  Future<List<int>> getAllEventsIds() async {
     return await _eventsDatabase.getAllEventsIds();
   }
 }

@@ -1,15 +1,12 @@
 import 'package:isar/isar.dart';
 import 'package:project/domain/models/event.dart';
-import 'package:project/utils/fast_hash_x.dart';
 
 part 'event_collection.g.dart';
 
 @collection
 class EventCollection {
-  Id get isarId => eventId.fastHash();
-
-  @Index(unique: true, replace: true)
-  String eventId;
+  @Index(replace: true)
+  Id id;
 
   String name;
   String shortDescription;
@@ -22,7 +19,7 @@ class EventCollection {
   String photoUrl;
 
   EventCollection({
-    required this.eventId,
+    required this.id,
     required this.name,
     required this.shortDescription,
     required this.description,
@@ -36,7 +33,7 @@ class EventCollection {
 
   static Event toModel(EventCollection event) {
     return Event(
-      id: event.eventId,
+      id: event.id,
       name: event.name,
       shortDescription: event.shortDescription,
       description: event.description,
@@ -51,7 +48,7 @@ class EventCollection {
 
   factory EventCollection.fromModel(Event event) {
     return EventCollection(
-      eventId: event.id,
+      id: event.id,
       name: event.name,
       shortDescription: event.shortDescription,
       description: event.description,

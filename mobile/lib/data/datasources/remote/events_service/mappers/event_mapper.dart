@@ -5,8 +5,7 @@ import 'package:project/utils/constants/constants.dart';
 extension EventMapper on EventApiResponse {
   Event toModel() {
     return Event(
-      // TODO: id is int
-      id: id.toString(),
+      id: id,
       name: name,
       shortDescription: shortDescription,
       description: description,

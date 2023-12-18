@@ -5,9 +5,9 @@ import '../events_repository/events_repository.dart';
 abstract class LocalEventsRepository implements EventsRepository {
   void saveEvents(List<Event> events);
 
-  void saveVisitors(List<Visitor> visitors, String eventId);
+  void saveVisitors(List<Visitor> visitors, int eventId);
 
-  void deleteEventsByIds(List<String> ids);
+  void deleteEventsByIds(List<int> ids);
 
-  Future<List<String>> getAllEventsIds();
+  Future<List<int>> getAllEventsIds();
 }

@@ -12,7 +12,7 @@ class VisitorCollection {
   String visitorId;
 
   @Index()
-  String eventId;
+  int eventId;
 
   String name;
 
@@ -29,7 +29,7 @@ class VisitorCollection {
     );
   }
 
-  factory VisitorCollection.fromModel(Visitor visitor, String eventId) {
+  factory VisitorCollection.fromModel(Visitor visitor, int eventId) {
     return VisitorCollection(
       visitorId: visitor.id,
       eventId: eventId,

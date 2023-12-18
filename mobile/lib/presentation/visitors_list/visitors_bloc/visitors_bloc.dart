@@ -16,7 +16,7 @@ class VisitorsBloc extends Bloc<VisitorsEvent, VisitorsState> {
   }
 
   final EventsRepository _eventsRepository;
-  final String _eventId;
+  final int _eventId;
 
   static const _limit = 25;
 

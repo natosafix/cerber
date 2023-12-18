@@ -1,5 +1,5 @@
 class Event {
-  final String id;
+  final int id;
   final String name;
   final String shortDescription;
   final String description;

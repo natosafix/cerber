@@ -17,8 +17,8 @@ class EventsDatabase {
     return await _events.where().offset(offset).limit(limit).findAll();
   }
 
-  Future<List<String>> getAllEventsIds() async {
-    return await _events.where().eventIdProperty().findAll();
+  Future<List<int>> getAllEventsIds() async {
+    return await _events.where().idProperty().findAll();
   }
 
   Future<void> addEvents(List<EventCollection> events) async {
@@ -27,14 +27,14 @@ class EventsDatabase {
     });
   }
 
-  Future<void> deleteEventsByIds(List<String> eventsIds) async {
+  Future<void> deleteEventsByIds(List<int> eventsIds) async {
     await _isar.writeTxn(() async {
-      await _events.deleteAllByEventId(eventsIds);
+      await _events.deleteAll(eventsIds);
     });
   }
 
   Future<List<VisitorCollection>> getVisitors({
-    required String eventId,
+    required int eventId,
     required int limit,
     required int offset,
   }) async {

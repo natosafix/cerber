@@ -31,7 +31,7 @@ class CompoundEventsRepository implements EventsRepository {
     }
   }
 
-  final Set<String> _downloadedEventsIds = {};
+  final Set<int> _downloadedEventsIds = {};
 
   void _deleteNonexistentEvents() async {
     final savedEventsIds = (await _localEventsRepo.getAllEventsIds()).toSet();
@@ -77,7 +77,7 @@ class CompoundEventsRepository implements EventsRepository {
 
   @override
   Future<Result<List<Visitor>, Exception>> getVisitors({
-    required String eventId,
+    required int eventId,
     required int limit,
     required int offset,
   }) async {

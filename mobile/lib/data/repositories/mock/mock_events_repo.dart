@@ -18,7 +18,7 @@ class MockEventsRepo implements EventsRepository {
 
   @override
   Future<Result<List<Visitor>, Exception>> getVisitors({
-    required String eventId,
+    required int eventId,
     required int limit,
     required int offset,
   }) async {
@@ -31,7 +31,7 @@ class MockEventsRepo implements EventsRepository {
 
   static List<Event> mockEvents = [
     Event(
-      id: "6",
+      id: 6,
       name: "Конференция управления разработки 2023 6",
       shortDescription:
           "В новой книге «Поход на Бар-Хото» автор обращается к своей излюбленной восточной тематике; это вымышленная история с вымышленными героями — но в реальных декорациях.",
@@ -48,7 +48,7 @@ class MockEventsRepo implements EventsRepository {
       category: "Prazdnik",
     ),
     Event(
-      id: "7",
+      id: 7,
       name: "Конференция управления разработки 2023 7",
       shortDescription:
           "В новой книге «Поход на Бар-Хото» автор обращается к своей излюбленной восточной тематике; это вымышленная история с вымышленными героями — но в реальных декорациях.",
@@ -65,7 +65,7 @@ class MockEventsRepo implements EventsRepository {
       category: "Prazdnik",
     ),
     Event(
-      id: "8",
+      id: 8,
       name: "Конференция управления разработки 2023 8",
       shortDescription:
           "В новой книге «Поход на Бар-Хото» автор обращается к своей излюбленной восточной тематике; это вымышленная история с вымышленными героями — но в реальных декорациях.",
@@ -82,7 +82,7 @@ class MockEventsRepo implements EventsRepository {
       category: "Prazdnik",
     ),
     Event(
-      id: "9",
+      id: 9,
       name: "Конференция управления разработки 2023 9",
       shortDescription:
           "В новой книге «Поход на Бар-Хото» автор обращается к своей излюбленной восточной тематике; это вымышленная история с вымышленными героями — но в реальных декорациях.",
@@ -99,7 +99,7 @@ class MockEventsRepo implements EventsRepository {
       category: "Prazdnik",
     ),
     Event(
-      id: "10",
+      id: 10,
       name: "Конференция управления разработки 2023 10",
       shortDescription:
           "В новой книге «Поход на Бар-Хото» автор обращается к своей излюбленной восточной тематике; это вымышленная история с вымышленными героями — но в реальных декорациях.",
@@ -116,7 +116,7 @@ class MockEventsRepo implements EventsRepository {
       category: "Prazdnik",
     ),
     Event(
-      id: "11",
+      id: 11,
       name: "Конференция управления разработки 2023 11",
       shortDescription:
           "В новой книге «Поход на Бар-Хото» автор обращается к своей излюбленной восточной тематике; это вымышленная история с вымышленными героями — но в реальных декорациях.",
@@ -133,7 +133,7 @@ class MockEventsRepo implements EventsRepository {
       category: "Prazdnik",
     ),
     Event(
-      id: "12",
+      id: 12,
       name: "Конференция управления разработки 2023 12",
       shortDescription:
           "В новой книге «Поход на Бар-Хото» автор обращается к своей излюбленной восточной тематике; это вымышленная история с вымышленными героями — но в реальных декорациях.",
@@ -150,7 +150,7 @@ class MockEventsRepo implements EventsRepository {
       category: "Prazdnik",
     ),
     Event(
-      id: "13",
+      id: 13,
       name: "Конференция управления разработки 2023 13",
       shortDescription:
           "В новой книге «Поход на Бар-Хото» автор обращается к своей излюбленной восточной тематике; это вымышленная история с вымышленными героями — но в реальных декорациях.",
@@ -167,7 +167,7 @@ class MockEventsRepo implements EventsRepository {
       category: "Prazdnik",
     ),
     Event(
-      id: "14",
+      id: 14,
       name: "Конференция управления разработки 2023 14",
       shortDescription:
           "В новой книге «Поход на Бар-Хото» автор обращается к своей излюбленной восточной тематике; это вымышленная история с вымышленными героями — но в реальных декорациях.",
@@ -183,70 +183,6 @@ class MockEventsRepo implements EventsRepository {
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
       category: "Prazdnik",
     ),
-//     Event(
-//       id: "4",
-//       name: "QEw",
-//       description: "changed desctioption",
-//       startDate: DateTime.now().add(const Duration(days: 2)),
-//       location: 'Ekb',
-//       photoUrl: "",
-//     ),
-//     Event(
-//       id: "5",
-//       name: "Gfd",
-//       description: "description1",
-//       startDate: DateTime.now().add(const Duration(days: 2)),
-//       location: 'MOscow',
-//       photoUrl: "",
-//     ),
-//     Event(
-//       id: "7",
-//       name: "GVS",
-//       description: "description1",
-//       startDate: DateTime.now().add(const Duration(days: 2)),
-//       location: 'LOnodn',
-//       photoUrl: "",
-//     ),
-//     Event(
-//       id: "0",
-//       name: "POL",
-//       description: "description1",
-//       startDate: DateTime.now().add(const Duration(days: 2)),
-//       location: 'New york',
-//       photoUrl: "",
-//     ),
-//     Event(
-//       id: "9",
-//       name: "}{KJ}",
-//       description: "description1",
-//       startDate: DateTime.now().add(const Duration(days: 2)),
-//       location: 'Чапаева 16а',
-//       photoUrl: "",
-//     ),
-//     Event(
-//       id: "12",
-//       name: "BBNKIJHN",
-//       description: "description1",
-//       startDate: DateTime.now().add(const Duration(days: 2)),
-//       location: 'Kanos',
-//       photoUrl: "",
-//     ),
-//     Event(
-//       id: "11",
-//       name: "name1",
-//       description: "description1",
-//       startDate: DateTime.now().add(const Duration(days: 2)),
-//       location: 'Qwesd',
-//       photoUrl: "",
-//     ),
-//     Event(
-//       id: "2",
-//       name: "Ивент2",
-//       description: "description1 lorem ipsum kofs jiosdf sdff sd",
-//       startDate: DateTime.now().add(const Duration(days: 2, hours: 2)),
-//       location: 'POIFugf',
-//       photoUrl: "",
-//     ),
   ];
 
   static List<Visitor> mockVisitors = [
