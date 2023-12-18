@@ -17,7 +17,7 @@ public class AnswerConfiguration : IEntityTypeConfiguration<Answer>
         
         builder.HasOne(answer => answer.Order)
             .WithMany(order => order.Answers)
-            .HasForeignKey(answer => answer.OrderId)
+            .HasForeignKey(answer => answer.Customer)
             .OnDelete(DeleteBehavior.SetNull);
         
         builder.HasOne(answer => answer.Question)

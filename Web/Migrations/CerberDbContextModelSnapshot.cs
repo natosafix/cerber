@@ -34,7 +34,7 @@ namespace Web.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("OrderId")
+                    b.Property<Guid>("Customer")
                         .HasColumnType("uuid");
 
                     b.Property<int>("QuestionId")
@@ -42,7 +42,7 @@ namespace Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("Customer");
 
                     b.HasIndex("QuestionId");
 
@@ -177,6 +177,10 @@ namespace Web.Migrations
 
                     b.Property<int>("EventId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("Price")
                         .HasColumnType("integer");
@@ -424,7 +428,7 @@ namespace Web.Migrations
                 {
                     b.HasOne("Domain.Entities.Order", "Order")
                         .WithMany("Answers")
-                        .HasForeignKey("OrderId")
+                        .HasForeignKey("Customer")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 

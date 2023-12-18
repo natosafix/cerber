@@ -3,6 +3,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Dtos.Request;
+using Web.Dtos.Response;
 using Web.Services;
 
 namespace Web.Controllers;
@@ -23,17 +24,17 @@ public class OrdersController : Controller
     [HttpGet("")]
     public async Task<IActionResult> Get([FromQuery] int eventId)
     {
-        return Ok(await ordersService.Get(eventId));
+        var order = await ordersService.Get(eventId);
+        return Ok(mapper.Map<List<OrderResponseDto>>(order));
     }
 
     [HttpPost("")]
-    [Produces("application/json")]
     public async Task<IActionResult> Create([FromBody] CreateOrderDto createOrderDto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
         var order = await ordersService.Create(mapper.Map<Order>(createOrderDto));
-        return Ok(order);
+        return Ok(mapper.Map<OrderResponseDto>(order));
     }
 }

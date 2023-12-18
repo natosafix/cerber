@@ -16,5 +16,9 @@ public class MappingProfile : Profile
         CreateMap<CreateQuestionDto, Question>();
         
         CreateMap<Event, EventResponseDto>();
+        CreateMap<Ticket, TicketResponseDto>();
+        CreateMap<Question, QuestionResponseDto>();
+        CreateMap<Order, OrderResponseDto>();
+        CreateMap<Answer, AnswerResponseDto>();
     }
 }

@@ -51,7 +51,10 @@ public class EventsController : Controller
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        return Ok(await eventsService.Create(mapper.Map<Event>(createEventDto)));
+        var @event = mapper.Map<Event>(createEventDto);
+        var createdEvent = await eventsService.Create(@event);
+        var eventResponse = mapper.Map<EventResponseDto>(createdEvent);
+        return Ok(await eventsService.Create(mapper.Map<Event>(eventResponse)));
     }
     
     [HttpPut("{id}/inspector")]
