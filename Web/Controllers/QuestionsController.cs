@@ -21,6 +21,20 @@ public class QuestionsController : Controller
         this.questionsService = questionsService;
     }
 
+    [HttpGet("")]
+    public async Task<IActionResult> Get([FromQuery] int eventId)
+    {
+        var question = await questionsService.GetByEvent(eventId);
+        return Ok(mapper.Map<List<QuestionResponseDto>>(question));
+    }
+    
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetByEvent([FromRoute] int id)
+    {
+        var question = await questionsService.Get(id);
+        return Ok(mapper.Map<QuestionResponseDto>(question));
+    }
+    
     [HttpPost("")]
     public async Task<IActionResult> Create([FromBody] CreateQuestionDto createQuestionDto)
     {
