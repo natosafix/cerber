@@ -1,20 +1,25 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/models/visitor.dart';
-import 'package:project/domain/repositories/events_repository/events_repository.dart';
+import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
+import 'package:project/domain/repositories/compound_events_repository/download_status.dart';
 import 'package:project/domain/repositories/local_events_repository/local_events_repository.dart';
+import 'package:project/domain/repositories/remote_events_repository.dart';
 import 'package:project/utils/result.dart';
 
-class CompoundEventsRepository implements EventsRepository {
-  CompoundEventsRepository({
-    required EventsRepository remoteEventsRepo,
-    required LocalEventsRepository localEventsRepo,
-  })  : _remoteEventsRepo = remoteEventsRepo,
-        _localEventsRepo = localEventsRepo;
+class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
+  CompoundEventsRepositoryImpl({
+    required this.remoteEventsRepository,
+    required this.localEventsRepository,
+  });
 
-  final EventsRepository _remoteEventsRepo;
-  final LocalEventsRepository _localEventsRepo;
+  @override
+  final RemoteEventsRepository remoteEventsRepository;
+
+  @override
+  final LocalEventsRepository localEventsRepository;
 
   late final bool _networkAvailable;
 
@@ -34,11 +39,11 @@ class CompoundEventsRepository implements EventsRepository {
   final Set<int> _downloadedEventsIds = {};
 
   void _deleteNonexistentEvents() async {
-    final savedEventsIds = (await _localEventsRepo.getAllEventsIds()).toSet();
+    final savedEventsIds = (await localEventsRepository.getAllEventsIds()).toSet();
 
     final nonExistentEventsIds = savedEventsIds.difference(_downloadedEventsIds);
 
-    _localEventsRepo.deleteEventsByIds(nonExistentEventsIds.toList());
+    localEventsRepository.deleteEventsByIds(nonExistentEventsIds.toList());
 
     _downloadedEventsIds.clear();
   }
@@ -49,10 +54,10 @@ class CompoundEventsRepository implements EventsRepository {
     required int limit,
   }) async {
     if (!_networkAvailable) {
-      return await _localEventsRepo.getEvents(offset: offset, limit: limit);
+      return await localEventsRepository.getEvents(offset: offset, limit: limit);
     }
 
-    final result = await _remoteEventsRepo.getEvents(
+    final result = await remoteEventsRepository.getEvents(
       offset: offset,
       limit: limit,
     );
@@ -60,7 +65,7 @@ class CompoundEventsRepository implements EventsRepository {
     if (result.isSuccess) {
       final events = result.success;
 
-      _localEventsRepo.saveEvents(events);
+      localEventsRepository.saveEvents(events);
       _downloadedEventsIds.addAll(events.map((e) => e.id));
 
       if (events.length < limit) {
@@ -76,25 +81,28 @@ class CompoundEventsRepository implements EventsRepository {
   }
 
   @override
-  Future<Result<List<Visitor>, Exception>> getVisitors({
-    required int eventId,
-    required int limit,
-    required int offset,
-  }) async {
+  Future<Visitor?> findVisitor(String visitorId, int eventId) async {
     if (!_networkAvailable) {
-      return await _localEventsRepo.getVisitors(eventId: eventId, limit: limit, offset: offset);
-    }
-    
-    final result = await _remoteEventsRepo.getVisitors(
-      eventId: eventId,
-      limit: limit,
-      offset: offset,
-    );
-
-    if (result.isSuccess) {
-      _localEventsRepo.saveVisitors(result.success, eventId);
+      return await remoteEventsRepository.findVisitor(visitorId, eventId);
     }
 
-    return result;
+    return await localEventsRepository.findVisitor(visitorId, eventId);
+  }
+
+  @override
+  Future<void> downloadVisitorsDatabase(int eventId, StreamSink<DownloadStatus> status) async {
+    status.add(DownloadStatus.inProcess);
+
+    final downloadResult = await remoteEventsRepository.downloadVisitors(eventId);
+
+    if (downloadResult.isFailure) {
+      return status.add(DownloadStatus.failure);
+    }
+
+    final visitors = downloadResult.success;
+
+    await localEventsRepository.saveVisitors(visitors, eventId);
+
+    status.add(DownloadStatus.success);
   }
 }

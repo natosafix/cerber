@@ -38,5 +38,13 @@
             }
         }
     },
-    "eventHasNoVisitors": "У этого мероприятия нет посетителей"
+    "notDownloaded": "Не скачана",
+    "@notDownloaded": {
+        "description": "Database not downloaded"
+    },
+    "lastDownloaded": "Скачана",
+    "@lastDownloaded": {
+        "description": "Database last downloaded"
+    },
+    "somethingWentWrong": "Что-то пошло не так..."
 }

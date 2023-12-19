@@ -4,8 +4,7 @@ import 'package:project/presentation/authentication/authentication_bloc/authenti
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_bloc.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_status.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/finish_button_widget.dart';
-import 'package:project/utils/snackbar_x.dart';
-import 'package:project/utils/theme_util.dart';
+import 'package:project/utils/context_x.dart';
 
 class AuthenticationFormScreenBase extends StatelessWidget {
   const AuthenticationFormScreenBase({
@@ -31,7 +30,7 @@ class AuthenticationFormScreenBase extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
-            foregroundColor: ThemeUtil.isLight(context) ? Colors.black : Colors.white,
+            foregroundColor: context.isLight() ? Colors.black : Colors.white,
             elevation: 0,
             title: Text(title),
             centerTitle: true,

@@ -33,17 +33,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "downloadDatabase":
             MessageLookupByLibrary.simpleMessage("Download database"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
-        "eventHasNoVisitors":
-            MessageLookupByLibrary.simpleMessage("This event has no visitors"),
         "events": MessageLookupByLibrary.simpleMessage("Events"),
         "invalidEmailAddress":
             MessageLookupByLibrary.simpleMessage("Invalid email address"),
+        "lastDownloaded":
+            MessageLookupByLibrary.simpleMessage("Last downloaded"),
         "less": MessageLookupByLibrary.simpleMessage("less"),
         "logIn": MessageLookupByLibrary.simpleMessage("Log In"),
         "logIntoAccount":
             MessageLookupByLibrary.simpleMessage("Log Into Account"),
         "more": MessageLookupByLibrary.simpleMessage("more"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
+        "notDownloaded": MessageLookupByLibrary.simpleMessage("Not Downloaded"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "passwordMustConsistOfLettersAndNumbers":
             MessageLookupByLibrary.simpleMessage(
@@ -60,6 +61,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "shouldntBeEmpty":
             MessageLookupByLibrary.simpleMessage("Shouldn\'\'t be empty"),
         "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
+        "somethingWentWrong":
+            MessageLookupByLibrary.simpleMessage("Something went wrong..."),
         "visitors": MessageLookupByLibrary.simpleMessage("Visitors"),
         "when": MessageLookupByLibrary.simpleMessage("When"),
         "where": MessageLookupByLibrary.simpleMessage("Where"),

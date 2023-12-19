@@ -1,9 +1,14 @@
+import 'package:project/domain/models/answer.dart';
+import 'package:project/domain/models/ticket.dart';
+
 class Visitor {
   final String id;
-  final String name;
+  final List<Answer> answers;
+  final Ticket ticket;
 
   Visitor({
     required this.id,
-    required this.name,
+    required this.answers,
+    required this.ticket,
   });
 }

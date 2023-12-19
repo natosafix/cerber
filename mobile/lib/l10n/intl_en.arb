@@ -38,5 +38,13 @@
             }
         }
     },
-    "eventHasNoVisitors": "This event has no visitors"
+    "notDownloaded": "Not Downloaded",
+    "@notDownloaded": {
+        "description": "Database not downloaded"
+    },
+    "lastDownloaded": "Last downloaded",
+    "@lastDownloaded": {
+        "description": "Database last downloaded"
+    },
+    "somethingWentWrong": "Something went wrong..."
 }

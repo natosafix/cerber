@@ -7,21 +7,25 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:project/data/datasources/local/events_database/collections/event_collection.dart';
-import 'package:project/data/datasources/local/events_database/collections/visitor_collection.dart';
+import 'package:project/data/datasources/local/events_database/collections/answer_collection/answer_collection.dart';
+import 'package:project/data/datasources/local/events_database/collections/event_collection/event_collection.dart';
+import 'package:project/data/datasources/local/events_database/collections/question_collection/question_collection.dart';
+import 'package:project/data/datasources/local/events_database/collections/visitor_collection/visitor_collection.dart';
 import 'package:project/data/datasources/local/events_database/events_database.dart';
 import 'package:project/data/datasources/remote/authentication_service/authentication_service.dart';
 import 'package:project/data/datasources/remote/events_service/events_service.dart';
 import 'package:project/data/datasources/remote/events_service/interceptor.dart';
 import 'package:project/data/repositories/authentication_repository_impl.dart';
-import 'package:project/data/repositories/compound_events_repo.dart';
+import 'package:project/data/repositories/compound_events_repository_impl.dart';
 import 'package:project/data/repositories/local_events_repository_impl.dart';
 import 'package:project/data/repositories/mock/mock_auth_repo.dart';
 import 'package:project/data/repositories/mock/mock_events_repo.dart';
 import 'package:project/data/repositories/remote_events_repository_impl.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
+import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
 import 'package:project/domain/repositories/events_repository/events_repository.dart';
 import 'package:project/domain/repositories/local_events_repository/local_events_repository.dart';
+import 'package:project/domain/repositories/remote_events_repository.dart';
 import 'package:project/utils/constants/constants.dart';
 
 class _MyHttpOverrides extends HttpOverrides {
@@ -34,6 +38,8 @@ class _MyHttpOverrides extends HttpOverrides {
 
 final locator = GetIt.instance;
 
+const _mockRepos = false;
+
 void setupLocator() async {
   if (kDebugMode) HttpOverrides.global = _MyHttpOverrides();
 
@@ -43,53 +49,51 @@ void setupLocator() async {
     ),
   );
 
-  // locator.registerSingleton<AuthenticationRepository>(
-  //   MockAuthRepo(),
-  // );
-
-  // locator.registerSingleton<EventsRepository>(
-  //   MockEventsRepo(),
-  //   instanceName: 'remote',
-  // );
-
-  locator.registerSingleton<AuthenticationService>(
-    AuthenticationService(
-      Dio(),
-      baseUrl: Constants.authenticationRepositoryBaseUrl,
-    ),
-  );
-  locator.registerSingleton<AuthenticationRepository>(
-    AuthenticationRepositoryImpl(
-      authenticationService: locator<AuthenticationService>(),
-    ),
-  );
-
-  locator.registerSingleton<Dio>(
-    Dio(
-      BaseOptions(baseUrl: Constants.eventsRepositoryBaseUrl),
+  locator.registerLazySingleton<Dio>(
+    () => Dio(
+      BaseOptions(
+        baseUrl: Constants.eventsRepositoryBaseUrl,
+        connectTimeout: const Duration(seconds: 20),
+      ),
     )..interceptors.add(EventsServiceInterceptor()),
   );
-  locator.registerSingleton<EventsService>(
-    EventsService(locator<Dio>()),
-  );
-  locator.registerSingleton<EventsRepository>(
-    RemoteEventsRepositoryImpl(eventsService: locator<EventsService>()),
-    instanceName: 'remote',
-  );
 
-  DioCacheManager.initialize(locator<Dio>());
-
-  locator.registerSingletonAsync<Isar>(() async {
-    final dir = await getApplicationDocumentsDirectory();
-    final isar = await Isar.open(
-      [EventCollectionSchema, VisitorCollectionSchema],
-      directory: dir.path,
+  if (_mockRepos) {
+    locator.registerSingleton<AuthenticationRepository>(
+      MockAuthRepo(),
     );
-    return isar;
-  });
+
+    locator.registerSingleton<EventsRepository>(
+      MockEventsRepo(),
+      instanceName: 'remote',
+    );
+  } else {
+    locator.registerSingleton<AuthenticationService>(
+      AuthenticationService(
+        Dio(),
+        baseUrl: Constants.authenticationRepositoryBaseUrl,
+      ),
+    );
+    locator.registerSingleton<AuthenticationRepository>(
+      AuthenticationRepositoryImpl(
+        authenticationService: locator<AuthenticationService>(),
+      ),
+    );
+
+    locator.registerSingleton<EventsService>(
+      EventsService(locator<Dio>()),
+    );
+    locator.registerSingleton<RemoteEventsRepository>(
+      RemoteEventsRepositoryImpl(eventsService: locator<EventsService>()),
+    );
+  }
 
   locator.registerSingletonAsync<EventsDatabase>(() async {
-    final isar = await locator.getAsync<Isar>();
+    final dir = await getApplicationDocumentsDirectory();
+    final isar = await Isar.open(
+      [EventCollectionSchema, VisitorCollectionSchema, QuestionCollectionSchema, AnswerCollectionSchema],
+      directory: dir.path,
+    );
     return EventsDatabase(isar: isar);
   });
 
@@ -98,14 +102,19 @@ void setupLocator() async {
     return LocalEventsRepositoryImpl(eventsDatabase: eventDatabase);
   });
 
-  locator.registerSingletonAsync<EventsRepository>(() async {
+  locator.registerSingletonAsync<CompoundEventsRepository>(() async {
     final localEventsRepo = await locator.getAsync<LocalEventsRepository>();
-    final remoteEventsRepo = locator.get<EventsRepository>(instanceName: 'remote');
-    final compoundRepo = CompoundEventsRepository(
-      remoteEventsRepo: remoteEventsRepo,
-      localEventsRepo: localEventsRepo,
+    final compoundRepo = CompoundEventsRepositoryImpl(
+      remoteEventsRepository: locator<RemoteEventsRepository>(),
+      localEventsRepository: localEventsRepo,
     );
     await compoundRepo.init();
     return compoundRepo;
   });
+
+  locator.registerSingletonAsync<EventsRepository>(
+    () async => await locator.getAsync<CompoundEventsRepository>(),
+  );
+
+  DioCacheManager.initialize(locator<Dio>());
 }

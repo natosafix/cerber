@@ -57,7 +57,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }) async {
     try {
       final response = await _authenticationService.login(LogInRequest(
-        username: email, // TODO: passing email as username
+        email: email,
         password: password,
       ));
       return Success(response);

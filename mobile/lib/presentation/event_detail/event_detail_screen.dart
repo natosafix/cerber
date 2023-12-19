@@ -1,12 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager_dio/flutter_cache_manager_dio.dart';
+import 'package:project/domain/models/event.dart';
+import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
+import 'package:project/domain/repositories/compound_events_repository/download_status.dart';
 import 'package:project/l10n/generated/l10n.dart';
+import 'package:project/presentation/event_detail/event_detail_bloc/event_detail_bloc.dart';
+import 'package:project/presentation/qr_code_scanner/qr_code_scanner_screen.dart';
+import 'package:project/presentation/widgets/circular_progress_indicator_inbutton.dart';
+import 'package:project/utils/locator.dart';
+import 'package:project/utils/context_x.dart';
 
-import '../../domain/models/event.dart';
-import '../visitors_list/visitors_list_screen.dart';
-
-class EventDetailScreen extends StatefulWidget {
+class EventDetailScreen extends StatelessWidget {
   const EventDetailScreen(this.event, {super.key});
 
   final Event event;
@@ -16,127 +23,147 @@ class EventDetailScreen extends StatefulWidget {
   }
 
   @override
-  State<EventDetailScreen> createState() => _EventDetailScreenState();
-}
-
-class _EventDetailScreenState extends State<EventDetailScreen> {
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-        slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.transparent,
-            stretch: true,
-            expandedHeight: 250,
-            collapsedHeight: kToolbarHeight * 2,
-            flexibleSpace: FlexibleSpaceBar(
-              stretchModes: const [
-                StretchMode.zoomBackground,
-                StretchMode.fadeTitle,
-              ],
-              centerTitle: true,
-              titlePadding: const EdgeInsets.all(8),
-              title: Text(widget.event.name),
-              background: Stack(
-                fit: StackFit.expand,
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-                    fit: BoxFit.cover,
-                  ),
-                  const DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment(0.0, 0.5),
-                        end: Alignment.center,
-                        colors: [
-                          Color(0x60000000),
-                          Color(0x00000000),
+    return BlocProvider(
+      create: (context) => EventDetailBloc(
+        event,
+        compoundEventsRepository: locator<CompoundEventsRepository>(),
+      ),
+      child: Scaffold(
+        body: CustomScrollView(
+          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          slivers: [
+            SliverAppBar(
+              backgroundColor: Colors.transparent,
+              stretch: true,
+              expandedHeight: 250,
+              collapsedHeight: kToolbarHeight * 2,
+              flexibleSpace: FlexibleSpaceBar(
+                stretchModes: const [
+                  StretchMode.zoomBackground,
+                  StretchMode.fadeTitle,
+                ],
+                centerTitle: true,
+                titlePadding: const EdgeInsets.all(8),
+                title: Text(event.name),
+                background: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    CachedNetworkImage(
+                      cacheManager: DioCacheManager.instance,
+                      imageUrl: event.photoUrl,
+                      fit: BoxFit.cover,
+                    ),
+                    const DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment(0, 4),
+                          end: Alignment.center,
+                          colors: [
+                            Color(0xFF000000),
+                            Color(0x00000000),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.all(15),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate.fixed(
+                  [
+                    Text.rich(
+                      style: Theme.of(context).textTheme.titleLarge,
+                      TextSpan(
+                        children: [
+                          TextSpan(text: "${L10n.current.where}: "),
+                          TextSpan(
+                            text: event.address,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    Text.rich(
+                      style: Theme.of(context).textTheme.titleLarge,
+                      TextSpan(
+                        children: [
+                          TextSpan(text: "${L10n.current.when}: "),
+                          TextSpan(
+                            text: event.startDate.toString(),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    ExpandableText(
+                      event.description,
+                      expandText: L10n.current.more,
+                      collapseText: L10n.current.less,
+                      collapseOnTextTap: true,
+                      linkEllipsis: false,
+                      animation: true,
+                      maxLines: 7,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 18),
+                    BlocBuilder<EventDetailBloc, EventDetailState>(
+                      buildWhen: (previous, current) => previous.downloadStatus != current.downloadStatus,
+                      builder: (context, state) {
+                        if (state.lastDownloaded == null) {
+                          return Text("⚠ ${L10n.current.notDownloaded}");
+                        }
+                        return Text("${L10n.current.lastDownloaded} ${state.lastDownloaded}");
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    BlocConsumer<EventDetailBloc, EventDetailState>(
+                      listenWhen: (previous, current) => current.downloadStatus == DownloadStatus.failure,
+                      listener: (context, state) => context.showSnackbar(L10n.current.somethingWentWrong),
+                      buildWhen: (previous, current) => previous.isDownloading != current.isDownloading,
+                      builder: (context, state) {
+                        final isDownloading = state.isDownloading;
+                        return Column(
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: FilledButton(
+                                onPressed: isDownloading
+                                    ? null
+                                    : () => context.read<EventDetailBloc>().add(DownloadDatabase()),
+                                child: isDownloading
+                                    ? const CircularProgressIndicatorInbutton()
+                                    : Text(L10n.current.downloadDatabase),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            SizedBox(
+                              width: double.infinity,
+                              child: FilledButton(
+                                onPressed: isDownloading ? null : () => _startCheckingPressed(context),
+                                child: Text(L10n.current.beginChecking),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.all(15),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate.fixed(
-                [
-                  Text.rich(
-                    style: Theme.of(context).textTheme.titleLarge,
-                    TextSpan(
-                      children: [
-                        TextSpan(text: "${L10n.current.where}: "),
-                        TextSpan(
-                          text: widget.event.address,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text.rich(
-                    style: Theme.of(context).textTheme.titleLarge,
-                    TextSpan(
-                      children: [
-                        TextSpan(text: "${L10n.current.when}: "),
-                        TextSpan(
-                          text: widget.event.startDate.toString(),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  ExpandableText(
-                    widget.event.description,
-                    expandText: L10n.current.more,
-                    collapseText: L10n.current.less,
-                    collapseOnTextTap: true,
-                    linkEllipsis: false,
-                    animation: true,
-                    maxLines: 7,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 12),
-                  _buttons(),
-                ],
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buttons() {
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          child: FilledButton(
-            onPressed: () {},
-            child: Text(L10n.current.downloadDatabase),
-          ),
-        ),
-        const SizedBox(width: 10),
-        SizedBox(
-          width: double.infinity,
-          child: FilledButton(
-            onPressed: _startCheckingPressed,
-            child: Text(L10n.current.beginChecking),
-          ),
-        ),
-      ],
-    );
-  }
-
-  void _startCheckingPressed() {
-    Navigator.of(context).push(VisitorsListScreen.route(widget.event));
+  void _startCheckingPressed(BuildContext context) {
+    Navigator.of(context).push(QrCodeScannerScreen.route(event));
   }
 }

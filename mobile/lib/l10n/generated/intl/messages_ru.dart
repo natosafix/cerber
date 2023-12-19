@@ -35,17 +35,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "downloadDatabase":
             MessageLookupByLibrary.simpleMessage("Скачать базу"),
         "email": MessageLookupByLibrary.simpleMessage("Почта"),
-        "eventHasNoVisitors": MessageLookupByLibrary.simpleMessage(
-            "У этого мероприятия нет посетителей"),
         "events": MessageLookupByLibrary.simpleMessage("Мероприятия"),
         "invalidEmailAddress":
             MessageLookupByLibrary.simpleMessage("Некорректный адрес"),
+        "lastDownloaded": MessageLookupByLibrary.simpleMessage("Скачана"),
         "less": MessageLookupByLibrary.simpleMessage("меньше"),
         "logIn": MessageLookupByLibrary.simpleMessage("Войти"),
         "logIntoAccount":
             MessageLookupByLibrary.simpleMessage("Войти в аккаунт"),
         "more": MessageLookupByLibrary.simpleMessage("больше"),
         "name": MessageLookupByLibrary.simpleMessage("Имя"),
+        "notDownloaded": MessageLookupByLibrary.simpleMessage("Не скачана"),
         "password": MessageLookupByLibrary.simpleMessage("Пароль"),
         "passwordMustConsistOfLettersAndNumbers":
             MessageLookupByLibrary.simpleMessage(
@@ -62,6 +62,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "shouldntBeEmpty":
             MessageLookupByLibrary.simpleMessage("Не должно быть пустым"),
         "signUp": MessageLookupByLibrary.simpleMessage("Зарегаться"),
+        "somethingWentWrong":
+            MessageLookupByLibrary.simpleMessage("Что-то пошло не так..."),
         "visitors": MessageLookupByLibrary.simpleMessage("Посетители"),
         "when": MessageLookupByLibrary.simpleMessage("Когда"),
         "where": MessageLookupByLibrary.simpleMessage("Где"),

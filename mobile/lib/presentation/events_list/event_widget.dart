@@ -1,11 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager_dio/flutter_cache_manager_dio.dart';
-import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
-
-import '../../domain/models/event.dart';
-import '../../utils/theme_util.dart';
+import 'package:project/domain/models/event.dart';
+import 'package:project/utils/context_x.dart';
 
 class EventWidget extends StatelessWidget {
   const EventWidget(this.event, {super.key});
@@ -18,11 +15,11 @@ class EventWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: ThemeUtil.isLight(context) ? Colors.white : const Color.fromARGB(255, 58, 58, 58),
+        color: context.isLight() ? Colors.white : const Color.fromARGB(255, 58, 58, 58),
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(
-            color: ThemeUtil.isLight(context)
+            color: context.isLight()
                 ? Colors.grey.withOpacity(0.15)
                 : const Color.fromARGB(255, 15, 15, 15).withOpacity(0.3),
             spreadRadius: 2.5,
@@ -68,7 +65,7 @@ class EventWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
-          color: ThemeUtil.isLight(context) ? Colors.grey.withOpacity(0.2) : Colors.black26,
+          color: context.isLight() ? Colors.grey.withOpacity(0.2) : Colors.black26,
           spreadRadius: 5,
           blurRadius: 9,
           offset: const Offset(0, 4),
@@ -80,13 +77,12 @@ class EventWidget extends StatelessWidget {
           constraints: const BoxConstraints(
             maxHeight: 250,
           ),
+          width: double.infinity,
           child: CachedNetworkImage(
             cacheManager: DioCacheManager.instance,
             imageUrl: event.photoUrl,
             fit: BoxFit.fitWidth,
             errorWidget: (context, url, error) => const Icon(Icons.error),
-            // fadeInDuration: Duration.zero,
-            // httpHeaders: context.read<AuthenticationRepository>().httpHeadersForAuthentication,
           ),
         ),
       ),

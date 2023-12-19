@@ -1,10 +1,11 @@
-import '../../domain/models/event.dart';
-import '../../domain/models/visitor.dart';
-import '../../domain/repositories/local_events_repository/local_events_repository.dart';
-import '../../utils/result.dart';
-import '../datasources/local/events_database/collections/event_collection.dart';
-import '../datasources/local/events_database/collections/visitor_collection.dart';
-import '../datasources/local/events_database/events_database.dart';
+import 'package:project/data/datasources/local/events_database/collections/answer_collection/answer_collection.dart';
+import 'package:project/data/datasources/local/events_database/collections/event_collection/event_collection.dart';
+import 'package:project/data/datasources/local/events_database/collections/visitor_collection/visitor_collection.dart';
+import 'package:project/data/datasources/local/events_database/events_database.dart';
+import 'package:project/domain/models/event.dart';
+import 'package:project/domain/models/visitor.dart';
+import 'package:project/domain/repositories/local_events_repository/local_events_repository.dart';
+import 'package:project/utils/result.dart';
 
 class LocalEventsRepositoryImpl implements LocalEventsRepository {
   LocalEventsRepositoryImpl({
@@ -22,23 +23,19 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
       limit: limit,
       offset: offset,
     );
-    
+
     return Success(events.map(EventCollection.toModel).toList());
   }
 
   @override
-  Future<Result<List<Visitor>, Exception>> getVisitors({
-    required int eventId,
-    required int limit,
-    required int offset,
-  }) async {
-    final visitors = await _eventsDatabase.getVisitors(
-      eventId: eventId,
-      limit: limit,
-      offset: offset,
-    );
+  Future<Visitor?> findVisitor(String visitorId, int eventId) async {
+    final visitor = await _eventsDatabase.findVisitor(visitorId, eventId);
+    if (visitor == null) return null;
 
-    return Success(visitors.map(VisitorCollection.toModel).toList());
+    final answersCollections = await _eventsDatabase.findAnswers(visitor.answersIds);
+    final answers = answersCollections.map((e) => AnswerCollection.toModel(e!)).toList();
+
+    return VisitorCollection.toModel(visitor, answers);
   }
 
   @override
@@ -47,8 +44,14 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
   }
 
   @override
-  void saveVisitors(List<Visitor> visitors, int eventId) async {
-    _eventsDatabase.addVisitors(visitors.map((e) => VisitorCollection.fromModel(e, eventId)).toList());
+  Future<void> saveVisitors(List<Visitor> visitors, int eventId) async {
+    final answers = visitors.map((e) => e.answers).expand((e) => e).map((e) => AnswerCollection.fromModel(e)).toList();
+    await _eventsDatabase.addAnswers(answers);
+
+    final visitorsCollections = visitors.map((e) => VisitorCollection.fromModel(e, eventId)).toList();
+    await _eventsDatabase.addVisitors(visitorsCollections);
+
+    await _eventsDatabase.updateLastDownloaded(eventId);
   }
 
   @override
@@ -59,5 +62,10 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
   @override
   Future<List<int>> getAllEventsIds() async {
     return await _eventsDatabase.getAllEventsIds();
+  }
+
+  @override
+  Future<void> deleteVisitors(int eventId) async {
+    await _eventsDatabase.deleteVisitors(eventId);
   }
 }

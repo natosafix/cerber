@@ -42,23 +42,28 @@ const EventCollectionSchema = CollectionSchema(
       name: r'endDate',
       type: IsarType.dateTime,
     ),
-    r'name': PropertySchema(
+    r'lastDownloaded': PropertySchema(
       id: 5,
+      name: r'lastDownloaded',
+      type: IsarType.dateTime,
+    ),
+    r'name': PropertySchema(
+      id: 6,
       name: r'name',
       type: IsarType.string,
     ),
     r'photoUrl': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'photoUrl',
       type: IsarType.string,
     ),
     r'shortDescription': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'shortDescription',
       type: IsarType.string,
     ),
     r'startDate': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'startDate',
       type: IsarType.dateTime,
     )
@@ -104,10 +109,11 @@ void _eventCollectionSerialize(
   writer.writeString(offsets[2], object.city);
   writer.writeString(offsets[3], object.description);
   writer.writeDateTime(offsets[4], object.endDate);
-  writer.writeString(offsets[5], object.name);
-  writer.writeString(offsets[6], object.photoUrl);
-  writer.writeString(offsets[7], object.shortDescription);
-  writer.writeDateTime(offsets[8], object.startDate);
+  writer.writeDateTime(offsets[5], object.lastDownloaded);
+  writer.writeString(offsets[6], object.name);
+  writer.writeString(offsets[7], object.photoUrl);
+  writer.writeString(offsets[8], object.shortDescription);
+  writer.writeDateTime(offsets[9], object.startDate);
 }
 
 EventCollection _eventCollectionDeserialize(
@@ -123,10 +129,11 @@ EventCollection _eventCollectionDeserialize(
     description: reader.readString(offsets[3]),
     endDate: reader.readDateTime(offsets[4]),
     id: id,
-    name: reader.readString(offsets[5]),
-    photoUrl: reader.readString(offsets[6]),
-    shortDescription: reader.readString(offsets[7]),
-    startDate: reader.readDateTime(offsets[8]),
+    lastDownloaded: reader.readDateTimeOrNull(offsets[5]),
+    name: reader.readString(offsets[6]),
+    photoUrl: reader.readString(offsets[7]),
+    shortDescription: reader.readString(offsets[8]),
+    startDate: reader.readDateTime(offsets[9]),
   );
   return object;
 }
@@ -149,12 +156,14 @@ P _eventCollectionDeserializeProp<P>(
     case 4:
       return (reader.readDateTime(offset)) as P;
     case 5:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 6:
       return (reader.readString(offset)) as P;
     case 7:
       return (reader.readString(offset)) as P;
     case 8:
+      return (reader.readString(offset)) as P;
+    case 9:
       return (reader.readDateTime(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -913,6 +922,80 @@ extension EventCollectionQueryFilter
   }
 
   QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      lastDownloadedIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'lastDownloaded',
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      lastDownloadedIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'lastDownloaded',
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      lastDownloadedEqualTo(DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lastDownloaded',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      lastDownloadedGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'lastDownloaded',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      lastDownloadedLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'lastDownloaded',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      lastDownloadedBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'lastDownloaded',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
       nameEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1452,6 +1535,20 @@ extension EventCollectionQuerySortBy
     });
   }
 
+  QueryBuilder<EventCollection, EventCollection, QAfterSortBy>
+      sortByLastDownloaded() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastDownloaded', Sort.asc);
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterSortBy>
+      sortByLastDownloadedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastDownloaded', Sort.desc);
+    });
+  }
+
   QueryBuilder<EventCollection, EventCollection, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -1589,6 +1686,20 @@ extension EventCollectionQuerySortThenBy
     });
   }
 
+  QueryBuilder<EventCollection, EventCollection, QAfterSortBy>
+      thenByLastDownloaded() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastDownloaded', Sort.asc);
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterSortBy>
+      thenByLastDownloadedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastDownloaded', Sort.desc);
+    });
+  }
+
   QueryBuilder<EventCollection, EventCollection, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -1682,6 +1793,13 @@ extension EventCollectionQueryWhereDistinct
     });
   }
 
+  QueryBuilder<EventCollection, EventCollection, QDistinct>
+      distinctByLastDownloaded() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lastDownloaded');
+    });
+  }
+
   QueryBuilder<EventCollection, EventCollection, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1748,6 +1866,13 @@ extension EventCollectionQueryProperty
   QueryBuilder<EventCollection, DateTime, QQueryOperations> endDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'endDate');
+    });
+  }
+
+  QueryBuilder<EventCollection, DateTime?, QQueryOperations>
+      lastDownloadedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'lastDownloaded');
     });
   }
 

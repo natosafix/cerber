@@ -17,18 +17,24 @@ const VisitorCollectionSchema = CollectionSchema(
   name: r'VisitorCollection',
   id: 7580165231345664196,
   properties: {
-    r'eventId': PropertySchema(
+    r'answersIds': PropertySchema(
       id: 0,
+      name: r'answersIds',
+      type: IsarType.longList,
+    ),
+    r'eventId': PropertySchema(
+      id: 1,
       name: r'eventId',
       type: IsarType.long,
     ),
-    r'name': PropertySchema(
-      id: 1,
-      name: r'name',
-      type: IsarType.string,
+    r'ticket': PropertySchema(
+      id: 2,
+      name: r'ticket',
+      type: IsarType.object,
+      target: r'TicketEmbedded',
     ),
     r'visitorId': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'visitorId',
       type: IsarType.string,
     )
@@ -72,7 +78,7 @@ const VisitorCollectionSchema = CollectionSchema(
     )
   },
   links: {},
-  embeddedSchemas: {},
+  embeddedSchemas: {r'TicketEmbedded': TicketEmbeddedSchema},
   getId: _visitorCollectionGetId,
   getLinks: _visitorCollectionGetLinks,
   attach: _visitorCollectionAttach,
@@ -85,7 +91,10 @@ int _visitorCollectionEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.name.length * 3;
+  bytesCount += 3 + object.answersIds.length * 8;
+  bytesCount += 3 +
+      TicketEmbeddedSchema.estimateSize(
+          object.ticket, allOffsets[TicketEmbedded]!, allOffsets);
   bytesCount += 3 + object.visitorId.length * 3;
   return bytesCount;
 }
@@ -96,9 +105,15 @@ void _visitorCollectionSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.eventId);
-  writer.writeString(offsets[1], object.name);
-  writer.writeString(offsets[2], object.visitorId);
+  writer.writeLongList(offsets[0], object.answersIds);
+  writer.writeLong(offsets[1], object.eventId);
+  writer.writeObject<TicketEmbedded>(
+    offsets[2],
+    allOffsets,
+    TicketEmbeddedSchema.serialize,
+    object.ticket,
+  );
+  writer.writeString(offsets[3], object.visitorId);
 }
 
 VisitorCollection _visitorCollectionDeserialize(
@@ -108,9 +123,15 @@ VisitorCollection _visitorCollectionDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = VisitorCollection(
-    eventId: reader.readLong(offsets[0]),
-    name: reader.readString(offsets[1]),
-    visitorId: reader.readString(offsets[2]),
+    answersIds: reader.readLongList(offsets[0]) ?? [],
+    eventId: reader.readLong(offsets[1]),
+    ticket: reader.readObjectOrNull<TicketEmbedded>(
+          offsets[2],
+          TicketEmbeddedSchema.deserialize,
+          allOffsets,
+        ) ??
+        TicketEmbedded(),
+    visitorId: reader.readString(offsets[3]),
   );
   return object;
 }
@@ -123,10 +144,17 @@ P _visitorCollectionDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLong(offset)) as P;
+      return (reader.readLongList(offset) ?? []) as P;
     case 1:
-      return (reader.readString(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 2:
+      return (reader.readObjectOrNull<TicketEmbedded>(
+            offset,
+            TicketEmbeddedSchema.deserialize,
+            allOffsets,
+          ) ??
+          TicketEmbedded()) as P;
+    case 3:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -560,6 +588,151 @@ extension VisitorCollectionQueryWhere
 extension VisitorCollectionQueryFilter
     on QueryBuilder<VisitorCollection, VisitorCollection, QFilterCondition> {
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      answersIdsElementEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'answersIds',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      answersIdsElementGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'answersIds',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      answersIdsElementLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'answersIds',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      answersIdsElementBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'answersIds',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      answersIdsLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'answersIds',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      answersIdsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'answersIds',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      answersIdsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'answersIds',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      answersIdsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'answersIds',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      answersIdsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'answersIds',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      answersIdsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'answersIds',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
       eventIdEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -667,142 +840,6 @@ extension VisitorCollectionQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      nameEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      nameGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      nameLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      nameBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'name',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      nameStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      nameEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      nameContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      nameMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'name',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      nameIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'name',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      nameIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'name',
-        value: '',
       ));
     });
   }
@@ -945,7 +982,14 @@ extension VisitorCollectionQueryFilter
 }
 
 extension VisitorCollectionQueryObject
-    on QueryBuilder<VisitorCollection, VisitorCollection, QFilterCondition> {}
+    on QueryBuilder<VisitorCollection, VisitorCollection, QFilterCondition> {
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      ticket(FilterQuery<TicketEmbedded> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'ticket');
+    });
+  }
+}
 
 extension VisitorCollectionQueryLinks
     on QueryBuilder<VisitorCollection, VisitorCollection, QFilterCondition> {}
@@ -963,20 +1007,6 @@ extension VisitorCollectionQuerySortBy
       sortByEventIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'eventId', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
-      sortByName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'name', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
-      sortByNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'name', Sort.desc);
     });
   }
 
@@ -1026,20 +1056,6 @@ extension VisitorCollectionQuerySortThenBy
   }
 
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
-      thenByName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'name', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
-      thenByNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'name', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
       thenByVisitorId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'visitorId', Sort.asc);
@@ -1057,16 +1073,16 @@ extension VisitorCollectionQuerySortThenBy
 extension VisitorCollectionQueryWhereDistinct
     on QueryBuilder<VisitorCollection, VisitorCollection, QDistinct> {
   QueryBuilder<VisitorCollection, VisitorCollection, QDistinct>
-      distinctByEventId() {
+      distinctByAnswersIds() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'eventId');
+      return query.addDistinctBy(r'answersIds');
     });
   }
 
-  QueryBuilder<VisitorCollection, VisitorCollection, QDistinct> distinctByName(
-      {bool caseSensitive = true}) {
+  QueryBuilder<VisitorCollection, VisitorCollection, QDistinct>
+      distinctByEventId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'eventId');
     });
   }
 
@@ -1086,15 +1102,23 @@ extension VisitorCollectionQueryProperty
     });
   }
 
+  QueryBuilder<VisitorCollection, List<int>, QQueryOperations>
+      answersIdsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'answersIds');
+    });
+  }
+
   QueryBuilder<VisitorCollection, int, QQueryOperations> eventIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'eventId');
     });
   }
 
-  QueryBuilder<VisitorCollection, String, QQueryOperations> nameProperty() {
+  QueryBuilder<VisitorCollection, TicketEmbedded, QQueryOperations>
+      ticketProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'name');
+      return query.addPropertyName(r'ticket');
     });
   }
 

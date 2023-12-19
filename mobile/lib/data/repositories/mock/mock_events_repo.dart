@@ -1,7 +1,10 @@
-import '../../../domain/models/event.dart';
-import '../../../domain/models/visitor.dart';
-import '../../../domain/repositories/events_repository/events_repository.dart';
-import '../../../utils/result.dart';
+import 'package:project/domain/models/answer.dart';
+import 'package:project/domain/models/event.dart';
+import 'package:project/domain/models/question.dart';
+import 'package:project/domain/models/question_type.dart';
+import 'package:project/domain/models/visitor.dart';
+import 'package:project/domain/repositories/events_repository/events_repository.dart';
+import 'package:project/utils/result.dart';
 
 class MockEventsRepo implements EventsRepository {
   @override
@@ -17,16 +20,10 @@ class MockEventsRepo implements EventsRepository {
   }
 
   @override
-  Future<Result<List<Visitor>, Exception>> getVisitors({
-    required int eventId,
-    required int limit,
-    required int offset,
-  }) async {
+  Future<Visitor?> findVisitor(String visitorId, int eventId) async {
     await Future.delayed(const Duration(seconds: 1));
 
-    final visitors = mockVisitors.skip(offset).take(limit).toList();
-
-    return Success(visitors);
+    return mockVisitors.firstWhere((e) => e.id == visitorId);
   }
 
   static List<Event> mockEvents = [
@@ -186,45 +183,53 @@ class MockEventsRepo implements EventsRepository {
   ];
 
   static List<Visitor> mockVisitors = [
-    Visitor(id: "1", name: "Василий Березкин>"),
-    Visitor(id: "2", name: "Масленникова Ева"),
-    Visitor(id: "3", name: "Шаповалов Иван"),
-    Visitor(id: "4", name: "Мартынова Мария"),
-    Visitor(id: "5", name: "Иванова Элина"),
-    Visitor(id: "6", name: "Романова Анна"),
-    Visitor(id: "7", name: "Николаев Руслан"),
-    Visitor(id: "8", name: "Винокурова Мария"),
-    Visitor(id: "9", name: "Кириллов Никита"),
-    Visitor(id: "10", name: "Белоусов Фёдор"),
-    Visitor(id: "11", name: "Суворова Арина"),
-    Visitor(id: "12", name: "Осипова Ева"),
-    Visitor(id: "13", name: "Князев Фёдор"),
-    Visitor(id: "14", name: "Маслова Лейла"),
-    Visitor(id: "15", name: "Малышев Мирослав"),
-    Visitor(id: "16", name: "Морозов Данила"),
-    Visitor(id: "17", name: "Серебрякова Анастасия"),
-    Visitor(id: "18", name: "Федоров Александр"),
-    Visitor(id: "19", name: "Василий Пупкин"),
-    Visitor(id: "20", name: "Масленникова Ева"),
-    Visitor(id: "21", name: "Шаповалов Иван"),
-    Visitor(id: "22", name: "Мартынова Мария"),
-    Visitor(id: "23", name: "Иванова Элина"),
-    Visitor(id: "24", name: "Романова Анна"),
-    Visitor(id: "25", name: "Николаев Руслан"),
-    Visitor(id: "26", name: "Винокурова Мария"),
-    Visitor(id: "27", name: "Кириллов Никита"),
-    Visitor(id: "28", name: "Белоусов Фёдор"),
-    Visitor(id: "29", name: "Суворова Арина"),
-    Visitor(id: "30", name: "Осипова Ева"),
-    Visitor(id: "31", name: "Князев Фёдор"),
-    Visitor(id: "32", name: "Маслова Лейла"),
-    Visitor(id: "33", name: "Малышев Мирослав"),
-    Visitor(id: "34", name: "Морозов Данила"),
-    Visitor(id: "35", name: "Серебрякова Анастасия"),
-    Visitor(id: "36", name: "Федоров Александр"),
-    Visitor(id: "37", name: "Василий Пупкин"),
-    Visitor(id: "38", name: "Масленникова Ева"),
-    Visitor(id: "39", name: "Шаповалов Иван"),
-    Visitor(id: "40", name: "Мартынова Мария"),
+    // Visitor(id: "1", answers: [
+    //   Answer(
+    //     answer: "Лада приора",
+    //     question: Question(
+    //       question: "Ваш автомобиль",
+    //       questionType: QuestionType.text,
+    //     ),
+    //   ),
+    //   Answer(
+    //     answer: "20",
+    //     question: Question(
+    //       question: "Ваш возраст",
+    //       questionType: QuestionType.text,
+    //     ),
+    //   ),
+    // ]),
+    // Visitor(id: "2", answers: [
+    //   Answer(
+    //     answer: "Киа рио",
+    //     question: Question(
+    //       question: "Ваш автомобиль",
+    //       questionType: QuestionType.text,
+    //     ),
+    //   ),
+    //   Answer(
+    //     answer: "23",
+    //     question: Question(
+    //       question: "Ваш возраст",
+    //       questionType: QuestionType.text,
+    //     ),
+    //   ),
+    // ]),
+    // Visitor(id: "2", answers: [
+    //   Answer(
+    //     answer: "56 автобус",
+    //     question: Question(
+    //       question: "Ваш автомобиль",
+    //       questionType: QuestionType.text,
+    //     ),
+    //   ),
+    //   Answer(
+    //     answer: "33",
+    //     question: Question(
+    //       question: "Ваш возраст",
+    //       questionType: QuestionType.text,
+    //     ),
+    //   ),
+    // ]),
   ];
 }

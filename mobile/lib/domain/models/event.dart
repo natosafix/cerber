@@ -9,6 +9,7 @@ class Event {
   final DateTime endDate;
   final String photoUrl;
   final String category;
+  DateTime? lastDownloaded;
 
   Event({
     required this.id,
@@ -21,5 +22,6 @@ class Event {
     required this.endDate,
     required this.photoUrl,
     required this.category,
+    this.lastDownloaded,
   });
 }

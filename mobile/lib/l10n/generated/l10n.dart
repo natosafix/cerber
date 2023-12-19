@@ -300,11 +300,31 @@ class L10n {
     );
   }
 
-  /// `This event has no visitors`
-  String get eventHasNoVisitors {
+  /// `Not Downloaded`
+  String get notDownloaded {
     return Intl.message(
-      'This event has no visitors',
-      name: 'eventHasNoVisitors',
+      'Not Downloaded',
+      name: 'notDownloaded',
+      desc: 'Database not downloaded',
+      args: [],
+    );
+  }
+
+  /// `Last downloaded`
+  String get lastDownloaded {
+    return Intl.message(
+      'Last downloaded',
+      name: 'lastDownloaded',
+      desc: 'Database last downloaded',
+      args: [],
+    );
+  }
+
+  /// `Something went wrong...`
+  String get somethingWentWrong {
+    return Intl.message(
+      'Something went wrong...',
+      name: 'somethingWentWrong',
       desc: '',
       args: [],
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_bloc.dart';
+import 'package:project/presentation/widgets/circular_progress_indicator_inbutton.dart';
 
 class FinishButtonWigdet extends StatelessWidget {
   const FinishButtonWigdet({required this.text, super.key});
@@ -19,10 +20,7 @@ class FinishButtonWigdet extends StatelessWidget {
                 isEnabled(state) ? () => context.read<AuthenticationFormBloc>().add(const FinishPressed()) : null,
             child: !state.isProcessing
                 ? Text(text)
-                : const SizedBox.square(
-                    dimension: 15,
-                    child: CircularProgressIndicator(color: Colors.grey),
-                  ),
+                : const CircularProgressIndicatorInbutton(),
           ),
         );
       },

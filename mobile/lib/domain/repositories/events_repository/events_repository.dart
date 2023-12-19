@@ -8,9 +8,5 @@ abstract class EventsRepository {
     required int limit,
   });
 
-  Future<Result<List<Visitor>, Exception>> getVisitors({
-    required int eventId,
-    required int limit,
-    required int offset,
-  });
+  Future<Visitor?> findVisitor(String visitorId, int eventId);
 }

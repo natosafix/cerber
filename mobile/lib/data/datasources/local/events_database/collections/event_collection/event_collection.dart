@@ -17,6 +17,7 @@ class EventCollection {
   DateTime endDate;
   String category;
   String photoUrl;
+  DateTime? lastDownloaded;
 
   EventCollection({
     required this.id,
@@ -29,6 +30,7 @@ class EventCollection {
     required this.endDate,
     required this.category,
     required this.photoUrl,
+    this.lastDownloaded,
   });
 
   static Event toModel(EventCollection event) {
@@ -43,6 +45,7 @@ class EventCollection {
       endDate: event.endDate,
       photoUrl: event.photoUrl,
       category: event.category,
+      lastDownloaded: event.lastDownloaded,
     );
   }
 
@@ -58,6 +61,7 @@ class EventCollection {
       endDate: event.endDate,
       category: event.category,
       photoUrl: event.photoUrl,
+      lastDownloaded: event.lastDownloaded
     );
   }
 }

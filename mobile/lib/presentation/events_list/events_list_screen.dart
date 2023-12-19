@@ -8,7 +8,7 @@ import 'package:project/presentation/authentication/authentication_bloc/authenti
 import 'package:project/presentation/event_detail/event_detail_screen.dart';
 import 'package:project/presentation/events_list/event_widget.dart';
 import 'package:project/presentation/events_list/events_bloc/events_bloc.dart';
-import 'package:project/utils/theme_util.dart';
+import 'package:project/utils/context_x.dart';
 
 class EventsListScreen extends StatelessWidget {
   const EventsListScreen({super.key});
@@ -26,7 +26,7 @@ class EventsListScreen extends StatelessWidget {
           title: Text(L10n.current.events),
           elevation: 0,
           backgroundColor: Colors.transparent,
-          foregroundColor: ThemeUtil.isLight(context) ? Colors.black : Colors.white,
+          foregroundColor: context.isLight() ? Colors.black : Colors.white,
           actions: [
             IconButton(
               onPressed: () {
