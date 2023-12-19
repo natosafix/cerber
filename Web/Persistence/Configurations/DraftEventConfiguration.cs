@@ -12,11 +12,13 @@ public class DraftEventConfiguration : IEntityTypeConfiguration<DraftEvent>
 
         builder.HasKey(e => e.Id);
 
-        builder.Property(e => e.Title);
-        builder.Property(e => e.Description);
-        builder.Property(e => e.City);
-        builder.Property(e => e.Address);
-        builder.Property(e => e.From);
-        builder.Property(e => e.To);
+        builder.Property(e => e.OwnerId).IsRequired();
+
+        builder.Property(e => e.Title).HasDefaultValue(null);
+        builder.Property(e => e.Description).HasDefaultValue(null);
+        builder.Property(e => e.City).HasDefaultValue(null);
+        builder.Property(e => e.Address).HasDefaultValue(null);
+        builder.Property(e => e.From).HasDefaultValue(null);
+        builder.Property(e => e.To).HasDefaultValue(null);
     }
 }

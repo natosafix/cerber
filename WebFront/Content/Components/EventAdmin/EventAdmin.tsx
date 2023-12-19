@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import styles from './EventAdmin.scss';
 import { EventStepsNav } from './EventStepsNav/EventStepsNav';
 import { EventCoverSheet } from './EventCoverSheet/EventCoverSheet';
@@ -8,10 +8,26 @@ import { EventQuizCreator } from './EventQuizCreator/EventQuizCreator';
 import { EventPublish } from './EventPublish/EventPublish';
 import { Button, Gapped } from '@skbkontur/react-ui';
 import { EventAdminClient } from '../../../Api/EventAdmin/EventAdminClient';
+import {DraftEvent} from "../../../Api/EventAdmin/DraftEvent";
 
 
 export const EventAdmin: React.FC = () => {
     const [step, setStep] = useState(EventAdminPageNav.EventCoverSheet);
+    const [draft, setDraft] = useState<DraftEvent | null>(null);
+    
+    useEffect(() => {
+        EventAdminClient.getDraft()
+            .then(response => {
+                if (response.status !== 204) {
+                    setDraft(response.data);
+                } else {
+                    EventAdminClient.createDraft()
+                        .then(response => {
+                            setDraft(response.data);
+                        })
+                }
+            });
+    }, [])
     
     const onSave = () => {
         if (step === EventAdminPageNav.EventPublish) {

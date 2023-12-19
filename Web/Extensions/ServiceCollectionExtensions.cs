@@ -32,7 +32,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAnswersService, AnswersService>();
         services.AddScoped<IUserFilesService, UserFilesService>();
         services.AddScoped<IStorageManager, StorageManager>();
-        services.AddScoped<IUserHelper, UserHelper>();
         services.AddScoped<IMailService, MailService>();
         services.AddScoped<IQrCodeService, QrCodeService>();
         services.AddScoped<IEncryptionService, EncryptionService>();

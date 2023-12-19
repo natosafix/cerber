@@ -4,5 +4,6 @@ namespace Web.Services;
 
 public interface IDraftEventService
 {
-    Task<DraftEvent> FindDraftByUserId(string userId);
+    Task<DraftEvent?> FindDraftByUserIdAsync(string userId);
+    Task<DraftEvent?> CreateDraftAsync(string ownerId);
 }
