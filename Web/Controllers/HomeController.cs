@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Web.Models;
+using Web.Dtos.Response;
 
 namespace Web.Controllers;
 

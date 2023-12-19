@@ -5,63 +5,62 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Web.Models;
+using Web.Dtos.Request;
 
 namespace Web.Controllers;
 
 public class AuthController : Controller
 {
-    private readonly ILogger<AuthController> logger;
     private readonly UserManager<User> userManager;
     private readonly RoleManager<IdentityRole> roleManager;
     private readonly IConfiguration config;
 
-    public AuthController(ILogger<AuthController> logger, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration config)
+    public AuthController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration config)
     {
-        this.logger = logger;
         this.userManager = userManager;
         this.roleManager = roleManager;
         this.config = config;
     }
 
     [HttpPost("/[controller]/register")]
-    public async Task<IActionResult> Register([FromBody] RegisterModel model)
+    public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        var userExists = await userManager.FindByNameAsync(model.Username);
+        var userExists = await userManager.FindByNameAsync(dto.Username);
         if (userExists != null)
             return BadRequest("User already exists");
 
         User user = new()
         {
-            Email = model.Email,
+            Email = dto.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
-            UserName = model.Username
+            UserName = dto.Username
         };
-        var result = await userManager.CreateAsync(user, model.Password);
-        if (!result.Succeeded)
-            return StatusCode(StatusCodes.Status500InternalServerError,"User creation failed! Please check user details and try again.");
-
-        return Ok("User created successfully!");
-
+        var result = await userManager.CreateAsync(user, dto.Password);
+        return result.Succeeded
+            ? Ok("User created successfully!")
+            : StatusCode(StatusCodes.Status500InternalServerError,
+                "User creation failed! Please check user details and try again.");
     }
     
     [HttpPost("/[controller]/login")]
-    public async Task<IActionResult> Login([FromBody] LoginModel model)
+    public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        var user = await userManager.FindByNameAsync(model.Username);
-        if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
+        var user = await userManager.FindByEmailAsync(dto.Email);
+        if (user != null && await userManager.CheckPasswordAsync(user, dto.Password))
         {
             var userRoles = await userManager.GetRolesAsync(user);
 
             var authClaims = new List<Claim>
             {
+                new(ClaimTypes.NameIdentifier, user.Id),
                 new(ClaimTypes.Name, user.UserName),
+                new(ClaimTypes.Email, user.Email),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
             authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using Web.Models;
+using Web.Dtos.Request;
+using Web.Dtos.Response;
 
 namespace Web.Mapping;
 
@@ -15,5 +16,9 @@ public class MappingProfile : Profile
         CreateMap<CreateQuestionDto, Question>();
         
         CreateMap<Event, EventResponseDto>();
+        CreateMap<Ticket, TicketResponseDto>();
+        CreateMap<Question, QuestionResponseDto>();
+        CreateMap<Order, OrderResponseDto>();
+        CreateMap<Answer, AnswerResponseDto>();
     }
 }

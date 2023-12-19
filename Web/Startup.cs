@@ -8,7 +8,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Web.Extensions;
 using Web.Mapping;
+using Web.Middlewares;
 using Web.Persistence;
+using Web.Requirements;
 
 namespace Web;
 
@@ -26,6 +28,7 @@ public class Startup
         services.AddPersistence(config);
         services.AddRepositories();
         services.AddServices();
+        services.AddRequirements();
         
         services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddEntityFrameworkStores<CerberDbContext>()
@@ -38,6 +41,20 @@ public class Startup
             options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
                 .RequireAuthenticatedUser()
                 .Build();
+            options.AddPolicy(
+                "MustOwnEvent",
+                policyBuilder =>
+                {
+                    policyBuilder.RequireAuthenticatedUser();
+                    policyBuilder.AddRequirements(new MustOwnEventRequirement());
+                });
+            options.AddPolicy(
+                "MustInspectEvent",
+                policyBuilder =>
+                {
+                    policyBuilder.RequireAuthenticatedUser();
+                    policyBuilder.AddRequirements(new MustInspectEventRequirement());
+                });
         });
         
         services.AddAuthentication()
@@ -69,6 +86,7 @@ public class Startup
         {
             options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Populate;
+            options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
         });
         services.AddSwaggerGen();
     }
@@ -77,6 +95,8 @@ public class Startup
     {
         if (environment.IsDevelopment())
             app.UseDeveloperExceptionPage();
+        else
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
         
         app.UseHttpsRedirection();
         app.UseStaticFiles();
