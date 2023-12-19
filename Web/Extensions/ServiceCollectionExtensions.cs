@@ -2,6 +2,7 @@
 using Web.Persistence.Repositories;
 using Web.Requirements;
 using Web.Services;
+using Web.Services.Implementations;
 
 namespace Web.Extensions;
 

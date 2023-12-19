@@ -4,7 +4,7 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using Web.Settings;
 
-namespace Web.Services;
+namespace Web.Services.Implementations;
 
 public class MailService : IMailService
 {

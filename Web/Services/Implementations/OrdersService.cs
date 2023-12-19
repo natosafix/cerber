@@ -2,7 +2,7 @@
 using Domain.Infrastructure;
 using Web.Persistence.Repositories;
 
-namespace Web.Services;
+namespace Web.Services.Implementations;
 
 public class OrdersService : IOrdersService
 {

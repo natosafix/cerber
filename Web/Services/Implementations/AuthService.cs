@@ -1,4 +1,4 @@
-﻿namespace Web.Services;
+﻿namespace Web.Services.Implementations;
 
 public class AuthService : IAuthService
 {

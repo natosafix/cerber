@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using Web.Persistence.Repositories;
 
-namespace Web.Services;
+namespace Web.Services.Implementations;
 
 public class TicketsService : ITicketsService
 {

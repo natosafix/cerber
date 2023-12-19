@@ -1,7 +1,7 @@
 using Domain.Infrastructure;
 using QRCoder;
 
-namespace Web.Services;
+namespace Web.Services.Implementations;
 
 public class QrCodeService : IQrCodeService
 {
