@@ -11,5 +11,5 @@ public class CreateAnswerDto
     public string QuestionId { get; set; }
 
     [Required]
-    public string OrderId { get; set; }
+    public string Customer { get; set; }
 }

@@ -2,7 +2,7 @@
 
 namespace Web.Dtos.Request;
 
-public class CreateEventDto
+public class CreateEventDto : IValidatableObject
 {
     [Required]
     public string Name { get; set; }
@@ -30,4 +30,10 @@ public class CreateEventDto
     
     [Required]
     public string CoverId { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (From >= To)
+            yield return new ValidationResult("to before from", new List<string> {"from", "to"});
+    }
 }
