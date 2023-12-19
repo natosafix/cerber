@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using System.Security.Claims;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Web.Persistence.Repositories;
 
@@ -15,11 +16,14 @@ public class UserHelper : IUserHelper
         this.userManager = userManager;
     }
 
+    public string UserId => httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier) ??
+                            throw new InvalidOperationException("User is not authenticated");
+    
     public string Username => httpContextAccessor.HttpContext?.User.Identity?.Name ?? 
                               throw new InvalidOperationException("User is not authenticated");
 
     public async Task<User?> GetUser()
     {
-        return await userManager.FindByNameAsync(Username);
+        return await userManager.FindByIdAsync(UserId);
     }
 }

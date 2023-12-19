@@ -24,8 +24,9 @@ public class EventsController : Controller
         this.userHelper = userHelper;
     }
     
+    [AllowAnonymous]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetInspected([FromRoute] int id)
+    public async Task<IActionResult> Get([FromRoute] int id)
     {
         var inspectedEvents = await eventsService.Get(id);
         return Ok(mapper.Map<EventResponseDto>(inspectedEvents));
@@ -57,6 +58,7 @@ public class EventsController : Controller
         return Ok(await eventsService.Create(mapper.Map<Event>(eventResponse)));
     }
     
+    [Authorize("MustOwnEvent")]
     [HttpPut("{id}/inspector")]
     public async Task<IActionResult> AddInspector([FromRoute] int id, [FromBody] SetInspectorDto setInspectorDto)
     {

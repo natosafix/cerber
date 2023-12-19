@@ -17,6 +17,13 @@ public class EventsRepository : IEventsRepository
     {
         return await dbContext.Events.FindAsync(id);
     }
+    
+    public async Task<Event?> GetWithInspectors(int id)
+    {
+        return await dbContext.Events
+            .Include(e => e.Inspectors)
+            .FirstOrDefaultAsync(e => e.Id.Equals(id));
+    }
 
     public async Task<Event> Create(Event @event)
    {

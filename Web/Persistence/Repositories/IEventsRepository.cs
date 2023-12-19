@@ -6,6 +6,8 @@ namespace Web.Persistence.Repositories;
 public interface IEventsRepository
 {
     Task<Event?> Get(int id);
+
+    Task<Event?> GetWithInspectors(int id);
     
     Task<Event> Create(Event @event);
     

@@ -9,7 +9,4 @@ public class CreateAnswerDto
 
     [Required]
     public string QuestionId { get; set; }
-
-    [Required]
-    public string Customer { get; set; }
 }

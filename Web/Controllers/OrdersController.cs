@@ -21,6 +21,7 @@ public class OrdersController : Controller
         this.mapper = mapper;
     }
 
+    [Authorize("MustInspectEvent")]    
     [HttpGet("")]
     public async Task<IActionResult> Get([FromQuery] int eventId)
     {
@@ -28,6 +29,7 @@ public class OrdersController : Controller
         return Ok(mapper.Map<List<OrderResponseDto>>(order));
     }
 
+    [AllowAnonymous]
     [HttpPost("")]
     public async Task<IActionResult> Create([FromBody] CreateOrderDto createOrderDto)
     {

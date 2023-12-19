@@ -14,11 +14,15 @@ public class TicketsController : Controller
 {
     private readonly ITicketsService ticketsService;
     private readonly IMapper mapper;
+    private readonly IAuthService authService;
+    private readonly IUserHelper userHelper;
     
-    public TicketsController(ITicketsService ticketsService, IMapper mapper)
+    public TicketsController(ITicketsService ticketsService, IMapper mapper, IAuthService authService, IUserHelper userHelper)
     {
         this.ticketsService = ticketsService;
         this.mapper = mapper;
+        this.authService = authService;
+        this.userHelper = userHelper;
     }
 
     [HttpPost("")]
@@ -27,7 +31,11 @@ public class TicketsController : Controller
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        var ticket = await ticketsService.Create(mapper.Map<Ticket>(createTicketDto));
-        return Ok(mapper.Map<TicketResponseDto>(ticket));
+        var ticket = mapper.Map<Ticket>(createTicketDto);
+        if (!await authService.IsOwner(userHelper.UserId, ticket.EventId))
+            return StatusCode(403);
+        
+        var ticketCreated = await ticketsService.Create(ticket);
+        return Ok(mapper.Map<TicketResponseDto>(ticketCreated));
     }
 }

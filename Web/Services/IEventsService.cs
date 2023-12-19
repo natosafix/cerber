@@ -6,6 +6,8 @@ namespace Web.Services;
 public interface IEventsService
 {
     Task<Event> Get(int id);
+
+    Task<Event> GetWithInspectors(int id);
     
     Task<Event> Create(Event @event);
     

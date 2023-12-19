@@ -15,7 +15,7 @@ public class AuthController : Controller
     private readonly RoleManager<IdentityRole> roleManager;
     private readonly IConfiguration config;
 
-    public AuthController(ILogger<AuthController> logger, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration config)
+    public AuthController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration config)
     {
         this.userManager = userManager;
         this.roleManager = roleManager;
@@ -58,6 +58,7 @@ public class AuthController : Controller
 
             var authClaims = new List<Claim>
             {
+                new(ClaimTypes.NameIdentifier, user.Id),
                 new(ClaimTypes.Name, user.UserName),
                 new(ClaimTypes.Email, user.Email),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

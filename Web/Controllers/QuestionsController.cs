@@ -14,25 +14,31 @@ public class QuestionsController : Controller
 {
     private readonly IMapper mapper;
     private readonly IQuestionsService questionsService;
+    private readonly IAuthService authService;
+    private readonly IUserHelper userHelper;
 
-    public QuestionsController(IMapper mapper, IQuestionsService questionsService)
+    public QuestionsController(IMapper mapper, IQuestionsService questionsService, IAuthService authService, IUserHelper userHelper)
     {
         this.mapper = mapper;
         this.questionsService = questionsService;
+        this.authService = authService;
+        this.userHelper = userHelper;
     }
 
-    [HttpGet("")]
-    public async Task<IActionResult> Get([FromQuery] int eventId)
-    {
-        var question = await questionsService.GetByEvent(eventId);
-        return Ok(mapper.Map<List<QuestionResponseDto>>(question));
-    }
-    
+    [AllowAnonymous]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetByEvent([FromRoute] int id)
+    public async Task<IActionResult> Get([FromRoute] int id)
     {
         var question = await questionsService.Get(id);
         return Ok(mapper.Map<QuestionResponseDto>(question));
+    }
+    
+    [AllowAnonymous]
+    [HttpGet("")]
+    public async Task<IActionResult> GetByEvent([FromQuery] int eventId)
+    {
+        var question = await questionsService.GetByEvent(eventId);
+        return Ok(mapper.Map<List<QuestionResponseDto>>(question));
     }
     
     [HttpPost("")]
@@ -41,7 +47,11 @@ public class QuestionsController : Controller
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var question = await questionsService.Create(mapper.Map<Question>(createQuestionDto));
-        return Ok(mapper.Map<QuestionResponseDto>(question));
+        var question = mapper.Map<Question>(createQuestionDto);
+        if (!await authService.IsOwner(userHelper.UserId, question.EventId))
+            return StatusCode(403);
+
+        var questionCreated = await questionsService.Create(question);
+        return Ok(mapper.Map<QuestionResponseDto>(questionCreated));
     }
 }

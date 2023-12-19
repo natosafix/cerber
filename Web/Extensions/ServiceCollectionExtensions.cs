@@ -1,4 +1,6 @@
-﻿using Web.Persistence.Repositories;
+﻿using Microsoft.AspNetCore.Authorization;
+using Web.Persistence.Repositories;
+using Web.Requirements;
 using Web.Services;
 
 namespace Web.Extensions;
@@ -29,6 +31,17 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserHelper, UserHelper>();
         services.AddScoped<IMailService, MailService>();
         services.AddScoped<IQrCodeService, QrCodeService>();
+        services.AddScoped<IEncryptionService, EncryptionService>();
+        services.AddScoped<IAuthService, AuthService>();
+        
+        return services;
+    }
+    
+    public static IServiceCollection AddRequirements(this IServiceCollection services)
+    {
+        services.AddScoped<IAuthorizationHandler, MustOwnEventHandler>();
+        services.AddScoped<IAuthorizationHandler, MustInspectEventHandler>();
+        
         return services;
     }
 }

@@ -27,13 +27,13 @@ public class OrdersService : IOrdersService
         order.Customer = Guid.NewGuid();
         order = await ordersRepository.Create(order);
         
-        var qrCode = qrCodeService.Create($"ticket.png", order.Customer.ToString());
+        /*var qrCode = qrCodeService.Create($"ticket.png", order.Customer.ToString());
         await mailService.SendWithImageAttachments(
             "name",
             "address",
             "Tickets",
             "Спасибо за заказ. Ваши билеты во вложениях.",
-            new List<ImageInfo> {qrCode});
+            new List<ImageInfo> {qrCode});*/
         
         return order;
     }

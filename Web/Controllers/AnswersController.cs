@@ -14,11 +14,17 @@ public class AnswersController : Controller
 {
     private readonly IMapper mapper;
     private readonly IAnswersService answersService;
+    private readonly IAuthService authService;
+    private readonly IUserHelper userHelper;
+    private readonly IQuestionsService questionsService;
     
-    public AnswersController(IMapper mapper, IAnswersService answersService)
+    public AnswersController(IMapper mapper, IAnswersService answersService, IAuthService authService, IUserHelper userHelper, IQuestionsService questionsService)
     {
         this.mapper = mapper;
         this.answersService = answersService;
+        this.authService = authService;
+        this.userHelper = userHelper;
+        this.questionsService = questionsService;
     }
 
     [HttpPost("")]
@@ -26,8 +32,12 @@ public class AnswersController : Controller
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-
+        
         var answer = mapper.Map<Answer>(createAnswerDto);
+        var question = await questionsService.Get(answer.QuestionId);
+        if (!await authService.IsInspector(userHelper.UserId, question.EventId))
+            return StatusCode(403);
+        
         var createdAnswer = await answersService.Create(answer);
         var answerResponse = mapper.Map<AnswerResponseDto>(createdAnswer);
         
