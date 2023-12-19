@@ -37,24 +37,26 @@ public class EventsRepository : IEventsRepository
 
    public async Task<PageList<Event>> GetInspected(string username, int offset, int limit)
    {
-       var events = (await dbContext.Users
-               .Include(u => u.InspectedEvents)
-               .FirstOrDefaultAsync(u => u.UserName.Equals(username)))
-           ?.InspectedEvents
-           .Skip(offset)
-           .Take(limit);
+       var events = await dbContext.Events.FromSqlInterpolated(
+           $@"SELECT e.""Id"", e.""OwnerId"", e.""CategoryId"", e.""Address"", e.""City"", e.""Description"", e.""From"", e.""Name"", e.""ShortDescription"", e.""To"", e.""CoverId""
+              FROM ""EventUser"" as eu
+              JOIN ""AspNetUsers"" as u on u.""Id"" = eu.""InspectorsId""
+              JOIN events e on e.""Id"" = eu.""InspectedEventsId""
+              WHERE u.""UserName"" = {username}
+              OFFSET {offset} 
+              LIMIT {limit}")
+           .ToListAsync();
        
        return new PageList<Event>(events ?? new List<Event>(), offset, limit);
    }
 
    public async Task<PageList<Event>> GetOwned(string username, int offset, int limit)
    {
-       var events = (await dbContext.Users
-               .Include(u => u.OwnedEvents)
-               .FirstOrDefaultAsync(u => u.UserName.Equals(username)))
-           ?.OwnedEvents
+       var events = await dbContext.Events.
+           Where(e => e.Owner.UserName.Equals(username))
            .Skip(offset)
-           .Take(limit);
+           .Take(limit)
+           .ToListAsync();
 
        return new PageList<Event>(events ?? new List<Event>(), offset, limit);
    }
