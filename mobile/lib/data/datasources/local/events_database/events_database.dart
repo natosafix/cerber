@@ -26,6 +26,11 @@ class EventsDatabase {
   }
 
   Future<void> addEvents(List<EventCollection> events) async {
+    for (final event in events) {
+      final saved = await _events.get(event.id);
+      if (saved == null) continue;
+      event.lastDownloaded = saved.lastDownloaded;
+    }
     await _isar.writeTxn(() async {
       await _events.putAll(events);
     });
