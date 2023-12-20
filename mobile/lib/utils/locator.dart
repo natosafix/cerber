@@ -23,8 +23,8 @@ import 'package:project/data/repositories/mock/mock_events_repo.dart';
 import 'package:project/data/repositories/remote_events_repository_impl.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
 import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
-import 'package:project/domain/repositories/events_repository/events_repository.dart';
-import 'package:project/domain/repositories/local_events_repository/local_events_repository.dart';
+import 'package:project/domain/repositories/events_repository.dart';
+import 'package:project/domain/repositories/local_events_repository.dart';
 import 'package:project/domain/repositories/remote_events_repository.dart';
 import 'package:project/utils/network_checker/network_checker.dart';
 import 'package:project/utils/network_checker/network_checker_impl.dart';
@@ -84,11 +84,10 @@ void setupLocator() async {
       ),
     );
 
-    locator.registerSingleton<EventsService>(
-      EventsService(locator<Dio>()),
-    );
     locator.registerSingleton<RemoteEventsRepository>(
-      RemoteEventsRepositoryImpl(eventsService: locator<EventsService>()),
+      RemoteEventsRepositoryImpl(
+        eventsService: EventsService(locator<Dio>()),
+      ),
     );
   }
 

@@ -113,7 +113,6 @@ class EventDetailScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 18),
                     BlocBuilder<EventDetailBloc, EventDetailState>(
-                      buildWhen: (previous, current) => previous.downloadStatus != current.downloadStatus,
                       builder: (context, state) {
                         if (state.lastDownloaded == null) {
                           return Text("⚠ ${L10n.current.notDownloaded}");

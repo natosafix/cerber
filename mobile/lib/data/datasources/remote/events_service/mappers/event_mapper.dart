@@ -15,6 +15,7 @@ extension EventMapper on EventApiResponse {
       endDate: to,
       photoUrl: "${Constants.eventsRepositoryBaseUrl}/files/${cover.id}/download",
       category: category.name,
+      lastDownloaded: null,
     );
   }
 }

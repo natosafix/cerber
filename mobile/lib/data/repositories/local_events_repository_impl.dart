@@ -4,7 +4,7 @@ import 'package:project/data/datasources/local/events_database/collections/visit
 import 'package:project/data/datasources/local/events_database/events_database.dart';
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/models/visitor.dart';
-import 'package:project/domain/repositories/local_events_repository/local_events_repository.dart';
+import 'package:project/domain/repositories/local_events_repository.dart';
 import 'package:project/utils/result.dart';
 
 class LocalEventsRepositoryImpl implements LocalEventsRepository {
@@ -39,7 +39,7 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
   }
 
   @override
-  void saveEvents(List<Event> events) async {
+  Future<void> saveEvents(List<Event> events) async {
     _eventsDatabase.addEvents(events.map(EventCollection.fromModel).toList());
   }
 
@@ -55,7 +55,7 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
   }
 
   @override
-  void deleteEventsByIds(List<int> ids) {
+  Future<void> deleteEventsByIds(List<int> ids) async {
     _eventsDatabase.deleteEventsByIds(ids);
   }
 
@@ -67,5 +67,12 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
   @override
   Future<void> deleteVisitors(int eventId) async {
     await _eventsDatabase.deleteVisitors(eventId);
+  }
+
+  @override
+  Stream<Event> watchEvent(int eventId) async* {
+    await for (final event in _eventsDatabase.watchEvent(eventId)) {
+      yield EventCollection.toModel(event);
+    }
   }
 }

@@ -1,81 +1,106 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:project/domain/models/event.dart';
+import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
+import 'package:project/presentation/qr_code_scanner/qr_code_scanner_bloc/qr_code_scanner_bloc.dart';
 import 'package:project/presentation/qr_code_scanner/scanner_overlay/scanner_overlay.dart';
+import 'package:project/utils/extensions/context_x.dart';
+import 'package:project/utils/locator.dart';
 
-class QrCodeScannerScreen extends StatefulWidget {
-  const QrCodeScannerScreen({required this.event, super.key});
+class QrCodeScannerScreen extends StatelessWidget {
+  QrCodeScannerScreen({required this.event, super.key});
 
   final Event event;
 
   static Route route(Event event) {
     return MaterialPageRoute(builder: (context) => QrCodeScannerScreen(event: event));
   }
-  
-  @override
-  State<QrCodeScannerScreen> createState() => _QrCodeScannerScreenState();
-}
 
-class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
   final scannerController = MobileScannerController();
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    final scanWindowPosition = Offset(screenSize.width * 0.5, screenSize.height * 0.4);
     final scanWindowDimension = screenSize.width * 0.6;
     final scanWindow = Rect.fromCircle(
-      center: Offset(screenSize.width * 0.5, screenSize.height * 0.4),
+      center: scanWindowPosition,
       radius: scanWindowDimension / 2,
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.history),
-          ),
-        ],
+    return BlocProvider(
+      create: (context) => QrCodeScannerBloc(
+        event: event,
+        compoundEventsRepository: locator<CompoundEventsRepository>(),
       ),
-      extendBodyBehindAppBar: true,
-      floatingActionButton: ValueListenableBuilder(
-        valueListenable: scannerController.torchState,
-        builder: (context, state, child) {
-          final icon = state == TorchState.on ? Icons.flash_off : Icons.flash_on;
-          final bgColor = state == TorchState.on ? Colors.yellow : Colors.grey;
-          return CircleAvatar(
-            backgroundColor: bgColor,
-            radius: 30,
-            child: IconButton(
-              icon: Icon(icon),
-              color: Colors.black,
-              onPressed: scannerController.toggleTorch,
-            ),
-          );
-        },
-      ),
-      body: Stack(
-        children: [
-          MobileScanner(
-            scanWindow: scanWindow,
-            controller: scannerController,
-            onDetect: _onDetect,
+      child: BlocListener<QrCodeScannerBloc, QrCodeScannerState>(
+        listener: _stateChanged,
+        child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            actions: [
+              IconButton(
+                onPressed: () {}, //TODO
+                icon: const Icon(Icons.history),
+              ),
+            ],
           ),
-          ScannerOverlay(
-            scanWindow: scanWindow,
-            scanWindowDimension: scanWindowDimension,
+          extendBodyBehindAppBar: true,
+          floatingActionButton: ValueListenableBuilder(
+            valueListenable: scannerController.torchState,
+            builder: (context, state, child) {
+              final icon = state == TorchState.on ? Icons.flash_off : Icons.flash_on;
+              final bgColor = state == TorchState.on ? Colors.yellow : Colors.grey;
+              return CircleAvatar(
+                backgroundColor: bgColor,
+                radius: 30,
+                child: IconButton(
+                  icon: Icon(icon),
+                  color: Colors.black,
+                  onPressed: scannerController.toggleTorch,
+                ),
+              );
+            },
           ),
-        ],
+          body: Stack(
+            children: [
+              Builder(
+                builder: (context) {
+                  return MobileScanner(
+                    scanWindow: scanWindow,
+                    controller: scannerController,
+                    onDetect: (capture) {
+                      context.read<QrCodeScannerBloc>().add(QrCodeScanned(capture: capture));
+                    },
+                  );
+                }
+              ),
+              ScannerOverlay(
+                scanWindow: scanWindow,
+                scanWindowDimension: scanWindowDimension,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  void _onDetect(BarcodeCapture capture) {
-    final List<Barcode> barcodes = capture.barcodes;
-    for (final barcode in barcodes) {
-      debugPrint('Barcode found! ${barcode.rawValue}');
+  void _stateChanged(BuildContext context, QrCodeScannerState scannerState) {
+    // TODO: add a fullscreen overlay for each state
+    switch (scannerState) {
+      case FailedToReadQrCode():
+        context.showSnackbar("FailedToReadQrCode");
+      case NoSuchVisitorFound():
+        context.showSnackbar("NoSuchVisitorFound");
+      case BoughtTicketOnSpot():
+        context.showSnackbar("BoughtTicketOnSpot");
+      case VisitorFound(visitor: final visitor):
+        context.showSnackbar("VisitorFound ${visitor.id}");
+      case InitialState():
+        break;
     }
   }
 }

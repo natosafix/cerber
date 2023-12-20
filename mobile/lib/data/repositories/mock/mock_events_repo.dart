@@ -3,7 +3,7 @@ import 'package:project/domain/models/event.dart';
 import 'package:project/domain/models/question.dart';
 import 'package:project/domain/models/question_type.dart';
 import 'package:project/domain/models/visitor.dart';
-import 'package:project/domain/repositories/events_repository/events_repository.dart';
+import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/utils/result.dart';
 
 class MockEventsRepo implements EventsRepository {
@@ -42,7 +42,7 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik",
+      category: "Prazdnik", lastDownloaded: null,
     ),
     Event(
       id: 7,
@@ -59,7 +59,7 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik",
+      category: "Prazdnik", lastDownloaded: null,
     ),
     Event(
       id: 8,
@@ -76,7 +76,7 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik",
+      category: "Prazdnik", lastDownloaded: null,
     ),
     Event(
       id: 9,
@@ -93,7 +93,7 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik",
+      category: "Prazdnik", lastDownloaded: null,
     ),
     Event(
       id: 10,
@@ -110,7 +110,7 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik",
+      category: "Prazdnik", lastDownloaded: null,
     ),
     Event(
       id: 11,
@@ -127,7 +127,7 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik",
+      category: "Prazdnik", lastDownloaded: null,
     ),
     Event(
       id: 12,
@@ -144,7 +144,7 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik",
+      category: "Prazdnik", lastDownloaded: null,
     ),
     Event(
       id: 13,
@@ -161,7 +161,7 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik",
+      category: "Prazdnik", lastDownloaded: null,
     ),
     Event(
       id: 14,
@@ -178,7 +178,7 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik",
+      category: "Prazdnik", lastDownloaded: null,
     ),
   ];
 

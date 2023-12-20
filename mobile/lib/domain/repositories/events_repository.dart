@@ -1,6 +1,6 @@
-import '../../../utils/result.dart';
-import '../../models/event.dart';
-import '../../models/visitor.dart';
+import '../../utils/result.dart';
+import '../models/event.dart';
+import '../models/visitor.dart';
 
 abstract class EventsRepository {
   Future<Result<List<Event>, Exception>> getEvents({

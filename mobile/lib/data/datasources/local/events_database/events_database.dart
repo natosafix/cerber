@@ -36,6 +36,12 @@ class EventsDatabase {
     });
   }
 
+  Stream<EventCollection> watchEvent(Id eventId) async* {
+    await for (final event in _events.watchObject(eventId, fireImmediately: true)) {
+      yield event!;
+    }
+  }
+
   Future<void> deleteEventsByIds(List<int> eventsIds) async {
     await _isar.writeTxn(() async {
       await _events.deleteAll(eventsIds);

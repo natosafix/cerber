@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:project/domain/models/event.dart';
-import 'package:project/domain/repositories/events_repository/events_repository.dart';
+import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/authentication/authentication_bloc/authentication_bloc.dart';
 import 'package:project/presentation/event_detail/event_detail_screen.dart';
@@ -46,12 +46,12 @@ class EventsListScreen extends StatelessWidget {
                 pagingController: state.pagingController,
                 physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 builderDelegate: PagedChildBuilderDelegate<Event>(
-                  itemBuilder: (context, item, index) {
+                  itemBuilder: (context, event, index) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       child: GestureDetector(
-                        onTap: () => Navigator.of(context).push(EventDetailScreen.route(item)),
-                        child: EventWidget(item),
+                        onTap: () => Navigator.of(context).push(EventDetailScreen.route(event)),
+                        child: EventWidget(event),
                       ),
                     );
                   },

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:project/domain/models/event.dart';
-import 'package:project/domain/repositories/events_repository/events_repository.dart';
+import 'package:project/domain/repositories/events_repository.dart';
 
 part 'events_event.dart';
 part 'events_state.dart';
