@@ -4,7 +4,7 @@ import 'package:project/presentation/authentication/authentication_bloc/authenti
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_bloc.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_status.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/finish_button_widget.dart';
-import 'package:project/utils/context_x.dart';
+import 'package:project/utils/extensions/context_x.dart';
 
 class AuthenticationFormScreenBase extends StatelessWidget {
   const AuthenticationFormScreenBase({

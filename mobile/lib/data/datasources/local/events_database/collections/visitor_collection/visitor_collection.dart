@@ -2,7 +2,7 @@ import 'package:isar/isar.dart';
 import 'package:project/data/datasources/local/events_database/collections/visitor_collection/ticket_embedded.dart';
 import 'package:project/domain/models/answer.dart';
 import 'package:project/domain/models/visitor.dart';
-import 'package:project/utils/fast_hash_x.dart';
+import 'package:project/utils/extensions/fast_hash_x.dart';
 
 part 'visitor_collection.g.dart';
 

@@ -8,7 +8,7 @@ import 'package:project/presentation/authentication/authentication_bloc/authenti
 import 'package:project/presentation/event_detail/event_detail_screen.dart';
 import 'package:project/presentation/events_list/event_widget.dart';
 import 'package:project/presentation/events_list/events_bloc/events_bloc.dart';
-import 'package:project/utils/context_x.dart';
+import 'package:project/utils/extensions/context_x.dart';
 
 class EventsListScreen extends StatelessWidget {
   const EventsListScreen({super.key});

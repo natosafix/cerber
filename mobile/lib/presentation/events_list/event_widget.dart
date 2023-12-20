@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager_dio/flutter_cache_manager_dio.dart';
 import 'package:project/domain/models/event.dart';
-import 'package:project/utils/context_x.dart';
+import 'package:project/utils/extensions/context_x.dart';
 
 class EventWidget extends StatelessWidget {
   const EventWidget(this.event, {super.key});
