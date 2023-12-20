@@ -23,12 +23,12 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
   @override
   final LocalEventsRepository localEventsRepository;
 
-  final _connectionChecker = locator<NetworkChecker>();
+  final _networkChecker = locator<NetworkChecker>();
 
   late final bool _networkAvailable;
 
   Future<void> init() async {
-    _networkAvailable = await _connectionChecker.networkAvailable();
+    _networkAvailable = await _networkChecker.networkAvailable();
   }
 
   final Set<int> _downloadedEventsIds = {};
