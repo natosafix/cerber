@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/models/visitor.dart';
@@ -7,6 +6,8 @@ import 'package:project/domain/repositories/compound_events_repository/compound_
 import 'package:project/domain/repositories/compound_events_repository/download_status.dart';
 import 'package:project/domain/repositories/local_events_repository/local_events_repository.dart';
 import 'package:project/domain/repositories/remote_events_repository.dart';
+import 'package:project/utils/network_checker/network_checker.dart';
+import 'package:project/utils/locator.dart';
 import 'package:project/utils/result.dart';
 
 class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
@@ -21,19 +22,12 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
   @override
   final LocalEventsRepository localEventsRepository;
 
+  final _connectionChecker = locator<NetworkChecker>();
+
   late final bool _networkAvailable;
 
   Future<void> init() async {
-    _networkAvailable = await _checkNetworkAvailability();
-  }
-
-  Future<bool> _checkNetworkAvailability() async {
-    try {
-      final result = await InternetAddress.lookup('example.com');
-      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
-    } on SocketException catch (_) {
-      return false;
-    }
+    _networkAvailable = await _connectionChecker.networkAvailable();
   }
 
   final Set<int> _downloadedEventsIds = {};
