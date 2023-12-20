@@ -5,6 +5,7 @@ import 'package:project/domain/models/visitor.dart';
 import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
 import 'package:project/domain/repositories/compound_events_repository/download_status.dart';
 import 'package:project/domain/repositories/local_events_repository/local_events_repository.dart';
+import 'package:project/domain/repositories/local_events_repository.dart';
 import 'package:project/domain/repositories/remote_events_repository.dart';
 import 'package:project/utils/network_checker/network_checker.dart';
 import 'package:project/utils/locator.dart';
@@ -76,7 +77,7 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
 
   @override
   Future<Visitor?> findVisitor(String visitorId, int eventId) async {
-    if (!_networkAvailable) {
+    if (_networkAvailable) {
       return await remoteEventsRepository.findVisitor(visitorId, eventId);
     }
 
