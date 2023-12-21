@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project/presentation/authentication/authentication_bloc/authentication_bloc.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_bloc.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_status.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/finish_button_widget.dart';
@@ -12,6 +11,7 @@ class AuthenticationFormScreenBase extends StatelessWidget {
     required this.inputFields,
     required this.title,
     required this.finishButtonText,
+    required this.onSuccess,
     super.key,
   });
 
@@ -19,6 +19,7 @@ class AuthenticationFormScreenBase extends StatelessWidget {
   final List<Widget> inputFields;
   final String title;
   final String finishButtonText;
+  final Function(BuildContext context) onSuccess;
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +70,7 @@ class AuthenticationFormScreenBase extends StatelessWidget {
         // dismissing keyboard
         FocusManager.instance.primaryFocus?.unfocus();
       case Success():
-        Navigator.of(context).pop();
-        // break;
-        // context.read<AuthenticationBloc>().add(Authenticate());
+        onSuccess(context);
       case Failure():
         context.showSnackbar(status.errorMessage);
       case UnknownStatus():

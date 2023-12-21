@@ -66,7 +66,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "visitors": MessageLookupByLibrary.simpleMessage("Visitors"),
         "when": MessageLookupByLibrary.simpleMessage("When"),
         "where": MessageLookupByLibrary.simpleMessage("Where"),
-        "youHaveNoEvents":
-            MessageLookupByLibrary.simpleMessage("You don\'\'t have any events")
+        "youHaveNoEvents": MessageLookupByLibrary.simpleMessage(
+            "You don\'\'t have any events"),
+        "youHaveSignUpsuccessfully": MessageLookupByLibrary.simpleMessage(
+            "You have signed up successfully")
       };
 }

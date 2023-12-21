@@ -8,6 +8,7 @@ import 'package:project/presentation/authentication/authentication_form/authenti
 import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/inputs/email_input.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/inputs/name_input.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/inputs/password_input.dart';
+import 'package:project/utils/extensions/context_x.dart';
 
 class InitialScreen extends StatelessWidget {
   const InitialScreen({super.key});
@@ -59,6 +60,10 @@ class InitialScreen extends StatelessWidget {
             inputFields: const [EmailInput(), NameInput(), PasswordInput()],
             title: L10n.current.createAccount,
             finishButtonText: L10n.current.signUp,
+            onSuccess: (context) {
+              context.showSnackbar(L10n.current.youHaveSignUpsuccessfully);
+              Navigator.of(context).pop();
+            },
           );
         },
       ),
@@ -74,6 +79,7 @@ class InitialScreen extends StatelessWidget {
             inputFields: const [EmailInput(), PasswordInput()],
             title: L10n.current.logIntoAccount,
             finishButtonText: L10n.current.logIn,
+            onSuccess: (context) {},
           );
         },
       ),

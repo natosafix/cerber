@@ -68,6 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "when": MessageLookupByLibrary.simpleMessage("Когда"),
         "where": MessageLookupByLibrary.simpleMessage("Где"),
         "youHaveNoEvents":
-            MessageLookupByLibrary.simpleMessage("У вас нет мероприятий")
+            MessageLookupByLibrary.simpleMessage("У вас нет мероприятий"),
+        "youHaveSignUpsuccessfully":
+            MessageLookupByLibrary.simpleMessage("Вы успешно зарегались")
       };
 }

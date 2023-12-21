@@ -329,6 +329,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `You have signed up successfully`
+  String get youHaveSignUpsuccessfully {
+    return Intl.message(
+      'You have signed up successfully',
+      name: 'youHaveSignUpsuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {
