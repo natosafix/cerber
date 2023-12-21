@@ -11,7 +11,16 @@ public class OrdersRepository : IOrdersRepository
         this.dbContext = dbContext;
     }
 
-    public Task<List<Order>> Get(int eventId)
+    public Task<Order?> Get(Guid customer)
+    {
+        return dbContext.Orders
+            .Include(o => o.Ticket)
+            .Include(o => o.Answers)
+            .ThenInclude(a => a.Question)
+            .FirstOrDefaultAsync(o => o.Customer.Equals(customer));
+    }
+
+    public Task<List<Order>> GetByEvent(int eventId)
     {
         return dbContext.Orders
             .Where(o => o.Ticket.EventId.Equals(eventId))

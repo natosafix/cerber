@@ -42,6 +42,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IAuthorizationHandler, MustOwnEventHandler>();
         services.AddScoped<IAuthorizationHandler, MustInspectEventHandler>();
+        services.AddScoped<IAuthorizationHandler, MustInspectOrderHandler>();
         
         return services;
     }

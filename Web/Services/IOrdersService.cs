@@ -4,7 +4,9 @@ namespace Web.Services;
 
 public interface IOrdersService
 {
-    Task<List<Order>> Get(int eventId);
+    Task<Order> Get(Guid customer);
+    
+    Task<List<Order>> GetByEvent(int eventId);
     
     Task<Order> Create(Order order);
 }

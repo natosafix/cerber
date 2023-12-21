@@ -55,6 +55,13 @@ public class Startup
                     policyBuilder.RequireAuthenticatedUser();
                     policyBuilder.AddRequirements(new MustInspectEventRequirement());
                 });
+            options.AddPolicy(
+                "MustInspectOrder",
+                policyBuilder =>
+                {
+                    policyBuilder.RequireAuthenticatedUser();
+                    policyBuilder.AddRequirements(new MustInspectOrderRequirement());
+                });
         });
         
         services.AddAuthentication()
