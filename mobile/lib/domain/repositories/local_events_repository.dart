@@ -1,6 +1,6 @@
-import '../models/event.dart';
-import '../models/visitor.dart';
-import 'events_repository.dart';
+import 'package:project/domain/models/event.dart';
+import 'package:project/domain/models/visitor.dart';
+import 'package:project/domain/repositories/events_repository.dart';
 
 abstract class LocalEventsRepository implements EventsRepository {
   Future<void> saveEvents(List<Event> events);
