@@ -85,6 +85,33 @@ class _EventsService implements EventsService {
   }
 
   @override
+  Future<VisitorApiResponse> getVisitor(String customer) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<VisitorApiResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/orders/${customer}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = VisitorApiResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<List<QuestionApiResponse>> getQuestions(int eventId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'eventId': eventId};

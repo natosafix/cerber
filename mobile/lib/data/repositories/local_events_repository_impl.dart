@@ -47,7 +47,13 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
 
   @override
   Future<void> saveVisitors(List<Visitor> visitors, int eventId) async {
-    final answers = visitors.map((e) => e.answers).expand((e) => e).map((e) => AnswerCollection.fromModel(e)).toList();
+    final answers = visitors
+        .map((e) => e.answers)
+        .expand((e) => e)
+        .map(
+          (e) => AnswerCollection.fromModel(e),
+        )
+        .toList();
     await _eventsDatabase.addAnswers(answers);
 
     final visitorsCollections = visitors.map((e) => VisitorCollection.fromModel(e, eventId)).toList();

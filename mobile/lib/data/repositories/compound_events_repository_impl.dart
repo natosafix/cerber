@@ -76,12 +76,15 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
 
   @override
   Future<Visitor?> findVisitor(String visitorId, int eventId) async {
-    //TODO: not implemented
-    // if (_networkAvailable) {
-    //   return await remoteEventsRepository.findVisitor(visitorId, eventId);
-    // }
+    final visitorLocal = await localEventsRepository.findVisitor(visitorId, eventId);
 
-    return await localEventsRepository.findVisitor(visitorId, eventId);
+    if (visitorLocal != null) return visitorLocal;
+
+    if (_networkAvailable) {
+      return await remoteEventsRepository.findVisitor(visitorId, eventId);
+    }
+
+    return null;
   }
 
   @override
@@ -96,6 +99,7 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
 
     final visitors = downloadResult.success;
 
+    await localEventsRepository.deleteVisitors(eventId);
     await localEventsRepository.saveVisitors(visitors, eventId);
 
     status.add(DownloadStatus.success);

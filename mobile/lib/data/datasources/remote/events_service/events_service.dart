@@ -21,6 +21,11 @@ abstract class EventsService {
     @Query('eventId') int eventId,
   );
 
+  @GET('/orders/{id}')
+  Future<VisitorApiResponse> getVisitor(
+    @Path('id') String customer,
+  );
+
   @GET('/questions')
   Future<List<QuestionApiResponse>> getQuestions(
     @Query('eventId') int eventId,
