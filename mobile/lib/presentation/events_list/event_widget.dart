@@ -1,7 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager_dio/flutter_cache_manager_dio.dart';
 import 'package:project/domain/models/event.dart';
+import 'package:project/presentation/events_list/event_image.dart';
 import 'package:project/utils/extensions/context_x.dart';
 
 class EventWidget extends StatelessWidget {
@@ -30,7 +29,7 @@ class EventWidget extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _eventImage(context),
+          EventImage(borderRadius: borderRadius, event: event),
           Padding(
             padding: const EdgeInsets.only(top: 15, bottom: 30, right: 20, left: 20),
             child: Align(
@@ -57,34 +56,6 @@ class EventWidget extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _eventImage(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-          color: context.isLight() ? Colors.grey.withOpacity(0.2) : Colors.black26,
-          spreadRadius: 5,
-          blurRadius: 9,
-          offset: const Offset(0, 4),
-        )
-      ]),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(borderRadius)),
-        child: Container(
-          constraints: const BoxConstraints(
-            maxHeight: 250,
-          ),
-          width: double.infinity,
-          child: CachedNetworkImage(
-            cacheManager: DioCacheManager.instance,
-            imageUrl: event.photoUrl,
-            fit: BoxFit.fitWidth,
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-          ),
-        ),
       ),
     );
   }
