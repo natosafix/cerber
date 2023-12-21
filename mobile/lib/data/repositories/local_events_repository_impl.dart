@@ -89,4 +89,9 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
     //   yield EventCollection.toModel(event);
     // }
   }
+
+  @override
+  Future<void> deleteAllData() async {
+    await _eventsDatabase.deleteAllData();
+  }
 }

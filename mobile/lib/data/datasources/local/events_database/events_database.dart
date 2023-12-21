@@ -50,7 +50,7 @@ class EventsDatabase {
     });
 
     yield* controller.stream;
-    
+
     // await for (final event in _events.watchObject(eventId, fireImmediately: true)) {
     //   yield event!;
     // }
@@ -97,5 +97,16 @@ class EventsDatabase {
 
   Future<VisitorCollection?> findVisitor(String visitorId, Id eventId) async {
     return await _visitors.getByVisitorIdEventId(visitorId, eventId);
+  }
+
+  Future<void> deleteAllData() async {
+    await _isar.writeTxn(() async {
+      await Future.wait([
+        _events.clear(),
+        _answers.clear(),
+        _visitors.clear(),
+        _questions.clear(),
+      ]);
+    });
   }
 }

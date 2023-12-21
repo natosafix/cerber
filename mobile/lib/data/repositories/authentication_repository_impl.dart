@@ -8,8 +8,10 @@ import 'package:project/data/datasources/remote/authentication_service/requests/
 import 'package:project/data/datasources/remote/authentication_service/responses/log_in_response.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_status.dart';
+import 'package:project/domain/repositories/local_events_repository.dart';
 import 'package:project/utils/constants/secure_storage_keys.dart';
 import 'package:project/utils/locator.dart';
+import 'package:project/utils/network_checker/network_checker.dart';
 import 'package:project/utils/result.dart';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
@@ -20,6 +22,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final AuthenticationService _authenticationService;
 
   final _secureStorage = locator<FlutterSecureStorage>();
+  final _networkChecker = locator<NetworkChecker>();
+  late final _localEventsRepository = locator<LocalEventsRepository>();
 
   final _authenticationController = StreamController<AuthenticationStatus>();
 
@@ -88,6 +92,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   void logOut() {
     _authenticationController.add(AuthenticationStatus.unauthenticated);
     _secureStorage.deleteAll();
+    _localEventsRepository.deleteAllData();
   }
 
   @override
@@ -98,12 +103,18 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return _authenticationController.add(AuthenticationStatus.unauthenticated);
     }
 
+    final networkAvailable = await _networkChecker.networkAvailable();
+
+    if (!networkAvailable) {
+      return _authenticationController.add(AuthenticationStatus.authenticated);
+    }
+
     final isTokenValid = await _isTokenValid();
 
     if (isTokenValid) {
       return _authenticationController.add(AuthenticationStatus.authenticated);
     }
-    
+
     await tryRefreshToken();
   }
 
@@ -144,8 +155,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     if (tokenExpiration == null) return false;
 
     final expires = DateTime.parse(tokenExpiration);
-    const threshold = Duration(minutes: 10);
 
-    return DateTime.now().add(threshold).isBefore(expires);
+    return DateTime.now().isBefore(expires);
   }
 }

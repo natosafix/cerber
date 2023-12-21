@@ -14,4 +14,6 @@ abstract class LocalEventsRepository implements EventsRepository {
   Future<void> deleteVisitors(int eventId);
 
   Stream<Event> watchEvent(int eventId);
+
+  Future<void> deleteAllData();
 }
