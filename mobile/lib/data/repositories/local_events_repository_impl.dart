@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:project/data/datasources/local/events_database/collections/answer_collection/answer_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/event_collection/event_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/visitor_collection/visitor_collection.dart';
@@ -71,8 +73,20 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
 
   @override
   Stream<Event> watchEvent(int eventId) async* {
-    await for (final event in _eventsDatabase.watchEvent(eventId)) {
-      yield EventCollection.toModel(event);
-    }
+    late StreamSubscription<EventCollection> subscription;
+
+    final controller = StreamController<Event>(
+      onCancel: () => subscription.cancel(),
+    );
+
+    subscription = _eventsDatabase.watchEvent(eventId).listen((event) {
+      controller.add(EventCollection.toModel(event));
+    });
+
+    yield* controller.stream;
+
+    // await for (final event in _eventsDatabase.watchEvent(eventId)) {
+    //   yield EventCollection.toModel(event);
+    // }
   }
 }

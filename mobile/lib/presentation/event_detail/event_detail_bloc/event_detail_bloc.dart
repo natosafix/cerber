@@ -54,9 +54,9 @@ class EventDetailBloc extends Bloc<EventDetailEvent, EventDetailState> {
   }
 
   @override
-  Future<void> close() {
-    _downloadStatusSubscription.cancel();
-    _eventSubscription.cancel();
+  Future<void> close() async {
+    await _downloadStatusSubscription.cancel();
+    await _eventSubscription.cancel();
     return super.close();
   }
 }

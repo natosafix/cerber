@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:isar/isar.dart';
 import 'package:project/data/datasources/local/events_database/collections/answer_collection/answer_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/event_collection/event_collection.dart';
@@ -37,9 +39,21 @@ class EventsDatabase {
   }
 
   Stream<EventCollection> watchEvent(Id eventId) async* {
-    await for (final event in _events.watchObject(eventId, fireImmediately: true)) {
-      yield event!;
-    }
+    late StreamSubscription<EventCollection?> subscription;
+
+    final controller = StreamController<EventCollection>(
+      onCancel: () => subscription.cancel(),
+    );
+
+    subscription = _events.watchObject(eventId, fireImmediately: true).listen((event) {
+      controller.add(event!);
+    });
+
+    yield* controller.stream;
+    
+    // await for (final event in _events.watchObject(eventId, fireImmediately: true)) {
+    //   yield event!;
+    // }
   }
 
   Future<void> deleteEventsByIds(List<int> eventsIds) async {
