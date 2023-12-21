@@ -4,12 +4,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_status.dart';
+import 'package:project/domain/repositories/local_events_repository.dart';
 import 'package:project/utils/constants/secure_storage_keys.dart';
 import 'package:project/utils/locator.dart';
 import 'package:project/utils/result.dart';
 
 class MockAuthRepo implements AuthenticationRepository {
   final _secureStorage = locator<FlutterSecureStorage>();
+  late final _localEventsRepository = locator<LocalEventsRepository>();
 
   final _authenticationController = StreamController<AuthenticationStatus>();
 
@@ -50,7 +52,8 @@ class MockAuthRepo implements AuthenticationRepository {
   @override
   void logOut() {
     _authenticationController.add(AuthenticationStatus.unauthenticated);
-    _secureStorage.delete(key: SecureStorageKeys.authToken);
+    _secureStorage.deleteAll();
+    _localEventsRepository.deleteAllData();
   }
 
   @override

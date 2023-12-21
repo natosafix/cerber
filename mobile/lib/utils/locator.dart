@@ -81,9 +81,8 @@ void setupLocator() async {
       MockAuthRepo(),
     );
 
-    locator.registerSingleton<EventsRepository>(
+    locator.registerSingleton<RemoteEventsRepository>(
       MockEventsRepo(),
-      instanceName: 'remote',
     );
   } else {
     locator.registerSingleton<AuthenticationService>(

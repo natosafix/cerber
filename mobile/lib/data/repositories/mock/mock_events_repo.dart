@@ -1,12 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:project/domain/models/answer.dart';
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/models/question.dart';
 import 'package:project/domain/models/question_type.dart';
 import 'package:project/domain/models/visitor.dart';
-import 'package:project/domain/repositories/events_repository.dart';
+import 'package:project/domain/repositories/remote_events_repository.dart';
 import 'package:project/utils/result.dart';
 
-class MockEventsRepo implements EventsRepository {
+class MockEventsRepo implements RemoteEventsRepository {
   @override
   Future<Result<List<Event>, Exception>> getEvents({
     required int offset,
@@ -26,6 +27,13 @@ class MockEventsRepo implements EventsRepository {
     return mockVisitors.firstWhere((e) => e.id == visitorId);
   }
 
+  @override
+  Future<Result<List<Visitor>, DioException>> downloadVisitors(int eventId) async {
+    await Future.delayed(const Duration(seconds: 1));
+
+    return Success(mockVisitors);
+  }
+
   static List<Event> mockEvents = [
     Event(
       id: 6,
@@ -42,7 +50,8 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik", lastDownloaded: null,
+      category: "Prazdnik",
+      lastDownloaded: null,
     ),
     Event(
       id: 7,
@@ -59,7 +68,8 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik", lastDownloaded: null,
+      category: "Prazdnik",
+      lastDownloaded: null,
     ),
     Event(
       id: 8,
@@ -76,7 +86,8 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik", lastDownloaded: null,
+      category: "Prazdnik",
+      lastDownloaded: null,
     ),
     Event(
       id: 9,
@@ -93,7 +104,8 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik", lastDownloaded: null,
+      category: "Prazdnik",
+      lastDownloaded: null,
     ),
     Event(
       id: 10,
@@ -110,7 +122,8 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik", lastDownloaded: null,
+      category: "Prazdnik",
+      lastDownloaded: null,
     ),
     Event(
       id: 11,
@@ -127,7 +140,8 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik", lastDownloaded: null,
+      category: "Prazdnik",
+      lastDownloaded: null,
     ),
     Event(
       id: 12,
@@ -144,7 +158,8 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik", lastDownloaded: null,
+      category: "Prazdnik",
+      lastDownloaded: null,
     ),
     Event(
       id: 13,
@@ -161,7 +176,8 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik", lastDownloaded: null,
+      category: "Prazdnik",
+      lastDownloaded: null,
     ),
     Event(
       id: 14,
@@ -178,7 +194,8 @@ class MockEventsRepo implements EventsRepository {
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
-      category: "Prazdnik", lastDownloaded: null,
+      category: "Prazdnik",
+      lastDownloaded: null,
     ),
   ];
 
