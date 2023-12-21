@@ -20,7 +20,7 @@ class EventImage extends StatelessWidget {
       decoration: context.isLight()
           ? BoxDecoration(boxShadow: [
               BoxShadow(
-                color: context.isLight() ? Colors.grey.withOpacity(0.2) : Colors.black26,
+                color: Colors.grey.withOpacity(0.2),
                 spreadRadius: 5,
                 blurRadius: 9,
                 offset: const Offset(0, 4),
