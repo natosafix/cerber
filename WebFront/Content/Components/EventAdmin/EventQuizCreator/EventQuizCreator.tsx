@@ -18,7 +18,6 @@ interface QuizBuilderCreatorProps {
 }
 
 export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
-    let localStorageSaver = new LocalStorageSaver('Draft.Quiz');
     const [questions, setQuestions] = useState<Question[]>([]);
     const [questionCounter, setQuestionCounter] = useState(0);
 
@@ -43,8 +42,7 @@ export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
                 <div className={styles.binBtnWrapper}>
                     <BinButton onClick={() => onDeleteQuestion(question.key)} />
                 </div>
-                <QuestionBuilder storageSaver={localStorageSaver}
-                                 onQuestionUpdate={onUpdateQuestion}
+                <QuestionBuilder onQuestionUpdate={onUpdateQuestion}
                                  question={question}
                                  questionNum={num + 4} />
             </div>
@@ -54,20 +52,17 @@ export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
     return (
         <Gapped gap={40} vertical={true}>
             <Button borderless={true} onClick={onAddQuestion}>Добавить вопрос</Button>
-            <SingleStringQuestion storageSaver={localStorageSaver}
-                                  title={'Вопрос №1'}
+            <SingleStringQuestion title={'Вопрос №1'}
                                   disabled={true}
                                   placeholder={'Введите ваш Email'}
                                   size={'medium'}
             />
-            <SingleStringQuestion storageSaver={localStorageSaver}
-                                  title={'Вопрос №2'}
+            <SingleStringQuestion title={'Вопрос №2'}
                                   disabled={true}
                                   placeholder={'Введите ваше имя'}
                                   size={'medium'}
             />
-            <SingleStringQuestion storageSaver={localStorageSaver}
-                                  title={'Вопрос №3'}
+            <SingleStringQuestion title={'Вопрос №3'}
                                   disabled={true}
                                   placeholder={'Введите вашу фамилию'}
                                   size={'medium'}

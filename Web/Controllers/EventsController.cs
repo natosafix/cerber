@@ -62,28 +62,6 @@ public class EventsController : Controller
         return Ok(await eventsService.Create(mapper.Map<Event>(eventResponse)));
     }
 
-    [HttpGet("draft")]
-    public async Task<IActionResult> Draft()
-    {
-        var user = await userHelper.GetUser();
-        var draft = await draftEventService.FindDraftByUserIdAsync(user!.Id);
-        return Ok(draft);
-    }
-
-    [HttpPost("createDraft")]
-    public async Task<IActionResult> CreateDraft()
-    {
-        var user = await userHelper.GetUser();
-
-        var draft = await draftEventService.FindDraftByUserIdAsync(user!.Id);
-        if (draft != null)
-            return BadRequest("User already has a draft");
-
-        draft = await draftEventService.CreateDraftAsync(user.Id);
-
-        return Ok(draft);
-    }
-
     [Authorize("MustOwnEvent")]
     [HttpPut("{id}/inspector")]
     public async Task<IActionResult> AddInspector([FromRoute] int id, [FromBody] SetInspectorDto setInspectorDto)

@@ -6,38 +6,23 @@ import { EventCoverSheet } from './EventCoverSheet/EventCoverSheet';
 import { EventAdminPageNav } from './EventStepsNav/EventAdminPageNav';
 import { EventQuizCreator } from './EventQuizCreator/EventQuizCreator';
 import { EventPublish } from './EventPublish/EventPublish';
-import { Button, Gapped } from '@skbkontur/react-ui';
-import { EventAdminClient } from '../../../Api/EventAdmin/EventAdminClient';
-import {DraftEvent} from "../../../Api/EventAdmin/DraftEvent";
+import { Gapped } from '@skbkontur/react-ui';
 
 
 export const EventAdmin: React.FC = () => {
-    const [step, setStep] = useState(EventAdminPageNav.EventCoverSheet);
-    const [draft, setDraft] = useState<DraftEvent | null>(null);
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const myParam = urlParams.get('id')!;
+    alert(`load myParam: ${myParam}`);
     
-    useEffect(() => {
-        EventAdminClient.getDraft()
-            .then(response => {
-                if (response.status !== 204) {
-                    setDraft(response.data);
-                } else {
-                    EventAdminClient.createDraft()
-                        .then(response => {
-                            setDraft(response.data);
-                        })
-                }
-            });
-    }, [])
+    const [draftId, setDraftId] = useState<string>(myParam);
+    const [step, setStep] = useState(EventAdminPageNav.EventCoverSheet);
     
     const onSave = () => {
         if (step === EventAdminPageNav.EventPublish) {
             // alert('Save all form');
         } else {
             alert("Save")
-            EventAdminClient.createDraft()
-                .then((response) => {
-                    alert(response.status);
-                })
             // alert('Save current page');
             setStep(step + 1);
         }
@@ -51,7 +36,7 @@ export const EventAdmin: React.FC = () => {
                 <div className={styles.contentWrapper}>
                     <Gapped gap={30} vertical={true}>
                         {step === EventAdminPageNav.EventCoverSheet && (
-                            <EventCoverSheet onSave={onSave} />
+                            <EventCoverSheet onSave={onSave} draftId={draftId!} />
                         )}
                         {step === EventAdminPageNav.EventQuizCreator && (
                             <EventQuizCreator onSave={onSave} />

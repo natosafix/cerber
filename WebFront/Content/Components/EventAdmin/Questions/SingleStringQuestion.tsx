@@ -8,7 +8,6 @@ import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWr
 import { Label } from '../../../Entries/Shared/Label/Label';
 
 interface Props {
-    storageSaver?: ILocalStorageSaver;
     title: string;
     disabled?: boolean;
     placeholder?: string;
@@ -31,7 +30,6 @@ export const SingleStringQuestion: React.FC<Props> = (
     {
         title,
         onValueChange = null,
-        storageSaver = null,
         disabled = false,
         placeholder= '',
         size= "large",
@@ -47,17 +45,6 @@ export const SingleStringQuestion: React.FC<Props> = (
         }
     }
 
-    useEffect(() => {
-        let savedValue = storageSaver?.load(title);
-        if (savedValue && savedValue !== value) {
-            changeValue(savedValue);
-        }
-    }, []);
-
-    let saveStorage = () => {
-        storageSaver?.save(title, value);
-    };
-
     return (
         <Gapped gap={Number.parseInt(variables.titleContentGap)} vertical={true}>
             <Label label={title} size={size} />
@@ -65,7 +52,6 @@ export const SingleStringQuestion: React.FC<Props> = (
                 <Input className={styles.questionInput}
                        value={value} 
                        onValueChange={changeValue} 
-                       onBlur={saveStorage}
                        placeholder={placeholder}
                        disabled={disabled} />
             </ValidationWrapper>
