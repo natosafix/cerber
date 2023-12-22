@@ -17,9 +17,14 @@ public class OrdersService : IOrdersService
         this.qrCodeService = qrCodeService;
     }
 
-    public Task<List<Order>> Get(int eventId)
+    public async Task<Order> Get(Guid customer)
     {
-        return ordersRepository.Get(eventId);
+        return await ordersRepository.Get(customer) ?? throw new BadHttpRequestException($"Not found order with customer {customer}");
+    }
+    
+    public Task<List<Order>> GetByEvent(int eventId)
+    {
+        return ordersRepository.GetByEvent(eventId);
     }
 
     public async Task<Order> Create(Order order)

@@ -21,11 +21,19 @@ public class OrdersController : Controller
         this.mapper = mapper;
     }
 
+    [Authorize("MustInspectOrder")]    
+    [HttpGet("{customer}")]
+    public async Task<IActionResult> Get([FromRoute] Guid customer)
+    {
+        var order = await ordersService.Get(customer);
+        return Ok(mapper.Map<OrderResponseDto>(order));
+    }
+    
     [Authorize("MustInspectEvent")]    
     [HttpGet("")]
-    public async Task<IActionResult> Get([FromQuery] int eventId)
+    public async Task<IActionResult> GetByEvent([FromQuery] int eventId)
     {
-        var order = await ordersService.Get(eventId);
+        var order = await ordersService.GetByEvent(eventId);
         return Ok(mapper.Map<List<OrderResponseDto>>(order));
     }
 

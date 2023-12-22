@@ -13,4 +13,16 @@ public static class HttpContextExtensions
 
         return null;
     }
+    
+    public static Guid? GetCustomer(this HttpContext? httpContext)
+    {
+        var orderId = httpContext?.Request.Query.ContainsKey("customer") == true
+            ? httpContext.Request.Query["customer"].ToString()
+            : httpContext?.GetRouteData().Values["customer"]?.ToString();
+        
+        if (orderId is not null)
+            return Guid.Parse(orderId);
+
+        return null;
+    }
 }
