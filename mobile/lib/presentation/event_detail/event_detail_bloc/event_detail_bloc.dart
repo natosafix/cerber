@@ -23,27 +23,23 @@ class EventDetailBloc extends Bloc<EventDetailEvent, EventDetailState> {
     on<_EventChanged>(_onEventChanged);
     on<DownloadDatabase>(_onDownloadDatabase);
 
-    _downloadStatusSubscription = _controller.stream.listen((status) {
+    _downloadStatusSubscription = _downloadStatusController.stream.listen((status) {
       add(_DownloadStatusChanged(status));
     });
+
     _eventSubscription = _localEventsRepository.watchEvent(_event.id).listen((event) {
       add(_EventChanged(event));
     });
   }
 
+  late final StreamSubscription<DownloadStatus> _downloadStatusSubscription;
+  late final StreamSubscription<Event> _eventSubscription;
+  final _downloadStatusController = StreamController<DownloadStatus>();
+
   final CompoundEventsRepository _compoundEventsRepository;
   final _localEventsRepository = locator<LocalEventsRepository>();
 
   final Event _event;
-
-  final _controller = StreamController<DownloadStatus>();
-
-  late final StreamSubscription<DownloadStatus> _downloadStatusSubscription;
-  late final StreamSubscription<Event> _eventSubscription;
-
-  void _onDownloadDatabase(DownloadDatabase event, Emitter<EventDetailState> emit) {
-    _compoundEventsRepository.downloadVisitorsDatabase(_event.id, _controller.sink);
-  }
 
   void _onDownloadStatusChanged(_DownloadStatusChanged event, Emitter<EventDetailState> emit) {
     emit(state.copyWith(downloadStatus: event.downloadStatus));
@@ -51,6 +47,10 @@ class EventDetailBloc extends Bloc<EventDetailEvent, EventDetailState> {
 
   void _onEventChanged(_EventChanged event, Emitter<EventDetailState> emit) {
     emit(state.copyWith(lastDownloaded: event.event.lastDownloaded));
+  }
+
+  void _onDownloadDatabase(DownloadDatabase event, Emitter<EventDetailState> emit) {
+    _compoundEventsRepository.downloadVisitorsDatabase(_event.id, _downloadStatusController.sink);
   }
 
   @override
