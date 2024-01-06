@@ -1,37 +1,40 @@
 ﻿import styles from '../EventAdmin.scss';
 import variables from '../EventAdminVariables.scss';
-import { Gapped, Textarea } from '@skbkontur/react-ui';
-import React, { useEffect, useState } from 'react';
-import { Label } from '../../../Entries/Shared/Label/Label';
+import {Gapped, Textarea} from '@skbkontur/react-ui';
+import React, {useEffect, useState} from 'react';
+import {Label} from '../../../Entries/Shared/Label/Label';
 
 interface IMultiStringQuestion {
-    storageSaver: ILocalStorageSaver;
     title: string;
+    size?: "small" | "medium" | "large";
+    onValueChange?: (value: string) => void;
+    defaultValue?: string;
 }
 
-export const MultiStringQuestion: React.FC<IMultiStringQuestion> = ({ title, storageSaver }) => {
-    const [value, setValue] = useState('');
+export const MultiStringQuestion: React.FC<IMultiStringQuestion> = (
+    {
+        title,
+        size = "large",
+        onValueChange = null,
+        defaultValue = ''
+    }) => {
+    const [value, setValue] = useState(defaultValue);
 
-    useEffect(() => {
-        let savedValue = storageSaver.load(title);
-        if (savedValue && savedValue !== value) {
-            setValue(savedValue);
+    const changeValue = (v: string) => {
+        setValue(v);
+        if (onValueChange) {
+            onValueChange(v);
         }
-    }, []);
-
-    let saveStorage = () => {
-        storageSaver.save(title, value);
-    };
+    }
 
     return (
         <Gapped gap={Number.parseInt(variables.titleContentGap)} vertical={true} className={styles.questionInput}>
-            <Label label={title} size={"large"} />
+            <Label label={title} size={size}/>
             <Textarea width={'100%'}
                       value={value}
-                      onValueChange={setValue}
-                      onBlur={saveStorage}
+                      onValueChange={changeValue}
                       maxRows={50}
-                      autoResize={true} />
+                      autoResize={true}/>
         </Gapped>
     );
 };

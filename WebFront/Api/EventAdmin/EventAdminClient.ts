@@ -1,15 +1,15 @@
 ﻿import axios from 'axios';
-import {DraftEvent} from "./DraftEvent";
+import {DraftEvent, DraftEventDto} from "./DraftEvent";
 
 const api = axios.create({baseURL: '/EventAdmin'});
 
 export class EventAdminClient {
-    public static getDraftCover(id: string) {
-        return api.get<DraftEvent | null>('/draftCover', {params: {id: id}});
+    public static getDraftCover() {
+        return api.get<DraftEventDto>('/draftCover');
     }
 
-    public static setDraftCover(id: string, draft: DraftEvent) {
-        return api.post('/draftCover', draft, {params: {id: id}})
+    public static setDraftCover(draft: DraftEvent) {
+        return api.post('/draftCover', draft)
     }
 
     public static createDraft() {

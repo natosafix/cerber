@@ -18,35 +18,39 @@ public class EventAdminController : Controller
     }
 
     [HttpGet("[controller]/draft")]
-    public async Task<IActionResult> Draft([FromQuery] string id)
+    public async Task<IActionResult> Draft()
     {
         return View("index");
     }
 
     [HttpGet("[controller]/draftCover")]
-    public async Task<IActionResult> DraftCover([FromQuery] string id)
+    public async Task<IActionResult> DraftCover()
     {
-        var draft = await draftEventService.FindDraftByUserIdAsync(id);
+        var userId = userHelper.UserId;
+        var draft = await draftEventService.FindDraftByUserIdAsync(userId);
         return Ok(draft);
     }
 
     [HttpPost("[controller]/draftCover")]
-    public async Task<IActionResult> DraftCover([FromQuery] string id, [FromBody] DraftEvent draftEvent)
+    public async Task<IActionResult> DraftCover([FromBody] DraftEvent draftEvent)
     {
-        var draft = await draftEventService.FindDraftByUserIdAsync(id);
-        return Ok(draft);
+        var userId = userHelper.UserId;
+        if (draftEvent.OwnerId != userId)
+            return BadRequest();
+        await draftEventService.UpdateDraft(draftEvent);
+        return Ok();
     }
 
     [HttpPost("createDraft")]
     public async Task<IActionResult> CreateDraft()
     {
-        var user = await userHelper.GetUser();
+        var userId = userHelper.UserId;
 
-        var draft = await draftEventService.FindDraftByUserIdAsync(user!.Id);
+        var draft = await draftEventService.FindDraftByUserIdAsync(userId);
         if (draft != null)
             return BadRequest("User already has a draft");
 
-        draft = await draftEventService.CreateDraftAsync(user.Id);
+        draft = await draftEventService.CreateDraftAsync(userId);
 
         return Ok(draft);
     }
