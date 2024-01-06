@@ -39,21 +39,9 @@ class EventsDatabase {
   }
 
   Stream<EventCollection> watchEvent(Id eventId) async* {
-    late StreamSubscription<EventCollection?> subscription;
-
-    final controller = StreamController<EventCollection>(
-      onCancel: () => subscription.cancel(),
-    );
-
-    subscription = _events.watchObject(eventId, fireImmediately: true).listen((event) {
-      controller.add(event!);
+    yield* _events.watchObject(eventId, fireImmediately: true).map((event) {
+      return event!;
     });
-
-    yield* controller.stream;
-
-    // await for (final event in _events.watchObject(eventId, fireImmediately: true)) {
-    //   yield event!;
-    // }
   }
 
   Future<void> deleteEventsByIds(List<int> eventsIds) async {

@@ -79,21 +79,9 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
 
   @override
   Stream<Event> watchEvent(int eventId) async* {
-    late StreamSubscription<EventCollection> subscription;
-
-    final controller = StreamController<Event>(
-      onCancel: () => subscription.cancel(),
-    );
-
-    subscription = _eventsDatabase.watchEvent(eventId).listen((event) {
-      controller.add(EventCollection.toModel(event));
+    yield* _eventsDatabase.watchEvent(eventId).map((event) {
+      return EventCollection.toModel(event);
     });
-
-    yield* controller.stream;
-
-    // await for (final event in _eventsDatabase.watchEvent(eventId)) {
-    //   yield EventCollection.toModel(event);
-    // }
   }
 
   @override
