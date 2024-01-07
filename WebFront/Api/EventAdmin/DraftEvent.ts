@@ -19,7 +19,6 @@
         this.To = to;
     }
 
-
     public static fromDto(dto: DraftEventDto): DraftEvent {
         return new DraftEvent(dto.id, dto.ownerId, dto.title, dto.description, dto.city, dto.address, dto.from, dto.to);
     }

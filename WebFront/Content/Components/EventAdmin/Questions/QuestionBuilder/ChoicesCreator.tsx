@@ -1,6 +1,6 @@
-﻿import React, { useState } from 'react';
-import { Button, Gapped, Input } from '@skbkontur/react-ui';
-import { Label } from '../../../../Entries/Shared/Label/Label';
+﻿import React, {useState} from 'react';
+import {Button, Gapped, Input} from '@skbkontur/react-ui';
+import {Label} from '../../../../Entries/Shared/Label/Label';
 import styles from './QuestionBuilder.scss';
 
 interface Props {
@@ -8,10 +8,10 @@ interface Props {
     setSrcChoices: (string: string[]) => void;
 }
 
-export const ChoicesCreator: React.FC<Props> = ({ srcChoices, setSrcChoices }) => {
+export const ChoicesCreator: React.FC<Props> = ({srcChoices, setSrcChoices}) => {
     const [choices, setChoices] = useState(srcChoices);
 
-    const onRemove = (idx) => {
+    const onRemove = (idx: number) => {
         let newChoices = choices.filter((c, i) => i !== idx);
         setSrcChoices(newChoices);
         setChoices(newChoices);
@@ -31,20 +31,22 @@ export const ChoicesCreator: React.FC<Props> = ({ srcChoices, setSrcChoices }) =
 
     return (
         <Gapped vertical={true}>
-            <Label label={'Варинаты ответа'} size={'small'} />
+            <Label label={'Варинаты ответа'} size={'small'}/>
             {choices.map((choice, i) =>
                 <div className={styles.lineWrapper}>
                     <div className={styles.inputWrapper}>
                         <Input size={'small'}
                                className={styles.input}
                                value={choice}
-                               onValueChange={(v) => onValueChange(v, i)} />
+                               onValueChange={(v) => onValueChange(v, i)}
+                        />
                     </div>
                     <div className={styles.deleteBtnWrapper}>
-                        <Button use={'text'} borderless={true} size={'small'} onClick={() => onRemove(i)}>Удалить
-                            вариант</Button>
+                        <Button use={'text'} borderless={true} size={'small'} onClick={() => onRemove(i)}>
+                            Удалить вариант
+                        </Button>
                     </div>
-                </div>,
+                </div>
             )}
             <Button use={'default'} onClick={onAdd}>Добавить</Button>
         </Gapped>

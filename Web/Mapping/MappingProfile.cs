@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Web.Dtos;
 using Web.Dtos.Request;
 using Web.Dtos.Response;
 
@@ -14,11 +15,13 @@ public class MappingProfile : Profile
         CreateMap<CreateOrderDto, Order>();
         CreateMap<CreateAnswerDto, Answer>();
         CreateMap<CreateQuestionDto, Question>();
-        
+        CreateMap<DraftQuestionDto, DraftQuestion>().Configure();
+
         CreateMap<Event, EventResponseDto>();
         CreateMap<Ticket, TicketResponseDto>();
         CreateMap<Question, QuestionResponseDto>();
         CreateMap<Order, OrderResponseDto>();
         CreateMap<Answer, AnswerResponseDto>();
+        CreateMap<DraftQuestion, DraftQuestionDto>().Configure();
     }
 }

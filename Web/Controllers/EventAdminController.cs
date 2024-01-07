@@ -1,6 +1,8 @@
-﻿using Domain.Entities;
+﻿using AutoMapper;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.Dtos;
 using Web.Services;
 
 namespace Web.Controllers;
@@ -8,26 +10,31 @@ namespace Web.Controllers;
 [Authorize]
 public class EventAdminController : Controller
 {
+    private readonly IMapper mapper;
     private readonly IUserHelper userHelper;
-    private readonly IDraftEventService draftEventService;
+    private readonly IDraftEventsService draftEventsService;
+    private readonly IDraftQuestionsService draftQuestionsService;
 
-    public EventAdminController(IUserHelper userHelper, IDraftEventService draftEventService)
+    public EventAdminController(IUserHelper userHelper, IDraftEventsService draftEventsService,
+        IDraftQuestionsService draftQuestionsService, IMapper mapper)
     {
         this.userHelper = userHelper;
-        this.draftEventService = draftEventService;
+        this.draftEventsService = draftEventsService;
+        this.draftQuestionsService = draftQuestionsService;
+        this.mapper = mapper;
     }
 
     [HttpGet("[controller]/draft")]
-    public async Task<IActionResult> Draft()
+    public Task<IActionResult> Draft()
     {
-        return View("index");
+        return Task.FromResult<IActionResult>(View("index"));
     }
 
     [HttpGet("[controller]/draftCover")]
     public async Task<IActionResult> DraftCover()
     {
         var userId = userHelper.UserId;
-        var draft = await draftEventService.FindDraftByUserIdAsync(userId);
+        var draft = await draftEventsService.FindDraftByUserIdAsync(userId);
         return Ok(draft);
     }
 
@@ -37,7 +44,36 @@ public class EventAdminController : Controller
         var userId = userHelper.UserId;
         if (draftEvent.OwnerId != userId)
             return BadRequest();
-        await draftEventService.UpdateDraft(draftEvent);
+        await draftEventsService.UpdateDraft(draftEvent);
+        return Ok();
+    }
+
+    [HttpGet("[controller]/questions")]
+    public async Task<IActionResult> Questions()
+    {
+        var userId = userHelper.UserId;
+        var draftEvent = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (draftEvent is null)
+            return BadRequest();
+
+        var questions = await draftQuestionsService.GetDraftQuestionsByDraftEventId(draftEvent.Id);
+        var result = mapper.Map<DraftQuestionDto[]>(questions);
+        return Ok(result);
+    }
+
+    [HttpPost("[controller]/questions")]
+    public async Task<IActionResult> Questions([FromBody] DraftQuestionDto[] draftQuestions)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState.ToList());
+
+        var userId = userHelper.UserId;
+        var draftEvent = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (draftEvent is null)
+            return BadRequest();
+
+        var questions = mapper.Map<DraftQuestion[]>(draftQuestions);
+        await draftQuestionsService.SetDraftQuestions(questions, draftEvent.Id);
         return Ok();
     }
 
@@ -46,11 +82,11 @@ public class EventAdminController : Controller
     {
         var userId = userHelper.UserId;
 
-        var draft = await draftEventService.FindDraftByUserIdAsync(userId);
+        var draft = await draftEventsService.FindDraftByUserIdAsync(userId);
         if (draft != null)
             return BadRequest("User already has a draft");
 
-        draft = await draftEventService.CreateDraftAsync(userId);
+        draft = await draftEventsService.CreateDraftAsync(userId);
 
         return Ok(draft);
     }

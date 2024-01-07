@@ -1,13 +1,13 @@
 ﻿using Domain.Entities;
 using Web.Persistence.Repositories;
 
-namespace Web.Services;
+namespace Web.Services.Implementations;
 
-public class DraftEventService : IDraftEventService
+public class DraftEventsService : IDraftEventsService
 {
     private readonly IDraftEventsRepository draftEventsRepository;
 
-    public DraftEventService(IDraftEventsRepository draftEventsRepository)
+    public DraftEventsService(IDraftEventsRepository draftEventsRepository)
     {
         this.draftEventsRepository = draftEventsRepository;
     }
