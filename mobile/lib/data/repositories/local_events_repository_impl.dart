@@ -6,13 +6,22 @@ import 'package:project/data/datasources/local/events_database/collections/visit
 import 'package:project/data/datasources/local/events_database/events_database.dart';
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/models/visitor.dart';
+import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
+import 'package:project/domain/repositories/authentication_repository/authentication_status.dart';
 import 'package:project/domain/repositories/local_events_repository.dart';
+import 'package:project/utils/locator.dart';
 import 'package:project/utils/result.dart';
 
 class LocalEventsRepositoryImpl implements LocalEventsRepository {
   LocalEventsRepositoryImpl({
     required EventsDatabase eventsDatabase,
-  }) : _eventsDatabase = eventsDatabase;
+  }) : _eventsDatabase = eventsDatabase {
+    locator<AuthenticationRepository>().authenticationStatus.listen((status) {
+      if (status == AuthenticationStatus.unauthenticated) {
+        deleteAllData();
+      }
+    });
+  }
 
   final EventsDatabase _eventsDatabase;
 

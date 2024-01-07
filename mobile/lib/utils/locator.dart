@@ -53,18 +53,14 @@ void setupLocator() async {
 
   locator.registerSingleton<NetworkChecker>(NetworkCheckerImpl());
 
-  locator.registerSingletonAsync<EventsDatabase>(() async {
+  locator.registerSingletonAsync<LocalEventsRepository>(() async {
     final dir = await getApplicationDocumentsDirectory();
     final isar = await Isar.open(
       [EventCollectionSchema, VisitorCollectionSchema, QuestionCollectionSchema, AnswerCollectionSchema],
       directory: dir.path,
     );
-    return EventsDatabase(isar: isar);
-  });
-
-  locator.registerSingletonAsync<LocalEventsRepository>(() async {
-    final eventDatabase = await locator.getAsync<EventsDatabase>();
-    return LocalEventsRepositoryImpl(eventsDatabase: eventDatabase);
+    final eventsDatabase = EventsDatabase(isar: isar);
+    return LocalEventsRepositoryImpl(eventsDatabase: eventsDatabase);
   });
 
   locator.registerLazySingleton<Dio>(
@@ -85,15 +81,12 @@ void setupLocator() async {
       MockEventsRepo(),
     );
   } else {
-    locator.registerSingleton<AuthenticationService>(
-      AuthenticationService(
-        Dio(),
-        baseUrl: Constants.authenticationRepositoryBaseUrl,
-      ),
-    );
     locator.registerSingleton<AuthenticationRepository>(
       AuthenticationRepositoryImpl(
-        authenticationService: locator<AuthenticationService>(),
+        authenticationService: AuthenticationService(
+          Dio(),
+          baseUrl: Constants.authenticationRepositoryBaseUrl,
+        ),
       ),
     );
 
