@@ -47,7 +47,7 @@ export const EventCoverSheet: React.FC<Props> = ({onSave}) => {
                 <MultiStringQuestion title={'Подробное описание'}
                                      defaultValue={draft?.Description}
                                      onValueChange={(v) => setDraft(draft?.withDescription(v))}/>
-                {/*<ImageLoader title={'Обложка'}/>*/}
+                {/*<ImageLoader title={'Обложка'}/>   TODO */} 
                 <EventAdminSaveBtn onSave={onClickHandle}/>
             </Gapped>
         </ValidationContainer>

@@ -2,7 +2,7 @@
 
 namespace Web.Services;
 
-public interface IDraftEventService
+public interface IDraftEventsService
 {
     Task<DraftEvent?> FindDraftByUserIdAsync(string userId);
     Task UpdateDraft(DraftEvent draftEvent);

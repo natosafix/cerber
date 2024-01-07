@@ -16,15 +16,12 @@ public class EventsController : Controller
     private readonly IMapper mapper;
     private readonly IEventsService eventsService;
     private readonly IUserHelper userHelper;
-    private readonly IDraftEventService draftEventService;
 
-    public EventsController(IMapper mapper, IEventsService eventsService, IUserHelper userHelper,
-        IDraftEventService draftEventService)
+    public EventsController(IMapper mapper, IEventsService eventsService, IUserHelper userHelper)
     {
         this.mapper = mapper;
         this.eventsService = eventsService;
         this.userHelper = userHelper;
-        this.draftEventService = draftEventService;
     }
 
     [AllowAnonymous]

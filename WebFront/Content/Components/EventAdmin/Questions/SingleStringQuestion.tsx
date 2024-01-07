@@ -48,12 +48,13 @@ export const SingleStringQuestion: React.FC<Props> = (
     return (
         <Gapped gap={Number.parseInt(variables.titleContentGap)} vertical={true}>
             <Label label={title} size={size}/>
-            <ValidationWrapper validationInfo={validate(value)}>
+            <ValidationWrapper validationInfo={disabled ? null : validate(value)}>
                 <Input className={styles.questionInput}
                        value={value}
                        onValueChange={changeValue}
                        placeholder={placeholder}
-                       disabled={disabled}/>
+                       disabled={disabled}
+                />
             </ValidationWrapper>
         </Gapped>
     );
