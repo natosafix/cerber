@@ -4,16 +4,12 @@
     .lineWrapper {
         display: flex;
         
-        .inputWrapper {
-            width: 65%;
+        .input {
+            width: 100%;
 
             display: flex;
             justify-content: center;
             align-items: center;
-
-            .input {
-                width: 100%;
-            }
         }
 
         .deleteBtnWrapper {

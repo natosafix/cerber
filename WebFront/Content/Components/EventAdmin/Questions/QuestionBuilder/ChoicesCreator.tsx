@@ -2,10 +2,31 @@
 import {Button, Gapped, Input} from '@skbkontur/react-ui';
 import {Label} from '../../../../Entries/Shared/Label/Label';
 import styles from './QuestionBuilder.scss';
+import {ValidationWrapper} from "@skbkontur/react-ui-validations";
+import {Nullable} from "@skbkontur/react-ui/typings/utility-types";
+import {ValidationInfo} from "@skbkontur/react-ui-validations/src/ValidationWrapper";
 
 interface Props {
     srcChoices: string[];
     setSrcChoices: (string: string[]) => void;
+}
+
+function validate(value: string): Nullable<ValidationInfo> {
+    if (value === null || value.length == 0) {
+        return {message: 'Поле обязательно для заполнения', type: 'submit'};
+    } else if (value.length >= 100) {
+        return {message: 'Не более 100 символов', type: 'submit'};
+    }
+
+    return null;
+}
+
+function validateChoicesExists(choices: string[]): Nullable<ValidationInfo> {
+    if (!choices || choices.length === 0) {
+        return {message: 'Требуется хотя бы один варинат ответа', type: 'submit'};
+    }
+
+    return null;
 }
 
 export const ChoicesCreator: React.FC<Props> = ({srcChoices, setSrcChoices}) => {
@@ -34,13 +55,13 @@ export const ChoicesCreator: React.FC<Props> = ({srcChoices, setSrcChoices}) => 
             <Label label={'Варинаты ответа'} size={'small'}/>
             {choices.map((choice, i) =>
                 <div className={styles.lineWrapper}>
-                    <div className={styles.inputWrapper}>
+                    <ValidationWrapper validationInfo={validate(choice)}>
                         <Input size={'small'}
                                className={styles.input}
                                value={choice}
                                onValueChange={(v) => onValueChange(v, i)}
                         />
-                    </div>
+                    </ValidationWrapper>
                     <div className={styles.deleteBtnWrapper}>
                         <Button use={'text'} borderless={true} size={'small'} onClick={() => onRemove(i)}>
                             Удалить вариант
@@ -48,7 +69,9 @@ export const ChoicesCreator: React.FC<Props> = ({srcChoices, setSrcChoices}) => 
                     </div>
                 </div>
             )}
-            <Button use={'default'} onClick={onAdd}>Добавить</Button>
+            <ValidationWrapper validationInfo={validateChoicesExists(choices)}>
+                <Button use={'default'} onClick={onAdd}>Добавить</Button>
+            </ValidationWrapper>
         </Gapped>
     );
 };
