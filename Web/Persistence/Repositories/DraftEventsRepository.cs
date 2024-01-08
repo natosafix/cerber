@@ -7,7 +7,7 @@ public interface IDraftEventsRepository
 {
     Task<DraftEvent?> FindDraftAsync(string ownerId);
     Task UpdateAsync(DraftEvent draftEvent);
-    Task<DraftEvent?> AddAsync(string ownerId);
+    Task<DraftEvent?> CreateAsync(string ownerId);
 }
 
 public class DraftEventsRepository : IDraftEventsRepository
@@ -46,7 +46,7 @@ public class DraftEventsRepository : IDraftEventsRepository
         }
     }
 
-    public async Task<DraftEvent?> AddAsync(string ownerId)
+    public async Task<DraftEvent?> CreateAsync(string ownerId)
     {
         var newDraft = new DraftEvent() {OwnerId = ownerId};
         var result = await dbContext.DraftEvents.AddAsync(newDraft);

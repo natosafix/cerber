@@ -44,7 +44,7 @@ public class EventAdminController : Controller
         var userId = userHelper.UserId;
         if (draftEvent.OwnerId != userId)
             return BadRequest();
-        await draftEventsService.UpdateDraft(draftEvent);
+        await draftEventsService.UpdateDraftAsync(draftEvent);
         return Ok();
     }
 
@@ -56,7 +56,7 @@ public class EventAdminController : Controller
         if (draftEvent is null)
             return BadRequest();
 
-        var questions = await draftQuestionsService.GetDraftQuestionsByDraftEventId(draftEvent.Id);
+        var questions = await draftQuestionsService.GetDraftQuestionsByDraftEventIdAsync(draftEvent.Id);
         var result = mapper.Map<DraftQuestionDto[]>(questions);
         return Ok(result);
     }
@@ -73,7 +73,7 @@ public class EventAdminController : Controller
             return BadRequest();
 
         var questions = mapper.Map<DraftQuestion[]>(draftQuestions);
-        await draftQuestionsService.SetDraftQuestions(questions, draftEvent.Id);
+        await draftQuestionsService.SetDraftQuestionsAsync(questions, draftEvent.Id);
         return Ok();
     }
 
