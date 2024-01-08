@@ -17,13 +17,13 @@ public class DraftEventsService : IDraftEventsService
         return await draftEventsRepository.FindDraftAsync(userId);
     }
 
-    public async Task UpdateDraft(DraftEvent draftEvent)
+    public async Task UpdateDraftAsync(DraftEvent draftEvent)
     {
         await draftEventsRepository.UpdateAsync(draftEvent);
     }
 
     public async Task<DraftEvent?> CreateDraftAsync(string ownerId)
     {
-        return await draftEventsRepository.AddAsync(ownerId);
+        return await draftEventsRepository.CreateAsync(ownerId);
     }
 }

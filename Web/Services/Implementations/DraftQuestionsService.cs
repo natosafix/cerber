@@ -13,12 +13,12 @@ public class DraftQuestionsService : IDraftQuestionsService
         this.draftQuestionRepository = draftQuestionRepository;
     }
 
-    public async Task<IReadOnlyCollection<DraftQuestion>> GetDraftQuestionsByDraftEventId(int draftEventId)
+    public async Task<IReadOnlyCollection<DraftQuestion>> GetDraftQuestionsByDraftEventIdAsync(int draftEventId)
     {
-        return await draftQuestionRepository.GetDraftQuestionsByDraftEventId(draftEventId);
+        return await draftQuestionRepository.GetDraftQuestionsByDraftEventIdAsync(draftEventId);
     }
 
-    public async Task SetDraftQuestions(IReadOnlyCollection<DraftQuestion> draftQuestions, int dstDraftEventId)
+    public async Task SetDraftQuestionsAsync(IReadOnlyCollection<DraftQuestion> draftQuestions, int dstDraftEventId)
     {
         foreach (var question in draftQuestions)
         {
@@ -27,6 +27,6 @@ public class DraftQuestionsService : IDraftQuestionsService
                 question.AnswerChoices = null;
         }
 
-        await draftQuestionRepository.SetDraftQuestions(draftQuestions);
+        await draftQuestionRepository.SetDraftQuestionsAsync(draftQuestions);
     }
 }

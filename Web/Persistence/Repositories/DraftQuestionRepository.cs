@@ -5,8 +5,8 @@ namespace Web.Persistence.Repositories;
 
 public interface IDraftQuestionRepository
 {
-    Task<IReadOnlyCollection<DraftQuestion>> GetDraftQuestionsByDraftEventId(int draftEventId);
-    Task SetDraftQuestions(IReadOnlyCollection<DraftQuestion> draftQuestions);
+    Task<IReadOnlyCollection<DraftQuestion>> GetDraftQuestionsByDraftEventIdAsync(int draftEventId);
+    Task SetDraftQuestionsAsync(IReadOnlyCollection<DraftQuestion> draftQuestions);
 }
 
 public class DraftQuestionRepository : IDraftQuestionRepository
@@ -18,14 +18,14 @@ public class DraftQuestionRepository : IDraftQuestionRepository
         this.dbContext = dbContext;
     }
 
-    public async Task<IReadOnlyCollection<DraftQuestion>> GetDraftQuestionsByDraftEventId(int draftEventId)
+    public async Task<IReadOnlyCollection<DraftQuestion>> GetDraftQuestionsByDraftEventIdAsync(int draftEventId)
     {
         return await dbContext.DraftQuestions
             .Where(dq => dq.DraftEventId == draftEventId)
             .ToListAsync();
     }
 
-    public async Task SetDraftQuestions(IReadOnlyCollection<DraftQuestion> draftQuestions)
+    public async Task SetDraftQuestionsAsync(IReadOnlyCollection<DraftQuestion> draftQuestions)
     {
         var draftEventId = draftQuestions.First().DraftEventId;
 
