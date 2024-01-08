@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:project/data/datasources/remote/events_service/events_service.dart';
+import 'package:project/data/datasources/remote/events_service/mappers/answer_mapper.dart';
 import 'package:project/data/datasources/remote/events_service/mappers/event_mapper.dart';
 import 'package:project/data/datasources/remote/events_service/mappers/question_mapper.dart';
 import 'package:project/data/datasources/remote/events_service/mappers/visitor_mapper.dart';
@@ -37,6 +38,7 @@ class RemoteEventsRepositoryImpl implements RemoteEventsRepository {
     try {
       final visitorResponse = await _eventsService.getVisitor(visitorId);
       final questionsResponse = await _eventsService.getQuestions(eventId);
+
       return _matchQuestionsWithVisitors([visitorResponse], questionsResponse).first;
     } on DioException catch (_) {
       return null;
@@ -61,8 +63,14 @@ class RemoteEventsRepositoryImpl implements RemoteEventsRepository {
   ) {
     final questions = questionsApi.map((e) => e.toModel());
 
-    Question questionGetter(int questionId) => questions.firstWhere((q) => q.id == questionId);
+    return visitorsApi.map((visitorApi) {
+      final answers = visitorApi.answers.map((e) => e.toModel());
+      final questionsMap = {
+        for (final question in questions) question: answers.firstWhere((a) => a.questionId == question.id)
+      };
+      return visitorApi.toModel(questionsMap);
+    }).toList();
+  }
 
-    return visitorsApi.map((e) => e.toModel(questionGetter)).toList();
   }
 }

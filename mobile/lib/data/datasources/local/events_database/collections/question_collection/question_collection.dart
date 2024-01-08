@@ -14,10 +14,14 @@ class QuestionCollection {
 
   String question;
 
+  @Index()
+  int eventId;
+
   QuestionCollection({
     required this.id,
     required this.questionTypeDb,
     required this.question,
+    required this.eventId,
   });
 
   static Question toModel(QuestionCollection questionCollection) {
@@ -28,11 +32,12 @@ class QuestionCollection {
     );
   }
 
-  factory QuestionCollection.fromModel(Question question) {
+  factory QuestionCollection.fromModel(Question question, int eventId) {
     return QuestionCollection(
       id: question.id,
       questionTypeDb: QuestionTypeDb.fromModel(question.questionType),
       question: question.question,
+      eventId: eventId,
     );
   }
 }

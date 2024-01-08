@@ -1,6 +1,7 @@
 import 'package:isar/isar.dart';
 import 'package:project/data/datasources/local/events_database/collections/question_collection/question_collection.dart';
 import 'package:project/domain/models/answer.dart';
+import 'package:project/domain/models/question.dart';
 
 part 'answer_collection.g.dart';
 
@@ -16,17 +17,21 @@ class AnswerCollection {
   AnswerCollection();
 
   static Answer toModel(AnswerCollection answerCollection) {
-    answerCollection.question.loadSync();
     return Answer(
       id: answerCollection.id,
       answer: answerCollection.answer,
-      question: QuestionCollection.toModel(answerCollection.question.value!),
+      questionId: answerCollection.getQuestion().id,
     );
   }
 
-  AnswerCollection.fromModel(Answer answer) {
+  AnswerCollection.fromModel(Answer answer, Question question, int eventId) {
     id = answer.id;
     this.answer = answer.answer;
-    question.value = QuestionCollection.fromModel(answer.question);
+    this.question.value = QuestionCollection.fromModel(question, eventId);
+  }
+
+  QuestionCollection getQuestion() {
+    question.loadSync();
+    return question.value!;
   }
 }

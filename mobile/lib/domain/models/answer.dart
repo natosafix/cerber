@@ -1,13 +1,11 @@
-import 'package:project/domain/models/question.dart';
-
 class Answer {
   final int id;
   final String answer;
-  final Question question;
+  final int questionId;
 
   Answer({
     required this.id,
     required this.answer,
-    required this.question,
+    required this.questionId,
   });
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:project/data/datasources/local/events_database/collections/answer_collection/answer_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/event_collection/event_collection.dart';
+import 'package:project/data/datasources/local/events_database/collections/question_collection/question_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/visitor_collection/visitor_collection.dart';
 import 'package:project/data/datasources/local/events_database/events_database.dart';
 import 'package:project/domain/models/event.dart';
@@ -44,23 +45,27 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
     if (visitor == null) return null;
 
     final answersCollections = await _eventsDatabase.findAnswers(visitor.answersIds);
-    final answers = answersCollections.map((e) => AnswerCollection.toModel(e!)).toList();
 
-    return VisitorCollection.toModel(visitor, answers);
+    final questionsMap = {
+      for (final answer in answersCollections)
+        QuestionCollection.toModel(answer!.getQuestion()): AnswerCollection.toModel(answer)
+    };
+
+    return VisitorCollection.toModel(visitor, questionsMap);
   }
 
   @override
   Future<void> saveEvents(List<Event> events) async {
-    _eventsDatabase.addEvents(events.map(EventCollection.fromModel).toList());
+    await _eventsDatabase.addEvents(events.map(EventCollection.fromModel).toList());
   }
 
   @override
   Future<void> saveVisitors(List<Visitor> visitors, int eventId) async {
     final answers = visitors
-        .map((e) => e.answers)
-        .expand((e) => e)
+        .map((e) => e.questionsMap)
+        .expand((e) => e.entries)
         .map(
-          (e) => AnswerCollection.fromModel(e),
+          (e) => AnswerCollection.fromModel(e.value, e.key, eventId),
         )
         .toList();
     await _eventsDatabase.addAnswers(answers);
@@ -73,7 +78,7 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
 
   @override
   Future<void> deleteEventsByIds(List<int> ids) async {
-    _eventsDatabase.deleteEventsByIds(ids);
+    await _eventsDatabase.deleteEventsByIds(ids);
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:isar/isar.dart';
 import 'package:project/data/datasources/local/events_database/collections/visitor_collection/ticket_embedded.dart';
 import 'package:project/domain/models/answer.dart';
+import 'package:project/domain/models/question.dart';
 import 'package:project/domain/models/visitor.dart';
 import 'package:project/utils/extensions/fast_hash_x.dart';
 
@@ -27,10 +28,10 @@ class VisitorCollection {
     required this.ticket,
   });
 
-  static Visitor toModel(VisitorCollection visitor, List<Answer> answers) {
+  static Visitor toModel(VisitorCollection visitor, Map<Question, Answer> questionsMap) {
     return Visitor(
       id: visitor.visitorId,
-      answers: answers,
+      questionsMap: questionsMap,
       ticket: TicketEmbedded.toModel(visitor.ticket),
     );
   }
@@ -39,7 +40,7 @@ class VisitorCollection {
     return VisitorCollection(
       visitorId: visitor.id,
       eventId: eventId,
-      answersIds: visitor.answers.map((a) => a.id).toList(),
+      answersIds: visitor.questionsMap.values.map((a) => a.id).toList(),
       ticket: TicketEmbedded.fromModel(visitor.ticket),
     );
   }

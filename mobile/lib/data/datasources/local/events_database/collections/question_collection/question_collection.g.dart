@@ -18,13 +18,18 @@ const QuestionCollectionSchema = CollectionSchema(
   name: r'QuestionCollection',
   id: -6570938562249556041,
   properties: {
-    r'question': PropertySchema(
+    r'eventId': PropertySchema(
       id: 0,
+      name: r'eventId',
+      type: IsarType.long,
+    ),
+    r'question': PropertySchema(
+      id: 1,
       name: r'question',
       type: IsarType.string,
     ),
     r'questionTypeDb': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'questionTypeDb',
       type: IsarType.string,
       enumMap: _QuestionCollectionquestionTypeDbEnumValueMap,
@@ -35,7 +40,21 @@ const QuestionCollectionSchema = CollectionSchema(
   deserialize: _questionCollectionDeserialize,
   deserializeProp: _questionCollectionDeserializeProp,
   idName: r'id',
-  indexes: {},
+  indexes: {
+    r'eventId': IndexSchema(
+      id: -2707901133518603130,
+      name: r'eventId',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'eventId',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    )
+  },
   links: {},
   embeddedSchemas: {},
   getId: _questionCollectionGetId,
@@ -61,8 +80,9 @@ void _questionCollectionSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.question);
-  writer.writeString(offsets[1], object.questionTypeDb.name);
+  writer.writeLong(offsets[0], object.eventId);
+  writer.writeString(offsets[1], object.question);
+  writer.writeString(offsets[2], object.questionTypeDb.name);
 }
 
 QuestionCollection _questionCollectionDeserialize(
@@ -72,10 +92,11 @@ QuestionCollection _questionCollectionDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = QuestionCollection(
+    eventId: reader.readLong(offsets[0]),
     id: id,
-    question: reader.readString(offsets[0]),
+    question: reader.readString(offsets[1]),
     questionTypeDb: _QuestionCollectionquestionTypeDbValueEnumMap[
-            reader.readStringOrNull(offsets[1])] ??
+            reader.readStringOrNull(offsets[2])] ??
         QuestionTypeDb.text,
   );
   return object;
@@ -89,8 +110,10 @@ P _questionCollectionDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 1:
+      return (reader.readString(offset)) as P;
+    case 2:
       return (_QuestionCollectionquestionTypeDbValueEnumMap[
               reader.readStringOrNull(offset)] ??
           QuestionTypeDb.text) as P;
@@ -129,6 +152,15 @@ extension QuestionCollectionQueryWhereSort
   QueryBuilder<QuestionCollection, QuestionCollection, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterWhere>
+      anyEventId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'eventId'),
+      );
     });
   }
 }
@@ -202,10 +234,159 @@ extension QuestionCollectionQueryWhere
       ));
     });
   }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterWhereClause>
+      eventIdEqualTo(int eventId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'eventId',
+        value: [eventId],
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterWhereClause>
+      eventIdNotEqualTo(int eventId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'eventId',
+              lower: [],
+              upper: [eventId],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'eventId',
+              lower: [eventId],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'eventId',
+              lower: [eventId],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'eventId',
+              lower: [],
+              upper: [eventId],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterWhereClause>
+      eventIdGreaterThan(
+    int eventId, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'eventId',
+        lower: [eventId],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterWhereClause>
+      eventIdLessThan(
+    int eventId, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'eventId',
+        lower: [],
+        upper: [eventId],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterWhereClause>
+      eventIdBetween(
+    int lowerEventId,
+    int upperEventId, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'eventId',
+        lower: [lowerEventId],
+        includeLower: includeLower,
+        upper: [upperEventId],
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension QuestionCollectionQueryFilter
     on QueryBuilder<QuestionCollection, QuestionCollection, QFilterCondition> {
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      eventIdEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'eventId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      eventIdGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'eventId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      eventIdLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'eventId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      eventIdBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'eventId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
       idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
@@ -544,6 +725,20 @@ extension QuestionCollectionQueryLinks
 extension QuestionCollectionQuerySortBy
     on QueryBuilder<QuestionCollection, QuestionCollection, QSortBy> {
   QueryBuilder<QuestionCollection, QuestionCollection, QAfterSortBy>
+      sortByEventId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'eventId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterSortBy>
+      sortByEventIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'eventId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterSortBy>
       sortByQuestion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'question', Sort.asc);
@@ -574,6 +769,20 @@ extension QuestionCollectionQuerySortBy
 
 extension QuestionCollectionQuerySortThenBy
     on QueryBuilder<QuestionCollection, QuestionCollection, QSortThenBy> {
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterSortBy>
+      thenByEventId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'eventId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterSortBy>
+      thenByEventIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'eventId', Sort.desc);
+    });
+  }
+
   QueryBuilder<QuestionCollection, QuestionCollection, QAfterSortBy>
       thenById() {
     return QueryBuilder.apply(this, (query) {
@@ -620,6 +829,13 @@ extension QuestionCollectionQuerySortThenBy
 extension QuestionCollectionQueryWhereDistinct
     on QueryBuilder<QuestionCollection, QuestionCollection, QDistinct> {
   QueryBuilder<QuestionCollection, QuestionCollection, QDistinct>
+      distinctByEventId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'eventId');
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QDistinct>
       distinctByQuestion({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'question', caseSensitive: caseSensitive);
@@ -640,6 +856,12 @@ extension QuestionCollectionQueryProperty
   QueryBuilder<QuestionCollection, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<QuestionCollection, int, QQueryOperations> eventIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'eventId');
     });
   }
 
