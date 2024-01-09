@@ -21,6 +21,11 @@ const AnswerCollectionSchema = CollectionSchema(
       id: 0,
       name: r'answer',
       type: IsarType.string,
+    ),
+    r'questionId': PropertySchema(
+      id: 1,
+      name: r'questionId',
+      type: IsarType.long,
     )
   },
   estimateSize: _answerCollectionEstimateSize,
@@ -29,14 +34,7 @@ const AnswerCollectionSchema = CollectionSchema(
   deserializeProp: _answerCollectionDeserializeProp,
   idName: r'id',
   indexes: {},
-  links: {
-    r'question': LinkSchema(
-      id: -7310773584643426034,
-      name: r'question',
-      target: r'QuestionCollection',
-      single: true,
-    )
-  },
+  links: {},
   embeddedSchemas: {},
   getId: _answerCollectionGetId,
   getLinks: _answerCollectionGetLinks,
@@ -61,6 +59,7 @@ void _answerCollectionSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.answer);
+  writer.writeLong(offsets[1], object.questionId);
 }
 
 AnswerCollection _answerCollectionDeserialize(
@@ -69,9 +68,11 @@ AnswerCollection _answerCollectionDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = AnswerCollection();
-  object.answer = reader.readString(offsets[0]);
-  object.id = id;
+  final object = AnswerCollection(
+    answer: reader.readString(offsets[0]),
+    id: id,
+    questionId: reader.readLong(offsets[1]),
+  );
   return object;
 }
 
@@ -84,6 +85,8 @@ P _answerCollectionDeserializeProp<P>(
   switch (propertyId) {
     case 0:
       return (reader.readString(offset)) as P;
+    case 1:
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -94,15 +97,11 @@ Id _answerCollectionGetId(AnswerCollection object) {
 }
 
 List<IsarLinkBase<dynamic>> _answerCollectionGetLinks(AnswerCollection object) {
-  return [object.question];
+  return [];
 }
 
 void _answerCollectionAttach(
-    IsarCollection<dynamic> col, Id id, AnswerCollection object) {
-  object.id = id;
-  object.question
-      .attach(col, col.isar.collection<QuestionCollection>(), r'question', id);
-}
+    IsarCollection<dynamic> col, Id id, AnswerCollection object) {}
 
 extension AnswerCollectionQueryWhereSort
     on QueryBuilder<AnswerCollection, AnswerCollection, QWhere> {
@@ -376,27 +375,69 @@ extension AnswerCollectionQueryFilter
       ));
     });
   }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
+      questionIdEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'questionId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
+      questionIdGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'questionId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
+      questionIdLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'questionId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
+      questionIdBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'questionId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension AnswerCollectionQueryObject
     on QueryBuilder<AnswerCollection, AnswerCollection, QFilterCondition> {}
 
 extension AnswerCollectionQueryLinks
-    on QueryBuilder<AnswerCollection, AnswerCollection, QFilterCondition> {
-  QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
-      question(FilterQuery<QuestionCollection> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'question');
-    });
-  }
-
-  QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
-      questionIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'question', 0, true, 0, true);
-    });
-  }
-}
+    on QueryBuilder<AnswerCollection, AnswerCollection, QFilterCondition> {}
 
 extension AnswerCollectionQuerySortBy
     on QueryBuilder<AnswerCollection, AnswerCollection, QSortBy> {
@@ -411,6 +452,20 @@ extension AnswerCollectionQuerySortBy
       sortByAnswerDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'answer', Sort.desc);
+    });
+  }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QAfterSortBy>
+      sortByQuestionId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'questionId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QAfterSortBy>
+      sortByQuestionIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'questionId', Sort.desc);
     });
   }
 }
@@ -443,6 +498,20 @@ extension AnswerCollectionQuerySortThenBy
       return query.addSortBy(r'id', Sort.desc);
     });
   }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QAfterSortBy>
+      thenByQuestionId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'questionId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QAfterSortBy>
+      thenByQuestionIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'questionId', Sort.desc);
+    });
+  }
 }
 
 extension AnswerCollectionQueryWhereDistinct
@@ -451,6 +520,13 @@ extension AnswerCollectionQueryWhereDistinct
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'answer', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QDistinct>
+      distinctByQuestionId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'questionId');
     });
   }
 }
@@ -466,6 +542,12 @@ extension AnswerCollectionQueryProperty
   QueryBuilder<AnswerCollection, String, QQueryOperations> answerProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'answer');
+    });
+  }
+
+  QueryBuilder<AnswerCollection, int, QQueryOperations> questionIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'questionId');
     });
   }
 }

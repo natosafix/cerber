@@ -28,10 +28,10 @@ class VisitorCollection {
     required this.ticket,
   });
 
-  static Visitor toModel(VisitorCollection visitor, Map<Question, Answer> questionsMap) {
+  static Visitor toModel(VisitorCollection visitor, Map<Question, Answer> answers) {
     return Visitor(
       id: visitor.visitorId,
-      questionsMap: questionsMap,
+      questionsMap: answers,
       ticket: TicketEmbedded.toModel(visitor.ticket),
     );
   }

@@ -46,7 +46,7 @@ class RemoteEventsRepositoryImpl implements RemoteEventsRepository {
   }
 
   @override
-  Future<Result<List<Visitor>, DioException>> downloadVisitors(int eventId) async {
+  Future<Result<List<Visitor>, DioException>> getVisitors(int eventId) async {
     try {
       final questionsResponse = await _eventsService.getQuestions(eventId);
       final visitorsResponse = await _eventsService.getVisitors(eventId);
@@ -72,5 +72,13 @@ class RemoteEventsRepositoryImpl implements RemoteEventsRepository {
     }).toList();
   }
 
+  @override
+  Future<List<Question>?> getQuestions(int eventId) async {
+    try {
+      final questionsApi = await _eventsService.getQuestions(eventId);
+      return questionsApi.map((e) => e.toModel()).toList();
+    } on DioException catch (_) {
+      return null;
+    }
   }
 }

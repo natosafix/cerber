@@ -8,7 +8,7 @@ import 'package:project/domain/repositories/remote_events_repository.dart';
 
 abstract class CompoundEventsRepository implements EventsRepository {
   // downloads from remote repo and saves to local
-  Future<void> downloadVisitorsDatabase(int eventId, StreamSink<DownloadStatus> status);
+  Future<void> downloadDatabase(int eventId, StreamSink<DownloadStatus> status);
 
   @protected
   abstract final LocalEventsRepository localEventsRepository;

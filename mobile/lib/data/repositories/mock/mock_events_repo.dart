@@ -28,10 +28,16 @@ class MockEventsRepo implements RemoteEventsRepository {
   }
 
   @override
-  Future<Result<List<Visitor>, DioException>> downloadVisitors(int eventId) async {
+  Future<Result<List<Visitor>, DioException>> getVisitors(int eventId) async {
     await Future.delayed(const Duration(seconds: 1));
 
     return Success(mockVisitors);
+  }
+
+  @override
+  Future<List<Question>?> getQuestions(int eventId) async {
+    await Future.delayed(const Duration(seconds: 1));
+    return [];
   }
 
   static List<Event> mockEvents = [

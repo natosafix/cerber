@@ -44,7 +44,7 @@ class EventsDatabase {
     });
   }
 
-  Future<void> deleteEventsByIds(List<int> eventsIds) async {
+  Future<void> deleteEventsByIds(List<Id> eventsIds) async {
     await _isar.writeTxn(() async {
       await _events.deleteAll(eventsIds);
     });
@@ -72,10 +72,8 @@ class EventsDatabase {
   }
 
   Future<void> addAnswers(List<AnswerCollection> answers) async {
-    final questions = answers.map((e) => e.question.value!).toList();
-    _isar.writeTxnSync(() {
-      _questions.putAllSync(questions);
-      _answers.putAllSync(answers);
+    await _isar.writeTxn(() async {
+      _answers.putAll(answers);
     });
   }
 
@@ -95,6 +93,22 @@ class EventsDatabase {
         _visitors.clear(),
         _questions.clear(),
       ]);
+    });
+  }
+
+  Future<List<QuestionCollection>> getQuestions(Id eventId) async {
+    return await _questions.where().eventIdEqualTo(eventId).findAll();
+  }
+
+  Future<void> addQuestions(List<QuestionCollection> questions) async {
+    await _isar.writeTxn(() async {
+      _questions.putAll(questions);
+    });
+  }
+
+  Future<void> deleteQuestions(Id eventId) async {
+    await _isar.writeTxn(() async {
+      await _questions.where().eventIdEqualTo(eventId).deleteAll();
     });
   }
 }

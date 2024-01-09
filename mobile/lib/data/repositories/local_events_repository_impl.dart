@@ -6,6 +6,7 @@ import 'package:project/data/datasources/local/events_database/collections/quest
 import 'package:project/data/datasources/local/events_database/collections/visitor_collection/visitor_collection.dart';
 import 'package:project/data/datasources/local/events_database/events_database.dart';
 import 'package:project/domain/models/event.dart';
+import 'package:project/domain/models/question.dart';
 import 'package:project/domain/models/visitor.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_status.dart';
@@ -44,11 +45,13 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
     final visitor = await _eventsDatabase.findVisitor(visitorId, eventId);
     if (visitor == null) return null;
 
-    final answersCollections = await _eventsDatabase.findAnswers(visitor.answersIds);
+    final answers = await _eventsDatabase.findAnswers(visitor.answersIds);
+    final questions = await _eventsDatabase.getQuestions(eventId);
 
     final questionsMap = {
-      for (final answer in answersCollections)
-        QuestionCollection.toModel(answer!.getQuestion()): AnswerCollection.toModel(answer)
+      for (final answer in answers)
+        QuestionCollection.toModel(questions.firstWhere((q) => q.id == answer!.questionId)):
+            AnswerCollection.toModel(answer!)
     };
 
     return VisitorCollection.toModel(visitor, questionsMap);
@@ -62,10 +65,10 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
   @override
   Future<void> saveVisitors(List<Visitor> visitors, int eventId) async {
     final answers = visitors
-        .map((e) => e.questionsMap)
-        .expand((e) => e.entries)
+        .map((visitor) => visitor.questionsMap.values)
+        .expand((e) => e)
         .map(
-          (e) => AnswerCollection.fromModel(e.value, e.key, eventId),
+          (answer) => AnswerCollection.fromModel(answer),
         )
         .toList();
     await _eventsDatabase.addAnswers(answers);
@@ -101,5 +104,22 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
   @override
   Future<void> deleteAllData() async {
     await _eventsDatabase.deleteAllData();
+  }
+
+  @override
+  Future<List<Question>> getQuestions(int eventId) async {
+    final questions = await _eventsDatabase.getQuestions(eventId);
+    return questions.map((e) => QuestionCollection.toModel(e)).toList();
+  }
+
+  @override
+  Future<void> saveQuestions(List<Question> questions, int eventId) async {
+    final questionsCollections = questions.map((e) => QuestionCollection.fromModel(e, eventId)).toList();
+    await _eventsDatabase.addQuestions(questionsCollections);
+  }
+
+  @override
+  Future<void> deleteQuestions(int eventId) async {
+    await _eventsDatabase.deleteQuestions(eventId);
   }
 }

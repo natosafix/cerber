@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:project/domain/models/event.dart';
+import 'package:project/domain/models/question.dart';
 import 'package:project/domain/models/visitor.dart';
 import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
 import 'package:project/domain/repositories/compound_events_repository/download_status.dart';
@@ -88,20 +89,42 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
   }
 
   @override
-  Future<void> downloadVisitorsDatabase(int eventId, StreamSink<DownloadStatus> status) async {
+  Future<void> downloadDatabase(int eventId, StreamSink<DownloadStatus> status) async {
     status.add(DownloadStatus.inProcess);
 
-    final downloadResult = await remoteEventsRepository.downloadVisitors(eventId);
+    final visitorsResult = await remoteEventsRepository.getVisitors(eventId);
 
-    if (downloadResult.isFailure) {
+    if (visitorsResult.isFailure) {
       return status.add(DownloadStatus.failure);
     }
 
-    final visitors = downloadResult.success;
+    final visitors = visitorsResult.success;
 
     await localEventsRepository.deleteVisitors(eventId);
     await localEventsRepository.saveVisitors(visitors, eventId);
 
+    final questions = await remoteEventsRepository.getQuestions(eventId);
+
+    if (questions == null) {
+      return status.add(DownloadStatus.failure);
+    }
+
+    await localEventsRepository.deleteQuestions(eventId);
+    await localEventsRepository.saveQuestions(questions, eventId);
+
     status.add(DownloadStatus.success);
+  }
+
+  @override
+  Future<List<Question>?> getQuestions(int eventId) async {
+    final localQuestions = await localEventsRepository.getQuestions(eventId);
+
+    if (localQuestions != null) return localQuestions;
+
+    if (_networkAvailable) {
+      return await remoteEventsRepository.getQuestions(eventId);
+    }
+
+    return null;
   }
 }

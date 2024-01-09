@@ -50,7 +50,7 @@ class EventDetailBloc extends Bloc<EventDetailEvent, EventDetailState> {
   }
 
   void _onDownloadDatabase(DownloadDatabase event, Emitter<EventDetailState> emit) {
-    _compoundEventsRepository.downloadVisitorsDatabase(_event.id, _downloadStatusController.sink);
+    _compoundEventsRepository.downloadDatabase(_event.id, _downloadStatusController.sink);
   }
 
   @override
