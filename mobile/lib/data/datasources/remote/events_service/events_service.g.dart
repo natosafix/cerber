@@ -85,7 +85,7 @@ class _EventsService implements EventsService {
   }
 
   @override
-  Future<VisitorApiResponse> getVisitor(String customer) async {
+  Future<VisitorApiResponse> getVisitor(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -98,7 +98,7 @@ class _EventsService implements EventsService {
     )
             .compose(
               _dio.options,
-              '/orders/${customer}',
+              '/orders/${id}',
               queryParameters: queryParameters,
               data: _data,
             )

@@ -23,7 +23,7 @@ abstract class EventsService {
 
   @GET('/orders/{id}')
   Future<VisitorApiResponse> getVisitor(
-    @Path('id') String customer,
+    @Path('id') String id,
   );
 
   @GET('/questions')
