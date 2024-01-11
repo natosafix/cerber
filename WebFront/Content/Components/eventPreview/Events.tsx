@@ -1,20 +1,22 @@
-import Event  from './event/Event';
-import { IEvent } from './models/index'
-import React from 'react';
+// Events.tsx
 
+import Event from './event/Event';
+import { IEvent } from './models';
+import React from 'react';
+import styles from './events.scss'
 
 interface IProps {
-  events: IEvent[];
+    events: IEvent[];
 }
 
 const Events = ({ events }: IProps) => {
-  return (
-      <div>
-        {events?.map((p) => (
-            <Event event={p} key={p.img} />
-        ))}
-      </div>
-  );
+    return (
+        <div className={styles.eventsWrapper}>
+            {events?.map((p) => (
+                <Event event={p} key={p.img} />
+            ))}
+        </div>
+    );
 };
 
-export default Events
+export default Events;

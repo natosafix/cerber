@@ -1,13 +1,45 @@
-﻿
-.divWrapper{
-  width: 25%;
-  height: 25%;
+﻿.eventWrapper {
+  width: 45vh;
+  height: 35vh; 
+  display: flex;
+  flex-direction: column;
+  margin-right: 5vh;
+  margin-bottom: 5vh;
+  background-color: white;
+  border-radius: 25px;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
 }
 
 .imgWrapper {
-  width: 10%;
-  height: 10%;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
+  flex: 1;
+  overflow: hidden;
+  border-radius: 10px; /* Задайте радиус закругления по вашему вкусу */
 }
+
+.imgWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 25px; /* Согласуйте с радиусом закругления .imgWrapper */
+}
+
+.textWrapper {
+  height: 20%;
+  padding: 10px;
+  background-color: white; /* Прозрачный фон для текста */
+  color: black; /* Цвет текста */
+  border-radius: 25px;
+  align-content: center;
+}
+
+.eventLink {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer; /* Изменение курсора на указатель при наведении */
+}
+
+.eventWrapper:hover {
+  /* Дополнительные стили при наведении на блок */
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3); /* Пример: добавление тени */
+}
+

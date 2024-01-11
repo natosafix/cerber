@@ -12,7 +12,7 @@ onDomContentLoaded(() =>
         <CerberThemeProvider>
             <Header />
             <EventsProvider>
-                <EventPreview />
+                <EventPreview/>
             </EventsProvider>
         </CerberThemeProvider>,
         document.getElementById('index'),

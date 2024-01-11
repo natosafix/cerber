@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import Events from './Events';
 import { useEvents } from './event-context';
+import styles from './eventPreview.scss'
 
 
 export const EventPreview: React.FC = () => {
@@ -13,7 +14,6 @@ export const EventPreview: React.FC = () => {
 
     return (
         <div>
-            <p>Мероприятий найдено: {events?.length}</p>
             <Events events={events} />
         </div>
     );
