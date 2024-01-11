@@ -1,21 +1,30 @@
-﻿import React, { useRef, useState } from 'react';
-import { ValidationContainer } from '@skbkontur/react-ui-validations';
-import { Button, Gapped, Input } from '@skbkontur/react-ui';
-import { LocalStorageSaver } from '../../../Helpers/LocalStorageSaver/LocalStorageSaver';
-import { SingleStringQuestion } from '../Questions/SingleStringQuestion';
-import { MultiStringQuestion } from '../Questions/MultiStringQuestion';
-import { ImageLoader } from '../Questions/ImageLoader';
-import { EventAdminSaveBtn } from '../EventStepsNav/EventAdminSaveBtn';
+﻿import React, {useEffect, useRef, useState} from 'react';
+import {ValidationContainer} from '@skbkontur/react-ui-validations';
+import {Gapped} from '@skbkontur/react-ui';
+import {SingleStringQuestion} from '../Questions/SingleStringQuestion';
+import {MultiStringQuestion} from '../Questions/MultiStringQuestion';
+import {ImageLoader} from '../Questions/ImageLoader';
+import {EventAdminSaveBtn} from '../EventStepsNav/EventAdminSaveBtn';
+import {EventAdminClient} from "../../../../Api/EventAdmin/EventAdminClient";
+import {DraftEvent} from "../../../../Api/EventAdmin/DraftEvent";
 
 
 interface Props {
     onSave: () => void;
 }
 
-export const EventCoverSheet: React.FC<Props> = ({ onSave }) => {
-    let localStorageSaver = new LocalStorageSaver('Draft');
+export const EventCoverSheet: React.FC<Props> = ({onSave}) => {
+    const [draft, setDraft] = useState<DraftEvent>();
 
-    const [eventName, setEventName] = useState('');
+    useEffect(() => {
+        EventAdminClient.getDraftCover().then(r => {
+            const loadedDraft = DraftEvent.fromDto(r.data);
+            setDraft(loadedDraft);
+            if (loadedDraft.CoverImageId) {
+                
+            }
+        });
+    }, [])
 
     const validWrapper = useRef<ValidationContainer>(null);
 
@@ -23,18 +32,27 @@ export const EventCoverSheet: React.FC<Props> = ({ onSave }) => {
         if (validWrapper.current) {
             const isValid = await validWrapper.current.validate();
             if (isValid) {
+                await EventAdminClient.setDraftCover(draft!);
                 onSave();
             }
         }
     };
 
+    if (!draft) {
+        return null;
+    }
+
     return (
         <ValidationContainer ref={validWrapper}>
             <Gapped gap={30} vertical={true}>
-                <SingleStringQuestion storageSaver={localStorageSaver} title={'Название'} />
-                <MultiStringQuestion storageSaver={localStorageSaver} title={'Подробное описание'} />
-                <ImageLoader storageSaver={localStorageSaver} title={'Обложка'} />
-                <EventAdminSaveBtn onSave={onClickHandle} />
+                <SingleStringQuestion title={'Название'}
+                                      defaultValue={draft?.Title}
+                                      onValueChange={(v) => setDraft(draft?.withTitle(v))}/>
+                <MultiStringQuestion title={'Подробное описание'}
+                                     defaultValue={draft?.Description}
+                                     onValueChange={(v) => setDraft(draft?.withDescription(v))}/>
+                <ImageLoader title={'Обложка'}/> 
+                <EventAdminSaveBtn onSave={onClickHandle}/>
             </Gapped>
         </ValidationContainer>
     );

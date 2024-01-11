@@ -2,7 +2,8 @@
 
 public enum QuestionType
 {
-    Text,
-    Radio,
-    CheckBox,
+    SingleString,
+    MultiString,
+    OneSelection,
+    MultipleSelection
 }

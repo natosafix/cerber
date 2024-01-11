@@ -3,12 +3,13 @@ import styles from '../EventAdmin.scss';
 import variables from '../EventAdminVariables.scss';
 import { FileUploader, FileUploaderAttachedFile, Gapped } from '@skbkontur/react-ui';
 import { Label } from '../../../Entries/Shared/Label/Label';
+import {EventAdminClient} from "../../../../Api/EventAdmin/EventAdminClient";
 
 
 interface IImageLoaderQuestion {
-    storageSaver: ILocalStorageSaver;
     title: string;
 }
+
 
 const base64toBlob = (base64Data: string): Blob => {
     let startIdx = base64Data.indexOf("base64,");
@@ -39,18 +40,18 @@ const base64toBlob = (base64Data: string): Blob => {
     return new Blob(byteArrays, { type: '' });
 }
 
-export const ImageLoader: React.FC<IImageLoaderQuestion> = ({ title, storageSaver }) => {
+export const ImageLoader: React.FC<IImageLoaderQuestion> = ({ title }) => {
     const [selectedFile, setSelectedFile] = useState<Blob | undefined>();
     let firstRender = useRef(true);
     const [preview, setPreview] = useState<string | undefined>();
 
-    useEffect(() => {
-        let savedPreview = storageSaver.load(title);
-        if (savedPreview) {
-            let blob = base64toBlob(savedPreview);
-            setSelectedFile(blob);
-        }
-    }, []);
+    // useEffect(() => {
+    //     let savedPreview = storageSaver.load(title);
+    //     if (savedPreview) {
+    //         let blob = base64toBlob(savedPreview);
+    //         setSelectedFile(blob);
+    //     }
+    // }, []);
     
     useEffect(() => {
         if (firstRender.current) {
@@ -58,7 +59,6 @@ export const ImageLoader: React.FC<IImageLoaderQuestion> = ({ title, storageSave
             return;
         }
         if (!selectedFile) {
-            storageSaver.delete(title);
             setPreview(undefined);
             return;
         }
@@ -68,7 +68,7 @@ export const ImageLoader: React.FC<IImageLoaderQuestion> = ({ title, storageSave
         const reader = new FileReader();
         reader.onload = () => {
             if (typeof reader.result === 'string') {
-                storageSaver.save(title, reader.result);
+                // storageSaver.save(title, reader.result); TODO
             }
         };
         reader.readAsDataURL(selectedFile);
@@ -94,7 +94,7 @@ export const ImageLoader: React.FC<IImageLoaderQuestion> = ({ title, storageSave
                 vertical={true}
                 className={styles.questionInput}>
             <Label label={title} size={"large"} />
-            <FileUploader accept={'image/*'} onValueChange={onFileLoad} />
+            <FileUploader accept={'image/*'} onValueChange={onFileLoad} request={EventAdminClient.setCoverImage} />
             {preview && (
                 <img src={preview} alt={'loaded image'} className={styles.imagePreview} />
             )}

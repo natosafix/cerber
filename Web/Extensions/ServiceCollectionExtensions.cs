@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
+        services.AddScoped<IDraftEventsRepository, DraftEventsRepository>();
+        services.AddScoped<IDraftQuestionRepository, DraftQuestionRepository>();
         services.AddScoped<IEventsRepository, EventsRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<ITicketsRepository, TicketsRepository>();
@@ -22,6 +24,9 @@ public static class ServiceCollectionExtensions
     
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddScoped<IUserHelper, UserHelper>();
+        services.AddScoped<IDraftEventsService, DraftEventsService>();
+        services.AddScoped<IDraftQuestionsService, DraftQuestionsService>();
         services.AddScoped<IEventsService, EventsService>();
         services.AddScoped<ITicketsService, TicketsService>();
         services.AddScoped<IOrdersService, OrdersService>();
@@ -29,7 +34,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAnswersService, AnswersService>();
         services.AddScoped<IUserFilesService, UserFilesService>();
         services.AddScoped<IStorageManager, StorageManager>();
-        services.AddScoped<IUserHelper, UserHelper>();
         services.AddScoped<IMailService, MailService>();
         services.AddScoped<IQrCodeService, QrCodeService>();
         services.AddScoped<IEncryptionService, EncryptionService>();

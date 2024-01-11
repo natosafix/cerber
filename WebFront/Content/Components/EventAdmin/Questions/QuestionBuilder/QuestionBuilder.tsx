@@ -9,13 +9,12 @@ import { ChoicesCreator } from './ChoicesCreator';
 import styles from './QuestionBuilder.scss';
 
 interface Props {
-    storageSaver: ILocalStorageSaver;
     question: Question;
     onQuestionUpdate: (question: Question) => void;
     questionNum: number;
 }
 
-export const QuestionBuilder: React.FC<Props> = ({ storageSaver, question, onQuestionUpdate, questionNum }) => {
+export const QuestionBuilder: React.FC<Props> = ({ question, onQuestionUpdate, questionNum }) => {
     const [type, setType] = useState(question.type);
     
     const onTitleUpdate = (v: string) => {
