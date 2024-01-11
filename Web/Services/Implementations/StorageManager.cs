@@ -11,20 +11,25 @@ public class StorageManager : IStorageManager
 
     public async Task<byte[]> Get(string path)
     {
-        return await File.ReadAllBytesAsync(webHostEnvironment.WebRootPath + path);
+        return await File.ReadAllBytesAsync(Path.Combine(webHostEnvironment.WebRootPath, path));
+    }
+
+    public Stream GetFileStream(string path)
+    {
+        var webPath = Path.Combine(webHostEnvironment.WebRootPath, path);
+        var stream = new FileStream(webPath, FileMode.Open);
+        return stream;
     }
 
     public async Task Save(IFormFile file, string path)
     {
-        var webPath = webHostEnvironment.WebRootPath + path;
-        var directory = Path.GetDirectoryName(webPath);
+        var webPath = Path.Combine(webHostEnvironment.WebRootPath, path);
+        var directory = new DirectoryInfo(webPath).Parent!;
         
-        if (!Directory.Exists(directory))
-            Directory.CreateDirectory(directory!);
-        
-        await using (var fileStream = new FileStream(webPath, FileMode.Create))
-        {
-            await file.CopyToAsync(fileStream);
-        }
+        if (!directory.Exists)
+            directory.Create();
+
+        await using var fileStream = new FileStream(webPath, FileMode.Create);
+        await file.CopyToAsync(fileStream);
     }
 }

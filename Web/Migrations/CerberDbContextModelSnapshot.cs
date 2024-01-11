@@ -80,6 +80,9 @@ namespace Web.Migrations
                     b.Property<string>("City")
                         .HasColumnType("text");
 
+                    b.Property<int?>("CoverImageId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 

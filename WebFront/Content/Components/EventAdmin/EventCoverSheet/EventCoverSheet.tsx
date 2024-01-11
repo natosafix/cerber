@@ -18,7 +18,11 @@ export const EventCoverSheet: React.FC<Props> = ({onSave}) => {
 
     useEffect(() => {
         EventAdminClient.getDraftCover().then(r => {
-            setDraft(DraftEvent.fromDto(r.data));
+            const loadedDraft = DraftEvent.fromDto(r.data);
+            setDraft(loadedDraft);
+            if (loadedDraft.CoverImageId) {
+                
+            }
         });
     }, [])
 
@@ -47,7 +51,7 @@ export const EventCoverSheet: React.FC<Props> = ({onSave}) => {
                 <MultiStringQuestion title={'Подробное описание'}
                                      defaultValue={draft?.Description}
                                      onValueChange={(v) => setDraft(draft?.withDescription(v))}/>
-                {/*<ImageLoader title={'Обложка'}/>   TODO */} 
+                <ImageLoader title={'Обложка'}/> 
                 <EventAdminSaveBtn onSave={onClickHandle}/>
             </Gapped>
         </ValidationContainer>

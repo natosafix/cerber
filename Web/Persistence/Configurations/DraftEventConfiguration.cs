@@ -14,6 +14,7 @@ public class DraftEventConfiguration : IEntityTypeConfiguration<DraftEvent>
 
         builder.Property(e => e.OwnerId).IsRequired();
 
+        builder.Property(e => e.CoverImageId).HasDefaultValue(null);
         builder.Property(e => e.Title).HasDefaultValue(null);
         builder.Property(e => e.Description).HasDefaultValue(null);
         builder.Property(e => e.City).HasDefaultValue(null);

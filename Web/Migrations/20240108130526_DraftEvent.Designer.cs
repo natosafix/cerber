@@ -12,7 +12,7 @@ using Web.Persistence;
 namespace Web.Migrations
 {
     [DbContext(typeof(CerberDbContext))]
-    [Migration("20231219193640_DraftEvent")]
+    [Migration("20240108130526_DraftEvent")]
     partial class DraftEvent
     {
         /// <inheritdoc />
@@ -83,6 +83,9 @@ namespace Web.Migrations
                     b.Property<string>("City")
                         .HasColumnType("text");
 
+                    b.Property<int?>("CoverImageId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -102,6 +105,32 @@ namespace Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("draftEvents", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.DraftQuestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AnswerChoices")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DraftEventId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("draftQuestions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Event", b =>
