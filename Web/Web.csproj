@@ -38,4 +38,8 @@
       <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\Files\bolthen\" />
+    </ItemGroup>
+
 </Project>

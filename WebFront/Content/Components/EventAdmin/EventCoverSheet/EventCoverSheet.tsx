@@ -20,15 +20,12 @@ export const EventCoverSheet: React.FC<Props> = ({onSave}) => {
         EventAdminClient.getDraftCover().then(r => {
             const loadedDraft = DraftEvent.fromDto(r.data);
             setDraft(loadedDraft);
-            if (loadedDraft.CoverImageId) {
-                
-            }
         });
     }, [])
 
     const validWrapper = useRef<ValidationContainer>(null);
 
-    let onClickHandle = async () => {
+    const onClickHandle = async () => {
         if (validWrapper.current) {
             const isValid = await validWrapper.current.validate();
             if (isValid) {
@@ -37,6 +34,10 @@ export const EventCoverSheet: React.FC<Props> = ({onSave}) => {
             }
         }
     };
+    
+    const onImgRemove = async () => {
+        await EventAdminClient.removeCoverImage();
+    }
 
     if (!draft) {
         return null;
@@ -51,7 +52,10 @@ export const EventCoverSheet: React.FC<Props> = ({onSave}) => {
                 <MultiStringQuestion title={'Подробное описание'}
                                      defaultValue={draft?.Description}
                                      onValueChange={(v) => setDraft(draft?.withDescription(v))}/>
-                <ImageLoader title={'Обложка'}/> 
+                <ImageLoader title={'Обложка'} 
+                             uploader={EventAdminClient.setCoverImage} 
+                             defaultUrl={draft.CoverImageId ? EventAdminClient.getCoverImageUrl() : null}
+                             onRemove={onImgRemove}/> 
                 <EventAdminSaveBtn onSave={onClickHandle}/>
             </Gapped>
         </ValidationContainer>
