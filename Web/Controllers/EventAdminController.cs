@@ -53,6 +53,10 @@ public class EventAdminController : Controller
         var userId = userHelper.UserId;
         if (draftEvent.OwnerId != userId)
             return NotFound();
+        
+        var existsDraft = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (existsDraft is not null)
+            draftEvent.CoverImageId = existsDraft.CoverImageId;
 
         await draftEventsService.UpdateDraftAsync(draftEvent);
         return Ok();
