@@ -20,6 +20,11 @@ public class EventsService : IEventsService
        return await eventsRepository.Get(id) ?? throw new BadHttpRequestException($"Not found event with id {id}");
     }
     
+    public async Task<Event> GetByTicketId(int ticketId)
+    {
+        return await eventsRepository.GetByTicketId(ticketId) ?? throw new BadHttpRequestException($"Not found event by ticketId {ticketId}");
+    }
+    
     public async Task<Event> GetWithInspectors(int id)
     {
         return await eventsRepository.GetWithInspectors(id) ?? throw new BadHttpRequestException($"Not found event with id {id}");
@@ -27,6 +32,7 @@ public class EventsService : IEventsService
 
     public async Task<Event> Create(Event @event)
     {
+        @event.CryptoKey = Guid.NewGuid().ToString();
         return await eventsRepository.Create(@event);
     }
     

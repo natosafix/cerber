@@ -18,6 +18,14 @@ public class EventsRepository : IEventsRepository
         return await dbContext.Events.FindAsync(id);
     }
     
+    public async Task<Event?> GetByTicketId(int ticketId)
+    {
+        var ticket = await dbContext.Tickets
+            .Include(t => t.Event)
+            .FirstOrDefaultAsync(t => t.Id == ticketId);
+        return ticket?.Event;
+    }
+    
     public async Task<Event?> GetWithInspectors(int id)
     {
         return await dbContext.Events
