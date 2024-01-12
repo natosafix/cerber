@@ -53,7 +53,7 @@ public class EventsRepository : IEventsRepository
    public async Task<PageList<Event>> GetInspected(string username, int offset, int limit)
    {
        var events = await dbContext.Events.FromSqlInterpolated(
-           $@"SELECT e.""Id"", e.""OwnerId"", e.""CategoryId"", e.""Address"", e.""City"", e.""Description"", e.""From"", e.""Name"", e.""ShortDescription"", e.""To"", e.""CoverId""
+           $@"SELECT e.""Id"", e.""OwnerId"", e.""CategoryId"", e.""Address"", e.""City"", e.""Description"", e.""From"", e.""Name"", e.""ShortDescription"", e.""To"", e.""CoverId"", e.""CryptoKey""
               FROM ""EventUser"" as eu
               JOIN ""AspNetUsers"" as u on u.""Id"" = eu.""InspectorsId""
               JOIN events e on e.""Id"" = eu.""InspectedEventsId""
