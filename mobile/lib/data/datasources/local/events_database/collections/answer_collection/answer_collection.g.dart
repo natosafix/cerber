@@ -17,10 +17,10 @@ const AnswerCollectionSchema = CollectionSchema(
   name: r'AnswerCollection',
   id: -7844939883382642991,
   properties: {
-    r'answer': PropertySchema(
+    r'answers': PropertySchema(
       id: 0,
-      name: r'answer',
-      type: IsarType.string,
+      name: r'answers',
+      type: IsarType.stringList,
     ),
     r'questionId': PropertySchema(
       id: 1,
@@ -48,7 +48,13 @@ int _answerCollectionEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.answer.length * 3;
+  bytesCount += 3 + object.answers.length * 3;
+  {
+    for (var i = 0; i < object.answers.length; i++) {
+      final value = object.answers[i];
+      bytesCount += value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -58,7 +64,7 @@ void _answerCollectionSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.answer);
+  writer.writeStringList(offsets[0], object.answers);
   writer.writeLong(offsets[1], object.questionId);
 }
 
@@ -69,7 +75,7 @@ AnswerCollection _answerCollectionDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = AnswerCollection(
-    answer: reader.readString(offsets[0]),
+    answers: reader.readStringList(offsets[0]) ?? [],
     id: id,
     questionId: reader.readLong(offsets[1]),
   );
@@ -84,7 +90,7 @@ P _answerCollectionDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 1:
       return (reader.readLong(offset)) as P;
     default:
@@ -185,13 +191,13 @@ extension AnswerCollectionQueryWhere
 extension AnswerCollectionQueryFilter
     on QueryBuilder<AnswerCollection, AnswerCollection, QFilterCondition> {
   QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
-      answerEqualTo(
+      answersElementEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'answer',
+        property: r'answers',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -199,7 +205,7 @@ extension AnswerCollectionQueryFilter
   }
 
   QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
-      answerGreaterThan(
+      answersElementGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -207,7 +213,7 @@ extension AnswerCollectionQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'answer',
+        property: r'answers',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -215,7 +221,7 @@ extension AnswerCollectionQueryFilter
   }
 
   QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
-      answerLessThan(
+      answersElementLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -223,7 +229,7 @@ extension AnswerCollectionQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'answer',
+        property: r'answers',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -231,7 +237,7 @@ extension AnswerCollectionQueryFilter
   }
 
   QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
-      answerBetween(
+      answersElementBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -240,7 +246,7 @@ extension AnswerCollectionQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'answer',
+        property: r'answers',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -251,13 +257,13 @@ extension AnswerCollectionQueryFilter
   }
 
   QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
-      answerStartsWith(
+      answersElementStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'answer',
+        property: r'answers',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -265,13 +271,13 @@ extension AnswerCollectionQueryFilter
   }
 
   QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
-      answerEndsWith(
+      answersElementEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'answer',
+        property: r'answers',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -279,10 +285,10 @@ extension AnswerCollectionQueryFilter
   }
 
   QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
-      answerContains(String value, {bool caseSensitive = true}) {
+      answersElementContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'answer',
+        property: r'answers',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -290,10 +296,10 @@ extension AnswerCollectionQueryFilter
   }
 
   QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
-      answerMatches(String pattern, {bool caseSensitive = true}) {
+      answersElementMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'answer',
+        property: r'answers',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
@@ -301,22 +307,111 @@ extension AnswerCollectionQueryFilter
   }
 
   QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
-      answerIsEmpty() {
+      answersElementIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'answer',
+        property: r'answers',
         value: '',
       ));
     });
   }
 
   QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
-      answerIsNotEmpty() {
+      answersElementIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'answer',
+        property: r'answers',
         value: '',
       ));
+    });
+  }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
+      answersLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'answers',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
+      answersIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'answers',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
+      answersIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'answers',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
+      answersLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'answers',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
+      answersLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'answers',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AnswerCollection, AnswerCollection, QAfterFilterCondition>
+      answersLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'answers',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 
@@ -442,20 +537,6 @@ extension AnswerCollectionQueryLinks
 extension AnswerCollectionQuerySortBy
     on QueryBuilder<AnswerCollection, AnswerCollection, QSortBy> {
   QueryBuilder<AnswerCollection, AnswerCollection, QAfterSortBy>
-      sortByAnswer() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'answer', Sort.asc);
-    });
-  }
-
-  QueryBuilder<AnswerCollection, AnswerCollection, QAfterSortBy>
-      sortByAnswerDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'answer', Sort.desc);
-    });
-  }
-
-  QueryBuilder<AnswerCollection, AnswerCollection, QAfterSortBy>
       sortByQuestionId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'questionId', Sort.asc);
@@ -472,20 +553,6 @@ extension AnswerCollectionQuerySortBy
 
 extension AnswerCollectionQuerySortThenBy
     on QueryBuilder<AnswerCollection, AnswerCollection, QSortThenBy> {
-  QueryBuilder<AnswerCollection, AnswerCollection, QAfterSortBy>
-      thenByAnswer() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'answer', Sort.asc);
-    });
-  }
-
-  QueryBuilder<AnswerCollection, AnswerCollection, QAfterSortBy>
-      thenByAnswerDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'answer', Sort.desc);
-    });
-  }
-
   QueryBuilder<AnswerCollection, AnswerCollection, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -516,10 +583,10 @@ extension AnswerCollectionQuerySortThenBy
 
 extension AnswerCollectionQueryWhereDistinct
     on QueryBuilder<AnswerCollection, AnswerCollection, QDistinct> {
-  QueryBuilder<AnswerCollection, AnswerCollection, QDistinct> distinctByAnswer(
-      {bool caseSensitive = true}) {
+  QueryBuilder<AnswerCollection, AnswerCollection, QDistinct>
+      distinctByAnswers() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'answer', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'answers');
     });
   }
 
@@ -539,9 +606,10 @@ extension AnswerCollectionQueryProperty
     });
   }
 
-  QueryBuilder<AnswerCollection, String, QQueryOperations> answerProperty() {
+  QueryBuilder<AnswerCollection, List<String>, QQueryOperations>
+      answersProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'answer');
+      return query.addPropertyName(r'answers');
     });
   }
 

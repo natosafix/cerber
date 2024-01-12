@@ -5,6 +5,7 @@ import 'package:project/domain/models/event.dart';
 import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
 import 'package:project/presentation/qr_code_scanner/qr_code_scanner_bloc/qr_code_scanner_bloc.dart';
 import 'package:project/presentation/qr_code_scanner/scanner_overlay/scanner_overlay.dart';
+import 'package:project/presentation/questions/questions_screen/questions_screen.dart';
 import 'package:project/utils/extensions/context_x.dart';
 import 'package:project/utils/locator.dart';
 
@@ -17,7 +18,9 @@ class QrCodeScannerScreen extends StatelessWidget {
     return MaterialPageRoute(builder: (context) => QrCodeScannerScreen(event: event));
   }
 
-  final scannerController = MobileScannerController();
+  final scannerController = MobileScannerController(
+    // detectionSpeed: DetectionSpeed.noDuplicates,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +44,10 @@ class QrCodeScannerScreen extends StatelessWidget {
             elevation: 0,
             backgroundColor: Colors.transparent,
             actions: [
+              IconButton(
+                onPressed: () => _addPressed,
+                icon: const Icon(Icons.add),
+              ),
               IconButton(
                 onPressed: () {}, //TODO
                 icon: const Icon(Icons.history),
@@ -66,17 +73,15 @@ class QrCodeScannerScreen extends StatelessWidget {
           ),
           body: Stack(
             children: [
-              Builder(
-                builder: (context) {
-                  return MobileScanner(
-                    scanWindow: scanWindow,
-                    controller: scannerController,
-                    onDetect: (capture) {
-                      context.read<QrCodeScannerBloc>().add(QrCodeScanned(capture: capture));
-                    },
-                  );
-                }
-              ),
+              Builder(builder: (context) {
+                return MobileScanner(
+                  scanWindow: scanWindow,
+                  controller: scannerController,
+                  onDetect: (capture) {
+                    context.read<QrCodeScannerBloc>().add(QrCodeScanned(capture: capture));
+                  },
+                );
+              }),
               ScannerOverlay(
                 scanWindow: scanWindow,
                 scanWindowDimension: scanWindowDimension,
@@ -98,9 +103,13 @@ class QrCodeScannerScreen extends StatelessWidget {
       case BoughtTicketOnSpot():
         context.showSnackbar("BoughtTicketOnSpot");
       case VisitorFound(visitor: final visitor):
-        context.showSnackbar("VisitorFound ${visitor.id}");
+        Navigator.of(context).push(QuestionsScreen.route(visitor, event.id));
       case InitialState():
         break;
     }
+  }
+
+  void _addPressed(BuildContext context) {
+    Navigator.of(context).push(QuestionsScreen.route(null, event.id));
   }
 }

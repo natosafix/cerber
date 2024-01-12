@@ -8,20 +8,20 @@ class AnswerCollection {
   @Index(replace: true)
   final Id id;
 
-  final String answer;
+  final List<String> answers;
 
   final int questionId;
 
   AnswerCollection({
     required this.id,
-    required this.answer,
+    required this.answers,
     required this.questionId,
   });
 
   static Answer toModel(AnswerCollection answerCollection) {
     return Answer(
       id: answerCollection.id,
-      answer: answerCollection.answer,
+      answers: answerCollection.answers,
       questionId: answerCollection.questionId,
     );
   }
@@ -29,7 +29,7 @@ class AnswerCollection {
   factory AnswerCollection.fromModel(Answer answer) {
     return AnswerCollection(
       id: answer.id,
-      answer: answer.answer,
+      answers: answer.answers,
       questionId: answer.questionId,
     );
   }

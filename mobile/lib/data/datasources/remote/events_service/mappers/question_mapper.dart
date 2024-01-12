@@ -8,6 +8,7 @@ extension QuestionMapper on QuestionApiResponse {
       id: id,
       question: content,
       questionType: type.toModel(),
+      options: [], //TODO
     );
   }
 }

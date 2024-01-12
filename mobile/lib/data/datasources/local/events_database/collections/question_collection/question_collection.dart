@@ -17,17 +17,21 @@ class QuestionCollection {
   @Index()
   int eventId;
 
+  List<String> options;
+
   QuestionCollection({
     required this.id,
     required this.questionTypeDb,
     required this.question,
     required this.eventId,
+    required this.options,
   });
 
   static Question toModel(QuestionCollection questionCollection) {
     return Question(
       id: questionCollection.id,
       question: questionCollection.question,
+      options: questionCollection.options,
       questionType: QuestionTypeDb.toModel(questionCollection.questionTypeDb),
     );
   }
@@ -38,6 +42,7 @@ class QuestionCollection {
       questionTypeDb: QuestionTypeDb.fromModel(question.questionType),
       question: question.question,
       eventId: eventId,
+      options: question.options,
     );
   }
 }

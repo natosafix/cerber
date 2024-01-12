@@ -1,11 +1,11 @@
 class Answer {
   final int id;
-  final String answer;
+  final List<String> answers;
   final int questionId;
 
   Answer({
     required this.id,
-    required this.answer,
+    required this.answers,
     required this.questionId,
   });
 }

@@ -23,13 +23,18 @@ const QuestionCollectionSchema = CollectionSchema(
       name: r'eventId',
       type: IsarType.long,
     ),
-    r'question': PropertySchema(
+    r'options': PropertySchema(
       id: 1,
+      name: r'options',
+      type: IsarType.stringList,
+    ),
+    r'question': PropertySchema(
+      id: 2,
       name: r'question',
       type: IsarType.string,
     ),
     r'questionTypeDb': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'questionTypeDb',
       type: IsarType.string,
       enumMap: _QuestionCollectionquestionTypeDbEnumValueMap,
@@ -69,6 +74,13 @@ int _questionCollectionEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.options.length * 3;
+  {
+    for (var i = 0; i < object.options.length; i++) {
+      final value = object.options[i];
+      bytesCount += value.length * 3;
+    }
+  }
   bytesCount += 3 + object.question.length * 3;
   bytesCount += 3 + object.questionTypeDb.name.length * 3;
   return bytesCount;
@@ -81,8 +93,9 @@ void _questionCollectionSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.eventId);
-  writer.writeString(offsets[1], object.question);
-  writer.writeString(offsets[2], object.questionTypeDb.name);
+  writer.writeStringList(offsets[1], object.options);
+  writer.writeString(offsets[2], object.question);
+  writer.writeString(offsets[3], object.questionTypeDb.name);
 }
 
 QuestionCollection _questionCollectionDeserialize(
@@ -94,9 +107,10 @@ QuestionCollection _questionCollectionDeserialize(
   final object = QuestionCollection(
     eventId: reader.readLong(offsets[0]),
     id: id,
-    question: reader.readString(offsets[1]),
+    options: reader.readStringList(offsets[1]) ?? [],
+    question: reader.readString(offsets[2]),
     questionTypeDb: _QuestionCollectionquestionTypeDbValueEnumMap[
-            reader.readStringOrNull(offsets[2])] ??
+            reader.readStringOrNull(offsets[3])] ??
         QuestionTypeDb.text,
   );
   return object;
@@ -112,8 +126,10 @@ P _questionCollectionDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 2:
+      return (reader.readString(offset)) as P;
+    case 3:
       return (_QuestionCollectionquestionTypeDbValueEnumMap[
               reader.readStringOrNull(offset)] ??
           QuestionTypeDb.text) as P;
@@ -440,6 +456,231 @@ extension QuestionCollectionQueryFilter
         upper: upper,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsElementEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'options',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsElementGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'options',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsElementLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'options',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsElementBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'options',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsElementStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'options',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsElementEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'options',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsElementContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'options',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsElementMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'options',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsElementIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'options',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsElementIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'options',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'options',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'options',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'options',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'options',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'options',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QAfterFilterCondition>
+      optionsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'options',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 
@@ -836,6 +1077,13 @@ extension QuestionCollectionQueryWhereDistinct
   }
 
   QueryBuilder<QuestionCollection, QuestionCollection, QDistinct>
+      distinctByOptions() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'options');
+    });
+  }
+
+  QueryBuilder<QuestionCollection, QuestionCollection, QDistinct>
       distinctByQuestion({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'question', caseSensitive: caseSensitive);
@@ -862,6 +1110,13 @@ extension QuestionCollectionQueryProperty
   QueryBuilder<QuestionCollection, int, QQueryOperations> eventIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'eventId');
+    });
+  }
+
+  QueryBuilder<QuestionCollection, List<String>, QQueryOperations>
+      optionsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'options');
     });
   }
 
