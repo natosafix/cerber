@@ -1,12 +1,12 @@
 ﻿import * as React from 'react';
-import {useState} from 'react';
+import { useState } from 'react';
 import styles from './EventAdmin.scss';
-import {EventStepsNav} from './EventStepsNav/EventStepsNav';
-import {EventCoverSheet} from './EventCoverSheet/EventCoverSheet';
-import {EventAdminPageNav} from './EventStepsNav/EventAdminPageNav';
-import {EventQuizCreator} from './EventQuizCreator/EventQuizCreator';
-import {EventPublish} from './EventPublish/EventPublish';
-import {Gapped} from '@skbkontur/react-ui';
+import { EventStepsNav } from './EventStepsNav/EventStepsNav';
+import { EventCoverSheet } from './EventCoverSheet/EventCoverSheet';
+import { EventAdminPageNav } from './EventStepsNav/EventAdminPageNav';
+import { EventQuizCreator } from './EventQuizCreator/EventQuizCreator';
+import { EventPublish } from './EventPublish/EventPublish';
+import { Gapped } from '@skbkontur/react-ui';
 import { EventAdminClient } from '../../../Api/EventAdmin/EventAdminClient';
 
 
@@ -21,8 +21,11 @@ export const EventAdmin: React.FC = () => {
     const onSave = async () => {
         if (step === EventAdminPageNav.EventPublish) {
             EventAdminClient.publishDraft().then(r => {
-                alert(JSON.stringify(r));
+                window.location.href = r.data;
             });
+            // EventAdminClient.publishDraft().then(r => {
+            //     alert(JSON.stringify(r));
+            // });
         } else {
             // alert('Save current page');
             setStep(step + 1);

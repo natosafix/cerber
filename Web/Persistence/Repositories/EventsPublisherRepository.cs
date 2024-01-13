@@ -28,10 +28,10 @@ public class EventsPublisherRepository : IEventsPublisherRepository
         await using var transaction = await dbContext.Database.BeginTransactionAsync();
         try
         {
-            await dbContext.DraftEvents.Where(de => de.Id == srcDraftEvent.Id).ExecuteDeleteAsync();
+            await dbContext.DraftQuestions.Where(dq => dq.DraftEventId == srcDraftEvent.Id).ExecuteDeleteAsync();
             await dbContext.SaveChangesAsync();
 
-            await dbContext.DraftQuestions.Where(dq => dq.DraftEventId == srcDraftEvent.Id).ExecuteDeleteAsync();
+            await dbContext.DraftEvents.Where(de => de.Id == srcDraftEvent.Id).ExecuteDeleteAsync();
             await dbContext.SaveChangesAsync();
 
             dstEvent = (await dbContext.Events.AddAsync(dstEvent)).Entity;

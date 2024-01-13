@@ -178,7 +178,9 @@ public class EventAdminController : Controller
         var dstQuestions = mapper.Map<Question[]>(srcDraftQuestions);
 
         var newEvent = await draftEventPublisherService.Publish(srcDraft, dstEvent, dstQuestions);
-        return RedirectToAction("Get", "Events", new {id = newEvent});
+
+        var url = Url.Action("Get", "Events", new {id = newEvent}); // TODO Егорусу, ссылка на мероприятие
+        return Ok(url);
     }
 
     [HttpPost("createDraft")]
