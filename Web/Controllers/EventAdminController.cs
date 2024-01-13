@@ -44,21 +44,24 @@ public class EventAdminController : Controller
         if (draft is null)
             return NotFound();
 
-        return Ok(draft);
+        return Ok(mapper.Map<DraftEventCoverDto>(draft));
     }
 
     [HttpPost("[controller]/draftCover")]
-    public async Task<IActionResult> DraftCover([FromBody] DraftEvent draftEvent)
+    public async Task<IActionResult> DraftCover([FromBody] DraftEventCoverDto draftEventDto)
     {
-        var userId = userHelper.UserId;
-        if (draftEvent.OwnerId != userId)
-            return NotFound();
-        
-        var existsDraft = await draftEventsService.FindDraftByUserIdAsync(userId);
-        if (existsDraft is not null)
-            draftEvent.CoverImageId = existsDraft.CoverImageId;
+        if (!ModelState.IsValid)
+            return BadRequest();
 
-        await draftEventsService.UpdateDraftAsync(draftEvent);
+        var userId = userHelper.UserId;
+        var existsDraft = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (existsDraft is null)
+            return NotFound();
+
+        draftEventDto.CoverImageId = existsDraft.CoverImageId;
+        var newDraftEventCover = mapper.Map(draftEventDto, existsDraft);
+
+        await draftEventsService.UpdateDraftAsync(newDraftEventCover);
         return Ok();
     }
 
