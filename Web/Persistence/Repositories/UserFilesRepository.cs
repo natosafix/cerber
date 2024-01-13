@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Web.Persistence.Repositories;
 
@@ -21,5 +22,11 @@ public class UserFilesRepository : IUserFilesRepository
         var result = await dbContext.UserFiles.AddAsync(userFile);
         await dbContext.SaveChangesAsync();
         return result.Entity;
+    }
+
+    public async Task Remove(UserFile userFile)
+    {
+        await dbContext.UserFiles.Where(uf => uf.Id == userFile.Id).ExecuteDeleteAsync();
+        await dbContext.SaveChangesAsync();
     }
 }

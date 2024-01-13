@@ -17,7 +17,7 @@ public class StorageManager : IStorageManager
     public Stream GetFileStream(string path)
     {
         var webPath = Path.Combine(webHostEnvironment.WebRootPath, path);
-        var stream = new FileStream(webPath, FileMode.Open);
+        var stream = new FileStream(webPath, FileMode.Open, FileAccess.Read, FileShare.Read);
         return stream;
     }
 
@@ -31,5 +31,11 @@ public class StorageManager : IStorageManager
 
         await using var fileStream = new FileStream(webPath, FileMode.Create);
         await file.CopyToAsync(fileStream);
+    }
+
+    public void Remove(string path)
+    {
+        var webPath = Path.Combine(webHostEnvironment.WebRootPath, path);
+        File.Delete(webPath);
     }
 }

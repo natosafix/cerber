@@ -17,9 +17,9 @@ public class EventAdminController : Controller
     private readonly IDraftQuestionsService draftQuestionsService;
 
     public EventAdminController(
-        IUserHelper userHelper, 
+        IUserHelper userHelper,
         IDraftEventsService draftEventsService,
-        IDraftQuestionsService draftQuestionsService, 
+        IDraftQuestionsService draftQuestionsService,
         IMapper mapper,
         IUserFilesService userFilesService)
     {
@@ -44,17 +44,24 @@ public class EventAdminController : Controller
         if (draft is null)
             return NotFound();
 
-        return Ok(draft);
+        return Ok(mapper.Map<DraftEventCoverDto>(draft));
     }
 
     [HttpPost("[controller]/draftCover")]
-    public async Task<IActionResult> DraftCover([FromBody] DraftEvent draftEvent)
+    public async Task<IActionResult> DraftCover([FromBody] DraftEventCoverDto draftEventDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest();
+
         var userId = userHelper.UserId;
-        if (draftEvent.OwnerId != userId)
+        var existsDraft = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (existsDraft is null)
             return NotFound();
 
-        await draftEventsService.UpdateDraftAsync(draftEvent);
+        draftEventDto.CoverImageId = existsDraft.CoverImageId;
+        var newDraftEventCover = mapper.Map(draftEventDto, existsDraft);
+
+        await draftEventsService.UpdateDraftAsync(newDraftEventCover);
         return Ok();
     }
 
@@ -95,14 +102,55 @@ public class EventAdminController : Controller
         if (draftEvent?.CoverImageId is null)
             return NotFound();
 
-        var fileStream = await userFilesService.GetContentStream(draftEvent.CoverImageId.Value);
+        var userFile = await userFilesService.TryGet(draftEvent.CoverImageId.Value);
+        if (userFile is null)
+            return NotFound();
+
+        var fileStream = userFilesService.GetContentStream(userFile);
         return File(fileStream, "APPLICATION/octet-stream");
     }
 
     [HttpPost("[controller]/coverImage")]
     public async Task<IActionResult> SetCoverImage(IFormFile file)
     {
-        return Ok(await userFilesService.Save(file));
+        var userId = userHelper.UserId;
+        var draftEvent = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (draftEvent is null)
+            return NotFound();
+
+        var oldImgId = draftEvent.CoverImageId;
+
+        var saved = await userFilesService.Save(file);
+        draftEvent.CoverImageId = saved.Id;
+        await draftEventsService.UpdateDraftAsync(draftEvent);
+
+        if (oldImgId is not null)
+        {
+            var oldUserFile = await userFilesService.TryGet(oldImgId.Value);
+            await userFilesService.Remove(oldUserFile!);
+        }
+
+        return Ok();
+    }
+
+    [HttpDelete("[controller]/coverImage")]
+    public async Task<IActionResult> RemoveCoverImage()
+    {
+        var userId = userHelper.UserId;
+        var draftEvent = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (draftEvent?.CoverImageId == null)
+            return NotFound();
+
+        var userFile = await userFilesService.TryGet(draftEvent.CoverImageId.Value);
+        if (userFile is null)
+            return NotFound();
+
+        draftEvent.CoverImageId = null;
+        await draftEventsService.UpdateDraftAsync(draftEvent);
+
+        await userFilesService.Remove(userFile!);
+
+        return Ok();
     }
 
     [HttpPost("createDraft")]

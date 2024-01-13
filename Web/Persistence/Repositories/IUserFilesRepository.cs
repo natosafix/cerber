@@ -7,4 +7,6 @@ public interface IUserFilesRepository
     Task<UserFile?> Get(int id);
     
     Task<UserFile> Save(UserFile userFile);
+
+    Task Remove(UserFile userFile);
 }
