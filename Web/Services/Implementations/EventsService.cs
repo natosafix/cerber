@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using System.Security.Cryptography;
+using Domain.Entities;
 using Domain.Infrastructure;
 using Web.Persistence.Repositories;
 
@@ -20,6 +21,11 @@ public class EventsService : IEventsService
        return await eventsRepository.Get(id) ?? throw new BadHttpRequestException($"Not found event with id {id}");
     }
     
+    public async Task<Event> GetByTicketId(int ticketId)
+    {
+        return await eventsRepository.GetByTicketId(ticketId) ?? throw new BadHttpRequestException($"Not found event by ticketId {ticketId}");
+    }
+    
     public async Task<Event> GetWithInspectors(int id)
     {
         return await eventsRepository.GetWithInspectors(id) ?? throw new BadHttpRequestException($"Not found event with id {id}");
@@ -27,6 +33,9 @@ public class EventsService : IEventsService
 
     public async Task<Event> Create(Event @event)
     {
+        var bytes = new byte[16];
+        RandomNumberGenerator.Create().GetBytes(bytes);
+        @event.CryptoKey = Convert.ToBase64String(bytes);
         return await eventsRepository.Create(@event);
     }
     

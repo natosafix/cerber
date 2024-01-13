@@ -11,6 +11,7 @@ public class StorageManager : IStorageManager
 
     public async Task<byte[]> Get(string path)
     {
+        var a = Path.Combine(webHostEnvironment.WebRootPath, path);
         return await File.ReadAllBytesAsync(Path.Combine(webHostEnvironment.WebRootPath, path));
     }
 

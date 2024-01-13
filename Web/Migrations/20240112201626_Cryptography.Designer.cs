@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Web.Persistence;
@@ -11,9 +12,11 @@ using Web.Persistence;
 namespace Web.Migrations
 {
     [DbContext(typeof(CerberDbContext))]
-    partial class CerberDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240112201626_Cryptography")]
+    partial class Cryptography
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,7 +157,9 @@ namespace Web.Migrations
 
                     b.Property<string>("CryptoKey")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("b97584f9-82a5-4f34-8db4-f5d9ba0a5673");
 
                     b.Property<string>("Description")
                         .IsRequired()

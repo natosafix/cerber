@@ -27,6 +27,8 @@ public class Event
     public int CategoryId { get; set; }
     public Category Category { get; set; }
     
+    public string CryptoKey { get; set; }
+    
     public List<Ticket> Tickets { get; set; }
     
     public List<Question> Questions { get; set; }

@@ -24,6 +24,8 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
             .IsRequired();
         builder.Property(e => e.From);
         builder.Property(e => e.To);
+        builder.Property(e => e.CryptoKey)
+            .IsRequired();
 
         builder.HasMany(@event => @event.Questions)
             .WithOne(question => question.Event)
