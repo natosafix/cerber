@@ -42,7 +42,7 @@ public class OrdersService : IOrdersService
         var qrCode = qrCodeService.Create($"ticket.png", encryptedCustomer);
         await mailService.SendWithImageAttachments(
             "",
-            "artemburdinnn@gmail.com",
+            "email",
             "Tickets",
             "Спасибо за заказ. Ваши билеты во вложениях.",
             new List<ImageInfo> {qrCode});

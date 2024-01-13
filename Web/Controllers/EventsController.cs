@@ -17,15 +17,17 @@ public class EventsController : Controller
     private readonly IMapper mapper;
     private readonly IEventsService eventsService;
     private readonly IUserHelper userHelper;
+    private readonly IUserFilesService userFilesService;
 
     public EventsController(
         IMapper mapper,
         IEventsService eventsService,
-        IUserHelper userHelper)
+        IUserHelper userHelper, IUserFilesService userFilesService)
     {
         this.mapper = mapper;
         this.eventsService = eventsService;
         this.userHelper = userHelper;
+        this.userFilesService = userFilesService;
     }
 
     [AllowAnonymous]
@@ -74,5 +76,15 @@ public class EventsController : Controller
         await eventsService.AddInspector(id, inspectorId);
 
         return NoContent();
+    }
+    
+    [Authorize("MustOwnEvent")]
+    [HttpGet("{id}/cover")]
+    public async Task<IActionResult> GetCover([FromRoute] int id)
+    {
+        var @event = await eventsService.Get(id);
+        var userFile = await userFilesService.Get(@event.CoverId!.Value);
+        var bytes = await userFilesService.GetContent(userFile);
+        return File(bytes, "APPLICATION/octet-stream", userFile.Name);
     }
 }
