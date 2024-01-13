@@ -59,8 +59,8 @@ public class EventsRepository : IEventsRepository
 
    public async Task<PageList<Event>> GetOwned(string username, int offset, int limit)
    {
-       var events = await dbContext.Events.
-           Where(e => e.Owner.UserName.Equals(username))
+       var events = await dbContext.Events
+           .Where(e => e.Owner.UserName.Equals(username))
            .Skip(offset)
            .Take(limit)
            .ToListAsync();

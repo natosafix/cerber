@@ -8,7 +8,6 @@ interface Props {
 export const EventPublish: React.FC<Props> = ({onSave}) => {
     return (
         <div>
-            EventPublish
             <EventAdminSaveBtn onSave={onSave} />
         </div>
     );

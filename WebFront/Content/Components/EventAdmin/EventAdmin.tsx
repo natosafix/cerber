@@ -7,6 +7,7 @@ import {EventAdminPageNav} from './EventStepsNav/EventAdminPageNav';
 import {EventQuizCreator} from './EventQuizCreator/EventQuizCreator';
 import {EventPublish} from './EventPublish/EventPublish';
 import {Gapped} from '@skbkontur/react-ui';
+import { EventAdminClient } from '../../../Api/EventAdmin/EventAdminClient';
 
 
 export const EventAdmin: React.FC = () => {
@@ -17,9 +18,11 @@ export const EventAdmin: React.FC = () => {
     const [draftId, setDraftId] = useState<string>(myParam);
     const [step, setStep] = useState(EventAdminPageNav.EventCoverSheet);
 
-    const onSave = () => {
+    const onSave = async () => {
         if (step === EventAdminPageNav.EventPublish) {
-            // alert('Save all form');
+            EventAdminClient.publishDraft().then(r => {
+                alert(JSON.stringify(r));
+            });
         } else {
             // alert('Save current page');
             setStep(step + 1);

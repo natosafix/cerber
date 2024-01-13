@@ -12,27 +12,22 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
 
         builder.HasKey(e => e.Id);
         
-        builder.Property(e => e.Name)
-            .IsRequired();
-        builder.Property(e => e.ShortDescription)
-            .HasMaxLength(50)
-            .IsRequired();
+        builder.Property(e => e.Name).IsRequired();
+        builder.Property(e => e.ShortDescription).HasMaxLength(50);
         builder.Property(e => e.Description);
-        builder.Property(e => e.City)
-            .IsRequired();
-        builder.Property(e => e.Address)
-            .IsRequired();
-        builder.Property(e => e.From);
-        builder.Property(e => e.To);
+        builder.Property(e => e.City).IsRequired();
+        builder.Property(e => e.Address).IsRequired();
+        builder.Property(e => e.From).IsRequired();
+        builder.Property(e => e.To).IsRequired();
 
         builder.HasMany(@event => @event.Questions)
             .WithOne(question => question.Event)
             .OnDelete(DeleteBehavior.Cascade);
         
-        builder.HasOne(@event => @event.Category)
-            .WithMany(category => category.Events)
-            .HasForeignKey(@event => @event.CategoryId)
-            .OnDelete(DeleteBehavior.SetNull);
+        // builder.HasOne(@event => @event.Category)
+        //     .WithMany(category => category.Events)
+        //     .HasForeignKey(@event => @event.CategoryId)
+        //     .OnDelete(DeleteBehavior.SetNull);
         
         builder.HasOne(@event => @event.Owner)
             .WithMany(user =>  user.OwnedEvents)
@@ -46,7 +41,7 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
         builder.HasMany(@event => @event.Inspectors)
             .WithMany(user => user.InspectedEvents);
 
-        builder.Navigation(e => e.Category).AutoInclude();
+        // builder.Navigation(e => e.Category).AutoInclude();
         builder.Navigation(e => e.Cover).AutoInclude();
     }
 }

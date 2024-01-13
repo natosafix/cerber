@@ -8,7 +8,7 @@ public class DraftEventCoverDto : IValidatableObject
 
     [Required] public string? Title { get; set; }
 
-    public string? Description { get; set; }
+    [Required] public string? Description { get; set; }
 
     [Required] public string? Address { get; set; }
 

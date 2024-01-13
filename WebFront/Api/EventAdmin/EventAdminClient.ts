@@ -43,6 +43,10 @@ export class EventAdminClient {
     public static removeCoverImage() {
         return api.delete('/coverImage');
     }
+    
+    public static publishDraft() {
+        return api.post('/publishDraft')
+    }
 
     public static createDraft() {
         return api.post<DraftEvent | null>('/createDraft');

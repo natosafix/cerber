@@ -14,10 +14,12 @@ public class QuestionConfiguration : IEntityTypeConfiguration<Question>
         
         builder.Property(e => e.Type)
             .IsRequired();
-        builder.Property(e => e.Content)
+        builder.Property(e => e.Title)
             .IsRequired();
         builder.Property(e => e.Required)
             .IsRequired();
+        builder.Property(e => e.AnswerChoices)
+            .HasDefaultValue(null);
 
         builder.HasOne(question => question.Event)
             .WithMany(@event => @event.Questions)

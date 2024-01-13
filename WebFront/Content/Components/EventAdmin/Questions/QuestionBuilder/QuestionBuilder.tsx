@@ -16,16 +16,16 @@ interface Props {
 
 export const QuestionBuilder: React.FC<Props> = ({ question, onQuestionUpdate, questionNum }) => {
     const [type, setType] = useState(question.type);
-    
+
     const onTitleUpdate = (v: string) => {
         onQuestionUpdate(question.withTitle(v));
     };
 
     const onTypeChange = (type: QuestionTypes) => {
-        setType(type)
+        setType(type);
         onQuestionUpdate(question.withType(type));
     };
-    
+
     const onChoicesChange = (choices: string[]) => {
         onQuestionUpdate(question.withAnswerChoices(choices));
     };
@@ -33,7 +33,7 @@ export const QuestionBuilder: React.FC<Props> = ({ question, onQuestionUpdate, q
     return (
         <Gapped gap={10} vertical={true}>
             <Label label={`Вопрос №${questionNum}`} size={'medium'} />
-            <SingleStringQuestion title={'Текст вопроса'} size={'small'} 
+            <SingleStringQuestion title={'Текст вопроса'} size={'small'}
                                   onValueChange={onTitleUpdate}
                                   defaultValue={question.title} />
             <QuestionTypePicker onValueChange={onTypeChange} defaultValue={type} />
