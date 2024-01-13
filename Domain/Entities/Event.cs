@@ -6,7 +6,7 @@ public class Event
     
     public string Name { get; set; }
 
-    public string ShortDescription { get; set; }
+    public string? ShortDescription { get; set; }
 
     public string Description { get; set; }
     
@@ -24,8 +24,8 @@ public class Event
     public string OwnerId { get; set; }
     public User Owner { get; set; }
     
-    public int CategoryId { get; set; }
-    public Category Category { get; set; }
+    public int? CategoryId { get; set; }
+    public Category? Category { get; set; }
     
     public string CryptoKey { get; set; }
     

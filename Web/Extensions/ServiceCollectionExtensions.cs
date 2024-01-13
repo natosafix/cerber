@@ -3,6 +3,7 @@ using Web.Persistence.Repositories;
 using Web.Requirements;
 using Web.Services;
 using Web.Services.Implementations;
+using Web.Services.Validators;
 
 namespace Web.Extensions;
 
@@ -12,6 +13,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IDraftEventsRepository, DraftEventsRepository>();
         services.AddScoped<IDraftQuestionRepository, DraftQuestionRepository>();
+        services.AddScoped<IDraftEventPublisherService, DraftEventPublisherService>();
         services.AddScoped<IEventsRepository, EventsRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<ITicketsRepository, TicketsRepository>();
@@ -27,6 +29,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserHelper, UserHelper>();
         services.AddScoped<IDraftEventsService, DraftEventsService>();
         services.AddScoped<IDraftQuestionsService, DraftQuestionsService>();
+        services.AddScoped<IDraftEventValidator, DraftEventValidator>();
+        services.AddScoped<IEventsPublisherRepository, EventsPublisherRepository>();
         services.AddScoped<IEventsService, EventsService>();
         services.AddScoped<ITicketsService, TicketsService>();
         services.AddScoped<IOrdersService, OrdersService>();

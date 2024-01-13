@@ -11,8 +11,12 @@ interface Props {
     setSrcChoices: (string: string[]) => void;
 }
 
+function isNullOrWhiteSpace(v: string) {
+    return !v || v.trim() === '';
+}
+
 function validate(value: string): Nullable<ValidationInfo> {
-    if (value === null || value.length == 0) {
+    if (isNullOrWhiteSpace(value)) {
         return {message: 'Поле обязательно для заполнения', type: 'submit'};
     } else if (value.length >= 100) {
         return {message: 'Не более 100 символов', type: 'submit'};

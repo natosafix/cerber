@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Dtos;
 using Web.Services;
+using Web.Services.Validators;
 
 namespace Web.Controllers;
 
@@ -15,19 +16,25 @@ public class EventAdminController : Controller
     private readonly IUserHelper userHelper;
     private readonly IDraftEventsService draftEventsService;
     private readonly IDraftQuestionsService draftQuestionsService;
+    private readonly IDraftEventPublisherService draftEventPublisherService;
+    private readonly IDraftEventValidator draftEventValidator;
 
     public EventAdminController(
         IUserHelper userHelper,
         IDraftEventsService draftEventsService,
         IDraftQuestionsService draftQuestionsService,
         IMapper mapper,
-        IUserFilesService userFilesService)
+        IUserFilesService userFilesService,
+        IDraftEventPublisherService draftEventPublisherService,
+        IDraftEventValidator draftEventValidator)
     {
         this.userHelper = userHelper;
         this.draftEventsService = draftEventsService;
         this.draftQuestionsService = draftQuestionsService;
         this.mapper = mapper;
         this.userFilesService = userFilesService;
+        this.draftEventPublisherService = draftEventPublisherService;
+        this.draftEventValidator = draftEventValidator;
     }
 
     [HttpGet("[controller]/draft")]
@@ -151,6 +158,29 @@ public class EventAdminController : Controller
         await userFilesService.Remove(userFile!);
 
         return Ok();
+    }
+
+    [HttpPost("[controller]/publishDraft")]
+    public async Task<IActionResult> PublishDraft()
+    {
+        var userId = userHelper.UserId;
+        var srcDraft = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (srcDraft is null)
+            return NotFound();
+
+        srcDraft.To = srcDraft.From; // TODO DELETE
+        if (!draftEventValidator.IsValid(srcDraft))
+            return BadRequest();
+
+        var srcDraftQuestions = await draftQuestionsService.GetDraftQuestionsByDraftEventIdAsync(srcDraft.Id);
+
+        var dstEvent = mapper.Map<Event>(srcDraft);
+        var dstQuestions = mapper.Map<Question[]>(srcDraftQuestions);
+
+        var newEvent = await draftEventPublisherService.Publish(srcDraft, dstEvent, dstQuestions);
+
+        var url = Url.Action("Get", "Events", new {id = newEvent}); // TODO Егорусу, ссылка на мероприятие
+        return Ok(url);
     }
 
     [HttpPost("createDraft")]

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Web.Dtos.Request;
 using Web.Dtos.Response;
 using Web.Services;
+using Web.Services.Validators;
 
 namespace Web.Controllers;
 
@@ -17,7 +18,10 @@ public class EventsController : Controller
     private readonly IEventsService eventsService;
     private readonly IUserHelper userHelper;
 
-    public EventsController(IMapper mapper, IEventsService eventsService, IUserHelper userHelper)
+    public EventsController(
+        IMapper mapper,
+        IEventsService eventsService,
+        IUserHelper userHelper)
     {
         this.mapper = mapper;
         this.eventsService = eventsService;
