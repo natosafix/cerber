@@ -37,7 +37,7 @@ public class OrdersService : IOrdersService
         order.Customer = Guid.NewGuid();
         order = await ordersRepository.Create(order);
         var @event = await eventsService.GetByTicketId(order.TicketId);
-        var cryptoKey = Encoding.UTF8.GetBytes(@event.CryptoKey);
+        var cryptoKey = Convert.FromBase64String(@event.CryptoKey);
         var encryptedCustomer = encryptionService.EncryptString(order.Customer.ToString(), cryptoKey);
         var qrCode = qrCodeService.Create($"ticket.png", encryptedCustomer);
         await mailService.SendWithImageAttachments(
