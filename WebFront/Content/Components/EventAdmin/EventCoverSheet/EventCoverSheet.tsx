@@ -1,19 +1,19 @@
-﻿import React, {useEffect, useRef, useState} from 'react';
-import {ValidationContainer} from '@skbkontur/react-ui-validations';
-import {Gapped} from '@skbkontur/react-ui';
-import {SingleStringQuestion} from '../Questions/SingleStringQuestion';
-import {MultiStringQuestion} from '../Questions/MultiStringQuestion';
-import {ImageLoader} from '../Questions/ImageLoader';
-import {EventAdminSaveBtn} from '../EventStepsNav/EventAdminSaveBtn';
-import {EventAdminClient} from "../../../../Api/EventAdmin/EventAdminClient";
-import {DraftEvent} from "../../../../Api/EventAdmin/DraftEvent";
-
+﻿import React, { useEffect, useRef, useState } from 'react';
+import { ValidationContainer } from '@skbkontur/react-ui-validations';
+import { Gapped } from '@skbkontur/react-ui';
+import { SingleStringQuestion } from '../Questions/SingleStringQuestion';
+import { MultiStringQuestion } from '../Questions/MultiStringQuestion';
+import { ImageLoader } from '../Questions/ImageLoader';
+import { EventAdminSaveBtn } from '../EventStepsNav/EventAdminSaveBtn';
+import { EventAdminClient } from '../../../../Api/EventAdmin/EventAdminClient';
+import { DraftEvent } from '../../../../Api/EventAdmin/DraftEvent';
+import { DateTimeQuestion } from '../Questions/DateTimeQuestion';
 
 interface Props {
     onSave: () => void;
 }
 
-export const EventCoverSheet: React.FC<Props> = ({onSave}) => {
+export const EventCoverSheet: React.FC<Props> = ({ onSave }) => {
     const [draft, setDraft] = useState<DraftEvent>();
 
     useEffect(() => {
@@ -21,7 +21,7 @@ export const EventCoverSheet: React.FC<Props> = ({onSave}) => {
             const loadedDraft = DraftEvent.fromDto(r.data);
             setDraft(loadedDraft);
         });
-    }, [])
+    }, []);
 
     const validWrapper = useRef<ValidationContainer>(null);
 
@@ -34,10 +34,10 @@ export const EventCoverSheet: React.FC<Props> = ({onSave}) => {
             }
         }
     };
-    
+
     const onImgRemove = async () => {
         await EventAdminClient.removeCoverImage();
-    }
+    };
 
     if (!draft) {
         return null;
@@ -48,15 +48,24 @@ export const EventCoverSheet: React.FC<Props> = ({onSave}) => {
             <Gapped gap={30} vertical={true}>
                 <SingleStringQuestion title={'Название'}
                                       defaultValue={draft?.Title}
-                                      onValueChange={(v) => setDraft(draft?.withTitle(v))}/>
+                                      onValueChange={(v) => setDraft(draft?.withTitle(v))} />
                 <MultiStringQuestion title={'Подробное описание'}
                                      defaultValue={draft?.Description}
-                                     onValueChange={(v) => setDraft(draft?.withDescription(v))}/>
-                <ImageLoader title={'Обложка'} 
-                             uploader={EventAdminClient.setCoverImage} 
+                                     onValueChange={(v) => setDraft(draft?.withDescription(v))} />
+                <SingleStringQuestion title={'Город'}
+                                      defaultValue={draft?.City}
+                                      onValueChange={(v) => setDraft(draft?.withCity(v))} />
+                <SingleStringQuestion title={'Место'}
+                                      defaultValue={draft?.Address}
+                                      onValueChange={(v) => setDraft(draft?.withAddress(v))} />
+                <DateTimeQuestion title={'Дата и время'}
+                                  onValueChange={(v) => setDraft(draft?.withFrom(v))} 
+                                  defaultValue={draft?.From}/>
+                <ImageLoader title={'Обложка'}
+                             uploader={EventAdminClient.setCoverImage}
                              defaultUrl={draft.CoverImageId ? EventAdminClient.getCoverImageUrl() : null}
-                             onRemove={onImgRemove}/> 
-                <EventAdminSaveBtn onSave={onClickHandle}/>
+                             onRemove={onImgRemove} />
+                <EventAdminSaveBtn onSave={onClickHandle} />
             </Gapped>
         </ValidationContainer>
     );
