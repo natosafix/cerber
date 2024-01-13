@@ -60,5 +60,9 @@
                 "format": "Hm"
             }
         }
-    }
+    },
+    "yourQrCode": "Your QR code",
+    "visitorsQuestions": "Visitor''s questionnaire",
+    "save": "Save",
+    "questionsEmpty": "Questionnaire is empty"
 }

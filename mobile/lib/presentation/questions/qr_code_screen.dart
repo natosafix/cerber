@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project/l10n/generated/l10n.dart';
+import 'package:project/utils/extensions/context_x.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QrCodeScreen extends StatelessWidget {
@@ -9,16 +11,21 @@ class QrCodeScreen extends StatelessWidget {
 
   final String qrCodeData;
 
-  static Route route(String qrCodeData) {
-    return MaterialPageRoute(builder: (context) => QrCodeScreen(qrCodeData: qrCodeData));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: QrImageView(
-        data: qrCodeData,
-        size: MediaQuery.of(context).size.width * 0.8,
+      appBar: AppBar(
+        title: Text(L10n.current.yourQrCode),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: context.appBarForegroundColor(),
+      ),
+      body: Center(
+        child: QrImageView(
+          data: qrCodeData,
+          backgroundColor: Colors.white,
+          size: MediaQuery.of(context).size.width * 0.8,
+        ),
       ),
     );
   }

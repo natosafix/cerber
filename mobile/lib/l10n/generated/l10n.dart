@@ -355,6 +355,46 @@ class L10n {
       args: [dateString, timeString],
     );
   }
+
+  /// `Your QR code`
+  String get yourQrCode {
+    return Intl.message(
+      'Your QR code',
+      name: 'yourQrCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Visitor''s questionnaire`
+  String get visitorsQuestions {
+    return Intl.message(
+      'Visitor\'\'s questionnaire',
+      name: 'visitorsQuestions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get save {
+    return Intl.message(
+      'Save',
+      name: 'save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Questionnaire is empty`
+  String get questionsEmpty {
+    return Intl.message(
+      'Questionnaire is empty',
+      name: 'questionsEmpty',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

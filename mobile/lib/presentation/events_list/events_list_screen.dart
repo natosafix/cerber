@@ -26,7 +26,7 @@ class EventsListScreen extends StatelessWidget {
           title: Text(L10n.current.events),
           elevation: 0,
           backgroundColor: Colors.transparent,
-          foregroundColor: context.isLight() ? Colors.black : Colors.white,
+          foregroundColor: context.appBarForegroundColor(),
           actions: [
             IconButton(
               onPressed: () {

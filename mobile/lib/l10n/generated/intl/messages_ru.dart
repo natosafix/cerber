@@ -60,6 +60,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Должен иметь минимум 1 цифру"),
         "passwordMustHaveAtLeast1SpecialChar": m1,
         "passwordMustHaveAtLeastNChars": m2,
+        "questionsEmpty": MessageLookupByLibrary.simpleMessage("Анкета пуста"),
+        "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "scanVisitorsQrCode": MessageLookupByLibrary.simpleMessage(
             "Сканировать QR-код посетителя"),
         "shouldntBeEmpty":
@@ -68,11 +70,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "somethingWentWrong":
             MessageLookupByLibrary.simpleMessage("Что-то пошло не так..."),
         "visitors": MessageLookupByLibrary.simpleMessage("Посетители"),
+        "visitorsQuestions":
+            MessageLookupByLibrary.simpleMessage("Анкета посетителя"),
         "when": MessageLookupByLibrary.simpleMessage("Когда"),
         "where": MessageLookupByLibrary.simpleMessage("Где"),
         "youHaveNoEvents":
             MessageLookupByLibrary.simpleMessage("У вас нет мероприятий"),
         "youHaveSignUpsuccessfully":
-            MessageLookupByLibrary.simpleMessage("Вы успешно зарегались")
+            MessageLookupByLibrary.simpleMessage("Вы успешно зарегались"),
+        "yourQrCode": MessageLookupByLibrary.simpleMessage("Ваш QR-код")
       };
 }

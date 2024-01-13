@@ -31,7 +31,7 @@ class AuthenticationFormScreenBase extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
-            foregroundColor: context.isLight() ? Colors.black : Colors.white,
+            foregroundColor: context.appBarForegroundColor(),
             elevation: 0,
             title: Text(title),
             centerTitle: true,

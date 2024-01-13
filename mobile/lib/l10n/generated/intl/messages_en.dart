@@ -59,6 +59,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Must have at least 1 digit"),
         "passwordMustHaveAtLeast1SpecialChar": m1,
         "passwordMustHaveAtLeastNChars": m2,
+        "questionsEmpty":
+            MessageLookupByLibrary.simpleMessage("Questionnaire is empty"),
+        "save": MessageLookupByLibrary.simpleMessage("Save"),
         "scanVisitorsQrCode":
             MessageLookupByLibrary.simpleMessage("Scan visitor\'\'s QR code"),
         "shouldntBeEmpty":
@@ -67,11 +70,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "somethingWentWrong":
             MessageLookupByLibrary.simpleMessage("Something went wrong..."),
         "visitors": MessageLookupByLibrary.simpleMessage("Visitors"),
+        "visitorsQuestions":
+            MessageLookupByLibrary.simpleMessage("Visitor\'\'s questionnaire"),
         "when": MessageLookupByLibrary.simpleMessage("When"),
         "where": MessageLookupByLibrary.simpleMessage("Where"),
         "youHaveNoEvents": MessageLookupByLibrary.simpleMessage(
             "You don\'\'t have any events"),
         "youHaveSignUpsuccessfully": MessageLookupByLibrary.simpleMessage(
-            "You have signed up successfully")
+            "You have signed up successfully"),
+        "yourQrCode": MessageLookupByLibrary.simpleMessage("Your QR code")
       };
 }

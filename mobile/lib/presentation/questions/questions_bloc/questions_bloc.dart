@@ -40,6 +40,5 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
   void _onSaveNewVisitor(SaveNewVisitor event, Emitter<QuestionsState> emit) async {
     final qrCodeData = await _compoundEventsRepository.generateQrCode(_event);
     emit(state.copyWith(qrCodeData: qrCodeData.toString()));
-    emit(state.copyWith(qrCodeData: null));
   }
 }
