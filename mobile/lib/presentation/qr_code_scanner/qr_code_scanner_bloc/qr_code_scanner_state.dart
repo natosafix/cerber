@@ -6,12 +6,14 @@ final class InitialState extends QrCodeScannerState {}
 
 final class FailedToReadQrCode extends QrCodeScannerState {}
 
-final class NoSuchVisitorFound extends QrCodeScannerState {}
+final class BadQrCodeFormat extends QrCodeScannerState {}
+
+final class NoSuchVisitorExists extends QrCodeScannerState {}
 
 final class BoughtTicketOnSpot extends QrCodeScannerState {}
 
-final class VisitorFound extends QrCodeScannerState {
+final class VisitorExists extends QrCodeScannerState {
   final Visitor visitor;
 
-  VisitorFound(this.visitor);
+  VisitorExists(this.visitor);
 }

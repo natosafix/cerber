@@ -58,6 +58,7 @@ class MockEventsRepo implements RemoteEventsRepository {
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
       category: "Prazdnik",
       lastDownloaded: null,
+      cryptoKey: 'secretsecretsecr',
     ),
     Event(
       id: 7,
@@ -76,6 +77,7 @@ class MockEventsRepo implements RemoteEventsRepository {
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
       category: "Prazdnik",
       lastDownloaded: null,
+      cryptoKey: 'secretsecretsecr',
     ),
     Event(
       id: 8,
@@ -94,6 +96,7 @@ class MockEventsRepo implements RemoteEventsRepository {
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
       category: "Prazdnik",
       lastDownloaded: null,
+      cryptoKey: 'secretsecretsecr',
     ),
     Event(
       id: 9,
@@ -112,6 +115,7 @@ class MockEventsRepo implements RemoteEventsRepository {
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
       category: "Prazdnik",
       lastDownloaded: null,
+      cryptoKey: 'secretsecretsecr',
     ),
     Event(
       id: 10,
@@ -130,6 +134,7 @@ class MockEventsRepo implements RemoteEventsRepository {
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
       category: "Prazdnik",
       lastDownloaded: null,
+      cryptoKey: 'secretsecretsecr',
     ),
     Event(
       id: 11,
@@ -148,6 +153,7 @@ class MockEventsRepo implements RemoteEventsRepository {
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
       category: "Prazdnik",
       lastDownloaded: null,
+      cryptoKey: 'secretsecretsecr',
     ),
     Event(
       id: 12,
@@ -166,6 +172,7 @@ class MockEventsRepo implements RemoteEventsRepository {
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
       category: "Prazdnik",
       lastDownloaded: null,
+      cryptoKey: 'secretsecretsecr',
     ),
     Event(
       id: 13,
@@ -184,6 +191,7 @@ class MockEventsRepo implements RemoteEventsRepository {
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
       category: "Prazdnik",
       lastDownloaded: null,
+      cryptoKey: 'secretsecretsecr',
     ),
     Event(
       id: 14,
@@ -202,6 +210,7 @@ class MockEventsRepo implements RemoteEventsRepository {
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",
       category: "Prazdnik",
       lastDownloaded: null,
+      cryptoKey: 'secretsecretsecr',
     ),
   ];
 

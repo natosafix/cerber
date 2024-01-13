@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:project/domain/models/event.dart';
+import 'package:project/domain/models/qr_code_data.dart';
 import 'package:project/domain/models/question.dart';
 import 'package:project/domain/models/visitor.dart';
 import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
 import 'package:project/domain/repositories/compound_events_repository/download_status.dart';
+import 'package:project/domain/repositories/compound_events_repository/qr_code_process_result.dart';
 import 'package:project/domain/repositories/local_events_repository.dart';
 import 'package:project/domain/repositories/remote_events_repository.dart';
+import 'package:project/utils/cryptor/cryptor.dart';
 import 'package:project/utils/network_checker/network_checker.dart';
 import 'package:project/utils/locator.dart';
 import 'package:project/utils/result.dart';
@@ -24,6 +27,7 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
   final LocalEventsRepository localEventsRepository;
 
   final _networkChecker = locator<NetworkChecker>();
+  final _cryptor = locator<Cryptor>();
 
   late final bool _networkAvailable;
 
@@ -77,15 +81,11 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
 
   @override
   Future<Visitor?> findVisitor(String visitorId, int eventId) async {
-    final visitorLocal = await localEventsRepository.findVisitor(visitorId, eventId);
-
-    if (visitorLocal != null) return visitorLocal;
-
     if (_networkAvailable) {
       return await remoteEventsRepository.findVisitor(visitorId, eventId);
     }
 
-    return null;
+    return await localEventsRepository.findVisitor(visitorId, eventId);
   }
 
   @override
@@ -117,14 +117,37 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
 
   @override
   Future<List<Question>?> getQuestions(int eventId) async {
-    final localQuestions = await localEventsRepository.getQuestions(eventId);
-
-    if (localQuestions != null) return localQuestions;
-
     if (_networkAvailable) {
       return await remoteEventsRepository.getQuestions(eventId);
     }
 
-    return null;
+    return await localEventsRepository.getQuestions(eventId);
+  }
+
+  @override
+  Future<QrCodeProcessResult> processQrCode(QrCodeData qrCodeData, Event event) async {
+    final visitorIdDecrypted = _cryptor.decrypt(qrCodeData.encryptedVisitorId, event.cryptoKey, qrCodeData.iv);
+
+    if (visitorIdDecrypted == null) return VisitorNotFound();
+
+    final visitor = await findVisitor(visitorIdDecrypted, event.id);
+
+    if (visitor == null) return VisitorIdValidButNotFound();
+
+    return VisitorFound(visitor);
+  }
+
+  @override
+  Future<QrCodeData> generateQrCode(Event event) async {
+    await Future.delayed(Duration.zero);
+//TODO
+    const newVisitorId = "ojiytrfyguhoksd";
+
+    final encryptResult = _cryptor.encrypt(newVisitorId, event.cryptoKey);
+
+    return QrCodeData(
+      iv: encryptResult.iv,
+      encryptedVisitorId: encryptResult.encrypted,
+    );
   }
 }

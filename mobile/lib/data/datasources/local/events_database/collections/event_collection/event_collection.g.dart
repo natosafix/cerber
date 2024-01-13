@@ -32,38 +32,43 @@ const EventCollectionSchema = CollectionSchema(
       name: r'city',
       type: IsarType.string,
     ),
-    r'description': PropertySchema(
+    r'cryptoKey': PropertySchema(
       id: 3,
+      name: r'cryptoKey',
+      type: IsarType.string,
+    ),
+    r'description': PropertySchema(
+      id: 4,
       name: r'description',
       type: IsarType.string,
     ),
     r'endDate': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'endDate',
       type: IsarType.dateTime,
     ),
     r'lastDownloaded': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'lastDownloaded',
       type: IsarType.dateTime,
     ),
     r'name': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'name',
       type: IsarType.string,
     ),
     r'photoUrl': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'photoUrl',
       type: IsarType.string,
     ),
     r'shortDescription': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'shortDescription',
       type: IsarType.string,
     ),
     r'startDate': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'startDate',
       type: IsarType.dateTime,
     )
@@ -91,6 +96,7 @@ int _eventCollectionEstimateSize(
   bytesCount += 3 + object.address.length * 3;
   bytesCount += 3 + object.category.length * 3;
   bytesCount += 3 + object.city.length * 3;
+  bytesCount += 3 + object.cryptoKey.length * 3;
   bytesCount += 3 + object.description.length * 3;
   bytesCount += 3 + object.name.length * 3;
   bytesCount += 3 + object.photoUrl.length * 3;
@@ -107,13 +113,14 @@ void _eventCollectionSerialize(
   writer.writeString(offsets[0], object.address);
   writer.writeString(offsets[1], object.category);
   writer.writeString(offsets[2], object.city);
-  writer.writeString(offsets[3], object.description);
-  writer.writeDateTime(offsets[4], object.endDate);
-  writer.writeDateTime(offsets[5], object.lastDownloaded);
-  writer.writeString(offsets[6], object.name);
-  writer.writeString(offsets[7], object.photoUrl);
-  writer.writeString(offsets[8], object.shortDescription);
-  writer.writeDateTime(offsets[9], object.startDate);
+  writer.writeString(offsets[3], object.cryptoKey);
+  writer.writeString(offsets[4], object.description);
+  writer.writeDateTime(offsets[5], object.endDate);
+  writer.writeDateTime(offsets[6], object.lastDownloaded);
+  writer.writeString(offsets[7], object.name);
+  writer.writeString(offsets[8], object.photoUrl);
+  writer.writeString(offsets[9], object.shortDescription);
+  writer.writeDateTime(offsets[10], object.startDate);
 }
 
 EventCollection _eventCollectionDeserialize(
@@ -126,14 +133,15 @@ EventCollection _eventCollectionDeserialize(
     address: reader.readString(offsets[0]),
     category: reader.readString(offsets[1]),
     city: reader.readString(offsets[2]),
-    description: reader.readString(offsets[3]),
-    endDate: reader.readDateTime(offsets[4]),
+    cryptoKey: reader.readString(offsets[3]),
+    description: reader.readString(offsets[4]),
+    endDate: reader.readDateTime(offsets[5]),
     id: id,
-    lastDownloaded: reader.readDateTimeOrNull(offsets[5]),
-    name: reader.readString(offsets[6]),
-    photoUrl: reader.readString(offsets[7]),
-    shortDescription: reader.readString(offsets[8]),
-    startDate: reader.readDateTime(offsets[9]),
+    lastDownloaded: reader.readDateTimeOrNull(offsets[6]),
+    name: reader.readString(offsets[7]),
+    photoUrl: reader.readString(offsets[8]),
+    shortDescription: reader.readString(offsets[9]),
+    startDate: reader.readDateTime(offsets[10]),
   );
   return object;
 }
@@ -154,16 +162,18 @@ P _eventCollectionDeserializeProp<P>(
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
-      return (reader.readDateTime(offset)) as P;
-    case 5:
-      return (reader.readDateTimeOrNull(offset)) as P;
-    case 6:
       return (reader.readString(offset)) as P;
+    case 5:
+      return (reader.readDateTime(offset)) as P;
+    case 6:
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 7:
       return (reader.readString(offset)) as P;
     case 8:
       return (reader.readString(offset)) as P;
     case 9:
+      return (reader.readString(offset)) as P;
+    case 10:
       return (reader.readDateTime(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -668,6 +678,142 @@ extension EventCollectionQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'city',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      cryptoKeyEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'cryptoKey',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      cryptoKeyGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'cryptoKey',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      cryptoKeyLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'cryptoKey',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      cryptoKeyBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'cryptoKey',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      cryptoKeyStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'cryptoKey',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      cryptoKeyEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'cryptoKey',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      cryptoKeyContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'cryptoKey',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      cryptoKeyMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'cryptoKey',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      cryptoKeyIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'cryptoKey',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      cryptoKeyIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'cryptoKey',
         value: '',
       ));
     });
@@ -1509,6 +1655,20 @@ extension EventCollectionQuerySortBy
   }
 
   QueryBuilder<EventCollection, EventCollection, QAfterSortBy>
+      sortByCryptoKey() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'cryptoKey', Sort.asc);
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterSortBy>
+      sortByCryptoKeyDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'cryptoKey', Sort.desc);
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterSortBy>
       sortByDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
@@ -1648,6 +1808,20 @@ extension EventCollectionQuerySortThenBy
   }
 
   QueryBuilder<EventCollection, EventCollection, QAfterSortBy>
+      thenByCryptoKey() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'cryptoKey', Sort.asc);
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterSortBy>
+      thenByCryptoKeyDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'cryptoKey', Sort.desc);
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterSortBy>
       thenByDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
@@ -1779,6 +1953,13 @@ extension EventCollectionQueryWhereDistinct
     });
   }
 
+  QueryBuilder<EventCollection, EventCollection, QDistinct> distinctByCryptoKey(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'cryptoKey', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<EventCollection, EventCollection, QDistinct>
       distinctByDescription({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1853,6 +2034,12 @@ extension EventCollectionQueryProperty
   QueryBuilder<EventCollection, String, QQueryOperations> cityProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'city');
+    });
+  }
+
+  QueryBuilder<EventCollection, String, QQueryOperations> cryptoKeyProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'cryptoKey');
     });
   }
 

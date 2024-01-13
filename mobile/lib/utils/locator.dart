@@ -26,6 +26,8 @@ import 'package:project/domain/repositories/compound_events_repository/compound_
 import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/domain/repositories/local_events_repository.dart';
 import 'package:project/domain/repositories/remote_events_repository.dart';
+import 'package:project/utils/cryptor/cryptor.dart';
+import 'package:project/utils/cryptor/cryptor_impl.dart';
 import 'package:project/utils/network_checker/network_checker.dart';
 import 'package:project/utils/network_checker/network_checker_impl.dart';
 import 'package:project/utils/constants/constants.dart';
@@ -52,6 +54,8 @@ void setupLocator() async {
   );
 
   locator.registerSingleton<NetworkChecker>(NetworkCheckerImpl());
+
+  locator.registerSingleton<Cryptor>(CryptorImpl());
 
   locator.registerSingletonAsync<LocalEventsRepository>(() async {
     final dir = await getApplicationDocumentsDirectory();

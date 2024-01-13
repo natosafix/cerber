@@ -1,8 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:project/domain/models/event.dart';
+import 'package:project/domain/models/qr_code_data.dart';
 import 'package:project/domain/models/visitor.dart';
 import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
+import 'package:project/domain/repositories/compound_events_repository/qr_code_process_result.dart';
 
 part 'qr_code_scanner_event.dart';
 part 'qr_code_scanner_state.dart';
@@ -27,25 +29,21 @@ class QrCodeScannerBloc extends Bloc<QrCodeScannerEvent, QrCodeScannerState> {
       return emit(FailedToReadQrCode());
     }
 
-    // before trying to find the visitor we need to decrypt the 'value' to retreive this visitor's id
-    // ...but we havent decided on the implementation yet :(
+    final qrCodeData = QrCodeData.fromString(value);
 
-    // perform decryption here
-    final visitorId = value;
-    const DECRYPTION_SUCCESSFUL = true;
-
-    if (!DECRYPTION_SUCCESSFUL) {
-      return emit(NoSuchVisitorFound());
+    if (qrCodeData == null) {
+      return emit(BadQrCodeFormat());
     }
 
-    final visitor = await _compoundEventsRepository.findVisitor(visitorId, _event.id);
+    final qrCodeProcessResult = await _compoundEventsRepository.processQrCode(qrCodeData, _event);
 
-    if (visitor == null) {
-      // decryption is successful but we couldnt find this visitor in any repo
-      // which means they bought a ticket on spot
-      return emit(BoughtTicketOnSpot());
+    switch (qrCodeProcessResult) {
+      case VisitorFound(visitor: final visitor):
+        emit(VisitorExists(visitor));
+      case VisitorNotFound():
+        emit(NoSuchVisitorExists());
+      case VisitorIdValidButNotFound():
+        emit(BoughtTicketOnSpot());
     }
-
-    return emit(VisitorFound(visitor));
   }
 }

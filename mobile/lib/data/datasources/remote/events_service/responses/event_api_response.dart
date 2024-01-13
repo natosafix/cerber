@@ -16,6 +16,7 @@ class EventApiResponse {
   final DateTime to;
   final CategoryApiResponse category;
   final CoverApiResponse cover;
+  final String cryptoKey;
 
   EventApiResponse({
     required this.id,
@@ -28,6 +29,7 @@ class EventApiResponse {
     required this.to,
     required this.category,
     required this.cover,
+    required this.cryptoKey,
   });
 
   factory EventApiResponse.fromJson(Map<String, dynamic> json) => _$EventApiResponseFromJson(json);

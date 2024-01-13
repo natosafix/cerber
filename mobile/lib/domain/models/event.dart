@@ -10,6 +10,7 @@ class Event {
   final String photoUrl;
   final String category;
   final DateTime? lastDownloaded;
+  final String cryptoKey;
 
   Event({
     required this.id,
@@ -23,5 +24,6 @@ class Event {
     required this.photoUrl,
     required this.category,
     required this.lastDownloaded,
+    required this.cryptoKey,
   });
 }

@@ -19,4 +19,5 @@ EventApiResponse _$EventApiResponseFromJson(Map<String, dynamic> json) =>
       category: CategoryApiResponse.fromJson(
           json['category'] as Map<String, dynamic>),
       cover: CoverApiResponse.fromJson(json['cover'] as Map<String, dynamic>),
+      cryptoKey: json['cryptoKey'] as String,
     );

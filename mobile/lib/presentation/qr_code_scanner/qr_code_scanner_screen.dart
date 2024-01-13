@@ -19,8 +19,8 @@ class QrCodeScannerScreen extends StatelessWidget {
   }
 
   final scannerController = MobileScannerController(
-    // detectionSpeed: DetectionSpeed.noDuplicates,
-  );
+      // detectionSpeed: DetectionSpeed.noDuplicates,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,9 @@ class QrCodeScannerScreen extends StatelessWidget {
             backgroundColor: Colors.transparent,
             actions: [
               IconButton(
-                onPressed: () => _addPressed,
+                onPressed: () {
+                  _addPressed(context);
+                },
                 icon: const Icon(Icons.add),
               ),
               IconButton(
@@ -98,18 +100,20 @@ class QrCodeScannerScreen extends StatelessWidget {
     switch (scannerState) {
       case FailedToReadQrCode():
         context.showSnackbar("FailedToReadQrCode");
-      case NoSuchVisitorFound():
+      case BadQrCodeFormat():
+        context.showSnackbar("UnknownQrCodeFormat");
+      case NoSuchVisitorExists():
         context.showSnackbar("NoSuchVisitorFound");
       case BoughtTicketOnSpot():
         context.showSnackbar("BoughtTicketOnSpot");
-      case VisitorFound(visitor: final visitor):
-        Navigator.of(context).push(QuestionsScreen.route(visitor, event.id));
+      case VisitorExists(visitor: final visitor):
+        Navigator.of(context).push(QuestionsScreen.route(visitor, event));
       case InitialState():
         break;
     }
   }
 
   void _addPressed(BuildContext context) {
-    Navigator.of(context).push(QuestionsScreen.route(null, event.id));
+    Navigator.of(context).push(QuestionsScreen.route(null, event));
   }
 }
