@@ -20,10 +20,12 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
-  static String m0(specialChars) =>
+  static String m0(date, time) => "${date} в ${time}";
+
+  static String m1(specialChars) =>
       "Должен иметь минимум 1 из специальных символов: ${specialChars}";
 
-  static String m1(minLength) => "Должен иметь минимум ${minLength} символов";
+  static String m2(minLength) => "Должен иметь минимум ${minLength} символов";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -36,6 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Скачать базу"),
         "email": MessageLookupByLibrary.simpleMessage("Почта"),
         "events": MessageLookupByLibrary.simpleMessage("Мероприятия"),
+        "formattedDateTime": m0,
         "invalidEmailAddress":
             MessageLookupByLibrary.simpleMessage("Некорректный адрес"),
         "lastDownloaded": MessageLookupByLibrary.simpleMessage("Скачана"),
@@ -55,8 +58,8 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Должен иметь минимум 1 заглавную букву"),
         "passwordMustHaveAtLeast1Digit": MessageLookupByLibrary.simpleMessage(
             "Должен иметь минимум 1 цифру"),
-        "passwordMustHaveAtLeast1SpecialChar": m0,
-        "passwordMustHaveAtLeastNChars": m1,
+        "passwordMustHaveAtLeast1SpecialChar": m1,
+        "passwordMustHaveAtLeastNChars": m2,
         "scanVisitorsQrCode": MessageLookupByLibrary.simpleMessage(
             "Сканировать QR-код посетителя"),
         "shouldntBeEmpty":

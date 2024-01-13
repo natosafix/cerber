@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project/domain/models/event.dart';
+import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/events_list/event_image.dart';
 import 'package:project/utils/extensions/context_x.dart';
 
@@ -49,7 +50,7 @@ class EventWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 7),
                   Text(
-                    event.startDate.toString(),
+                    L10n.current.formattedDateTime(event.startDate, event.startDate),
                   ),
                 ],
               ),

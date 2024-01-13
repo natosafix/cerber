@@ -94,7 +94,7 @@ class EventDetailScreen extends StatelessWidget {
                         children: [
                           TextSpan(text: "${L10n.current.when}: "),
                           TextSpan(
-                            text: event.startDate.toString(),
+                            text: L10n.current.formattedDateTime(event.startDate, event.startDate),
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -114,10 +114,11 @@ class EventDetailScreen extends StatelessWidget {
                     const SizedBox(height: 18),
                     BlocBuilder<EventDetailBloc, EventDetailState>(
                       builder: (context, state) {
-                        if (state.lastDownloaded == null) {
+                        final date = state.lastDownloaded;
+                        if (date == null) {
                           return Text("⚠ ${L10n.current.notDownloaded}");
                         }
-                        return Text("${L10n.current.lastDownloaded} ${state.lastDownloaded}");
+                        return Text("${L10n.current.lastDownloaded} ${L10n.current.formattedDateTime(date, date)}");
                       },
                     ),
                     const SizedBox(height: 8),

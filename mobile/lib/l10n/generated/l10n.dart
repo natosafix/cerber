@@ -339,6 +339,22 @@ class L10n {
       args: [],
     );
   }
+
+  /// `{date} at {time}`
+  String formattedDateTime(DateTime date, DateTime time) {
+    final DateFormat dateDateFormat = DateFormat.yMd(Intl.getCurrentLocale());
+    final String dateString = dateDateFormat.format(date);
+
+    final DateFormat timeDateFormat = DateFormat.Hm(Intl.getCurrentLocale());
+    final String timeString = timeDateFormat.format(time);
+
+    return Intl.message(
+      '$dateString at $timeString',
+      name: 'formattedDateTime',
+      desc: '',
+      args: [dateString, timeString],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

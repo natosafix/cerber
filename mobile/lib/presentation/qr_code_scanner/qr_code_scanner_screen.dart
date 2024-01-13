@@ -96,7 +96,7 @@ class QrCodeScannerScreen extends StatelessWidget {
   }
 
   void _stateChanged(BuildContext context, QrCodeScannerState scannerState) {
-    // TODO: add a fullscreen overlay for each state
+    // TODO
     switch (scannerState) {
       case FailedToReadQrCode():
         context.showSnackbar("FailedToReadQrCode");

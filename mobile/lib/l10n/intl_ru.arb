@@ -47,5 +47,18 @@
         "description": "Database last downloaded"
     },
     "somethingWentWrong": "Что-то пошло не так...",
-    "youHaveSignUpsuccessfully": "Вы успешно зарегались"
+    "youHaveSignUpsuccessfully": "Вы успешно зарегались",
+    "formattedDateTime": "{date} в {time}",
+    "@formattedDateTime": {
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "yMd"
+            },
+            "time": {
+                "type": "DateTime",
+                "format": "Hm"
+            }
+        }
+    }
 }

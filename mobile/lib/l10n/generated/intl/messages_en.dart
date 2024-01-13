@@ -20,10 +20,12 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(specialChars) =>
+  static String m0(date, time) => "${date} at ${time}";
+
+  static String m1(specialChars) =>
       "Must have at least 1 of the following characters: ${specialChars}";
 
-  static String m1(minLength) => "Must have at least ${minLength} characters";
+  static String m2(minLength) => "Must have at least ${minLength} characters";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -34,6 +36,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Download database"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "events": MessageLookupByLibrary.simpleMessage("Events"),
+        "formattedDateTime": m0,
         "invalidEmailAddress":
             MessageLookupByLibrary.simpleMessage("Invalid email address"),
         "lastDownloaded":
@@ -54,8 +57,8 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Must have at least 1 capital letter"),
         "passwordMustHaveAtLeast1Digit":
             MessageLookupByLibrary.simpleMessage("Must have at least 1 digit"),
-        "passwordMustHaveAtLeast1SpecialChar": m0,
-        "passwordMustHaveAtLeastNChars": m1,
+        "passwordMustHaveAtLeast1SpecialChar": m1,
+        "passwordMustHaveAtLeastNChars": m2,
         "scanVisitorsQrCode":
             MessageLookupByLibrary.simpleMessage("Scan visitor\'\'s QR code"),
         "shouldntBeEmpty":

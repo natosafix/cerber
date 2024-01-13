@@ -47,5 +47,18 @@
         "description": "Database last downloaded"
     },
     "somethingWentWrong": "Something went wrong...",
-    "youHaveSignUpsuccessfully": "You have signed up successfully"
+    "youHaveSignUpsuccessfully": "You have signed up successfully",
+    "formattedDateTime": "{date} at {time}",
+    "@formattedDateTime": {
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "yMd"
+            },
+            "time": {
+                "type": "DateTime",
+                "format": "Hm"
+            }
+        }
+    }
 }
