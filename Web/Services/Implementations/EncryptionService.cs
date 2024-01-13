@@ -21,8 +21,8 @@ public class EncryptionService : IEncryptionService
             return text;
         
         var vector = GenerateInitializationVector();
-        var encryptedText = Convert.ToBase64String(Encrypt(text, key, vector));
-        return Convert.ToBase64String(vector) + ";" + encryptedText;
+        var encryptedText = Encrypt(text, key, vector);
+        return Convert.ToBase64String(vector) + ";" + Convert.ToBase64String(encryptedText);
     }
     
     private string Decrypt(byte[] encryptedBytes, byte[] key, byte[] vector)

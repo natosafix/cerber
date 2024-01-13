@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using System.Security.Cryptography;
+using Domain.Entities;
 using Domain.Infrastructure;
 using Web.Persistence.Repositories;
 
@@ -32,7 +33,9 @@ public class EventsService : IEventsService
 
     public async Task<Event> Create(Event @event)
     {
-        @event.CryptoKey = Guid.NewGuid().ToString();
+        var bytes = new byte[16];
+        RandomNumberGenerator.Create().GetBytes(bytes);
+        @event.CryptoKey = Convert.ToBase64String(bytes);
         return await eventsRepository.Create(@event);
     }
     
