@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using System.Security.Cryptography;
+using Domain.Entities;
 using Domain.Enums;
 using Web.Persistence.Repositories;
 
@@ -42,6 +43,10 @@ public class DraftEventPublisherService : IDraftEventPublisherService
                 Type = QuestionType.SingleString
             }
         };
+        
+        var bytes = new byte[16];
+        RandomNumberGenerator.Create().GetBytes(bytes);
+        dstEvent.CryptoKey = Convert.ToBase64String(bytes);
 
         return await eventsPublisherRepository.Publish(
             srcDraftEvent, dstEvent,

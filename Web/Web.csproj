@@ -40,7 +40,7 @@
     
 
     <ItemGroup>
-      <Folder Include="wwwroot\Files\bolthen\" />
+      <Folder Include="wwwroot" />
     </ItemGroup>
 
 </Project>

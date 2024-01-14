@@ -105,7 +105,6 @@ public class Startup
         else
             app.UseMiddleware<ExceptionHandlerMiddleware>();
         
-        app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
         
