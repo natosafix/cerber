@@ -111,7 +111,7 @@ QuestionCollection _questionCollectionDeserialize(
     question: reader.readString(offsets[2]),
     questionTypeDb: _QuestionCollectionquestionTypeDbValueEnumMap[
             reader.readStringOrNull(offsets[3])] ??
-        QuestionTypeDb.text,
+        QuestionTypeDb.oneLineText,
   );
   return object;
 }
@@ -132,19 +132,21 @@ P _questionCollectionDeserializeProp<P>(
     case 3:
       return (_QuestionCollectionquestionTypeDbValueEnumMap[
               reader.readStringOrNull(offset)] ??
-          QuestionTypeDb.text) as P;
+          QuestionTypeDb.oneLineText) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
 const _QuestionCollectionquestionTypeDbEnumValueMap = {
-  r'text': r'text',
+  r'oneLineText': r'oneLineText',
+  r'multiLineText': r'multiLineText',
   r'radio': r'radio',
   r'checkbox': r'checkbox',
 };
 const _QuestionCollectionquestionTypeDbValueEnumMap = {
-  r'text': QuestionTypeDb.text,
+  r'oneLineText': QuestionTypeDb.oneLineText,
+  r'multiLineText': QuestionTypeDb.multiLineText,
   r'radio': QuestionTypeDb.radio,
   r'checkbox': QuestionTypeDb.checkbox,
 };

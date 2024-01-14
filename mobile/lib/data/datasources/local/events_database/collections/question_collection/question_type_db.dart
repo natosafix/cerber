@@ -1,13 +1,15 @@
 import 'package:project/domain/models/question_type.dart';
 
 enum QuestionTypeDb {
-  text,
+  oneLineText,
+  multiLineText,
   radio,
   checkbox;
 
   factory QuestionTypeDb.fromModel(QuestionType questionType) {
     return switch (questionType) {
-      QuestionType.text => QuestionTypeDb.text,
+      QuestionType.oneLineText => QuestionTypeDb.oneLineText,
+      QuestionType.multiLineText => QuestionTypeDb.multiLineText,
       QuestionType.radio => QuestionTypeDb.radio,
       QuestionType.checkbox => QuestionTypeDb.checkbox,
     };
@@ -15,9 +17,10 @@ enum QuestionTypeDb {
 
   static QuestionType toModel(QuestionTypeDb questionTypeDb) {
     return switch (questionTypeDb) {
-      QuestionTypeDb.text => QuestionType.text,
+      QuestionTypeDb.oneLineText => QuestionType.oneLineText,
+      QuestionTypeDb.multiLineText => QuestionType.multiLineText,
       QuestionTypeDb.radio => QuestionType.radio,
       QuestionTypeDb.checkbox => QuestionType.checkbox,
-    }; 
+    };
   }
 }

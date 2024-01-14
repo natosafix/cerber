@@ -1,5 +1,6 @@
 enum QuestionType {
-  text,
+  oneLineText,
+  multiLineText,
   radio,
   checkbox,
 }

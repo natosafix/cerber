@@ -10,12 +10,16 @@ QuestionApiResponse _$QuestionApiResponseFromJson(Map<String, dynamic> json) =>
     QuestionApiResponse(
       id: json['id'] as int,
       type: $enumDecode(_$QuestionTypeResponseEnumMap, json['type']),
-      content: json['content'] as String,
+      title: json['title'] as String,
       required: json['required'] as bool,
+      answerChoices: (json['answerChoices'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
     );
 
 const _$QuestionTypeResponseEnumMap = {
-  QuestionTypeResponse.text: 0,
-  QuestionTypeResponse.radio: 1,
-  QuestionTypeResponse.checkbox: 2,
+  QuestionTypeResponse.oneLineText: 0,
+  QuestionTypeResponse.multiLineText: 1,
+  QuestionTypeResponse.radio: 2,
+  QuestionTypeResponse.checkbox: 3,
 };

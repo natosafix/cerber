@@ -7,14 +7,16 @@ part 'question_api_response.g.dart';
 class QuestionApiResponse {
   final int id;
   final QuestionTypeResponse type;
-  final String content;
+  final String title;
   final bool required;
+  final List<String> answerChoices;
 
   QuestionApiResponse({
     required this.id,
     required this.type,
-    required this.content,
+    required this.title,
     required this.required,
+    required this.answerChoices,
   });
 
   factory QuestionApiResponse.fromJson(Map<String, dynamic> json) => _$QuestionApiResponseFromJson(json);

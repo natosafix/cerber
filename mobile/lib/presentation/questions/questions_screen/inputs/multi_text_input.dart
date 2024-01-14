@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:project/domain/models/answer.dart';
 import 'package:project/domain/models/question.dart';
 
-class TextInput extends StatelessWidget {
-  TextInput(
+class MultiLineTextInput extends StatelessWidget {
+  MultiLineTextInput(
     this.question,
     this.answer, {
     super.key,
@@ -20,8 +20,12 @@ class TextInput extends StatelessWidget {
       controller: _controller,
       enabled: answer == null,
       decoration: InputDecoration(
-        labelText: question.question,
+        border: const OutlineInputBorder(),
+        hintText: question.question,
       ),
+      textCapitalization: TextCapitalization.sentences,
+      keyboardType: TextInputType.multiline,
+      maxLines: 2,
     );
   }
 }

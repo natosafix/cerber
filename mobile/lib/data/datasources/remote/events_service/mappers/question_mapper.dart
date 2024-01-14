@@ -6,9 +6,9 @@ extension QuestionMapper on QuestionApiResponse {
   Question toModel() {
     return Question(
       id: id,
-      question: content,
+      question: title,
       questionType: type.toModel(),
-      options: [], //TODO
+      options: answerChoices,
     );
   }
 }

@@ -10,7 +10,6 @@ EventApiResponse _$EventApiResponseFromJson(Map<String, dynamic> json) =>
     EventApiResponse(
       id: json['id'] as int,
       name: json['name'] as String,
-      shortDescription: json['shortDescription'] as String,
       description: json['description'] as String,
       city: json['city'] as String,
       address: json['address'] as String,
