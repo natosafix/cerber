@@ -30,14 +30,22 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "add": MessageLookupByLibrary.simpleMessage("Добавить"),
+        "badQrCodeFormat":
+            MessageLookupByLibrary.simpleMessage("QR-код в неверном формате"),
         "beginChecking":
             MessageLookupByLibrary.simpleMessage("Начать проверку"),
+        "boughtTicketOnSpot": MessageLookupByLibrary.simpleMessage(
+            "QR код верный, однако посетителя нет в базе, вероятно билет был куплен на месте"),
         "createAccount":
             MessageLookupByLibrary.simpleMessage("Создать аккаунт"),
         "downloadDatabase":
             MessageLookupByLibrary.simpleMessage("Скачать базу"),
         "email": MessageLookupByLibrary.simpleMessage("Почта"),
         "events": MessageLookupByLibrary.simpleMessage("Мероприятия"),
+        "failedToFindSuchVisitor":
+            MessageLookupByLibrary.simpleMessage("Такого посетителя нет"),
+        "failedToReadQrCode":
+            MessageLookupByLibrary.simpleMessage("Не можем прочитать QR-код"),
         "formattedDateTime": m0,
         "invalidEmailAddress":
             MessageLookupByLibrary.simpleMessage("Некорректный адрес"),

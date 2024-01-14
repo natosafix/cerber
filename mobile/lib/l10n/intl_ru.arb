@@ -64,5 +64,9 @@
     "yourQrCode": "Ваш QR-код",
     "visitorsQuestions": "Анкета посетителя",
     "save": "Сохранить",
-    "questionsEmpty": "Анкета пуста"
+    "questionsEmpty": "Анкета пуста",
+    "failedToReadQrCode": "Не можем прочитать QR-код",
+    "badQrCodeFormat": "QR-код в неверном формате",
+    "failedToFindSuchVisitor": "Такого посетителя нет",
+    "boughtTicketOnSpot": "QR код верный, однако посетителя нет в базе, вероятно билет был куплен на месте"
 }

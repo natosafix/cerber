@@ -64,5 +64,9 @@
     "yourQrCode": "Your QR code",
     "visitorsQuestions": "Visitor''s questionnaire",
     "save": "Save",
-    "questionsEmpty": "Questionnaire is empty"
+    "questionsEmpty": "Questionnaire is empty",
+    "failedToReadQrCode": "Failed to read QR code",
+    "badQrCodeFormat": "Bad QR code format",
+    "failedToFindSuchVisitor": "Could not find this visitor",
+    "boughtTicketOnSpot": "QR code is correct however this visitor is not in the database, they probably bought the ticket on spot"
 }

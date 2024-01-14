@@ -395,6 +395,46 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Failed to read QR code`
+  String get failedToReadQrCode {
+    return Intl.message(
+      'Failed to read QR code',
+      name: 'failedToReadQrCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bad QR code format`
+  String get badQrCodeFormat {
+    return Intl.message(
+      'Bad QR code format',
+      name: 'badQrCodeFormat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not find this visitor`
+  String get failedToFindSuchVisitor {
+    return Intl.message(
+      'Could not find this visitor',
+      name: 'failedToFindSuchVisitor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `QR code is correct however this visitor is not in the database, they probably bought the ticket on spot`
+  String get boughtTicketOnSpot {
+    return Intl.message(
+      'QR code is correct however this visitor is not in the database, they probably bought the ticket on spot',
+      name: 'boughtTicketOnSpot',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
+import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/qr_code_scanner/qr_code_scanner_bloc/qr_code_scanner_bloc.dart';
 import 'package:project/presentation/qr_code_scanner/scanner_overlay/scanner_overlay.dart';
 import 'package:project/presentation/questions/questions_screen/questions_screen.dart';
@@ -96,20 +97,19 @@ class QrCodeScannerScreen extends StatelessWidget {
   }
 
   void _stateChanged(BuildContext context, QrCodeScannerState scannerState) {
-    // TODO
     switch (scannerState) {
-      case FailedToReadQrCode():
-        context.showSnackbar("FailedToReadQrCode");
-      case BadQrCodeFormat():
-        context.showSnackbar("UnknownQrCodeFormat");
-      case NoSuchVisitorExists():
-        context.showSnackbar("NoSuchVisitorFound");
-      case BoughtTicketOnSpot():
-        context.showSnackbar("BoughtTicketOnSpot");
       case VisitorExists(visitor: final visitor):
         Navigator.of(context).push(QuestionsScreen.route(visitor, event));
+      case NoSuchVisitorExists():
+        context.showSnackbar(L10n.current.failedToFindSuchVisitor);
+      case BoughtTicketOnSpot():
+        context.showSnackbar(L10n.current.boughtTicketOnSpot);
       case InitialState():
         break;
+      case FailedToReadQrCode():
+        context.showSnackbar(L10n.current.failedToReadQrCode);
+      case BadQrCodeFormat():
+        context.showSnackbar(L10n.current.badQrCodeFormat);
     }
   }
 
