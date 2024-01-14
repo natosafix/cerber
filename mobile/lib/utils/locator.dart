@@ -71,7 +71,7 @@ void setupLocator() async {
     () => Dio(
       BaseOptions(
         baseUrl: Constants.eventsRepositoryBaseUrl,
-        connectTimeout: const Duration(seconds: 20),
+        // connectTimeout: const Duration(seconds: 120),
       ),
     )..interceptors.add(EventsServiceInterceptor()),
   );
