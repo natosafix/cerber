@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project/domain/models/answer.dart';
 import 'package:project/domain/models/question.dart';
+import 'package:project/presentation/questions/questions_screen/questions_screen.dart';
 
 class MultiLineTextInput extends StatelessWidget {
   MultiLineTextInput(
@@ -16,16 +17,19 @@ class MultiLineTextInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: _controller,
-      enabled: answer == null,
-      decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        hintText: question.question,
+    return Padding(
+      padding: const EdgeInsets.only(top: QuestionsScreen.midInputsPadding * 2),
+      child: TextField(
+        controller: _controller,
+        readOnly: answer != null,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: question.question,
+        ),
+        textCapitalization: TextCapitalization.sentences,
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
       ),
-      textCapitalization: TextCapitalization.sentences,
-      keyboardType: TextInputType.multiline,
-      maxLines: 2,
     );
   }
 }

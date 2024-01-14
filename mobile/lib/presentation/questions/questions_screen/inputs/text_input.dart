@@ -18,7 +18,7 @@ class TextInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: _controller,
-      enabled: answer == null,
+      readOnly: answer != null,
       decoration: InputDecoration(
         labelText: question.question,
       ),

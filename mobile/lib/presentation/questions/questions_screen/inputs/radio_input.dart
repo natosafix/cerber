@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project/domain/models/answer.dart';
 import 'package:project/domain/models/question.dart';
+import 'package:project/presentation/questions/questions_screen/questions_screen.dart';
 
 class RadioInput extends StatefulWidget {
   const RadioInput(
@@ -27,15 +28,25 @@ class _RadioInputState extends State<RadioInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: widget.question.options.map((option) {
-        return RadioListTile(
-          title: Text(option),
-          value: option,
-          groupValue: _selected,
-          onChanged: widget.answer != null ? _onChanged : null,
-        );
-      }).toList(),
+    return Padding(
+      padding: const EdgeInsets.only(top: QuestionsScreen.midInputsPadding),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.question.question,
+            style: TextStyle(color: Colors.grey.shade600),
+          ),
+          ...widget.question.options.map((option) {
+            return RadioListTile(
+              title: Text(option),
+              value: option,
+              groupValue: _selected,
+              onChanged: widget.answer == null ? _onChanged : (_) {},
+            );
+          }),
+        ],
+      ),
     );
   }
 

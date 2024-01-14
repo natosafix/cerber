@@ -7,6 +7,7 @@ import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/questions/qr_code_screen.dart';
 import 'package:project/presentation/questions/questions_bloc/questions_bloc.dart';
 import 'package:project/presentation/questions/questions_screen/inputs/checkbox_input.dart';
+import 'package:project/presentation/questions/questions_screen/inputs/multi_text_input.dart';
 import 'package:project/presentation/questions/questions_screen/inputs/radio_input.dart';
 import 'package:project/presentation/questions/questions_screen/inputs/text_input.dart';
 import 'package:project/utils/extensions/context_x.dart';
@@ -24,6 +25,8 @@ class QuestionsScreen extends StatelessWidget {
 
   final Visitor? visitor;
   final Event event;
+
+  static const double midInputsPadding = 8;
 
   @override
   Widget build(BuildContext context) {
@@ -52,29 +55,37 @@ class QuestionsScreen extends StatelessWidget {
               final question = entry.key;
               final answer = entry.value;
               widgets.add(switch (question.questionType) {
-                QuestionType.text => TextInput(question, answer),
+                QuestionType.oneLineText => TextInput(question, answer),
+                QuestionType.multiLineText => MultiLineTextInput(question, answer),
                 QuestionType.radio => RadioInput(question, answer),
                 QuestionType.checkbox => CheckboxInput(question, answer),
               });
-              widgets.add(const SizedBox(height: 8));
+              widgets.add(const SizedBox(height: midInputsPadding));
             }
 
-            widgets.add(Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: () => context.read<QuestionsBloc>().add(SaveNewVisitor()),
-                  child: Text(L10n.current.save),
+            if (visitor == null) {
+              widgets.add(Padding(
+                padding: const EdgeInsets.only(top: midInputsPadding * 2),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: () => context.read<QuestionsBloc>().add(SaveNewVisitor()),
+                    child: Text(L10n.current.save),
+                  ),
                 ),
-              ),
-            ));
+              ));
+            }
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Center(
-                child: Column(
-                  children: widgets,
+            return Scrollbar(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Center(
+                    child: Column(
+                      children: widgets,
+                    ),
+                  ),
                 ),
               ),
             );

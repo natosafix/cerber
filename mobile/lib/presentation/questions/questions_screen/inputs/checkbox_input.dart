@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project/domain/models/answer.dart';
 import 'package:project/domain/models/question.dart';
+import 'package:project/presentation/questions/questions_screen/questions_screen.dart';
 
 class CheckboxInput extends StatefulWidget {
   const CheckboxInput(
@@ -30,15 +31,25 @@ class _CheckboxInputState extends State<CheckboxInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: widget.question.options.map((option) {
-        return CheckboxListTile(
-          title: Text(option),
-          value: _selected[option],
-          onChanged: widget.answer != null ? (value) => _onChanged(option, value) : null,
-          controlAffinity: ListTileControlAffinity.leading,
-        );
-      }).toList(),
+    return Padding(
+      padding: const EdgeInsets.only(top: QuestionsScreen.midInputsPadding),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.question.question,
+            style: TextStyle(color: Colors.grey.shade600),
+          ),
+          ...widget.question.options.map((option) {
+            return CheckboxListTile(
+              title: Text(option),
+              value: _selected[option],
+              onChanged: widget.answer == null ? (value) => _onChanged(option, value) : (_) {},
+              controlAffinity: ListTileControlAffinity.leading,
+            );
+          }),
+        ],
+      ),
     );
   }
 
