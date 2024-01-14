@@ -14,7 +14,7 @@ class EventApiResponse {
   final String address;
   final DateTime from;
   final DateTime to;
-  final CategoryApiResponse category;
+  // final CategoryApiResponse category;
   final CoverApiResponse cover;
   final String cryptoKey;
 
@@ -27,7 +27,7 @@ class EventApiResponse {
     required this.address,
     required this.from,
     required this.to,
-    required this.category,
+    // required this.category,
     required this.cover,
     required this.cryptoKey,
   });

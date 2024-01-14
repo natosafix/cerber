@@ -15,7 +15,7 @@ class EventCollection {
   String address;
   DateTime startDate;
   DateTime endDate;
-  String category;
+  // String category;
   String photoUrl;
   DateTime? lastDownloaded;
   String cryptoKey;
@@ -29,7 +29,7 @@ class EventCollection {
     required this.address,
     required this.startDate,
     required this.endDate,
-    required this.category,
+    // required this.category,
     required this.photoUrl,
     required this.lastDownloaded,
     required this.cryptoKey,
@@ -46,7 +46,7 @@ class EventCollection {
       startDate: event.startDate,
       endDate: event.endDate,
       photoUrl: event.photoUrl,
-      category: event.category,
+      // category: event.category,
       lastDownloaded: event.lastDownloaded,
       cryptoKey: event.cryptoKey,
     );
@@ -62,7 +62,7 @@ class EventCollection {
       address: event.address,
       startDate: event.startDate,
       endDate: event.endDate,
-      category: event.category,
+      // category: event.category,
       photoUrl: event.photoUrl,
       lastDownloaded: event.lastDownloaded,
       cryptoKey: event.cryptoKey,
