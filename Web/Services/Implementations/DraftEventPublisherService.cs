@@ -47,7 +47,6 @@ public class DraftEventPublisherService : IDraftEventPublisherService
         var bytes = new byte[16];
         RandomNumberGenerator.Create().GetBytes(bytes);
         dstEvent.CryptoKey = Convert.ToBase64String(bytes);
-        dstEvent.Id = 0;
 
         return await eventsPublisherRepository.Publish(
             srcDraftEvent, dstEvent,

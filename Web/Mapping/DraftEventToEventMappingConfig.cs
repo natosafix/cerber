@@ -8,6 +8,8 @@ public static class DraftEventToEventMappingConfig
     public static void Configure(this IMappingExpression<DraftEvent, Event> mapping)
     {
         mapping
+            .ForMember(d => d.Id,
+                opt => opt.MapFrom(_ => 0))
             .ForMember(e => e.CoverId,
                 opt => opt.MapFrom(de => de.CoverImageId))
             .ForMember(e => e.Name,

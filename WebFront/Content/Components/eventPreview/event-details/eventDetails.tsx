@@ -8,42 +8,38 @@ export const EventDetails: React.FC = () => {
     const { id } = useParams();
     const [event, setEvent] = useState<IEvent | null>(null);
     const [hasCerberAuthCookie, setHasCerberAuthCookie] = useState(false);
+    const [imgSrc, setImgSrc] = useState<string | null>(null);
+
 
     useEffect(() => {
-        const fetchEventDetails = async () => {
-            if (id) {
-                try {
+        const fetchEventDetailsAndCover = async () => {
+            try {
+                if (id) {
                     const eventData = await getEvent(id);
                     console.log('Event Data:', eventData);
                     setEvent(eventData);
-                } catch (error) {
-                    return <div>Такого события не существует</div>;
+
+                    if (eventData.img) {
+                        const imgSrc = URL.createObjectURL(eventData.img);
+                        setImgSrc(imgSrc);
+                    }
                 }
+            } catch (error) {
+                console.error(error);
             }
         };
-        const checkCerberAuthCookie = () => {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.startsWith('CerberAuth=')) {
-                    setHasCerberAuthCookie(true);
-                    break;
-                }
-            }
-        };
-        
-        checkCerberAuthCookie();
-        fetchEventDetails();
+
+        fetchEventDetailsAndCover();
     }, [id]);
+
 
     if (!event) {
         return <div>Loading...</div>;
     }
-
     return (
         <div className={styles.eventWrapper}>
             <div className={styles.imgWrapper}>
-                <img src="https://content-30.foto.my.mail.ru/community/bibliadenjzadnjom/1/h-36648.jpg" />
+                {imgSrc && <img src={imgSrc} alt={event.name}/>}
             </div>
             <div className={styles.textWrapper}>
                 <p className={styles.title}>{event.name}</p>
