@@ -26,6 +26,10 @@ export class EventAdminClient {
         return api.get('/coverImage');
     }
 
+    public static getCoverImageUrl(): string {
+        return api.getUri({url: '/coverImage'});
+    }
+
     public static setCoverImage(file: FileUploaderAttachedFile): Promise<void> {
         let formData = new FormData();
         formData.append('file', file.originalFile, file.originalFile.name);
@@ -34,6 +38,14 @@ export class EventAdminClient {
                 "Content-Type": `multipart/form-data`,
             }
         });
+    }
+
+    public static removeCoverImage() {
+        return api.delete('/coverImage');
+    }
+    
+    public static publishDraft() {
+        return api.post('/publishDraft')
     }
 
     public static createDraft() {

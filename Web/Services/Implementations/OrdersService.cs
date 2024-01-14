@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using System.Text;
+using Domain.Entities;
 using Domain.Infrastructure;
 using Web.Persistence.Repositories;
 
@@ -9,12 +10,16 @@ public class OrdersService : IOrdersService
     private readonly IOrdersRepository ordersRepository;
     private readonly IMailService mailService;
     private readonly IQrCodeService qrCodeService;
+    private readonly IEventsService eventsService;
+    private readonly IEncryptionService encryptionService;
     
-    public OrdersService(IOrdersRepository ordersRepository, IMailService mailService, IQrCodeService qrCodeService)
+    public OrdersService(IOrdersRepository ordersRepository, IMailService mailService, IQrCodeService qrCodeService, IEventsService eventsService, IEncryptionService encryptionService)
     {
         this.ordersRepository = ordersRepository;
         this.mailService = mailService;
         this.qrCodeService = qrCodeService;
+        this.eventsService = eventsService;
+        this.encryptionService = encryptionService;
     }
 
     public async Task<Order> Get(Guid customer)
@@ -31,11 +36,13 @@ public class OrdersService : IOrdersService
     {
         order.Customer = Guid.NewGuid();
         order = await ordersRepository.Create(order);
-        
-        var qrCode = qrCodeService.Create($"ticket.png", order.Customer.ToString());
+        var @event = await eventsService.GetByTicketId(order.TicketId);
+        var cryptoKey = Convert.FromBase64String(@event.CryptoKey);
+        var encryptedCustomer = encryptionService.EncryptString(order.Customer.ToString(), cryptoKey);
+        var qrCode = qrCodeService.Create($"ticket.png", encryptedCustomer);
         await mailService.SendWithImageAttachments(
-            "name",
-            "address",
+            "",
+            "email",
             "Tickets",
             "Спасибо за заказ. Ваши билеты во вложениях.",
             new List<ImageInfo> {qrCode});

@@ -1,17 +1,14 @@
 ﻿export class DraftEvent {
-    public Id: number;
-    public OwnerId: string;
     public CoverImageId: number;
     public Title: string;
     public Description: string;
     public City: string;
     public Address: string;
-    public From: Date;
+    public From: Date | null;
     public To: Date;
 
-    constructor(id: number, ownerId: string, coverImageId: number, title: string, description: string, city: string, address: string, from: Date, to: Date) {
-        this.Id = id;
-        this.OwnerId = ownerId;
+    constructor(coverImageId: number, title: string, description: string, city: string, address: string, from: Date | null, to: Date) {
+
         this.CoverImageId = coverImageId;
         this.Title = title;
         this.Description = description;
@@ -23,15 +20,13 @@
 
     public static fromDto(dto: DraftEventDto): DraftEvent {
         return new DraftEvent(
-            dto.id,
-            dto.ownerId,
             dto.coverImageId,
             dto.title,
             dto.description,
             dto.city,
             dto.address,
-            dto.from,
-            dto.to);
+            dto.from ? new Date(dto.from) : null,
+            new Date(dto.to));
     }
 
     public withTitle(title: string): DraftEvent {
@@ -39,20 +34,33 @@
         return this;
     }
 
+    public withAddress(address: string): DraftEvent {
+        this.Address = address;
+        return this;
+    }
+
+    public withCity(city: string): DraftEvent {
+        this.City = city;
+        return this;
+    }
+
     public withDescription(description: string): DraftEvent {
         this.Description = description;
+        return this;
+    }
+
+    public withFrom(value: Date): DraftEvent {
+        this.From = value;
         return this;
     }
 }
 
 export class DraftEventDto {
-    public id: number;
-    public ownerId: string;
     public coverImageId: number;
     public title: string;
     public description: string;
     public city: string;
     public address: string;
-    public from: Date;
-    public to: Date;
+    public from: string;
+    public to: string;
 }

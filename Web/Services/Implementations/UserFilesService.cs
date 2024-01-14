@@ -24,14 +24,18 @@ public class UserFilesService : IUserFilesService
         return await userFilesRepository.Get(id) ?? throw new BadHttpRequestException($"Not found file with id {id}");
     }
 
+    public async Task<UserFile?> TryGet(int id)
+    {
+        return await userFilesRepository.Get(id);
+    }
+
     public async Task<byte[]> GetContent(UserFile userFile)
     {
         return await storageManager.Get(userFile.Path);
     }
 
-    public async Task<Stream> GetContentStream(int id)
+    public Stream GetContentStream(UserFile userFile)
     {
-        var userFile = await Get(id);
         return storageManager.GetFileStream(userFile.Path);
     }
 
@@ -45,5 +49,11 @@ public class UserFilesService : IUserFilesService
         };
         await storageManager.Save(formFile, userFile.Path);
         return await userFilesRepository.Save(userFile);
+    }
+
+    public async Task Remove(UserFile userFile)
+    {
+        await userFilesRepository.Remove(userFile);
+        storageManager.Remove(userFile.Path);
     }
 }

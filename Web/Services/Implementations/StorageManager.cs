@@ -11,13 +11,14 @@ public class StorageManager : IStorageManager
 
     public async Task<byte[]> Get(string path)
     {
+        var a = Path.Combine(webHostEnvironment.WebRootPath, path);
         return await File.ReadAllBytesAsync(Path.Combine(webHostEnvironment.WebRootPath, path));
     }
 
     public Stream GetFileStream(string path)
     {
         var webPath = Path.Combine(webHostEnvironment.WebRootPath, path);
-        var stream = new FileStream(webPath, FileMode.Open);
+        var stream = new FileStream(webPath, FileMode.Open, FileAccess.Read, FileShare.Read);
         return stream;
     }
 
@@ -31,5 +32,11 @@ public class StorageManager : IStorageManager
 
         await using var fileStream = new FileStream(webPath, FileMode.Create);
         await file.CopyToAsync(fileStream);
+    }
+
+    public void Remove(string path)
+    {
+        var webPath = Path.Combine(webHostEnvironment.WebRootPath, path);
+        File.Delete(webPath);
     }
 }

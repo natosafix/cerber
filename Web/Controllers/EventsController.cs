@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Web.Dtos.Request;
 using Web.Dtos.Response;
 using Web.Services;
+using Web.Services.Validators;
 
 namespace Web.Controllers;
 
@@ -16,12 +17,17 @@ public class EventsController : Controller
     private readonly IMapper mapper;
     private readonly IEventsService eventsService;
     private readonly IUserHelper userHelper;
+    private readonly IUserFilesService userFilesService;
 
-    public EventsController(IMapper mapper, IEventsService eventsService, IUserHelper userHelper)
+    public EventsController(
+        IMapper mapper,
+        IEventsService eventsService,
+        IUserHelper userHelper, IUserFilesService userFilesService)
     {
         this.mapper = mapper;
         this.eventsService = eventsService;
         this.userHelper = userHelper;
+        this.userFilesService = userFilesService;
     }
 
     [AllowAnonymous]
@@ -56,7 +62,7 @@ public class EventsController : Controller
         var @event = mapper.Map<Event>(createEventDto);
         var createdEvent = await eventsService.Create(@event);
         var eventResponse = mapper.Map<EventResponseDto>(createdEvent);
-        return Ok(await eventsService.Create(mapper.Map<Event>(eventResponse)));
+        return Ok(eventResponse);
     }
 
     [Authorize("MustOwnEvent")]
@@ -70,5 +76,15 @@ public class EventsController : Controller
         await eventsService.AddInspector(id, inspectorId);
 
         return NoContent();
+    }
+    
+    [Authorize("MustOwnEvent")]
+    [HttpGet("{id}/cover")]
+    public async Task<IActionResult> GetCover([FromRoute] int id)
+    {
+        var @event = await eventsService.Get(id);
+        var userFile = await userFilesService.Get(@event.CoverId!.Value);
+        var bytes = await userFilesService.GetContent(userFile);
+        return File(bytes, "APPLICATION/octet-stream", userFile.Name);
     }
 }

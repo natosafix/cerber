@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Dtos;
 using Web.Services;
+using Web.Services.Validators;
 
 namespace Web.Controllers;
 
@@ -15,19 +16,25 @@ public class EventAdminController : Controller
     private readonly IUserHelper userHelper;
     private readonly IDraftEventsService draftEventsService;
     private readonly IDraftQuestionsService draftQuestionsService;
+    private readonly IDraftEventPublisherService draftEventPublisherService;
+    private readonly IDraftEventValidator draftEventValidator;
 
     public EventAdminController(
-        IUserHelper userHelper, 
+        IUserHelper userHelper,
         IDraftEventsService draftEventsService,
-        IDraftQuestionsService draftQuestionsService, 
+        IDraftQuestionsService draftQuestionsService,
         IMapper mapper,
-        IUserFilesService userFilesService)
+        IUserFilesService userFilesService,
+        IDraftEventPublisherService draftEventPublisherService,
+        IDraftEventValidator draftEventValidator)
     {
         this.userHelper = userHelper;
         this.draftEventsService = draftEventsService;
         this.draftQuestionsService = draftQuestionsService;
         this.mapper = mapper;
         this.userFilesService = userFilesService;
+        this.draftEventPublisherService = draftEventPublisherService;
+        this.draftEventValidator = draftEventValidator;
     }
 
     [HttpGet("[controller]/draft")]
@@ -44,17 +51,24 @@ public class EventAdminController : Controller
         if (draft is null)
             return NotFound();
 
-        return Ok(draft);
+        return Ok(mapper.Map<DraftEventCoverDto>(draft));
     }
 
     [HttpPost("[controller]/draftCover")]
-    public async Task<IActionResult> DraftCover([FromBody] DraftEvent draftEvent)
+    public async Task<IActionResult> DraftCover([FromBody] DraftEventCoverDto draftEventDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest();
+
         var userId = userHelper.UserId;
-        if (draftEvent.OwnerId != userId)
+        var existsDraft = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (existsDraft is null)
             return NotFound();
 
-        await draftEventsService.UpdateDraftAsync(draftEvent);
+        draftEventDto.CoverImageId = existsDraft.CoverImageId;
+        var newDraftEventCover = mapper.Map(draftEventDto, existsDraft);
+
+        await draftEventsService.UpdateDraftAsync(newDraftEventCover);
         return Ok();
     }
 
@@ -95,14 +109,78 @@ public class EventAdminController : Controller
         if (draftEvent?.CoverImageId is null)
             return NotFound();
 
-        var fileStream = await userFilesService.GetContentStream(draftEvent.CoverImageId.Value);
+        var userFile = await userFilesService.TryGet(draftEvent.CoverImageId.Value);
+        if (userFile is null)
+            return NotFound();
+
+        var fileStream = userFilesService.GetContentStream(userFile);
         return File(fileStream, "APPLICATION/octet-stream");
     }
 
     [HttpPost("[controller]/coverImage")]
     public async Task<IActionResult> SetCoverImage(IFormFile file)
     {
-        return Ok(await userFilesService.Save(file));
+        var userId = userHelper.UserId;
+        var draftEvent = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (draftEvent is null)
+            return NotFound();
+
+        var oldImgId = draftEvent.CoverImageId;
+
+        var saved = await userFilesService.Save(file);
+        draftEvent.CoverImageId = saved.Id;
+        await draftEventsService.UpdateDraftAsync(draftEvent);
+
+        if (oldImgId is not null)
+        {
+            var oldUserFile = await userFilesService.TryGet(oldImgId.Value);
+            await userFilesService.Remove(oldUserFile!);
+        }
+
+        return Ok();
+    }
+
+    [HttpDelete("[controller]/coverImage")]
+    public async Task<IActionResult> RemoveCoverImage()
+    {
+        var userId = userHelper.UserId;
+        var draftEvent = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (draftEvent?.CoverImageId == null)
+            return NotFound();
+
+        var userFile = await userFilesService.TryGet(draftEvent.CoverImageId.Value);
+        if (userFile is null)
+            return NotFound();
+
+        draftEvent.CoverImageId = null;
+        await draftEventsService.UpdateDraftAsync(draftEvent);
+
+        await userFilesService.Remove(userFile!);
+
+        return Ok();
+    }
+
+    [HttpPost("[controller]/publishDraft")]
+    public async Task<IActionResult> PublishDraft()
+    {
+        var userId = userHelper.UserId;
+        var srcDraft = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (srcDraft is null)
+            return NotFound();
+
+        srcDraft.To = srcDraft.From; // TODO DELETE
+        if (!draftEventValidator.IsValid(srcDraft))
+            return BadRequest();
+
+        var srcDraftQuestions = await draftQuestionsService.GetDraftQuestionsByDraftEventIdAsync(srcDraft.Id);
+
+        var dstEvent = mapper.Map<Event>(srcDraft);
+        var dstQuestions = mapper.Map<Question[]>(srcDraftQuestions);
+
+        var newEvent = await draftEventPublisherService.Publish(srcDraft, dstEvent, dstQuestions);
+
+        var url = Url.Action("Get", "Events", new {id = newEvent}); // TODO Егорусу, ссылка на мероприятие
+        return Ok(url);
     }
 
     [HttpPost("createDraft")]

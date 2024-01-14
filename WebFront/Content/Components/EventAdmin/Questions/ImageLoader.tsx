@@ -8,9 +8,12 @@ import {EventAdminClient} from "../../../../Api/EventAdmin/EventAdminClient";
 
 interface IImageLoaderQuestion {
     title: string;
+    defaultUrl: string | null | undefined;
+    uploader: (file: FileUploaderAttachedFile) => Promise<void>;
+    onRemove: () => void;
 }
 
-
+// Жалко удалять
 const base64toBlob = (base64Data: string): Blob => {
     let startIdx = base64Data.indexOf("base64,");
     if (startIdx === -1) {
@@ -40,19 +43,22 @@ const base64toBlob = (base64Data: string): Blob => {
     return new Blob(byteArrays, { type: '' });
 }
 
-export const ImageLoader: React.FC<IImageLoaderQuestion> = ({ title }) => {
+export const ImageLoader: React.FC<IImageLoaderQuestion> = ({ title, defaultUrl, uploader, onRemove }) => {
     const [selectedFile, setSelectedFile] = useState<Blob | undefined>();
+    const [preview, setPreview] = useState<string | null | undefined>(defaultUrl);
     let firstRender = useRef(true);
-    const [preview, setPreview] = useState<string | undefined>();
 
-    // useEffect(() => {
-    //     let savedPreview = storageSaver.load(title);
-    //     if (savedPreview) {
-    //         let blob = base64toBlob(savedPreview);
-    //         setSelectedFile(blob);
-    //     }
-    // }, []);
-    
+    const onValueChange = (files: FileUploaderAttachedFile[]) => {
+        if (files.length === 0) {
+            onRemove();
+            setSelectedFile(undefined);
+            return;
+        }
+        if (files[0].status === 'Uploaded') {
+            setSelectedFile(files[0].originalFile);
+        }
+    };
+
     useEffect(() => {
         if (firstRender.current) {
             firstRender.current = false;
@@ -64,39 +70,20 @@ export const ImageLoader: React.FC<IImageLoaderQuestion> = ({ title }) => {
         }
 
         let objectUrl = URL.createObjectURL(selectedFile);
-
-        const reader = new FileReader();
-        reader.onload = () => {
-            if (typeof reader.result === 'string') {
-                // storageSaver.save(title, reader.result); TODO
-            }
-        };
-        reader.readAsDataURL(selectedFile);
-
         setPreview(objectUrl);
-
         return () => URL.revokeObjectURL(objectUrl);
-
     }, [selectedFile]);
-
-    let onFileLoad = (files: FileUploaderAttachedFile[]) => {
-        if (files.length === 0) {
-            setSelectedFile(undefined);
-            return;
-        }
-
-        let file = files[0].originalFile;
-        setSelectedFile(file);
-    };
 
     return (
         <Gapped gap={Number.parseInt(variables.titleContentGap)}
                 vertical={true}
                 className={styles.questionInput}>
-            <Label label={title} size={"large"} />
-            <FileUploader accept={'image/*'} onValueChange={onFileLoad} request={EventAdminClient.setCoverImage} />
+            <Label label={title} size={"large"}/>
+            <FileUploader accept={'image/*'}
+                          onValueChange={onValueChange}
+                          request={uploader}/>
             {preview && (
-                <img src={preview} alt={'loaded image'} className={styles.imagePreview} />
+                <img src={preview} className={styles.imagePreview} alt={''}/>
             )}
         </Gapped>
     );

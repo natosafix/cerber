@@ -27,6 +27,9 @@ public class DraftQuestionRepository : IDraftQuestionRepository
 
     public async Task SetDraftQuestionsAsync(IReadOnlyCollection<DraftQuestion> draftQuestions)
     {
+        if (!draftQuestions.Any())
+            return;
+
         var draftEventId = draftQuestions.First().DraftEventId;
 
         await using var transaction = await dbContext.Database.BeginTransactionAsync();
