@@ -21,7 +21,6 @@ public class HomeController : Controller
         return View();
     }
     
-    [Authorize]
     [HttpGet("/[controller]/preview/{id}")]
     public IActionResult Preview()
     {

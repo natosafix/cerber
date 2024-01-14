@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IEvent } from '../models/index';
 import styles from './event.scss';
 import { useNavigate } from 'react-router-dom';
@@ -10,12 +10,29 @@ interface IProps {
 const Event: React.FC<IProps> = ({ event }) => {
     const { id, img, name, address, city, from, to } = event;
     const [isHovered, setIsHovered] = useState(false);
+    const [imgSrc, setImgSrc] = useState<string | null>(null);
+    
     const fromDate = new Date(from);
     const navigate = useNavigate();
+    
 
+    useEffect(() => {
+        const fetchEventCover = async () => {
+            try {
+                setImgSrc(URL.createObjectURL(img));
+            }
+            catch (error) {
+                console.error(error);
+            }
+        };
+        fetchEventCover();
+    }, [id]);
+    
     const handleClick = () => {
         navigate(`/home/preview/${id}`);
     };
+    
+    console.log(img)
 
     return (
         <div
@@ -26,7 +43,9 @@ const Event: React.FC<IProps> = ({ event }) => {
             onClick={handleClick}
         >
             <div className={styles.imgWrapper}>
-                <img src="https://content-30.foto.my.mail.ru/community/bibliadenjzadnjom/1/h-36648.jpg" alt={name} />
+                <div className={styles.imgWrapper}>
+                    {imgSrc && <img src={imgSrc} alt={name}/>}
+                </div>
             </div>
             <div className={styles.textWrapper}>
                 <p className={styles.title}>{name}</p>

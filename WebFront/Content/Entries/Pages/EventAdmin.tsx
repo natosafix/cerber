@@ -9,6 +9,7 @@ onDomContentLoaded(() =>
     ReactDom.render(
         <CerberThemeProvider>
             <Header />
+            
             <EventAdmin />
         </CerberThemeProvider>,
         document.getElementById('eventAdmin'),

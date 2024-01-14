@@ -1,5 +1,5 @@
 export interface IEvent {
-  img: number;
+  img: Blob;
   name: string;
   id: number;
   shortDescription: string;
