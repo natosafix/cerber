@@ -1,1 +1,10 @@
-﻿
+﻿.eventPreviewContainer {
+  overflow-y: auto;  // или scroll, в зависимости от ваших предпочтений
+  height: 100%;
+}
+
+body {
+  overflow-y: hidden;
+  height: 100%;
+  margin: 0;
+}

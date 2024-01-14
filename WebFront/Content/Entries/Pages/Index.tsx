@@ -8,6 +8,8 @@ import { onDomContentLoaded } from '../../Helpers/DomHelpers';
 import { EventPreview } from '../../Components/eventPreview/eventPreview';
 import { EventsProvider } from '../../Components/eventPreview/event-context';
 import { EventDetails } from '../../Components/eventPreview/event-details/eventDetails';
+import { EventAdmin } from '../../Components/EventAdmin/EventAdmin';
+
 
 onDomContentLoaded(() =>
     ReactDOM.render(
@@ -20,6 +22,9 @@ onDomContentLoaded(() =>
                         <Route path="/home/preview/:id" element={<EventDetails />} />
                     </Routes>
                 </EventsProvider>
+                <Routes>
+                    <Route path="eventAdmin/draft" element={<EventAdmin/>}/>
+                </Routes>
             </CerberThemeProvider>
         </Router>,
         document.getElementById('index'),
