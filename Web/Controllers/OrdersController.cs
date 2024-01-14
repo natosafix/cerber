@@ -54,7 +54,7 @@ public class OrdersController : Controller
         return Ok(mapper.Map<OrderResponseDto>(order));
     }
     
-    [HttpPost("")]
+    [HttpPost("byInspector")]
     public async Task<IActionResult> CreateByInspector([FromBody] CreateOrderDto createOrderDto)
     {
         if (!ModelState.IsValid)
