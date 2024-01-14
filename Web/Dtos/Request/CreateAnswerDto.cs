@@ -5,7 +5,7 @@ namespace Web.Dtos.Request;
 public class CreateAnswerDto
 {
     [Required]
-    public string Content { get; set; }
+    public string[] Content { get; set; }
 
     [Required]
     public string QuestionId { get; set; }

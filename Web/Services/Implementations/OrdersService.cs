@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Domain.Entities;
 using Domain.Infrastructure;
+using Newtonsoft.Json;
 using Web.Persistence.Repositories;
 
 namespace Web.Services.Implementations;
@@ -34,11 +35,16 @@ public class OrdersService : IOrdersService
 
     public async Task<Order> Create(Order order)
     {
+        var answers = JsonConvert.DeserializeObject<string[]>(order.Answers[2].Content)!;
+        var email = answers[0];
+            
         order.Customer = Guid.NewGuid();
         order = await ordersRepository.Create(order);
+        
         var @event = await eventsService.GetByTicketId(order.TicketId);
         var cryptoKey = Convert.FromBase64String(@event.CryptoKey);
         var encryptedCustomer = encryptionService.EncryptString(order.Customer.ToString(), cryptoKey);
+        
         var qrCode = qrCodeService.Create($"ticket.png", encryptedCustomer);
         await mailService.SendWithImageAttachments(
             "",

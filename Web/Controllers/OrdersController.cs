@@ -13,12 +13,18 @@ namespace Web.Controllers;
 public class OrdersController : Controller
 {
     private readonly IOrdersService ordersService;
+    private readonly ITicketsService ticketsService;
+    private readonly IAuthService authService;
+    private readonly IUserHelper userHelper;
     private readonly IMapper mapper;
     
-    public OrdersController(IOrdersService ordersService, IMapper mapper)
+    public OrdersController(IOrdersService ordersService, IMapper mapper, ITicketsService ticketsService, IAuthService authService, IUserHelper userHelper)
     {
         this.ordersService = ordersService;
         this.mapper = mapper;
+        this.ticketsService = ticketsService;
+        this.authService = authService;
+        this.userHelper = userHelper;
     }
 
     [Authorize("MustInspectOrder")]    
@@ -46,5 +52,20 @@ public class OrdersController : Controller
         
         var order = await ordersService.Create(mapper.Map<Order>(createOrderDto));
         return Ok(mapper.Map<OrderResponseDto>(order));
+    }
+    
+    [HttpPost("")]
+    public async Task<IActionResult> CreateByInspector([FromBody] CreateOrderDto createOrderDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var order = mapper.Map<Order>(createOrderDto);
+        var ticket = await ticketsService.Get(order.TicketId);
+        if (!await authService.IsInspector(userHelper.UserId, ticket.EventId))
+            return StatusCode(403);
+        
+        var createdOrder = await ordersService.Create(order);
+        return Ok(mapper.Map<OrderResponseDto>(createdOrder));
     }
 }
