@@ -22,7 +22,7 @@ public class HomeController : Controller
     }
     
     [Authorize]
-    [HttpGet("/[controller]/preview/")]
+    [HttpGet("/[controller]/preview/{id}")]
     public IActionResult Preview()
     {
         return View();
