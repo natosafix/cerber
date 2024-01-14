@@ -1,6 +1,4 @@
 import { useCallback } from 'react';
-
-
 import { useEventsContext } from './EventsContextProvider';
 import { IEvent } from '../models';
 import { getEvents } from '../services/events';
@@ -10,16 +8,20 @@ const useEvents = () => {
     events,
     setEvents,
   } = useEventsContext();
-  
-  const fetchEvents = useCallback(() => {
-    getEvents().then((events: IEvent[]) => {
-      setEvents(events);
-    });
+
+  const fetchEvents = useCallback(async (page) => {
+    try {
+      const newEvents = await getEvents(page);
+
+      setEvents((prevEvents) => [...prevEvents, ...newEvents]);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
   }, [setEvents]);
 
   return {
-    fetchEvents: fetchEvents,
-    events: events
+    fetchEvents,
+    events,
   };
 };
 

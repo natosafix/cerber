@@ -40,8 +40,7 @@ const Event: React.FC<IProps> = ({ event }) => {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             style={{ cursor: isHovered ? 'pointer' : 'default' }}
-            onClick={handleClick}
-        >
+            onClick={handleClick}>
             <div className={styles.imgWrapper}>
                 <div className={styles.imgWrapper}>
                     {imgSrc && <img src={imgSrc} alt={name}/>}

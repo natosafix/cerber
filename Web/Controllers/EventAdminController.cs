@@ -179,7 +179,7 @@ public class EventAdminController : Controller
 
         var newEvent = await draftEventPublisherService.Publish(srcDraft, dstEvent, dstQuestions);
 
-        var url = Url.Action("Get", "Events", new {id = newEvent}); // TODO Егорусу, ссылка на мероприятие
+        var url = Url.Action("preview", "home", new {id = newEvent});
         return Ok(url);
     }
 
