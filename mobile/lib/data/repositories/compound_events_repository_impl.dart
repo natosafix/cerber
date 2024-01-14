@@ -134,6 +134,8 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
 
     if (visitor == null) return VisitorIdValidButNotFound();
 
+    localEventsRepository.setVisitorQrCodeScanned(visitor.id, event.id);
+
     return VisitorFound(visitor);
   }
 

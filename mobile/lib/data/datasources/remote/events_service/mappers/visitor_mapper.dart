@@ -10,6 +10,7 @@ extension VisitorMapper on VisitorApiResponse {
       id: id,
       questionsMap: questionsMap,
       ticket: ticket.toModel(),
+      qrCodeScannedTime: null,
     );
   }
 }

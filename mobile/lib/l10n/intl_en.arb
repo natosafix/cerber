@@ -69,5 +69,6 @@
     "badQrCodeFormat": "Bad QR code format",
     "failedToFindSuchVisitor": "Could not find this visitor",
     "boughtTicketOnSpot": "QR code is correct however this visitor is not in the database, they probably bought the ticket on spot",
-    "invalidPasswordOrEmail": "Invalid password or email"
+    "invalidPasswordOrEmail": "Invalid password or email",
+    "qrCodeAlreadyBeenScanned": "This QR code has already been scanned"
 }

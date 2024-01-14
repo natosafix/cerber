@@ -21,11 +21,14 @@ class VisitorCollection {
 
   TicketEmbedded ticket;
 
+  DateTime? qrCodeScannedTime;
+
   VisitorCollection({
     required this.visitorId,
     required this.eventId,
     required this.answersIds,
     required this.ticket,
+    required this.qrCodeScannedTime,
   });
 
   static Visitor toModel(VisitorCollection visitor, Map<Question, Answer> answers) {
@@ -33,6 +36,7 @@ class VisitorCollection {
       id: visitor.visitorId,
       questionsMap: answers,
       ticket: TicketEmbedded.toModel(visitor.ticket),
+      qrCodeScannedTime: visitor.qrCodeScannedTime,
     );
   }
 
@@ -42,6 +46,7 @@ class VisitorCollection {
       eventId: eventId,
       answersIds: visitor.questionsMap.values.map((a) => a.id).toList(),
       ticket: TicketEmbedded.fromModel(visitor.ticket),
+      qrCodeScannedTime: visitor.qrCodeScannedTime,
     );
   }
 }

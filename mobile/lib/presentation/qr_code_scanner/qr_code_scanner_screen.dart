@@ -20,8 +20,8 @@ class QrCodeScannerScreen extends StatelessWidget {
   }
 
   final scannerController = MobileScannerController(
-      // detectionSpeed: DetectionSpeed.noDuplicates,
-      );
+    detectionTimeoutMs: 1500,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -106,10 +106,10 @@ class QrCodeScannerScreen extends StatelessWidget {
         context.showSnackbar(L10n.current.boughtTicketOnSpot);
       case InitialState():
         break;
-      case FailedToReadQrCode():
-        context.showSnackbar(L10n.current.failedToReadQrCode);
       case BadQrCodeFormat():
         context.showSnackbar(L10n.current.badQrCodeFormat);
+      case FailedToReadQrCode():
+        context.showSnackbar(L10n.current.failedToReadQrCode);
     }
   }
 

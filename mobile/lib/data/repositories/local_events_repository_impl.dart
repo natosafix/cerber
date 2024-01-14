@@ -122,4 +122,9 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
   Future<void> deleteQuestions(int eventId) async {
     await _eventsDatabase.deleteQuestions(eventId);
   }
+
+  @override
+  Future<void> setVisitorQrCodeScanned(String visitorId, int eventId) async {
+    await _eventsDatabase.setVisitorsQrCodeScanned(visitorId, eventId);
+  }
 }

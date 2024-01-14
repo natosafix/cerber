@@ -106,6 +106,18 @@ class EventsDatabase {
     });
   }
 
+  Future<void> setVisitorsQrCodeScanned(String visitorId, Id eventId) async {
+    final now = DateTime.now();
+    await _isar.writeTxn(() async {
+      final visitor = await _visitors.getByVisitorIdEventId(visitorId, eventId);
+      if (visitor == null) return;
+
+      visitor.qrCodeScannedTime = now;
+      
+      await _visitors.put(visitor);
+    });
+  }
+
   Future<void> deleteQuestions(Id eventId) async {
     await _isar.writeTxn(() async {
       await _questions.where().eventIdEqualTo(eventId).deleteAll();

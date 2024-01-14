@@ -21,4 +21,6 @@ abstract class LocalEventsRepository implements EventsRepository {
   Stream<Event> watchEvent(int eventId);
 
   Future<void> deleteAllData();
+
+  Future<void> setVisitorQrCodeScanned(String visitorId, int eventId);
 }

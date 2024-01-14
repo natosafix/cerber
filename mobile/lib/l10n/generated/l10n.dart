@@ -445,6 +445,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `This QR code has already been scanned`
+  String get qrCodeAlreadyBeenScanned {
+    return Intl.message(
+      'This QR code has already been scanned',
+      name: 'qrCodeAlreadyBeenScanned',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

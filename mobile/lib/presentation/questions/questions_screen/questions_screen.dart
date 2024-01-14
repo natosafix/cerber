@@ -27,6 +27,7 @@ class QuestionsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => _postFrameCallback(context));
     return BlocProvider(
       create: (context) => QuestionsBloc(visitor: visitor, event: event),
       child: Scaffold(
@@ -89,6 +90,27 @@ class QuestionsScreen extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       builder: (context) => QrCodeScreen(qrCodeData: state.qrCodeData!),
+    );
+  }
+
+  void _postFrameCallback(BuildContext context) {
+    if (visitor?.qrCodeScannedTime == null) return;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(L10n.current.qrCodeAlreadyBeenScanned),
+          actions: [
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

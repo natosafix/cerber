@@ -70,6 +70,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Должен иметь минимум 1 цифру"),
         "passwordMustHaveAtLeast1SpecialChar": m1,
         "passwordMustHaveAtLeastNChars": m2,
+        "qrCodeAlreadyBeenScanned": MessageLookupByLibrary.simpleMessage(
+            "Этот QR-код уже был отсканирован"),
         "questionsEmpty": MessageLookupByLibrary.simpleMessage("Анкета пуста"),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "scanVisitorsQrCode": MessageLookupByLibrary.simpleMessage(

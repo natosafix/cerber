@@ -69,6 +69,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Must have at least 1 digit"),
         "passwordMustHaveAtLeast1SpecialChar": m1,
         "passwordMustHaveAtLeastNChars": m2,
+        "qrCodeAlreadyBeenScanned": MessageLookupByLibrary.simpleMessage(
+            "This QR code has already been scanned"),
         "questionsEmpty":
             MessageLookupByLibrary.simpleMessage("Questionnaire is empty"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
