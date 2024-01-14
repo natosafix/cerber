@@ -8,7 +8,9 @@ public class QuestionResponseDto
     
     public QuestionType Type { get; set; }
     
-    public string Content { get; set; }
+    public string Title { get; set; }
+    
+    public string[] AnswerChoices { get; set; }
     
     public bool Required { get; set; }
 }

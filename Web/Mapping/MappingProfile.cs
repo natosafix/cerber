@@ -22,7 +22,7 @@ public class MappingProfile : Profile
         // Entity to Dto
         CreateMap<Event, EventResponseDto>();
         CreateMap<Ticket, TicketResponseDto>();
-        CreateMap<Question, QuestionResponseDto>();
+        CreateMap<Question, QuestionResponseDto>().Configure();
         CreateMap<Order, OrderResponseDto>();
         CreateMap<Answer, AnswerResponseDto>();
         CreateMap<DraftQuestion, DraftQuestionDto>().Configure();
