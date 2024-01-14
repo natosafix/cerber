@@ -11,7 +11,8 @@ module.exports = {
     entry: {
         index: './Content/Entries/Pages/Index.tsx',
         eventAdmin: './Content/Entries/Pages/EventAdmin.tsx',
-        preview: './Content/Entries/Pages/Preview.tsx'
+        preview: './Content/Entries/Pages/Preview.tsx',
+        quizSolve: './Content/Entries/Pages/QuizSolve.tsx'
     },
     output: {
         path: OUTPUT_PATH,
