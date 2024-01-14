@@ -44,7 +44,11 @@ class EventWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 7),
                   Text(
-                    event.address,
+                    "${event.city}, ${event.address}",
+                  ),
+                  const SizedBox(height: 7),
+                  Text(
+                    event.shortDescription,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
