@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Dtos.Request;
 using Web.Dtos.Response;
 using Web.Services;
-using Web.Services.Validators;
 
 namespace Web.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[Authorize]
 [Route("[controller]")]
 public class EventsController : Controller
 {

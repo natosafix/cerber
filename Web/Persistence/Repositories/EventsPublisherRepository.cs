@@ -14,10 +14,14 @@ public interface IEventsPublisherRepository
 public class EventsPublisherRepository : IEventsPublisherRepository
 {
     private readonly CerberDbContext dbContext;
+    private readonly IEventsRepository eventsRepository;
+    private readonly IUsersRepository usersRepository;
 
-    public EventsPublisherRepository(CerberDbContext dbContext)
+    public EventsPublisherRepository(CerberDbContext dbContext, IEventsRepository eventsRepository, IUsersRepository usersRepository)
     {
         this.dbContext = dbContext;
+        this.eventsRepository = eventsRepository;
+        this.usersRepository = usersRepository;
     }
 
     public async Task<int> Publish(
@@ -42,6 +46,10 @@ public class EventsPublisherRepository : IEventsPublisherRepository
 
             await dbContext.Questions.AddRangeAsync(dstQuestions);
             await dbContext.SaveChangesAsync();
+
+            var userId = Guid.Parse(dstEvent.OwnerId);
+            var inspector = await usersRepository.Get(userId) ?? throw new BadHttpRequestException($"Not found inspector with id {userId}");
+            await eventsRepository.AddInspector(dstEvent, inspector);
 
             await transaction.CommitAsync();
 
