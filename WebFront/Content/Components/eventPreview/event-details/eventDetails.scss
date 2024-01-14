@@ -1,0 +1,61 @@
+﻿
+
+.eventDetails {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #F0F0F0;
+  color: black;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.eventWrapper {
+  display: block;
+  text-align: left;
+  width: 66.66667vw;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  margin-top: 100px;
+  .title{
+    font-size: 40px;
+    margin: 0;
+    font-weight: bolder;
+  }
+}
+
+.eventDetails button {
+  background-color: transparent;
+  border: none;
+  color: black;
+  font-size: 18px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.eventDetails button:hover {
+  text-decoration: underline;
+}
+
+.imgWrapper img {
+  width: 100%;
+  height: 50vh;
+  object-fit: cover;
+}
+
+.imgWrapper {
+  
+}
+
+
+
+.textWrapper {
+  padding: 20px 0 0 0;
+}

@@ -20,6 +20,13 @@ public class HomeController : Controller
     {
         return View();
     }
+    
+    [Authorize]
+    [HttpGet("/[controller]/preview/")]
+    public IActionResult Preview()
+    {
+        return View();
+    }
 
     [HttpGet("/[controller]/privacy")]
     public IActionResult Privacy()

@@ -1,10 +1,11 @@
 export interface IEvent {
   img: number;
-  title: string;
-}
-
-export interface IEventsResponse {
-  data: {
-    events: IEvent[];
-  };
+  name: string;
+  id: number;
+  shortDescription: string;
+  description: string;
+  city: string;
+  address: string;
+  from: Date;
+  to: Date;
 }

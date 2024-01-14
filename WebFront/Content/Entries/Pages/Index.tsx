@@ -1,29 +1,27 @@
-﻿import * as React from 'react';
-import * as ReactDom from 'react-dom';
+﻿// index.jsx
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Header } from '../Shared/Header/Header';
 import { CerberThemeProvider } from '../Shared/ThemeProvider/CerberThemeProvider';
 import { onDomContentLoaded } from '../../Helpers/DomHelpers';
 import { EventPreview } from '../../Components/eventPreview/eventPreview';
 import { EventsProvider } from '../../Components/eventPreview/event-context';
-
+import { EventDetails } from '../../Components/eventPreview/event-details/eventDetails';
 
 onDomContentLoaded(() =>
-    ReactDom.render(
-        <CerberThemeProvider>
-            <Header />
-            <EventsProvider>
-                <EventPreview/>
-            </EventsProvider>
-        </CerberThemeProvider>,
+    ReactDOM.render(
+        <Router>
+            <CerberThemeProvider>
+                <Header />
+                <EventsProvider>
+                    <Routes>
+                        <Route path="/home/index" element={<EventPreview />} />
+                        <Route path="/home/preview/:id" element={<EventDetails />} />
+                    </Routes>
+                </EventsProvider>
+            </CerberThemeProvider>
+        </Router>,
         document.getElementById('index'),
     ),
 );
-
-// let place = document.getElementById('index');
-// let root = createRoot(place!);
-// root.render(
-//     <>
-//         <Header />
-//         Hello, World!!
-//     </>,
-// );

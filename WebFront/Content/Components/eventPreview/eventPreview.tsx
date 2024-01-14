@@ -1,11 +1,10 @@
-import * as React from 'react';
-import { useEffect } from 'react';
+
+import React, { useEffect } from 'react';
 import Events from './Events';
 import { useEvents } from './event-context';
-import styles from './eventPreview.scss'
+import styles from './eventPreview.scss';
 
-
-export const EventPreview: React.FC = () => {
+export const EventPreview = () => {
     const { events, fetchEvents } = useEvents();
 
     useEffect(() => {
@@ -13,8 +12,8 @@ export const EventPreview: React.FC = () => {
     }, [fetchEvents]);
 
     return (
-        <div>
+        <div className={styles.eventPreview}>
             <Events events={events} />
         </div>
     );
-}
+};
