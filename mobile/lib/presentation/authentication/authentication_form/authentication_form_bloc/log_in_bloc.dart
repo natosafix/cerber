@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_bloc.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_status.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/formz_inputs/email.dart';
@@ -28,11 +28,19 @@ class LogInBloc extends AuthenticationFormBloc {
       return emit(state.copyWith(authenticationStatus: const Success()));
     }
 
-    final error = res.failure.message ?? "Unknown Error";
-    debugPrint(res.failure.stackTrace.toString());
+    final response = res.failure.response;
 
-    emit(state.copyWith(authenticationStatus: Failure(errorMessage: error)));
-    
+    var errorMessage = "Unknown Error";
+
+    if (response != null) {
+      if (response.statusCode == 401) {
+        errorMessage = L10n.current.invalidPasswordOrEmail;
+      } else {
+        errorMessage = res.failure.message!;
+      }
+    }
+
+    emit(state.copyWith(authenticationStatus: Failure(errorMessage: errorMessage)));
     emit(state.copyWith(authenticationStatus: const UnknownStatus()));
   }
 }

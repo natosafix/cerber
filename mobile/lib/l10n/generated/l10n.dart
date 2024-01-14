@@ -435,6 +435,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Invalid password or email`
+  String get invalidPasswordOrEmail {
+    return Intl.message(
+      'Invalid password or email',
+      name: 'invalidPasswordOrEmail',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

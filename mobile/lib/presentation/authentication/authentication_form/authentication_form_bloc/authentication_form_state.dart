@@ -1,17 +1,17 @@
 part of 'authentication_form_bloc.dart';
 
 final class AuthenticationFormState {
+  final Email email;
+  final Name? name;
+  final Password password;
+  final AuthenticationFormStatus authenticationStatus;
+
   const AuthenticationFormState({
     required this.email,
     this.name,
     required this.password,
     this.authenticationStatus = const UnknownStatus(),
   });
-
-  final Email email;
-  final Name? name;
-  final Password password;
-  final AuthenticationFormStatus authenticationStatus;
 
   bool get isValid => Formz.validate([
         email,

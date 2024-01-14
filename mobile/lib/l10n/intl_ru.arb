@@ -68,5 +68,6 @@
     "failedToReadQrCode": "Не можем прочитать QR-код",
     "badQrCodeFormat": "QR-код в неверном формате",
     "failedToFindSuchVisitor": "Такого посетителя нет",
-    "boughtTicketOnSpot": "QR код верный, однако посетителя нет в базе, вероятно билет был куплен на месте"
+    "boughtTicketOnSpot": "QR код верный, однако посетителя нет в базе, вероятно билет был куплен на месте",
+    "invalidPasswordOrEmail": "Неверная почта или пароль"
 }

@@ -47,6 +47,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "formattedDateTime": m0,
         "invalidEmailAddress":
             MessageLookupByLibrary.simpleMessage("Invalid email address"),
+        "invalidPasswordOrEmail":
+            MessageLookupByLibrary.simpleMessage("Invalid password or email"),
         "lastDownloaded":
             MessageLookupByLibrary.simpleMessage("Last downloaded"),
         "less": MessageLookupByLibrary.simpleMessage("less"),

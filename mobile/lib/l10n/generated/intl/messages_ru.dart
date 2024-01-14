@@ -49,6 +49,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "formattedDateTime": m0,
         "invalidEmailAddress":
             MessageLookupByLibrary.simpleMessage("Некорректный адрес"),
+        "invalidPasswordOrEmail":
+            MessageLookupByLibrary.simpleMessage("Неверная почта или пароль"),
         "lastDownloaded": MessageLookupByLibrary.simpleMessage("Скачана"),
         "less": MessageLookupByLibrary.simpleMessage("меньше"),
         "logIn": MessageLookupByLibrary.simpleMessage("Войти"),
