@@ -1,7 +1,10 @@
-﻿import React from 'react';
+﻿import React, { useState } from 'react';
 import { Gapped, Radio, RadioGroup } from '@skbkontur/react-ui';
 import variables from './QuestionVariables.scss';
 import { Label } from '../Label/Label';
+import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
+import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
+import { ValidationWrapper } from '@skbkontur/react-ui-validations';
 
 interface RadioPickerProps {
     title: string;
@@ -10,25 +13,42 @@ interface RadioPickerProps {
     onValueChange: (picked: string) => void;
 }
 
+function validateChosenVariant(value?: string): Nullable<ValidationInfo> {
+    if (!value || value.length === 0) {
+        return { message: 'Поле обязательно для заполнения', type: 'submit' };
+    }
+
+    return null;
+}
+
 export const RadioPicker: React.FC<RadioPickerProps> = (
     {
-        variants, 
+        variants,
         title,
         size = 'large',
-        onValueChange
+        onValueChange,
     }) => {
+    const [value, setValue] = useState<string>();
+
+    const onRadioChange = (v: string) => {
+        setValue(v);
+        onValueChange(v);
+    };
+
     return (
         <Gapped gap={Number.parseInt(variables.titleContentGap)} vertical={true}>
             <Label label={title} size={size} />
-            <RadioGroup onValueChange={onValueChange}>
-                <Gapped gap={5} vertical={true}>
-                    {variants.map((variant, i) => (
-                        <Radio value={variant} size={size}>
-                            {variant}
-                        </Radio>
-                    ))}
-                </Gapped>
-            </RadioGroup>
+            <ValidationWrapper validationInfo={validateChosenVariant(value)}>
+                <RadioGroup onValueChange={onRadioChange} value={value}>
+                    <Gapped gap={5} vertical={true}>
+                        {variants.map((variant, i) => (
+                            <Radio value={variant} size={size}>
+                                {variant}
+                            </Radio>
+                        ))}
+                    </Gapped>
+                </RadioGroup>
+            </ValidationWrapper>
         </Gapped>
     );
 };
