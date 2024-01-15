@@ -28,7 +28,7 @@ public class AuthController : Controller
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        var userExists = await userManager.FindByNameAsync(dto.Username);
+        var userExists = await userManager.FindByEmailAsync(dto.Email);
         if (userExists != null)
             return BadRequest("User already exists");
 
@@ -68,7 +68,7 @@ public class AuthController : Controller
             var token = GetToken(authClaims);
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             
-            Response.Cookies.Append(config["JWT:CookieName"]!, tokenString, new CookieOptions {HttpOnly = true});
+            Response.Cookies.Append(config["JWT:CookieName"]!, tokenString, new CookieOptions {HttpOnly = false});
             return Ok(new
             {
                 token = tokenString,

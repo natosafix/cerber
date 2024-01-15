@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Infrastructure;
 using Newtonsoft.Json;
 using Web.Persistence.Repositories;
@@ -48,11 +47,16 @@ public class OrdersService : IOrdersService
         var qrCode = qrCodeService.Create($"ticket.png", encryptedCustomer);
         await mailService.SendWithImageAttachments(
             "",
-            "email",
+            email,
             "Tickets",
             "Спасибо за заказ. Ваши билеты во вложениях.",
             new List<ImageInfo> {qrCode});
         
         return order;
+    }
+
+    public async Task SetPaid(Guid customer)
+    {
+        await ordersRepository.SetPaid(customer);
     }
 }

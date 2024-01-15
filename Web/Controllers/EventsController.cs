@@ -76,7 +76,7 @@ public class EventsController : Controller
         return NoContent();
     }
     
-    [Authorize("MustOwnEvent")]
+    [AllowAnonymous]
     [HttpGet("{id}/cover")]
     public async Task<IActionResult> GetCover([FromRoute] int id)
     {
