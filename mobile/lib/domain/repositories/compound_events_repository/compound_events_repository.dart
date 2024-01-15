@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 import 'package:project/domain/models/event.dart';
+import 'package:project/domain/models/filled_answer.dart';
 import 'package:project/domain/models/qr_code_data.dart';
 import 'package:project/domain/repositories/compound_events_repository/download_status.dart';
 import 'package:project/domain/repositories/compound_events_repository/qr_code_process_result.dart';
@@ -15,7 +16,7 @@ abstract class CompoundEventsRepository implements EventsRepository {
 
   Future<QrCodeProcessResult> processQrCode(QrCodeData qrCodeData, Event event);
 
-  Future<QrCodeData> generateQrCode(Event event);
+  Future<QrCodeData> generateQrCode(Event event, List<FilledAnswer> filledAnswers, int ticketId);
 
   @protected
   abstract final LocalEventsRepository localEventsRepository;

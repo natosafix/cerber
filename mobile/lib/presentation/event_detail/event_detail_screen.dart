@@ -81,7 +81,7 @@ class EventDetailScreen extends StatelessWidget {
                         children: [
                           TextSpan(text: "${L10n.current.where}: "),
                           TextSpan(
-                            text: event.address,
+                            text: "${event.city}, ${event.address}",
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],

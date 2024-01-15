@@ -2,13 +2,19 @@ import 'package:dio/dio.dart';
 import 'package:project/data/datasources/remote/events_service/events_service.dart';
 import 'package:project/data/datasources/remote/events_service/mappers/answer_mapper.dart';
 import 'package:project/data/datasources/remote/events_service/mappers/event_mapper.dart';
+import 'package:project/data/datasources/remote/events_service/mappers/filled_answer_mapper.dart';
 import 'package:project/data/datasources/remote/events_service/mappers/question_mapper.dart';
+import 'package:project/data/datasources/remote/events_service/mappers/ticket_mapper.dart';
 import 'package:project/data/datasources/remote/events_service/mappers/visitor_mapper.dart';
+import 'package:project/data/datasources/remote/events_service/requests/send_answers_api_request.dart';
 import 'package:project/data/datasources/remote/events_service/responses/question_api_response.dart';
 import 'package:project/data/datasources/remote/events_service/responses/visitor_api_response.dart';
 import 'package:project/domain/models/event.dart';
+import 'package:project/domain/models/filled_answer.dart';
 import 'package:project/domain/models/question.dart';
+import 'package:project/domain/models/ticket.dart';
 import 'package:project/domain/models/visitor.dart';
+import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/domain/repositories/remote_events_repository.dart';
 import 'package:project/utils/result.dart';
 
@@ -77,6 +83,34 @@ class RemoteEventsRepositoryImpl implements RemoteEventsRepository {
     try {
       final questionsApi = await _eventsService.getQuestions(eventId);
       return questionsApi.map((e) => e.toModel()).toList();
+    } on DioException catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Future<NewVisitorId?> addNewVisitorAnswers(
+    int ticketId,
+    List<FilledAnswer> filledAnswers,
+    int eventId,
+  ) async {
+    final request = SendAnswersApiRequest(
+      ticketId: ticketId,
+      answers: filledAnswers.map((e) => e.toApi()).toList(),
+    );
+    try {
+      final response = await _eventsService.sendAnswers(request);
+      return response;
+    } on DioException catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Future<List<Ticket>?> getTickets(int eventId) async {
+    try {
+      final ticketsResponse = await _eventsService.getTickets(eventId);
+      return ticketsResponse.map((e) => e.toModel()).toList();
     } on DioException catch (_) {
       return null;
     }

@@ -1,18 +1,24 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:project/data/datasources/local/events_database/collections/answer_collection/answer_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/event_collection/event_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/question_collection/question_collection.dart';
+import 'package:project/data/datasources/local/events_database/collections/ticket_collection/ticket_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/visitor_collection/visitor_collection.dart';
 import 'package:project/data/datasources/local/events_database/events_database.dart';
 import 'package:project/domain/models/event.dart';
+import 'package:project/domain/models/filled_answer.dart';
 import 'package:project/domain/models/question.dart';
+import 'package:project/domain/models/ticket.dart';
 import 'package:project/domain/models/visitor.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_status.dart';
+import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/domain/repositories/local_events_repository.dart';
 import 'package:project/utils/locator.dart';
 import 'package:project/utils/result.dart';
+import 'package:uuid/uuid.dart';
 
 class LocalEventsRepositoryImpl implements LocalEventsRepository {
   LocalEventsRepositoryImpl({
@@ -54,7 +60,9 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
             AnswerCollection.toModel(answer!)
     };
 
-    return VisitorCollection.toModel(visitor, questionsMap);
+    final ticket = await _eventsDatabase.getTicket(visitor.ticketId);
+
+    return VisitorCollection.toModel(visitor, ticket!, questionsMap);
   }
 
   @override
@@ -126,5 +134,55 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
   @override
   Future<void> setVisitorQrCodeScanned(String visitorId, int eventId) async {
     await _eventsDatabase.setVisitorsQrCodeScanned(visitorId, eventId);
+  }
+
+  @override
+  Future<List<Ticket>?> getTickets(int eventId) async {
+    final tickets = await _eventsDatabase.getTickets(eventId);
+    return tickets.map(TicketCollection.toModel).toList();
+  }
+
+  @override
+  Future<void> saveTickets(List<Ticket> tickets, int eventId) async {
+    final ticketsCollections = tickets.map((e) => TicketCollection.fromModel(e, eventId)).toList();
+    await _eventsDatabase.addTickets(ticketsCollections);
+  }
+
+  @override
+  Future<void> deleteTickets(int eventId) async {
+    await _eventsDatabase.deleteTickets(eventId);
+  }
+
+  @override
+  Future<NewVisitorId?> addNewVisitorAnswers(
+    int ticketId,
+    List<FilledAnswer> filledAnswers,
+    int eventId,
+  ) async {
+    final random = Random.secure();
+
+    final answers = <AnswerCollection>[];
+    for (final filledAnswer in filledAnswers) {
+      answers.add(AnswerCollection(
+        id: random.nextInt(1 << 32),
+        answers: filledAnswer.answers,
+        questionId: filledAnswer.questionId,
+      ));
+    }
+
+    await _eventsDatabase.addAnswers(answers);
+
+    final uuid = const Uuid().v4();
+
+    final visitor = VisitorCollection(
+      visitorId: uuid,
+      eventId: eventId,
+      answersIds: answers.map((e) => e.id).toList(),
+      ticketId: ticketId,
+      qrCodeScannedTime: DateTime.now(),
+    );
+    await _eventsDatabase.addVisitors([visitor]);
+
+    return uuid;
   }
 }

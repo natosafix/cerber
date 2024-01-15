@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:project/data/datasources/remote/events_service/requests/send_answers_api_request.dart';
 import 'package:project/data/datasources/remote/events_service/responses/event_api_response.dart';
 import 'package:project/data/datasources/remote/events_service/responses/question_api_response.dart';
+import 'package:project/data/datasources/remote/events_service/responses/ticket_api_response.dart';
 import 'package:project/data/datasources/remote/events_service/responses/visitor_api_response.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -28,6 +30,16 @@ abstract class EventsService {
 
   @GET('/questions')
   Future<List<QuestionApiResponse>> getQuestions(
+    @Query('eventId') int eventId,
+  );
+
+  @POST('/orders/byInspector')
+  Future<String> sendAnswers(
+    @Body() SendAnswersApiRequest sendAnswersApiRequest,
+  );
+
+  @GET('/tickets')
+  Future<List<TicketApiResponse>> getTickets(
     @Query('eventId') int eventId,
   );
 }

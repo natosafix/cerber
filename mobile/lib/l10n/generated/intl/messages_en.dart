@@ -30,11 +30,14 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "add": MessageLookupByLibrary.simpleMessage("Add"),
+        "addNewVisitor":
+            MessageLookupByLibrary.simpleMessage("Add new visitor"),
         "badQrCodeFormat":
             MessageLookupByLibrary.simpleMessage("Bad QR code format"),
         "beginChecking": MessageLookupByLibrary.simpleMessage("Begin checking"),
         "boughtTicketOnSpot": MessageLookupByLibrary.simpleMessage(
             "QR code is correct however this visitor is not in the database, they probably bought the ticket on spot"),
+        "chooseTicket": MessageLookupByLibrary.simpleMessage("Choose a ticket"),
         "createAccount": MessageLookupByLibrary.simpleMessage("Create Account"),
         "downloadDatabase":
             MessageLookupByLibrary.simpleMessage("Download database"),
@@ -44,6 +47,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Could not find this visitor"),
         "failedToReadQrCode":
             MessageLookupByLibrary.simpleMessage("Failed to read QR code"),
+        "fillTheForm": MessageLookupByLibrary.simpleMessage("Fill the form"),
         "formattedDateTime": m0,
         "invalidEmailAddress":
             MessageLookupByLibrary.simpleMessage("Invalid email address"),
@@ -69,6 +73,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Must have at least 1 digit"),
         "passwordMustHaveAtLeast1SpecialChar": m1,
         "passwordMustHaveAtLeastNChars": m2,
+        "pleaseFillTheEntireForm":
+            MessageLookupByLibrary.simpleMessage("Please fill the entire form"),
         "qrCodeAlreadyBeenScanned": MessageLookupByLibrary.simpleMessage(
             "This QR code has already been scanned"),
         "questionsEmpty":
@@ -82,8 +88,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "somethingWentWrong":
             MessageLookupByLibrary.simpleMessage("Something went wrong..."),
         "visitors": MessageLookupByLibrary.simpleMessage("Visitors"),
-        "visitorsQuestions":
-            MessageLookupByLibrary.simpleMessage("Visitor\'\'s questionnaire"),
         "when": MessageLookupByLibrary.simpleMessage("When"),
         "where": MessageLookupByLibrary.simpleMessage("Where"),
         "youHaveNoEvents": MessageLookupByLibrary.simpleMessage(

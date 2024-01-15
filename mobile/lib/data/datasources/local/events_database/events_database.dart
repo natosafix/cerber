@@ -4,6 +4,7 @@ import 'package:isar/isar.dart';
 import 'package:project/data/datasources/local/events_database/collections/answer_collection/answer_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/event_collection/event_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/question_collection/question_collection.dart';
+import 'package:project/data/datasources/local/events_database/collections/ticket_collection/ticket_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/visitor_collection/visitor_collection.dart';
 
 class EventsDatabase {
@@ -15,6 +16,19 @@ class EventsDatabase {
   IsarCollection<VisitorCollection> get _visitors => _isar.collection();
   IsarCollection<AnswerCollection> get _answers => _isar.collection();
   IsarCollection<QuestionCollection> get _questions => _isar.collection();
+  IsarCollection<TicketCollection> get _tickets => _isar.collection();
+
+  Future<void> deleteAllData() async {
+    await _isar.writeTxn(() async {
+      await Future.wait([
+        _events.clear(),
+        _answers.clear(),
+        _visitors.clear(),
+        _questions.clear(),
+        _tickets.clear(),
+      ]);
+    });
+  }
 
   Future<List<EventCollection>> getEvents({
     required int limit,
@@ -85,17 +99,6 @@ class EventsDatabase {
     return await _visitors.getByVisitorIdEventId(visitorId, eventId);
   }
 
-  Future<void> deleteAllData() async {
-    await _isar.writeTxn(() async {
-      await Future.wait([
-        _events.clear(),
-        _answers.clear(),
-        _visitors.clear(),
-        _questions.clear(),
-      ]);
-    });
-  }
-
   Future<List<QuestionCollection>> getQuestions(Id eventId) async {
     return await _questions.where().eventIdEqualTo(eventId).findAll();
   }
@@ -121,6 +124,26 @@ class EventsDatabase {
   Future<void> deleteQuestions(Id eventId) async {
     await _isar.writeTxn(() async {
       await _questions.where().eventIdEqualTo(eventId).deleteAll();
+    });
+  }
+
+  Future<List<TicketCollection>> getTickets(Id eventId) async {
+    return await _tickets.where().eventIdEqualTo(eventId).findAll();
+  }
+
+  Future<TicketCollection?> getTicket(int ticketId) async {
+    return await _tickets.get(ticketId);
+  }
+
+  Future<void> addTickets(List<TicketCollection> tickets) async {
+    await _isar.writeTxn(() async {
+      await _tickets.putAll(tickets);
+    });
+  }
+
+  Future<void> deleteTickets(Id eventId) async {
+    await _isar.writeTxn(() async {
+      await _tickets.where().eventIdEqualTo(eventId).deleteAll();
     });
   }
 }

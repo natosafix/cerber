@@ -9,6 +9,7 @@ import 'package:project/presentation/qr_code_scanner/scanner_overlay/scanner_ove
 import 'package:project/presentation/questions/questions_screen/questions_screen.dart';
 import 'package:project/utils/extensions/context_x.dart';
 import 'package:project/utils/locator.dart';
+import 'package:vibration/vibration.dart';
 
 class QrCodeScannerScreen extends StatelessWidget {
   QrCodeScannerScreen({required this.event, super.key});
@@ -51,10 +52,10 @@ class QrCodeScannerScreen extends StatelessWidget {
                 },
                 icon: const Icon(Icons.add),
               ),
-              IconButton(
-                onPressed: () {}, //TODO
-                icon: const Icon(Icons.history),
-              ),
+              // IconButton(
+              //   onPressed: () {},
+              //   icon: const Icon(Icons.history),
+              // ),
             ],
           ),
           extendBodyBehindAppBar: true,
@@ -80,9 +81,7 @@ class QrCodeScannerScreen extends StatelessWidget {
                 return MobileScanner(
                   scanWindow: scanWindow,
                   controller: scannerController,
-                  onDetect: (capture) {
-                    context.read<QrCodeScannerBloc>().add(QrCodeScanned(capture: capture));
-                  },
+                  onDetect: (capture) => _onDetectQrCode(context, capture),
                 );
               }),
               ScannerOverlay(
@@ -94,6 +93,15 @@ class QrCodeScannerScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onDetectQrCode(BuildContext context, BarcodeCapture capture) async {
+    context.read<QrCodeScannerBloc>().add(QrCodeScanned(capture: capture));
+
+    final hasVibrator = await Vibration.hasVibrator();
+    if (hasVibrator != null && hasVibrator) {
+      Vibration.vibrate();
+    }
   }
 
   void _stateChanged(BuildContext context, QrCodeScannerState scannerState) {

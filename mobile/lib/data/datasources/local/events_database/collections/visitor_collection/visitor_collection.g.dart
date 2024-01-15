@@ -32,11 +32,10 @@ const VisitorCollectionSchema = CollectionSchema(
       name: r'qrCodeScannedTime',
       type: IsarType.dateTime,
     ),
-    r'ticket': PropertySchema(
+    r'ticketId': PropertySchema(
       id: 3,
-      name: r'ticket',
-      type: IsarType.object,
-      target: r'TicketEmbedded',
+      name: r'ticketId',
+      type: IsarType.long,
     ),
     r'visitorId': PropertySchema(
       id: 4,
@@ -83,7 +82,7 @@ const VisitorCollectionSchema = CollectionSchema(
     )
   },
   links: {},
-  embeddedSchemas: {r'TicketEmbedded': TicketEmbeddedSchema},
+  embeddedSchemas: {},
   getId: _visitorCollectionGetId,
   getLinks: _visitorCollectionGetLinks,
   attach: _visitorCollectionAttach,
@@ -97,9 +96,6 @@ int _visitorCollectionEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.answersIds.length * 8;
-  bytesCount += 3 +
-      TicketEmbeddedSchema.estimateSize(
-          object.ticket, allOffsets[TicketEmbedded]!, allOffsets);
   bytesCount += 3 + object.visitorId.length * 3;
   return bytesCount;
 }
@@ -113,12 +109,7 @@ void _visitorCollectionSerialize(
   writer.writeLongList(offsets[0], object.answersIds);
   writer.writeLong(offsets[1], object.eventId);
   writer.writeDateTime(offsets[2], object.qrCodeScannedTime);
-  writer.writeObject<TicketEmbedded>(
-    offsets[3],
-    allOffsets,
-    TicketEmbeddedSchema.serialize,
-    object.ticket,
-  );
+  writer.writeLong(offsets[3], object.ticketId);
   writer.writeString(offsets[4], object.visitorId);
 }
 
@@ -132,12 +123,7 @@ VisitorCollection _visitorCollectionDeserialize(
     answersIds: reader.readLongList(offsets[0]) ?? [],
     eventId: reader.readLong(offsets[1]),
     qrCodeScannedTime: reader.readDateTimeOrNull(offsets[2]),
-    ticket: reader.readObjectOrNull<TicketEmbedded>(
-          offsets[3],
-          TicketEmbeddedSchema.deserialize,
-          allOffsets,
-        ) ??
-        TicketEmbedded(),
+    ticketId: reader.readLong(offsets[3]),
     visitorId: reader.readString(offsets[4]),
   );
   return object;
@@ -157,12 +143,7 @@ P _visitorCollectionDeserializeProp<P>(
     case 2:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 3:
-      return (reader.readObjectOrNull<TicketEmbedded>(
-            offset,
-            TicketEmbeddedSchema.deserialize,
-            allOffsets,
-          ) ??
-          TicketEmbedded()) as P;
+      return (reader.readLong(offset)) as P;
     case 4:
       return (reader.readString(offset)) as P;
     default:
@@ -928,6 +909,62 @@ extension VisitorCollectionQueryFilter
   }
 
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      ticketIdEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'ticketId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      ticketIdGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'ticketId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      ticketIdLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'ticketId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      ticketIdBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'ticketId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
       visitorIdEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1065,14 +1102,7 @@ extension VisitorCollectionQueryFilter
 }
 
 extension VisitorCollectionQueryObject
-    on QueryBuilder<VisitorCollection, VisitorCollection, QFilterCondition> {
-  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
-      ticket(FilterQuery<TicketEmbedded> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.object(q, r'ticket');
-    });
-  }
-}
+    on QueryBuilder<VisitorCollection, VisitorCollection, QFilterCondition> {}
 
 extension VisitorCollectionQueryLinks
     on QueryBuilder<VisitorCollection, VisitorCollection, QFilterCondition> {}
@@ -1104,6 +1134,20 @@ extension VisitorCollectionQuerySortBy
       sortByQrCodeScannedTimeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'qrCodeScannedTime', Sort.desc);
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
+      sortByTicketId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'ticketId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
+      sortByTicketIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'ticketId', Sort.desc);
     });
   }
 
@@ -1167,6 +1211,20 @@ extension VisitorCollectionQuerySortThenBy
   }
 
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
+      thenByTicketId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'ticketId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
+      thenByTicketIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'ticketId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
       thenByVisitorId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'visitorId', Sort.asc);
@@ -1201,6 +1259,13 @@ extension VisitorCollectionQueryWhereDistinct
       distinctByQrCodeScannedTime() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'qrCodeScannedTime');
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QDistinct>
+      distinctByTicketId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'ticketId');
     });
   }
 
@@ -1240,10 +1305,9 @@ extension VisitorCollectionQueryProperty
     });
   }
 
-  QueryBuilder<VisitorCollection, TicketEmbedded, QQueryOperations>
-      ticketProperty() {
+  QueryBuilder<VisitorCollection, int, QQueryOperations> ticketIdProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'ticket');
+      return query.addPropertyName(r'ticketId');
     });
   }
 

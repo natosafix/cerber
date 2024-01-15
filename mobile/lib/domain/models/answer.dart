@@ -8,4 +8,12 @@ class Answer {
     required this.answers,
     required this.questionId,
   });
+
+  Answer copyWithAnswers(List<String> answers) {
+    return Answer(
+      id: id,
+      answers: answers,
+      questionId: questionId,
+    );
+  }
 }

@@ -342,7 +342,7 @@ class L10n {
 
   /// `{date} at {time}`
   String formattedDateTime(DateTime date, DateTime time) {
-    final DateFormat dateDateFormat = DateFormat.yMd(Intl.getCurrentLocale());
+    final DateFormat dateDateFormat = DateFormat.MMMMd(Intl.getCurrentLocale());
     final String dateString = dateDateFormat.format(date);
 
     final DateFormat timeDateFormat = DateFormat.Hm(Intl.getCurrentLocale());
@@ -361,16 +361,6 @@ class L10n {
     return Intl.message(
       'Your QR code',
       name: 'yourQrCode',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Visitor''s questionnaire`
-  String get visitorsQuestions {
-    return Intl.message(
-      'Visitor\'\'s questionnaire',
-      name: 'visitorsQuestions',
       desc: '',
       args: [],
     );
@@ -451,6 +441,46 @@ class L10n {
     return Intl.message(
       'This QR code has already been scanned',
       name: 'qrCodeAlreadyBeenScanned',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add new visitor`
+  String get addNewVisitor {
+    return Intl.message(
+      'Add new visitor',
+      name: 'addNewVisitor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose a ticket`
+  String get chooseTicket {
+    return Intl.message(
+      'Choose a ticket',
+      name: 'chooseTicket',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fill the form`
+  String get fillTheForm {
+    return Intl.message(
+      'Fill the form',
+      name: 'fillTheForm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please fill the entire form`
+  String get pleaseFillTheEntireForm {
+    return Intl.message(
+      'Please fill the entire form',
+      name: 'pleaseFillTheEntireForm',
       desc: '',
       args: [],
     );

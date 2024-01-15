@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:project/data/datasources/local/events_database/collections/answer_collection/answer_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/event_collection/event_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/question_collection/question_collection.dart';
+import 'package:project/data/datasources/local/events_database/collections/ticket_collection/ticket_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/visitor_collection/visitor_collection.dart';
 import 'package:project/data/datasources/local/events_database/events_database.dart';
 import 'package:project/data/datasources/remote/authentication_service/authentication_service.dart';
@@ -60,7 +61,13 @@ void setupLocator() async {
   locator.registerSingletonAsync<LocalEventsRepository>(() async {
     final dir = await getApplicationDocumentsDirectory();
     final isar = await Isar.open(
-      [EventCollectionSchema, VisitorCollectionSchema, QuestionCollectionSchema, AnswerCollectionSchema],
+      [
+        EventCollectionSchema,
+        VisitorCollectionSchema,
+        QuestionCollectionSchema,
+        AnswerCollectionSchema,
+        TicketCollectionSchema,
+      ],
       directory: dir.path,
     );
     final eventsDatabase = EventsDatabase(isar: isar);
@@ -107,7 +114,6 @@ void setupLocator() async {
       remoteEventsRepository: locator<RemoteEventsRepository>(),
       localEventsRepository: localEventsRepo,
     );
-    await compoundRepo.init();
     return compoundRepo;
   });
 

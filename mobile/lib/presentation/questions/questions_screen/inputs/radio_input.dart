@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project/domain/models/answer.dart';
 import 'package:project/domain/models/question.dart';
+import 'package:project/presentation/questions/questions_bloc/questions_bloc.dart';
 import 'package:project/presentation/questions/questions_screen/questions_screen.dart';
 
 class RadioInput extends StatefulWidget {
   const RadioInput(
     this.question,
-    this.answer, {
+    this.answer,
+    this.filling, {
     super.key,
   });
 
   final Question question;
-  final Answer? answer;
+  final Answer answer;
+  final bool filling;
 
   @override
   State<RadioInput> createState() => _RadioInputState();
@@ -22,7 +26,11 @@ class _RadioInputState extends State<RadioInput> {
 
   @override
   void initState() {
-    _selected = widget.answer?.answers.first;
+    if (widget.filling) {
+      _selected = null;
+    } else {
+      _selected = widget.answer.answers.first;
+    }
     super.initState();
   }
 
@@ -42,7 +50,8 @@ class _RadioInputState extends State<RadioInput> {
               title: Text(option),
               value: option,
               groupValue: _selected,
-              onChanged: widget.answer == null ? _onChanged : (_) {},
+              onChanged: widget.filling ? (_) => _onChanged(context, option) : (_) {},
+              contentPadding: EdgeInsets.zero,
             );
           }),
         ],
@@ -50,9 +59,10 @@ class _RadioInputState extends State<RadioInput> {
     );
   }
 
-  void _onChanged(String? value) {
+  void _onChanged(BuildContext context, String value) {
     setState(() {
       _selected = value;
     });
+    context.read<QuestionsBloc>().add(RadioChanged(question: widget.question, selectedValue: value));
   }
 }

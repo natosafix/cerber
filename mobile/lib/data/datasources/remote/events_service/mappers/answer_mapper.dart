@@ -5,7 +5,7 @@ extension AnswerMapper on AnswerApiResponse {
   Answer toModel() {
     return Answer(
       id: id,
-      answers: [content], //TODO
+      answers: content,
       questionId: questionId,
     );
   }

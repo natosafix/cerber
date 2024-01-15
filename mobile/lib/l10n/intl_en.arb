@@ -53,7 +53,7 @@
         "placeholders": {
             "date": {
                 "type": "DateTime",
-                "format": "yMd"
+                "format": "MMMMd"
             },
             "time": {
                 "type": "DateTime",
@@ -62,7 +62,6 @@
         }
     },
     "yourQrCode": "Your QR code",
-    "visitorsQuestions": "Visitor''s questionnaire",
     "save": "Save",
     "questionsEmpty": "Questionnaire is empty",
     "failedToReadQrCode": "Failed to read QR code",
@@ -70,5 +69,9 @@
     "failedToFindSuchVisitor": "Could not find this visitor",
     "boughtTicketOnSpot": "QR code is correct however this visitor is not in the database, they probably bought the ticket on spot",
     "invalidPasswordOrEmail": "Invalid password or email",
-    "qrCodeAlreadyBeenScanned": "This QR code has already been scanned"
+    "qrCodeAlreadyBeenScanned": "This QR code has already been scanned",
+    "addNewVisitor": "Add new visitor",
+    "chooseTicket": "Choose a ticket",
+    "fillTheForm": "Fill the form",
+    "pleaseFillTheEntireForm": "Please fill the entire form"
 }

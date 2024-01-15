@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:project/domain/models/answer.dart';
 import 'package:project/domain/models/event.dart';
+import 'package:project/domain/models/filled_answer.dart';
 import 'package:project/domain/models/question.dart';
-import 'package:project/domain/models/question_type.dart';
+import 'package:project/domain/models/ticket.dart';
 import 'package:project/domain/models/visitor.dart';
+import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/domain/repositories/remote_events_repository.dart';
 import 'package:project/utils/result.dart';
 
@@ -264,4 +265,16 @@ class MockEventsRepo implements RemoteEventsRepository {
     //   ),
     // ]),
   ];
+
+  @override
+  Future<List<Ticket>?> getTickets(int eventId) {
+    // TODO: implement getTickets
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<NewVisitorId?> addNewVisitorAnswers(int ticketId, List<FilledAnswer> filledAnswers, int eventId) {
+    // TODO: implement addNewVisitorAnswers
+    throw UnimplementedError();
+  }
 }

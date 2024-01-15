@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:project/domain/models/event.dart';
+import 'package:project/domain/models/filled_answer.dart';
 import 'package:project/domain/models/qr_code_data.dart';
 import 'package:project/domain/models/question.dart';
+import 'package:project/domain/models/ticket.dart';
 import 'package:project/domain/models/visitor.dart';
 import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
 import 'package:project/domain/repositories/compound_events_repository/download_status.dart';
 import 'package:project/domain/repositories/compound_events_repository/qr_code_process_result.dart';
+import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/domain/repositories/local_events_repository.dart';
 import 'package:project/domain/repositories/remote_events_repository.dart';
 import 'package:project/utils/cryptor/cryptor.dart';
@@ -29,12 +32,6 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
   final _networkChecker = locator<NetworkChecker>();
   final _cryptor = locator<Cryptor>();
 
-  late final bool _networkAvailable;
-
-  Future<void> init() async {
-    _networkAvailable = await _networkChecker.networkAvailable();
-  }
-
   final Set<int> _downloadedEventsIds = {};
 
   void _deleteNonexistentEvents() async {
@@ -47,12 +44,16 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
     _downloadedEventsIds.clear();
   }
 
+  Future<bool> _networkAvailable() async {
+    return await _networkChecker.networkAvailable();
+  }
+
   @override
   Future<Result<List<Event>, Exception>> getEvents({
     required int offset,
     required int limit,
   }) async {
-    if (!_networkAvailable) {
+    if (!(await _networkAvailable())) {
       return await localEventsRepository.getEvents(offset: offset, limit: limit);
     }
 
@@ -81,7 +82,7 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
 
   @override
   Future<Visitor?> findVisitor(String visitorId, int eventId) async {
-    if (_networkAvailable) {
+    if (await _networkAvailable()) {
       return await remoteEventsRepository.findVisitor(visitorId, eventId);
     }
 
@@ -112,12 +113,21 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
     await localEventsRepository.deleteQuestions(eventId);
     await localEventsRepository.saveQuestions(questions, eventId);
 
+    final tickets = await remoteEventsRepository.getTickets(eventId);
+
+    if (tickets == null) {
+      return status.add(DownloadStatus.failure);
+    }
+
+    await localEventsRepository.deleteTickets(eventId);
+    await localEventsRepository.saveTickets(tickets, eventId);
+
     status.add(DownloadStatus.success);
   }
 
   @override
   Future<List<Question>?> getQuestions(int eventId) async {
-    if (_networkAvailable) {
+    if (await _networkAvailable()) {
       return await remoteEventsRepository.getQuestions(eventId);
     }
 
@@ -127,11 +137,9 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
   @override
   Future<QrCodeProcessResult> processQrCode(QrCodeData qrCodeData, Event event) async {
     final visitorIdDecrypted = _cryptor.decrypt(qrCodeData.encryptedVisitorId, event.cryptoKey, qrCodeData.iv);
-
     if (visitorIdDecrypted == null) return VisitorNotFound();
 
     final visitor = await findVisitor(visitorIdDecrypted, event.id);
-
     if (visitor == null) return VisitorIdValidButNotFound();
 
     localEventsRepository.setVisitorQrCodeScanned(visitor.id, event.id);
@@ -140,10 +148,24 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
   }
 
   @override
-  Future<QrCodeData> generateQrCode(Event event) async {
-    await Future.delayed(Duration.zero);
-//TODO
-    const newVisitorId = "ojiytrfyguhoksd";
+  Future<QrCodeData> generateQrCode(Event event, List<FilledAnswer> filledAnswers, int ticketId) async {
+    late String newVisitorId;
+    var remoteFailed = false;
+    final networkAvailable = await _networkAvailable();
+
+    if (networkAvailable) {
+      final id = await remoteEventsRepository.addNewVisitorAnswers(ticketId, filledAnswers, event.id);
+      if (id == null) {
+        remoteFailed = true;
+      } else {
+        newVisitorId = id;
+      }
+    }
+
+    if (!networkAvailable || remoteFailed) {
+      final id = await localEventsRepository.addNewVisitorAnswers(ticketId, filledAnswers, event.id);
+      newVisitorId = id!;
+    }
 
     final encryptResult = _cryptor.encrypt(newVisitorId, event.cryptoKey);
 
@@ -151,5 +173,27 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
       iv: encryptResult.iv,
       encryptedVisitorId: encryptResult.encrypted,
     );
+  }
+
+  @override
+  Future<List<Ticket>?> getTickets(int eventId) async {
+    if (await _networkAvailable()) {
+      return await remoteEventsRepository.getTickets(eventId);
+    }
+
+    return await localEventsRepository.getTickets(eventId);
+  }
+
+  @override
+  Future<NewVisitorId?> addNewVisitorAnswers(
+    int ticketId,
+    List<FilledAnswer> filledAnswers,
+    int eventId,
+  ) async {
+    if (await _networkAvailable()) {
+      return await remoteEventsRepository.addNewVisitorAnswers(ticketId, filledAnswers, eventId);
+    }
+
+    return await localEventsRepository.addNewVisitorAnswers(ticketId, filledAnswers, eventId);
   }
 }

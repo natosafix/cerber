@@ -1,5 +1,5 @@
 import 'package:isar/isar.dart';
-import 'package:project/data/datasources/local/events_database/collections/visitor_collection/ticket_embedded.dart';
+import 'package:project/data/datasources/local/events_database/collections/ticket_collection/ticket_collection.dart';
 import 'package:project/domain/models/answer.dart';
 import 'package:project/domain/models/question.dart';
 import 'package:project/domain/models/visitor.dart';
@@ -19,7 +19,7 @@ class VisitorCollection {
 
   List<Id> answersIds;
 
-  TicketEmbedded ticket;
+  int ticketId;
 
   DateTime? qrCodeScannedTime;
 
@@ -27,15 +27,15 @@ class VisitorCollection {
     required this.visitorId,
     required this.eventId,
     required this.answersIds,
-    required this.ticket,
+    required this.ticketId,
     required this.qrCodeScannedTime,
   });
 
-  static Visitor toModel(VisitorCollection visitor, Map<Question, Answer> answers) {
+  static Visitor toModel(VisitorCollection visitor, TicketCollection ticket, Map<Question, Answer> answers) {
     return Visitor(
       id: visitor.visitorId,
       questionsMap: answers,
-      ticket: TicketEmbedded.toModel(visitor.ticket),
+      ticket: TicketCollection.toModel(ticket),
       qrCodeScannedTime: visitor.qrCodeScannedTime,
     );
   }
@@ -45,7 +45,7 @@ class VisitorCollection {
       visitorId: visitor.id,
       eventId: eventId,
       answersIds: visitor.questionsMap.values.map((a) => a.id).toList(),
-      ticket: TicketEmbedded.fromModel(visitor.ticket),
+      ticketId: visitor.ticket.id,
       qrCodeScannedTime: visitor.qrCodeScannedTime,
     );
   }

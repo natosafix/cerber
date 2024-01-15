@@ -5,7 +5,7 @@ part 'answer_api_response.g.dart';
 @JsonSerializable(createToJson: false)
 class AnswerApiResponse {
   final int id;
-  final String content;
+  final List<String> content;
   final int questionId;
 
   AnswerApiResponse({

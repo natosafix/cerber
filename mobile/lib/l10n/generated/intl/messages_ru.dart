@@ -30,12 +30,15 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "add": MessageLookupByLibrary.simpleMessage("Добавить"),
+        "addNewVisitor":
+            MessageLookupByLibrary.simpleMessage("Добавить посетителя"),
         "badQrCodeFormat":
             MessageLookupByLibrary.simpleMessage("QR-код в неверном формате"),
         "beginChecking":
             MessageLookupByLibrary.simpleMessage("Начать проверку"),
         "boughtTicketOnSpot": MessageLookupByLibrary.simpleMessage(
             "QR код верный, однако посетителя нет в базе, вероятно билет был куплен на месте"),
+        "chooseTicket": MessageLookupByLibrary.simpleMessage("Выберите билет"),
         "createAccount":
             MessageLookupByLibrary.simpleMessage("Создать аккаунт"),
         "downloadDatabase":
@@ -46,6 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Такого посетителя нет"),
         "failedToReadQrCode":
             MessageLookupByLibrary.simpleMessage("Не можем прочитать QR-код"),
+        "fillTheForm": MessageLookupByLibrary.simpleMessage("Заполните анкету"),
         "formattedDateTime": m0,
         "invalidEmailAddress":
             MessageLookupByLibrary.simpleMessage("Некорректный адрес"),
@@ -70,6 +74,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Должен иметь минимум 1 цифру"),
         "passwordMustHaveAtLeast1SpecialChar": m1,
         "passwordMustHaveAtLeastNChars": m2,
+        "pleaseFillTheEntireForm": MessageLookupByLibrary.simpleMessage(
+            "Пожалуйста, заполните анкету полностью"),
         "qrCodeAlreadyBeenScanned": MessageLookupByLibrary.simpleMessage(
             "Этот QR-код уже был отсканирован"),
         "questionsEmpty": MessageLookupByLibrary.simpleMessage("Анкета пуста"),
@@ -82,8 +88,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "somethingWentWrong":
             MessageLookupByLibrary.simpleMessage("Что-то пошло не так..."),
         "visitors": MessageLookupByLibrary.simpleMessage("Посетители"),
-        "visitorsQuestions":
-            MessageLookupByLibrary.simpleMessage("Анкета посетителя"),
         "when": MessageLookupByLibrary.simpleMessage("Когда"),
         "where": MessageLookupByLibrary.simpleMessage("Где"),
         "youHaveNoEvents":

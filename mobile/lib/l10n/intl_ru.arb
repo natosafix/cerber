@@ -53,7 +53,7 @@
         "placeholders": {
             "date": {
                 "type": "DateTime",
-                "format": "yMd"
+                "format": "MMMMd"
             },
             "time": {
                 "type": "DateTime",
@@ -62,7 +62,6 @@
         }
     },
     "yourQrCode": "Ваш QR-код",
-    "visitorsQuestions": "Анкета посетителя",
     "save": "Сохранить",
     "questionsEmpty": "Анкета пуста",
     "failedToReadQrCode": "Не можем прочитать QR-код",
@@ -70,5 +69,9 @@
     "failedToFindSuchVisitor": "Такого посетителя нет",
     "boughtTicketOnSpot": "QR код верный, однако посетителя нет в базе, вероятно билет был куплен на месте",
     "invalidPasswordOrEmail": "Неверная почта или пароль",
-    "qrCodeAlreadyBeenScanned": "Этот QR-код уже был отсканирован"
+    "qrCodeAlreadyBeenScanned": "Этот QR-код уже был отсканирован",
+    "addNewVisitor": "Добавить посетителя",
+    "chooseTicket": "Выберите билет",
+    "fillTheForm": "Заполните анкету",
+    "pleaseFillTheEntireForm": "Пожалуйста, заполните анкету полностью"
 }

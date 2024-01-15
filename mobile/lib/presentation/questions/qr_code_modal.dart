@@ -3,8 +3,8 @@ import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/utils/extensions/context_x.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class QrCodeScreen extends StatelessWidget {
-  const QrCodeScreen({
+class QrCodeModal extends StatelessWidget {
+  const QrCodeModal({
     required this.qrCodeData,
     super.key,
   });
