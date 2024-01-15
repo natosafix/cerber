@@ -48,6 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "failedToReadQrCode":
             MessageLookupByLibrary.simpleMessage("Failed to read QR code"),
         "fillTheForm": MessageLookupByLibrary.simpleMessage("Fill the form"),
+        "form": MessageLookupByLibrary.simpleMessage("Form"),
         "formattedDateTime": m0,
         "invalidEmailAddress":
             MessageLookupByLibrary.simpleMessage("Invalid email address"),
@@ -87,7 +88,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
         "somethingWentWrong":
             MessageLookupByLibrary.simpleMessage("Something went wrong..."),
+        "ticket": MessageLookupByLibrary.simpleMessage("Ticket"),
         "visitors": MessageLookupByLibrary.simpleMessage("Visitors"),
+        "visitorsInformation":
+            MessageLookupByLibrary.simpleMessage("Visitor Information"),
         "when": MessageLookupByLibrary.simpleMessage("When"),
         "where": MessageLookupByLibrary.simpleMessage("Where"),
         "youHaveNoEvents": MessageLookupByLibrary.simpleMessage(

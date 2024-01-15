@@ -50,6 +50,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "failedToReadQrCode":
             MessageLookupByLibrary.simpleMessage("Не можем прочитать QR-код"),
         "fillTheForm": MessageLookupByLibrary.simpleMessage("Заполните анкету"),
+        "form": MessageLookupByLibrary.simpleMessage("Анкета"),
         "formattedDateTime": m0,
         "invalidEmailAddress":
             MessageLookupByLibrary.simpleMessage("Некорректный адрес"),
@@ -87,7 +88,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "signUp": MessageLookupByLibrary.simpleMessage("Зарегаться"),
         "somethingWentWrong":
             MessageLookupByLibrary.simpleMessage("Что-то пошло не так..."),
+        "ticket": MessageLookupByLibrary.simpleMessage("Билет"),
         "visitors": MessageLookupByLibrary.simpleMessage("Посетители"),
+        "visitorsInformation":
+            MessageLookupByLibrary.simpleMessage("Информация о посетителе"),
         "when": MessageLookupByLibrary.simpleMessage("Когда"),
         "where": MessageLookupByLibrary.simpleMessage("Где"),
         "youHaveNoEvents":

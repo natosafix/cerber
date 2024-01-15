@@ -73,5 +73,8 @@
     "addNewVisitor": "Добавить посетителя",
     "chooseTicket": "Выберите билет",
     "fillTheForm": "Заполните анкету",
-    "pleaseFillTheEntireForm": "Пожалуйста, заполните анкету полностью"
+    "pleaseFillTheEntireForm": "Пожалуйста, заполните анкету полностью",
+    "visitorsInformation": "Информация о посетителе",
+    "form": "Анкета",
+    "ticket": "Билет"
 }

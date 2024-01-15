@@ -485,6 +485,36 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Visitor Information`
+  String get visitorsInformation {
+    return Intl.message(
+      'Visitor Information',
+      name: 'visitorsInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Form`
+  String get form {
+    return Intl.message(
+      'Form',
+      name: 'form',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ticket`
+  String get ticket {
+    return Intl.message(
+      'Ticket',
+      name: 'ticket',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

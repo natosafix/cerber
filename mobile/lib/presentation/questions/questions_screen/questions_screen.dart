@@ -29,6 +29,8 @@ class QuestionsScreen extends StatelessWidget {
 
   static const double midInputsPadding = 8;
 
+  bool get filling => visitor == null;
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) => _postFrameCallback(context));
@@ -36,7 +38,7 @@ class QuestionsScreen extends StatelessWidget {
       create: (context) => QuestionsBloc(visitor: visitor, event: event),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(L10n.current.addNewVisitor),
+          title: Text(filling ? L10n.current.addNewVisitor : L10n.current.visitorsInformation),
           elevation: 0,
           backgroundColor: Colors.transparent,
           foregroundColor: context.appBarForegroundColor(),
@@ -53,15 +55,15 @@ class QuestionsScreen extends StatelessWidget {
               }
 
               final widgets = <Widget>[];
-              final filling = visitor == null;
 
               if (filling) {
                 widgets.add(TicketSelector(state.tickets, state.selectedTicket));
               } else {
                 final ticket = visitor!.ticket;
+                widgets.add(Text(L10n.current.ticket));
                 widgets.add(RadioListTile(
                   title: Text(ticket.name),
-                  subtitle: Text("${ticket.price}₽"),
+                  subtitle: Text("${ticket.price} ₽"),
                   value: null,
                   groupValue: null,
                   onChanged: (_) {},
@@ -70,7 +72,7 @@ class QuestionsScreen extends StatelessWidget {
               }
 
               widgets.add(const SizedBox(height: midInputsPadding));
-              widgets.add(Text(L10n.current.fillTheForm));
+              widgets.add(Text(filling ? L10n.current.fillTheForm : L10n.current.form));
 
               for (final entry in state.questionsMap!.entries) {
                 final question = entry.key;

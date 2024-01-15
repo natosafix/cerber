@@ -73,5 +73,8 @@
     "addNewVisitor": "Add new visitor",
     "chooseTicket": "Choose a ticket",
     "fillTheForm": "Fill the form",
-    "pleaseFillTheEntireForm": "Please fill the entire form"
+    "pleaseFillTheEntireForm": "Please fill the entire form",
+    "visitorsInformation": "Visitor Information",
+    "form": "Form",
+    "ticket": "Ticket"
 }
