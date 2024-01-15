@@ -30,7 +30,7 @@ public class TicketsController : Controller
     public async Task<IActionResult> Get([FromQuery] int eventId)
     {
         var tickets = await ticketsService.GetByEvent(eventId);
-        return Ok(mapper.Map<TicketResponseDto>(tickets));
+        return Ok(mapper.Map<List<TicketResponseDto>>(tickets));
     }
 
     [HttpPost("")]
