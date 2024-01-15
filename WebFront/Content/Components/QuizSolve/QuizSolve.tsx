@@ -10,7 +10,6 @@ import { TicketPicker } from './TicketPicker';
 import { CreateAnswerDto } from '../../../Api/QuizSolve/CreateAnswerDto';
 import { CreateOrderDto } from '../../../Api/QuizSolve/CreateOrderDto';
 import { ValidationContainer } from '@skbkontur/react-ui-validations';
-import { EventAdminClient } from '../../../Api/EventAdmin/EventAdminClient';
 
 
 export const QuizSolve: React.FC = () => {
@@ -55,7 +54,9 @@ export const QuizSolve: React.FC = () => {
                 const answerDtos = answers.map(ans => new CreateAnswerDto(ans.Content, ans.Question.id));
                 const createOrderDto = new CreateOrderDto(chosenTicket!, answerDtos);
 
-                await QuizSolveClient.createOrder(createOrderDto);
+                QuizSolveClient.createOrder(createOrderDto).then(r => {
+                    window.location.href = QuizSolveClient.getCongratsUrl(quizId);
+                });
             }
         }
     };
