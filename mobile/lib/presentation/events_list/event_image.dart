@@ -31,14 +31,23 @@ class EventImage extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
         child: Container(
           constraints: const BoxConstraints(
-            maxHeight: 250,
+            maxHeight: 230,
           ),
           width: double.infinity,
           child: CachedNetworkImage(
             cacheManager: DioCacheManager.instance,
             imageUrl: event.photoUrl,
             fit: BoxFit.fitWidth,
-            errorWidget: (context, url, error) => const Icon(Icons.error),
+            errorWidget: (context, url, error) {
+              return Expanded(
+                child: Container(
+                  color: Colors.grey.shade400.withOpacity(0.3),
+                  child: const Center(
+                    child: Icon(Icons.error_outline),
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),

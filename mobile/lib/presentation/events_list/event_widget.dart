@@ -32,7 +32,7 @@ class EventWidget extends StatelessWidget {
         children: [
           EventImage(borderRadius: borderRadius, event: event),
           Padding(
-            padding: const EdgeInsets.only(top: 15, bottom: 30, right: 20, left: 20),
+            padding: const EdgeInsets.only(top: 15, bottom: 25, right: 20, left: 20),
             child: Align(
               alignment: Alignment.topLeft,
               child: Column(
