@@ -38,16 +38,9 @@
     <ItemGroup>
       <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
-    
-
+  
     <ItemGroup>
       <Folder Include="wwwroot" />
-    </ItemGroup>
-    
-
-    <ItemGroup>
-      <AdditionalFiles Include="Views\Home\Login.cshtml" />
-      <AdditionalFiles Include="Views\Home\Register.cshtml" />
     </ItemGroup>
 
 </Project>
