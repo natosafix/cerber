@@ -38,7 +38,12 @@ public class EventsService : IEventsService
         @event.CryptoKey = Convert.ToBase64String(bytes);
         return await eventsRepository.Create(@event);
     }
-    
+
+    public Task<List<string>> GetInspectors(int id)
+    {
+        return eventsRepository.GetInspectors(id);
+    }
+
     public async Task AddInspector(int id, Guid inspectorId)
     {
         var inspector = await usersRepository.Get(inspectorId) ?? throw new BadHttpRequestException($"Not found inspector with id {inspectorId}");
@@ -46,6 +51,19 @@ public class EventsService : IEventsService
         await eventsRepository.AddInspector(@event, inspector);
     }
 
+    public async Task AddInspectorByUsername(int id, string username)
+    {
+        var inspector = await usersRepository.Get(username) ?? throw new BadHttpRequestException($"Not found inspector with username {username}");
+        var @event = await Get(id);
+        await eventsRepository.AddInspector(@event, inspector);
+    }
+
+    public async Task DeleteInspector(int id, string username)
+    {
+        var @event = await GetWithInspectors(id);
+        await eventsRepository.DeleteInspector(@event, username);
+    }
+    
     public async Task<PageList<Event>> GetInspected(string username, int offset, int limit)
     {
         return await eventsRepository.GetInspected(username, offset, limit);

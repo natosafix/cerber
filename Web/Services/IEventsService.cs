@@ -13,7 +13,13 @@ public interface IEventsService
     
     Task<Event> Create(Event @event);
     
+    Task<List<string>> GetInspectors(int id);
+
+    Task DeleteInspector(int id, string username);
+    
     Task AddInspector(int id, Guid inspector);
+    
+    Task AddInspectorByUsername(int id, string username);
     
     Task<PageList<Event>> GetInspected(string username, int offset, int limit);
     

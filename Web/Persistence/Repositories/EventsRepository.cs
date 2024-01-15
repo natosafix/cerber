@@ -42,7 +42,15 @@ public class EventsRepository : IEventsRepository
        return entity;
    }
 
-   public async Task AddInspector(Event @event, User inspector)
+    public async Task<List<string>> GetInspectors(int id)
+    {
+        var @event = await dbContext.Events
+            .Include(e => e.Inspectors)
+            .FirstOrDefaultAsync(e => e.Id == id);
+        return @event?.Inspectors.Select(i => i.UserName).ToList() ?? throw new BadHttpRequestException($"Not found event with id {id}");
+    }
+
+    public async Task AddInspector(Event @event, User inspector)
    {
        @event.Inspectors ??= new List<User>();
        @event.Inspectors.Add(inspector);
@@ -50,7 +58,14 @@ public class EventsRepository : IEventsRepository
        await dbContext.SaveChangesAsync();
    }
 
-   public async Task<PageList<Event>> GetInspected(string username, int offset, int limit)
+    public async Task DeleteInspector(Event @event, string username)
+    {
+        @event.Inspectors = @event.Inspectors.Where(u => !u.UserName.Equals(username)).ToList();
+        dbContext.Events.Update(@event);
+        await dbContext.SaveChangesAsync();
+    }
+
+    public async Task<PageList<Event>> GetInspected(string username, int offset, int limit)
    {
        var events = await dbContext.Events.FromSqlInterpolated(
            $@"SELECT e.""Id"", e.""OwnerId"", e.""CategoryId"", e.""Address"", e.""City"", e.""Description"", e.""From"", e.""Name"", e.""ShortDescription"", e.""To"", e.""CoverId"", e.""CryptoKey""
