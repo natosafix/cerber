@@ -3,7 +3,7 @@ import { EventAdminSaveBtn } from '../EventStepsNav/EventAdminSaveBtn';
 import { Button, Gapped } from '@skbkontur/react-ui';
 import { QuestionBuilder } from '../Questions/QuestionBuilder/QuestionBuilder';
 import { BinButton } from '../../../Entries/Shared/BinButton/BinButton';
-import styles from './EventQuizCreator.scss';
+import styles from '../../../Entries/Shared/BinButton/BinButton.scss';
 import { EventAdminClient } from '../../../../Api/EventAdmin/EventAdminClient';
 import { ValidationContainer } from '@skbkontur/react-ui-validations';
 import { Question } from '../../../../Api/Models/Question';
@@ -72,7 +72,7 @@ export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
 
     const Create: React.FC<QuizBuilderCreatorProps> = ({ question, num }) => {
         return (
-            <div key={question.key} className={styles.questionBuilderWrapper}>
+            <div key={question.key} className={styles.relativeWrapper}>
                 <div className={styles.binBtnWrapper}>
                     <BinButton onClick={() => onDeleteQuestion(question.key)} />
                 </div>

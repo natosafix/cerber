@@ -34,7 +34,7 @@ public class TicketsController : Controller
     }
 
     [HttpPost("")]
-    public async Task<IActionResult> Create([FromBody] CreateTicketDto createTicketDto)
+    public async Task<IActionResult> Create([FromBody] CreateTicketDto[] createTicketDto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);

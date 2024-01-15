@@ -2,6 +2,7 @@
 import { DraftEvent, DraftEventDto } from './DraftEvent';
 import { FileUploaderAttachedFile } from '@skbkontur/react-ui';
 import { DraftQuestionDto } from './DraftQuestionDto';
+import { TicketDto } from '../Models/TicketDto';
 
 const api = axios.create({ baseURL: '/EventAdmin' });
 
@@ -44,8 +45,8 @@ export class EventAdminClient {
         return api.delete('/coverImage');
     }
 
-    public static publishDraft() {
-        return api.post('/publishDraft');
+    public static publishDraft(tickets: TicketDto[]) {
+        return api.post('/publishDraft', tickets);
     }
 
     public static createDraft() {

@@ -8,45 +8,38 @@ import { EventQuizCreator } from './EventQuizCreator/EventQuizCreator';
 import { EventPublish } from './EventPublish/EventPublish';
 import { Gapped } from '@skbkontur/react-ui';
 import { EventAdminClient } from '../../../Api/EventAdmin/EventAdminClient';
+import { Ticket } from './EventPublish/Ticket';
+import { TicketDto } from '../../../Api/Models/TicketDto';
 
 
 export const EventAdmin: React.FC = () => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const myParam = urlParams.get('id')!;
-
-    const [draftId, setDraftId] = useState<string>(myParam);
     const [step, setStep] = useState(EventAdminPageNav.EventCoverSheet);
+    const [tickets, setTickets] = useState<Ticket[]>([]);
 
     const onSave = async () => {
         if (step === EventAdminPageNav.EventPublish) {
-            EventAdminClient.publishDraft().then(r => {
-                window.location.href = r.data;
-            });
-            // EventAdminClient.publishDraft().then(r => {
-            //     alert(JSON.stringify(r));
-            // });
+            EventAdminClient.publishDraft(tickets.map(ticket => new TicketDto(ticket.Name, ticket.Price ?? 0)))
+                .then(r => window.location.href = r.data);
         } else {
-            // alert('Save current page');
             setStep(step + 1);
         }
     };
 
     return (
         <div className={styles.mainWrapper}>
-            <EventStepsNav step={step} setStepNav={setStep}/>
+            <EventStepsNav step={step} setStepNav={setStep} />
 
             <div className={styles.contentPageWrapper}>
                 <div className={styles.contentWrapper}>
                     <Gapped gap={30} vertical={true}>
                         {step === EventAdminPageNav.EventCoverSheet && (
-                            <EventCoverSheet onSave={onSave}/>
+                            <EventCoverSheet onSave={onSave} />
                         )}
                         {step === EventAdminPageNav.EventQuizCreator && (
-                            <EventQuizCreator onSave={onSave}/>
+                            <EventQuizCreator onSave={onSave} />
                         )}
                         {step === EventAdminPageNav.EventPublish && (
-                            <EventPublish onSave={onSave}/>
+                            <EventPublish onSave={onSave} onTicketsChange={setTickets} />
                         )}
                     </Gapped>
                 </div>

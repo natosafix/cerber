@@ -17,7 +17,8 @@ public class DraftEventPublisherService : IDraftEventPublisherService
     public async Task<int> Publish(
         DraftEvent srcDraftEvent,
         Event dstEvent,
-        IReadOnlyCollection<Question> dstQuestions)
+        IReadOnlyCollection<Question> dstQuestions,
+        IReadOnlyCollection<Ticket> tickets)
     {
         var defaultQuestions = new[]
         {
@@ -50,6 +51,7 @@ public class DraftEventPublisherService : IDraftEventPublisherService
 
         return await eventsPublisherRepository.Publish(
             srcDraftEvent, dstEvent,
-            defaultQuestions.Concat(dstQuestions).ToList());
+            defaultQuestions.Concat(dstQuestions).ToList(),
+            tickets);
     }
 }
