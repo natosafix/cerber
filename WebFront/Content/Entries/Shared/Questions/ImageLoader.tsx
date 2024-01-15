@@ -1,9 +1,8 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
-import styles from '../EventAdmin.scss';
-import variables from '../EventAdminVariables.scss';
+import styles from './QuestionStyles.scss';
+import variables from './QuestionVariables.scss';
 import { FileUploader, FileUploaderAttachedFile, Gapped } from '@skbkontur/react-ui';
-import { Label } from '../../../Entries/Shared/Label/Label';
-import {EventAdminClient} from "../../../../Api/EventAdmin/EventAdminClient";
+import { Label } from '../Label/Label';
 
 
 interface IImageLoaderQuestion {

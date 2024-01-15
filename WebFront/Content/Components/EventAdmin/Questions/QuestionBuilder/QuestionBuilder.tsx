@@ -1,5 +1,4 @@
 ﻿import React, { useState } from 'react';
-import { SingleStringQuestion } from '../SingleStringQuestion';
 import { QuestionTypePicker } from './QuestionTypePicker';
 import { Label } from '../../../../Entries/Shared/Label/Label';
 import { Gapped } from '@skbkontur/react-ui';
@@ -7,6 +6,7 @@ import { ChoicesCreator } from './ChoicesCreator';
 import styles from './QuestionBuilder.scss';
 import { Question } from '../../../../../Api/Models/Question';
 import { QuestionTypes } from '../../../../../Api/Models/QuestionTypes';
+import { SingleStringQuestion } from '../../../../Entries/Shared/Questions/SingleStringQuestion';
 
 interface Props {
     question: Question;

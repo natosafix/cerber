@@ -1,6 +1,5 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
 import { EventAdminSaveBtn } from '../EventStepsNav/EventAdminSaveBtn';
-import { SingleStringQuestion } from '../Questions/SingleStringQuestion';
 import { Button, Gapped } from '@skbkontur/react-ui';
 import { QuestionBuilder } from '../Questions/QuestionBuilder/QuestionBuilder';
 import { BinButton } from '../../../Entries/Shared/BinButton/BinButton';
@@ -9,6 +8,7 @@ import { EventAdminClient } from '../../../../Api/EventAdmin/EventAdminClient';
 import { ValidationContainer } from '@skbkontur/react-ui-validations';
 import { Question } from '../../../../Api/Models/Question';
 import { DraftQuestionDto } from '../../../../Api/EventAdmin/DraftQuestionDto';
+import { SingleStringQuestion } from '../../../Entries/Shared/Questions/SingleStringQuestion';
 
 interface Props {
     onSave: () => void;

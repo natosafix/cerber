@@ -1,8 +1,8 @@
-﻿import styles from '../EventAdmin.scss';
-import variables from '../EventAdminVariables.scss';
+﻿import styles from './QuestionStyles.scss';
+import variables from './QuestionVariables.scss';
 import { Gapped, Textarea } from '@skbkontur/react-ui';
-import React, { useEffect, useState } from 'react';
-import { Label } from '../../../Entries/Shared/Label/Label';
+import React, { useState } from 'react';
+import { Label } from '../Label/Label';
 import { ValidationWrapper } from '@skbkontur/react-ui-validations';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';

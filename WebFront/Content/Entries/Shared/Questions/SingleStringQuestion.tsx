@@ -1,11 +1,11 @@
-﻿import styles from '../EventAdmin.scss';
-import variables from '../EventAdminVariables.scss';
+﻿import styles from './QuestionStyles.scss';
+import variables from './QuestionVariables.scss';
 import { ValidationWrapper } from '@skbkontur/react-ui-validations';
 import { Gapped, Input } from '@skbkontur/react-ui';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
-import { Label } from '../../../Entries/Shared/Label/Label';
+import { Label } from '../Label/Label';
 
 interface Props {
     title: string;

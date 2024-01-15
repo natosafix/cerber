@@ -1,13 +1,13 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
 import { ValidationContainer } from '@skbkontur/react-ui-validations';
 import { Gapped } from '@skbkontur/react-ui';
-import { SingleStringQuestion } from '../Questions/SingleStringQuestion';
-import { MultiStringQuestion } from '../Questions/MultiStringQuestion';
-import { ImageLoader } from '../Questions/ImageLoader';
 import { EventAdminSaveBtn } from '../EventStepsNav/EventAdminSaveBtn';
 import { EventAdminClient } from '../../../../Api/EventAdmin/EventAdminClient';
 import { DraftEvent } from '../../../../Api/EventAdmin/DraftEvent';
-import { DateTimeQuestion } from '../Questions/DateTimeQuestion';
+import { MultiStringQuestion } from '../../../Entries/Shared/Questions/MultiStringQuestion';
+import { SingleStringQuestion } from '../../../Entries/Shared/Questions/SingleStringQuestion';
+import { DateTimeQuestion } from '../../../Entries/Shared/Questions/DateTimeQuestion';
+import { ImageLoader } from '../../../Entries/Shared/Questions/ImageLoader';
 
 interface Props {
     onSave: () => void;
