@@ -1,0 +1,77 @@
+{
+    "events": "Events",
+    "youHaveNoEvents": "You don''t have any events",
+    "where": "Where",
+    "when": "When",
+    "more": "more",
+    "less": "less",
+    "downloadDatabase": "Download database",
+    "beginChecking": "Begin checking",
+    "logIn": "Log In",
+    "signUp": "Sign Up",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "createAccount": "Create Account",
+    "logIntoAccount": "Log Into Account",
+    "shouldntBeEmpty": "Shouldn''t be empty",
+    "invalidEmailAddress": "Invalid email address",
+    "visitors": "Visitors",
+    "add": "Add",
+    "scanVisitorsQrCode": "Scan visitor''s QR code",
+    "passwordMustHaveAtLeastNChars": "Must have at least {minLength} characters",
+    "@passwordMustHaveAtLeastNChars": {
+        "placeholders": {
+            "minLength": {
+                "type": "num"
+            }
+        }
+    },
+    "passwordMustHaveAtLeast1CapitalLetter": "Must have at least 1 capital letter",
+    "passwordMustConsistOfLettersAndNumbers": "Must consist of letters, numbers and special characters",
+    "passwordMustHaveAtLeast1Digit": "Must have at least 1 digit",
+    "passwordMustHaveAtLeast1SpecialChar": "Must have at least 1 of the following characters: {specialChars}",
+    "@passwordMustHaveAtLeast1SpecialChar": {
+        "placeholders": {
+            "specialChars": {
+                "type": "String"
+            }
+        }
+    },
+    "notDownloaded": "Not Downloaded",
+    "@notDownloaded": {
+        "description": "Database not downloaded"
+    },
+    "lastDownloaded": "Last downloaded",
+    "@lastDownloaded": {
+        "description": "Database last downloaded"
+    },
+    "somethingWentWrong": "Something went wrong...",
+    "youHaveSignUpsuccessfully": "You have signed up successfully",
+    "formattedDateTime": "{date} at {time}",
+    "@formattedDateTime": {
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "MMMMd"
+            },
+            "time": {
+                "type": "DateTime",
+                "format": "Hm"
+            }
+        }
+    },
+    "yourQrCode": "Your QR code",
+    "save": "Save",
+    "questionsEmpty": "Questionnaire is empty",
+    "failedToReadQrCode": "Failed to read QR code",
+    "badQrCodeFormat": "Bad QR code format",
+    "failedToFindSuchVisitor": "Could not find this visitor",
+    "boughtTicketOnSpot": "QR code is correct however this visitor is not in the database, they probably bought the ticket on spot",
+    "invalidPasswordOrEmail": "Invalid password or email",
+    "qrCodeAlreadyBeenScanned": "This QR code has already been scanned",
+    "addNewVisitor": "Add new visitor",
+    "chooseTicket": "Choose a ticket",
+    "fillTheForm": "Fill the form",
+    "pleaseFillTheEntireForm": "Please fill the entire form"
+}
