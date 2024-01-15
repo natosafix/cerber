@@ -10,7 +10,7 @@ export const getEvents = async (count: number): Promise<IEvent[]> => {
     }
 
     console.log(count);
-    const response = await axios.get<IEvent[]>(`/events/owned?offset=${count}&limit=${count + 6}`);
+    const response = await axios.get<IEvent[]>(`/events/owned?offset=${count}&limit=6`);
 
     const eventsCount = response.data.length;
 
@@ -37,8 +37,56 @@ export const createDraft = async () => {
   }
 };
 
+export const getDraft = async (): Promise<AxiosResponse<IEvent> | undefined> => {
+  try {
+    const response = await axios.get<IEvent>(`/EventAdmin/draftCover`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return undefined;
+  }
+};
+
+
+export const register = async (userData) => {
+  try {
+    const response = await axios.post('/Auth/register', userData);
+    return {
+      success: true,
+      data: response.data,
+      message: 'Registration successful',
+    };
+  } catch (error) {
+    return {
+      success: false,
+      data: error.response.data,
+      message: 'Registration failed',
+    };
+  }
+};
+
+export const login = async ({ email, password }) => {
+  try {
+    const response = await axios.post('/Auth/login', { email, password });
+    localStorage.setItem('token', response.data.token);
+    return {
+      success: true,
+      data: response.data,
+      message: 'Login successful',
+    };
+  } 
+  catch (error) {
+    return {
+      success: false,
+      data: error.response.data,
+      message: 'Login failed',
+    };
+  }
+};
+
 export const getEvent = async (id?: string): Promise<IEvent> => {
   try {
+    console.log(id);
     if (id === undefined) {
       throw new Error('Event ID is undefined.');
     }

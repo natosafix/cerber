@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { getEvent } from '../services/events';
 import { IEvent } from '../models';
 import styles from './eventDetails.scss';
 import {InspectorEditor} from "../InspectorsEditor/InspectorEditor";
 
-export const EventDetails: React.FC = () => {
-    const { id } = useParams();
+export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
     const [event, setEvent] = useState<IEvent | null>(null);
     const [imgSrc, setImgSrc] = useState<string | null>(null);
-
 
     useEffect(() => {
         const fetchEventDetailsAndCover = async () => {
             try {
                 if (id) {
+                    
                     const eventData = await getEvent(id);
                     console.log('Event Data:', eventData);
                     setEvent(eventData);
@@ -44,7 +42,9 @@ export const EventDetails: React.FC = () => {
             <div className={styles.textWrapper}>
                 <p className={styles.title}>{event.name}</p>
                 <p className={styles.place}>{event.city}, {event.address}</p>
-                <p>{event.description}</p>
+                {event.description.split('\n').map((line, index) => (
+                    <p className={styles.paragraphDescription} key={index}>{line}</p>
+                ))}
             </div>
             <InspectorEditor  event={event}/>
         </div>

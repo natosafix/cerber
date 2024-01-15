@@ -49,7 +49,7 @@ export const EventPreview = () => {
         <div ref={containerRef} className={styles.eventPreviewContainer}>
             <EventCreateButton/>
             <Events events={events} />
-            {loading && <p>Loading...</p>}
+            <div className={styles.bottomDev}/>
         </div>
     );
 };

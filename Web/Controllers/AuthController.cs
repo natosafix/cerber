@@ -30,7 +30,7 @@ public class AuthController : Controller
         
         var userExists = await userManager.FindByEmailAsync(dto.Email);
         if (userExists != null)
-            return BadRequest("User already exists");
+            return BadRequest("Кажется, такой пользователь уже есть!");
 
         User user = new()
         {
@@ -42,7 +42,7 @@ public class AuthController : Controller
         return result.Succeeded
             ? Ok("User created successfully!")
             : StatusCode(StatusCodes.Status500InternalServerError,
-                "User creation failed! Please check user details and try again.");
+                "Что-то не так, проверьте свои данные!");
     }
     
     [HttpPost("/[controller]/login")]

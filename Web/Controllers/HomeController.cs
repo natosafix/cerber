@@ -21,6 +21,18 @@ public class HomeController : Controller
         return View();
     }
     
+    [HttpGet("/[controller]/register")]
+    public IActionResult Register()
+    {
+        return View();
+    }
+    
+    [HttpGet("/[controller]/login")]
+    public IActionResult Login()
+    {
+        return View();
+    }
+    
     [HttpGet("/[controller]/preview/{id}")]
     public IActionResult Preview()
     {

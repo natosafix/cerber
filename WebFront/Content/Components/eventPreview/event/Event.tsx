@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IEvent } from '../models/index';
 import styles from './event.scss';
-import { useNavigate } from 'react-router-dom';
 
 interface IProps {
     event: IEvent;
@@ -13,7 +12,6 @@ const Event: React.FC<IProps> = ({ event }) => {
     const [imgSrc, setImgSrc] = useState<string | null>(null);
     
     const fromDate = new Date(from);
-    const navigate = useNavigate();
     
 
     useEffect(() => {
@@ -29,11 +27,9 @@ const Event: React.FC<IProps> = ({ event }) => {
     }, [id]);
     
     const handleClick = () => {
-        navigate(`/home/preview/${id}`);
+        window.location.href = `/home/preview/${id}`;
     };
     
-    console.log(img)
-
     return (
         <div
             className={styles.eventWrapper}
@@ -59,8 +55,11 @@ function formatDate(date) {
     const day = ('0' + date.getDate()).slice(-2);
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const year = date.getFullYear();
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
 
-    return `${day}.${month}.${year}`;
+    return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
+
 
 export default Event;

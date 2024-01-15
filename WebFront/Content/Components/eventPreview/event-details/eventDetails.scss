@@ -1,6 +1,4 @@
-﻿
-
-.eventDetails {
+﻿.eventDetails {
   position: fixed;
   top: 0;
   left: 0;
@@ -46,15 +44,20 @@
 
 .imgWrapper img {
   width: 100%;
-  height: 50vh;
-  object-fit: cover;
+}
+
+.place {
+  color: #808080;
 }
 
 .imgWrapper {
   
 }
 
-
+.paragraphDescription{
+  padding: 0 0 0 0;
+  margin: 2px 0 0 0;
+}
 
 .textWrapper {
   padding: 20px 0 0 0;

@@ -12,6 +12,8 @@ module.exports = {
         index: './Content/Entries/Pages/Index.tsx',
         eventAdmin: './Content/Entries/Pages/EventAdmin.tsx',
         preview: './Content/Entries/Pages/Preview.tsx',
+        register: './Content/Entries/Pages/Register.tsx',
+        login: './Content/Entries/Pages/Login.tsx',
         quizSolve: './Content/Entries/Pages/QuizSolve.tsx'
     },
     output: {

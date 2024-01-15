@@ -5,7 +5,8 @@
   height: 35vh;
   display: flex;
   flex-direction: column;
-  margin-right: 5vh;
+  margin-right: 2.5vh;
+  margin-left: 2.5vh;
   margin-bottom: 5vh;
   background-color: white;
   border-radius: 25px;
@@ -27,7 +28,7 @@
 
 .textWrapper {
   height: 20%;
-  padding: 10px;
+  padding: 10px 10px 10px 20px;
   background-color: white;
   color: black;
   border-radius: 25px;
@@ -36,6 +37,7 @@
 
 .textWrapper .place {
   font-size: 14px;
+  color: #808080;
   margin: 0;
 }
 
@@ -45,6 +47,7 @@
   font-weight: bolder;
 }
 .textWrapper .time {
+  padding-top: 4px;
   font-size: 14px;
   margin: 0;
 }
