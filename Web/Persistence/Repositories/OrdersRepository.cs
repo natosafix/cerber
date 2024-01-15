@@ -36,4 +36,12 @@ public class OrdersRepository : IOrdersRepository
         await dbContext.SaveChangesAsync();
         return result.Entity;
     }
+    
+    public async Task SetPaid(Guid customer)
+    {
+        await dbContext.Orders
+            .Where(o => o.Customer.Equals(customer))
+            .ExecuteUpdateAsync(sp => sp.SetProperty(o => o.Paid, true));
+        await dbContext.SaveChangesAsync();
+    }
 }

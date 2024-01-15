@@ -28,7 +28,7 @@ public class AuthController : Controller
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        var userExists = await userManager.FindByNameAsync(dto.Username);
+        var userExists = await userManager.FindByEmailAsync(dto.Email);
         if (userExists != null)
             return BadRequest("User already exists");
 

@@ -65,7 +65,16 @@ public class OrdersController : Controller
         if (!await authService.IsInspector(userHelper.UserId, ticket.EventId))
             return StatusCode(403);
         
+        order.Paid = true;
         var createdOrder = await ordersService.Create(order);
         return Ok(createdOrder.Customer.ToString());
+    }
+    
+    [Authorize("MustInspectOrder")]    
+    [HttpPut("{customer}/paid")]
+    public async Task<IActionResult> SetPaid([FromRoute] Guid customer)
+    {
+        await ordersService.SetPaid(customer);
+        return Ok();
     }
 }

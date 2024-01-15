@@ -9,4 +9,6 @@ public interface IOrdersService
     Task<List<Order>> GetByEvent(int eventId);
     
     Task<Order> Create(Order order);
+
+    Task SetPaid(Guid customer);
 }
