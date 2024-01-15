@@ -5,13 +5,23 @@ import { TicketView } from './TicketView';
 import { Button, Gapped } from '@skbkontur/react-ui';
 import { BinButton } from '../../../Entries/Shared/BinButton/BinButton';
 import binBtnStyles from '../../../Entries/Shared/BinButton/BinButton.scss';
-import { ValidationContainer } from '@skbkontur/react-ui-validations';
+import { ValidationContainer, ValidationWrapper } from '@skbkontur/react-ui-validations';
 import { DraftQuestionDto } from '../../../../Api/EventAdmin/DraftQuestionDto';
 import { EventAdminClient } from '../../../../Api/EventAdmin/EventAdminClient';
+import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
+import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
 
 interface Props {
     onSave: () => void;
     onTicketsChange: (tickets: Ticket[]) => void;
+}
+
+function ticketExistsValidate(tickets: Ticket[]): Nullable<ValidationInfo> {
+    if (!tickets || tickets.length === 0) {
+        return { message: 'Необходимо добавить хотя бы один билет', type: 'submit' };
+    }
+
+    return null;
 }
 
 export const EventPublish: React.FC<Props> = ({ onSave, onTicketsChange }) => {
@@ -59,9 +69,12 @@ export const EventPublish: React.FC<Props> = ({ onSave, onTicketsChange }) => {
                         <TicketView ticket={ticket} ticketNum={id + 1} onTicketChange={onChangeTicket} />
                     </div>
                 ))}
-                <Button onClick={onAddTicketBtn}>
-                    Добавить билет
-                </Button>
+
+                <ValidationWrapper validationInfo={ticketExistsValidate(tickets)}>
+                    <Button onClick={onAddTicketBtn}>
+                        Добавить билет
+                    </Button>
+                </ValidationWrapper>
 
                 <EventAdminSaveBtn onSave={onSaveBtnClick} title={'Опубликовать'} />
             </Gapped>

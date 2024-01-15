@@ -4,9 +4,12 @@ namespace Web.Dtos.Request;
 
 public class CreateTicketDto : IValidatableObject
 {
-    [Required] [MaxLength(100)] public string Name { get; set; }
+    [Required]
+    [MaxLength(100)]
+    public string Name { get; set; }
 
-    [Required] public int Price { get; set; }
+    [Required]
+    public int Price { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
