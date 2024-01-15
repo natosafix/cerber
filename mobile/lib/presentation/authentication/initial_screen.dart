@@ -26,10 +26,8 @@ class InitialScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const FlutterLogo(
-              size: 300,
-            ),
-            const SizedBox(height: 30),
+            Image.asset("assets/${context.isLight() ? 'logo_light.png' : 'logo_dark.png'}"),
+            const SizedBox(height: 150),
             SizedBox(
               width: double.infinity,
               child: FilledButton(
