@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Web.Dtos.Request;
 using Web.Dtos.Response;
 using Web.Services;
+using Web.Services.Implementations;
 
 namespace Web.Controllers;
 
@@ -64,6 +65,13 @@ public class EventsController : Controller
     }
 
     [Authorize("MustOwnEvent")]
+    [HttpGet("{id}/inspectors")]
+    public async Task<IActionResult> GetInspectors([FromRoute] int id)
+    {
+        return Ok(await eventsService.GetInspectors(id));
+    }
+    
+    [Authorize("MustOwnEvent")]
     [HttpPut("{id}/inspector")]
     public async Task<IActionResult> AddInspector([FromRoute] int id, [FromBody] SetInspectorDto setInspectorDto)
     {
@@ -72,6 +80,27 @@ public class EventsController : Controller
 
         var inspectorId = Guid.Parse(setInspectorDto.Id);
         await eventsService.AddInspector(id, inspectorId);
+
+        return NoContent();
+    }
+    
+    [Authorize("MustOwnEvent")]
+    [HttpPut("{id}/inspectorByUsername")]
+    public async Task<IActionResult> AddInspectorByUsername([FromRoute] int id, [FromBody] SetInspectorByUsernameDto setInspectorDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
+        await eventsService.AddInspectorByUsername(id, setInspectorDto.Username);
+
+        return NoContent();
+    }
+    
+    [Authorize("MustOwnEvent")]
+    [HttpDelete("{id}/inspector")]
+    public async Task<IActionResult> DeleteInspector([FromRoute] int id, [FromQuery] string username)
+    {
+        await eventsService.DeleteInspector(id, username);
 
         return NoContent();
     }
