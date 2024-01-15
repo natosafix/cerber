@@ -68,7 +68,7 @@ public class AuthController : Controller
             var token = GetToken(authClaims);
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             
-            Response.Cookies.Append(config["JWT:CookieName"]!, tokenString, new CookieOptions {HttpOnly = true});
+            Response.Cookies.Append(config["JWT:CookieName"]!, tokenString, new CookieOptions {HttpOnly = false});
             return Ok(new
             {
                 token = tokenString,
