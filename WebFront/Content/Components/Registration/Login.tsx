@@ -16,7 +16,6 @@ const Login = () => {
     if (get_cookie("CerberAuth")){
         window.location.href = '/home/index';
     }
-    console.log(error);
     const handleLogin = async () => {
         try {
             if (validWrapper.current) {
@@ -24,7 +23,6 @@ const Login = () => {
                 if (isValid) {
                     const result = await login({ email, password });
                     if (!result.success){
-                        console.log(result);
                         setError("Неверные данные!");
                     }
                     else{
@@ -39,7 +37,6 @@ const Login = () => {
     };
 
     const setCookie = (name:string, value:string) => {
-        console.log(value);
         document.cookie = name + "=" + value + "; Path=/; expires=Session";
     };
 
@@ -66,7 +63,6 @@ const Login = () => {
 };
 
 function get_cookie(name) {
-    console.log(document.cookie.split(';'));
     return document.cookie.split(';').some(c => {
         return c.trim().startsWith(name + '=');
     });

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {Token, TokenInput} from "@skbkontur/react-ui";
-import {addInspector, deleteInspector, findUsers, getEvent, getInspectors} from "../services/events";
+import {addInspector, deleteInspector, findUsers, getInspectors} from "../services/events";
 import {IEvent} from "../models";
-
+import styles from "./InspectorEditor.scss"
 interface IProps {
     event: IEvent;
 }
@@ -32,13 +32,13 @@ export const InspectorEditor: React.FC<IProps> = ({ event }) => {
     }
     
     return (
-        <div>
+        <div className={styles.inspectorEditor}>
             <div>
                 <label> 
                     Редактирование проверяющих
                 </label>
             </div>
-            <div className="ainspectorEditor-field">
+            <div className={styles.editorText}>
                 <TokenInput
                     className="inspectorEditor-tokenInput"
                     width="100%"
@@ -66,7 +66,6 @@ export const InspectorEditor: React.FC<IProps> = ({ event }) => {
                     )}
                 />
             </div>
-
         </div>
     )
 }

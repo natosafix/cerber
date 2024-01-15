@@ -86,7 +86,6 @@ export const login = async ({ email, password }) => {
 
 export const getEvent = async (id?: string): Promise<IEvent> => {
   try {
-    console.log(id);
     if (id === undefined) {
       throw new Error('Event ID is undefined.');
     }

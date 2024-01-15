@@ -5,6 +5,7 @@ import styles from './eventDetails.scss';
 import { InspectorEditor } from '../InspectorsEditor/InspectorEditor';
 import { Gapped } from '@skbkontur/react-ui';
 import { Label } from '../../../Entries/Shared/Label/Label';
+import {Button} from "@skbkontur/react-ui";
 
 export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
     const [event, setEvent] = useState<IEvent | null>(null);
@@ -15,7 +16,6 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
             try {
                 if (id) {
                     const eventData = await getEvent(id);
-                    console.log('Event Data:', eventData);
                     setEvent(eventData);
 
                     if (eventData.img) {
@@ -31,6 +31,9 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
         fetchEventDetailsAndCover();
     }, [id]);
 
+    const handleClickButton = () => {
+        window.location.href = `/quiz/solve/${id}`;
+    };
 
     if (!event) {
         return <div>Loading...</div>;
@@ -60,6 +63,7 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
                             </Gapped>
                             
                             <InspectorEditor event={event} />
+                            <Button size={"large"} use="success" onClick={handleClickButton}>Заполнить анкету</Button>
                         </Gapped>
                     </div>
                 </Gapped>

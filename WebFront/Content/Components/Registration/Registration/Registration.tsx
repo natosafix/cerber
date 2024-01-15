@@ -62,7 +62,6 @@ const Registration = () => {
 };
 
 function get_cookie(name) {
-    console.log(document.cookie.split(';'));
     return document.cookie.split(';').some(c => {
         return c.trim().startsWith(name + '=');
     });
