@@ -45,12 +45,12 @@ public class OrdersService : IOrdersService
         var encryptedCustomer = encryptionService.EncryptString(order.Customer.ToString(), cryptoKey);
         
         var qrCode = qrCodeService.Create($"ticket.png", encryptedCustomer);
-        // await mailService.SendWithImageAttachments(
-        //     "",
-        //     email,
-        //     "Tickets",
-        //     "Спасибо за заказ. Ваши билеты во вложениях.",
-        //     new List<ImageInfo> {qrCode});
+        await mailService.SendWithImageAttachments(
+            "",
+            email,
+            "Tickets",
+            "Спасибо за заказ. Ваши билеты во вложениях.",
+            new List<ImageInfo> {qrCode});
         
         return order;
     }
