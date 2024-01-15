@@ -46,7 +46,7 @@ export const EventDetails: React.FC = () => {
                 <p className={styles.place}>{event.city}, {event.address}</p>
                 <p>{event.description}</p>
             </div>
-            <InspectorEditor />
+            <InspectorEditor  event={event}/>
         </div>
     );
 };

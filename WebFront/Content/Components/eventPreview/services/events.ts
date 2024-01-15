@@ -70,4 +70,31 @@ export const findUsers = async (username: string) => {
   }
 };
 
+export const addInspector = async (event: IEvent, username: string) => {
+  try {
+    const response = await axios.put(`/events/${event.id}/inspectorByUsername`, { username: username});
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteInspector = async (event: IEvent, username: string) => {
+  try {
+    const response = await axios.delete(`/events/${event.id}/inspector?username=${username}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getInspectors = async (event: IEvent) => {
+  try {
+    const response = await axios.get<string[]>(`/events/${event.id}/inspectors`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
