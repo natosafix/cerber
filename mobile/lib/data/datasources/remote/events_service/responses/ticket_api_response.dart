@@ -5,7 +5,7 @@ part 'ticket_api_response.g.dart';
 @JsonSerializable(createToJson: false)
 class TicketApiResponse {
   final int id;
-  final double price;
+  final int price;
   final String name;
 
   TicketApiResponse({

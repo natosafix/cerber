@@ -30,7 +30,7 @@ const TicketCollectionSchema = CollectionSchema(
     r'price': PropertySchema(
       id: 2,
       name: r'price',
-      type: IsarType.double,
+      type: IsarType.long,
     )
   },
   estimateSize: _ticketCollectionEstimateSize,
@@ -79,7 +79,7 @@ void _ticketCollectionSerialize(
 ) {
   writer.writeLong(offsets[0], object.eventId);
   writer.writeString(offsets[1], object.name);
-  writer.writeDouble(offsets[2], object.price);
+  writer.writeLong(offsets[2], object.price);
 }
 
 TicketCollection _ticketCollectionDeserialize(
@@ -92,7 +92,7 @@ TicketCollection _ticketCollectionDeserialize(
     eventId: reader.readLong(offsets[0]),
     id: id,
     name: reader.readString(offsets[1]),
-    price: reader.readDouble(offsets[2]),
+    price: reader.readLong(offsets[2]),
   );
   return object;
 }
@@ -109,7 +109,7 @@ P _ticketCollectionDeserializeProp<P>(
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readDouble(offset)) as P;
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -557,58 +557,49 @@ extension TicketCollectionQueryFilter
   }
 
   QueryBuilder<TicketCollection, TicketCollection, QAfterFilterCondition>
-      priceEqualTo(
-    double value, {
-    double epsilon = Query.epsilon,
-  }) {
+      priceEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'price',
         value: value,
-        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<TicketCollection, TicketCollection, QAfterFilterCondition>
       priceGreaterThan(
-    double value, {
+    int value, {
     bool include = false,
-    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'price',
         value: value,
-        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<TicketCollection, TicketCollection, QAfterFilterCondition>
       priceLessThan(
-    double value, {
+    int value, {
     bool include = false,
-    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'price',
         value: value,
-        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<TicketCollection, TicketCollection, QAfterFilterCondition>
       priceBetween(
-    double lower,
-    double upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -617,7 +608,6 @@ extension TicketCollectionQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        epsilon: epsilon,
       ));
     });
   }
@@ -772,7 +762,7 @@ extension TicketCollectionQueryProperty
     });
   }
 
-  QueryBuilder<TicketCollection, double, QQueryOperations> priceProperty() {
+  QueryBuilder<TicketCollection, int, QQueryOperations> priceProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'price');
     });

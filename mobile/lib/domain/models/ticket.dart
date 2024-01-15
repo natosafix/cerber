@@ -1,6 +1,6 @@
 class Ticket {
   final int id;
-  final double price;
+  final int price;
   final String name;
 
   Ticket({
