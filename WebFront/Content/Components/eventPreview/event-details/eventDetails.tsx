@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { getEvent } from '../services/events';
 import { IEvent } from '../models';
 import styles from './eventDetails.scss';
+import {InspectorEditor} from "../InspectorsEditor/InspectorEditor";
 
 export const EventDetails: React.FC = () => {
     const { id } = useParams();
@@ -45,8 +46,7 @@ export const EventDetails: React.FC = () => {
                 <p className={styles.place}>{event.city}, {event.address}</p>
                 <p>{event.description}</p>
             </div>
+            <InspectorEditor />
         </div>
     );
 };
-
-export default EventDetails;

@@ -1,4 +1,3 @@
-
 import axios, { AxiosResponse } from 'axios';
 import { IEvent } from '../models';
 
@@ -61,4 +60,14 @@ async function fetchEventCover(event: IEvent): Promise<IEvent> {
     return event;
   }
 }
+
+export const findUsers = async (username: string) => {
+  try {
+    const response = await axios.get<string[]>(`/users?username=${username}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 

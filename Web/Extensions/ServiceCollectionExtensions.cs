@@ -42,6 +42,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IQrCodeService, QrCodeService>();
         services.AddScoped<IEncryptionService, EncryptionService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IUsersService, UsersService>();
         
         return services;
     }
