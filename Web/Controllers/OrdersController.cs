@@ -66,6 +66,6 @@ public class OrdersController : Controller
             return StatusCode(403);
         
         var createdOrder = await ordersService.Create(order);
-        return Ok(mapper.Map<OrderResponseDto>(createdOrder));
+        return Ok(createdOrder.Customer.ToString());
     }
 }

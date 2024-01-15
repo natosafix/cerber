@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Robokassa.NET;
 using Web.Extensions;
 using Web.Mapping;
 using Web.Middlewares;
