@@ -2,9 +2,22 @@
 import axios, { AxiosResponse } from 'axios';
 import { IEvent } from '../models';
 
-export const getEvents = async (): Promise<IEvent[]> => {
+let shouldSendNextRequest = true;
+
+export const getEvents = async (count: number): Promise<IEvent[]> => {
   try {
-    const response = await axios.get<IEvent[]>('/events/owned');
+    if (!shouldSendNextRequest) {
+      return [];
+    }
+
+    console.log(count);
+    const response = await axios.get<IEvent[]>(`/events/owned?offset=${count}&limit=${count + 6}`);
+
+    const eventsCount = response.data.length;
+
+    if (eventsCount < 6) {
+      shouldSendNextRequest = false;
+    }
 
     const eventsWithImages = await Promise.all(response.data.map(async (event) => {
       return await fetchEventCover(event);
@@ -12,11 +25,18 @@ export const getEvents = async (): Promise<IEvent[]> => {
 
     return eventsWithImages;
   } catch (error) {
-    console.error('Error fetching events:', error);
     throw error;
   }
 };
 
+
+export const createDraft = async () => {
+  try {
+    await axios.post<IEvent>(`/createDraft`);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const getEvent = async (id?: string): Promise<IEvent> => {
   try {

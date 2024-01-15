@@ -7,7 +7,6 @@ import styles from './eventDetails.scss';
 export const EventDetails: React.FC = () => {
     const { id } = useParams();
     const [event, setEvent] = useState<IEvent | null>(null);
-    const [hasCerberAuthCookie, setHasCerberAuthCookie] = useState(false);
     const [imgSrc, setImgSrc] = useState<string | null>(null);
 
 

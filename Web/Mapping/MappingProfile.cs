@@ -14,7 +14,7 @@ public class MappingProfile : Profile
         CreateMap<CreateEventDto, Event>();
         CreateMap<CreateTicketDto, Ticket>();
         CreateMap<CreateOrderDto, Order>();
-        CreateMap<CreateAnswerDto, Answer>();
+        CreateMap<CreateAnswerDto, Answer>().Configure();
         CreateMap<CreateQuestionDto, Question>();
         CreateMap<DraftQuestionDto, DraftQuestion>().Configure();
         CreateMap<DraftEventCoverDto, DraftEvent>();
@@ -24,7 +24,7 @@ public class MappingProfile : Profile
         CreateMap<Ticket, TicketResponseDto>();
         CreateMap<Question, QuestionResponseDto>().Configure();
         CreateMap<Order, OrderResponseDto>();
-        CreateMap<Answer, AnswerResponseDto>();
+        CreateMap<Answer, AnswerResponseDto>().Configure();
         CreateMap<DraftQuestion, DraftQuestionDto>().Configure();
         CreateMap<DraftEvent, DraftEventCoverDto>();
         

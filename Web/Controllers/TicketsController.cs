@@ -24,6 +24,14 @@ public class TicketsController : Controller
         this.authService = authService;
         this.userHelper = userHelper;
     }
+    
+    [Authorize("MustInspectEvent")]    
+    [HttpGet("")]
+    public async Task<IActionResult> Get([FromQuery] int eventId)
+    {
+        var tickets = await ticketsService.GetByEvent(eventId);
+        return Ok(mapper.Map<TicketResponseDto>(tickets));
+    }
 
     [HttpPost("")]
     public async Task<IActionResult> Create([FromBody] CreateTicketDto createTicketDto)
