@@ -14,7 +14,8 @@ module.exports = {
         preview: './Content/Entries/Pages/Preview.tsx',
         register: './Content/Entries/Pages/Register.tsx',
         login: './Content/Entries/Pages/Login.tsx',
-        quizSolve: './Content/Entries/Pages/QuizSolve.tsx'
+        quizSolve: './Content/Entries/Pages/QuizSolve.tsx',
+        quizCongrats: './Content/Entries/Pages/QuizCongrats.tsx',
     },
     output: {
         path: OUTPUT_PATH,
