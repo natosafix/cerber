@@ -9,4 +9,10 @@ public class QuizController : Controller
     {
         return View();
     }
+
+    [HttpGet("[controller]/congrats")]
+    public async Task<IActionResult> Congrats([FromQuery] int eventId)
+    {
+        return View();
+    }
 }
