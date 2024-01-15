@@ -1,9 +1,10 @@
 ﻿export class TicketDto {
-    public Name: string;
-    public Price?: number;
+    public id: number;
+    public name: string;
+    public price?: number;
 
     constructor(name: string, price: number) {
-        this.Name = name;
-        this.Price = price;
+        this.name = name;
+        this.price = price;
     }
 }

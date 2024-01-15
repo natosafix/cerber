@@ -25,7 +25,6 @@ public class TicketsController : Controller
         this.userHelper = userHelper;
     }
     
-    [Authorize("MustInspectEvent")]    
     [HttpGet("")]
     public async Task<IActionResult> Get([FromQuery] int eventId)
     {
