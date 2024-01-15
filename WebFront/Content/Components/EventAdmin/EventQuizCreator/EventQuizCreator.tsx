@@ -87,7 +87,6 @@ export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
     return (
         <ValidationContainer ref={validWrapper}>
             <Gapped gap={40} vertical={true}>
-                <Button borderless={true} onClick={onAddQuestion}>Добавить вопрос</Button>
                 <SingleStringQuestion title={'Вопрос №1'}
                                       disabled={true}
                                       placeholder={'Введите ваш Email'}
@@ -106,6 +105,7 @@ export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
                 {questions.map((question, num) =>
                     Create({ question, num }),
                 )}
+                <Button borderless={true} onClick={onAddQuestion}>Добавить вопрос</Button>
                 <EventAdminSaveBtn onSave={onSaveBtnClick} />
             </Gapped>
         </ValidationContainer>

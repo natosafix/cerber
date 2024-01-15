@@ -164,7 +164,7 @@ public class EventAdminController : Controller
     [HttpPost("[controller]/publishDraft")]
     public async Task<IActionResult> PublishDraft([FromBody] CreateTicketDto[] tickets)
     {
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid || !tickets.Any())
             return BadRequest();
 
         var userId = userHelper.UserId;
