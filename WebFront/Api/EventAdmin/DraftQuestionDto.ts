@@ -1,4 +1,4 @@
-﻿import {QuestionTypes} from "../../Content/Components/EventAdmin/Questions/QuestionBuilder/QuestionTypes";
+﻿import { QuestionTypes } from '../Models/QuestionTypes';
 
 export class DraftQuestionDto {
     public title: string;

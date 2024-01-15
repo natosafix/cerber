@@ -2,14 +2,15 @@
 
 namespace Web.Dtos.Request;
 
-public class CreateTicketDto
+public class CreateTicketDto : IValidatableObject
 {
-    [Required]
-    public string Name { get; set; }
-    
-    [Required]
-    public string Price { get; set; }
+    [Required] [MaxLength(100)] public string Name { get; set; }
 
-    [Required]
-    public string EventId { get; set; }
+    [Required] public int Price { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (Price < 0)
+            yield return new ValidationResult("Can't be negative", new[] {nameof(Price)});
+    }
 }

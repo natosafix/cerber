@@ -1,14 +1,14 @@
-﻿import React, {useEffect, useRef, useState} from 'react';
-import {EventAdminSaveBtn} from '../EventStepsNav/EventAdminSaveBtn';
-import {SingleStringQuestion} from '../Questions/SingleStringQuestion';
-import {Button, Gapped} from '@skbkontur/react-ui';
-import {QuestionBuilder} from '../Questions/QuestionBuilder/QuestionBuilder';
-import {Question} from '../Questions/QuestionBuilder/Question';
-import {BinButton} from '../../../Entries/Shared/BinButton/BinButton';
-import styles from './EventQuizCreator.scss'
-import {EventAdminClient} from "../../../../Api/EventAdmin/EventAdminClient";
-import {DraftQuestionDto} from "../../../../Api/EventAdmin/DraftQuestionDto";
-import {ValidationContainer} from "@skbkontur/react-ui-validations";
+﻿import React, { useEffect, useRef, useState } from 'react';
+import { EventAdminSaveBtn } from '../EventStepsNav/EventAdminSaveBtn';
+import { Button, Gapped } from '@skbkontur/react-ui';
+import { QuestionBuilder } from '../Questions/QuestionBuilder/QuestionBuilder';
+import { BinButton } from '../../../Entries/Shared/BinButton/BinButton';
+import styles from '../../../Entries/Shared/BinButton/BinButton.scss';
+import { EventAdminClient } from '../../../../Api/EventAdmin/EventAdminClient';
+import { ValidationContainer } from '@skbkontur/react-ui-validations';
+import { Question } from '../../../../Api/Models/Question';
+import { DraftQuestionDto } from '../../../../Api/EventAdmin/DraftQuestionDto';
+import { SingleStringQuestion } from '../../../Entries/Shared/Questions/SingleStringQuestion';
 
 interface Props {
     onSave: () => void;
@@ -19,7 +19,7 @@ interface QuizBuilderCreatorProps {
     num: number;
 }
 
-export const EventQuizCreator: React.FC<Props> = ({onSave}) => {
+export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
     const [questions, setQuestions] = useState<Question[] | undefined>();
     const [questionCounter, setQuestionCounter] = useState(0);
     const validWrapper = useRef<ValidationContainer>(null);
@@ -28,7 +28,7 @@ export const EventQuizCreator: React.FC<Props> = ({onSave}) => {
         EventAdminClient.getQuestions().then(response => {
             let questionsDto = response.data;
             if (!questionsDto) {
-                setQuestions([])
+                setQuestions([]);
                 return;
             }
             setQuestionCounter(questionsDto.length);
@@ -37,7 +37,7 @@ export const EventQuizCreator: React.FC<Props> = ({onSave}) => {
                     .withType(dto.type)
                     .withTitle(dto.title)
                     .withAnswerChoices(dto.answerChoices)));
-        })
+        });
     }, []);
 
     if (!questions) {
@@ -68,13 +68,13 @@ export const EventQuizCreator: React.FC<Props> = ({onSave}) => {
                 onSave();
             }
         }
-    }
+    };
 
-    const Create: React.FC<QuizBuilderCreatorProps> = ({question, num}) => {
+    const Create: React.FC<QuizBuilderCreatorProps> = ({ question, num }) => {
         return (
-            <div key={question.key} className={styles.questionBuilderWrapper}>
+            <div key={question.key} className={styles.relativeWrapper}>
                 <div className={styles.binBtnWrapper}>
-                    <BinButton onClick={() => onDeleteQuestion(question.key)}/>
+                    <BinButton onClick={() => onDeleteQuestion(question.key)} />
                 </div>
                 <QuestionBuilder onQuestionUpdate={onUpdateQuestion}
                                  question={question}
@@ -104,9 +104,9 @@ export const EventQuizCreator: React.FC<Props> = ({onSave}) => {
                                       size={'medium'}
                 />
                 {questions.map((question, num) =>
-                    Create({question, num})
+                    Create({ question, num }),
                 )}
-                <EventAdminSaveBtn onSave={onSaveBtnClick}/>
+                <EventAdminSaveBtn onSave={onSaveBtnClick} />
             </Gapped>
         </ValidationContainer>
     );

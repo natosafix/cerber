@@ -25,7 +25,6 @@ public class TicketsController : Controller
         this.userHelper = userHelper;
     }
     
-    [Authorize("MustInspectEvent")]    
     [HttpGet("")]
     public async Task<IActionResult> Get([FromQuery] int eventId)
     {
@@ -34,7 +33,7 @@ public class TicketsController : Controller
     }
 
     [HttpPost("")]
-    public async Task<IActionResult> Create([FromBody] CreateTicketDto createTicketDto)
+    public async Task<IActionResult> Create([FromBody] CreateTicketDto[] createTicketDto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);

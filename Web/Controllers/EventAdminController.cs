@@ -3,6 +3,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Dtos;
+using Web.Dtos.Request;
 using Web.Services;
 using Web.Services.Validators;
 
@@ -161,8 +162,11 @@ public class EventAdminController : Controller
     }
 
     [HttpPost("[controller]/publishDraft")]
-    public async Task<IActionResult> PublishDraft()
+    public async Task<IActionResult> PublishDraft([FromBody] CreateTicketDto[] tickets)
     {
+        if (!ModelState.IsValid)
+            return BadRequest();
+
         var userId = userHelper.UserId;
         var srcDraft = await draftEventsService.FindDraftByUserIdAsync(userId);
         if (srcDraft is null)
@@ -176,8 +180,9 @@ public class EventAdminController : Controller
 
         var dstEvent = mapper.Map<Event>(srcDraft);
         var dstQuestions = mapper.Map<Question[]>(srcDraftQuestions);
+        var dstTickets = mapper.Map<Ticket[]>(tickets);
 
-        var newEvent = await draftEventPublisherService.Publish(srcDraft, dstEvent, dstQuestions);
+        var newEvent = await draftEventPublisherService.Publish(srcDraft, dstEvent, dstQuestions, dstTickets);
 
         var url = Url.Action("preview", "home", new {id = newEvent});
         return Ok(url);

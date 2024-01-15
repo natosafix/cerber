@@ -1,9 +1,9 @@
 ﻿import React, { useState } from 'react';
 import { DatePicker, Gapped, Input } from '@skbkontur/react-ui';
-import { Label } from '../../../Entries/Shared/Label/Label';
 import { ValidationWrapper } from '@skbkontur/react-ui-validations';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
+import { Label } from '../Label/Label';
 
 interface Props {
     title: string;

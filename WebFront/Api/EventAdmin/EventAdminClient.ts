@@ -1,9 +1,10 @@
 ﻿import axios from 'axios';
-import {DraftEvent, DraftEventDto} from "./DraftEvent";
-import {DraftQuestionDto} from "./DraftQuestionDto";
-import {FileUploaderAttachedFile} from "@skbkontur/react-ui";
+import { DraftEvent, DraftEventDto } from './DraftEvent';
+import { FileUploaderAttachedFile } from '@skbkontur/react-ui';
+import { DraftQuestionDto } from './DraftQuestionDto';
+import { TicketDto } from '../Models/TicketDto';
 
-const api = axios.create({baseURL: '/EventAdmin'});
+const api = axios.create({ baseURL: '/EventAdmin' });
 
 export class EventAdminClient {
     public static getDraftCover() {
@@ -11,7 +12,7 @@ export class EventAdminClient {
     }
 
     public static setDraftCover(draft: DraftEvent) {
-        return api.post('/draftCover', draft)
+        return api.post('/draftCover', draft);
     }
 
     public static getQuestions() {
@@ -27,7 +28,7 @@ export class EventAdminClient {
     }
 
     public static getCoverImageUrl(): string {
-        return api.getUri({url: '/coverImage'});
+        return api.getUri({ url: '/coverImage' });
     }
 
     public static setCoverImage(file: FileUploaderAttachedFile): Promise<void> {
@@ -35,17 +36,17 @@ export class EventAdminClient {
         formData.append('file', file.originalFile, file.originalFile.name);
         return api.post('/coverImage', formData, {
             headers: {
-                "Content-Type": `multipart/form-data`,
-            }
+                'Content-Type': `multipart/form-data`,
+            },
         });
     }
 
     public static removeCoverImage() {
         return api.delete('/coverImage');
     }
-    
-    public static publishDraft() {
-        return api.post('/publishDraft')
+
+    public static publishDraft(tickets: TicketDto[]) {
+        return api.post('/publishDraft', tickets);
     }
 
     public static createDraft() {

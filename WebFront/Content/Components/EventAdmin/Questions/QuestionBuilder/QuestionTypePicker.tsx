@@ -1,9 +1,9 @@
 ﻿import React from 'react';
 import { Gapped, Radio, RadioGroup } from '@skbkontur/react-ui';
-import { QuestionTypes } from './QuestionTypes';
+import { QuestionTypes } from '../../../../../Api/Models/QuestionTypes';
 
 interface Props {
-    onValueChange: (QuestionTypes) => void;
+    onValueChange: (type: QuestionTypes) => void;
     defaultValue?: QuestionTypes;
 }
 
