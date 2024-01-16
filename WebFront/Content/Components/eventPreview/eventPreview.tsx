@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Events from './Events';
+import {Events} from './Events';
 import { useEvents } from './event-context';
 import styles from './eventPreview.scss';
 import { EventCreateButton } from '../../Components/eventPreview/createDraftButton/createDraftButton';

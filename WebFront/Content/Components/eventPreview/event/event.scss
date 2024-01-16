@@ -32,11 +32,12 @@
 
 .textWrapper {
   height: 20%;
-  padding: 10px 10px 10px 20px;
+  padding: 10px 10px 20px 20px;
   background-color: white;
   color: black;
   border-radius: 25px;
   align-content: center;
+  
 }
 
 .textWrapper .place {
@@ -57,6 +58,10 @@
   margin: 0;
 }
 
+.titleWrapper {
+  max-height: 55px;
+  overflow: hidden;
+}
 
 .eventLink {
   text-decoration: none;

@@ -11,8 +11,12 @@ const useEvents = () => {
   const fetchEvents = useCallback(async (page) => {
     try {
       const newEvents = await getEvents(page);
-
-      setEvents((prevEvents) => [...prevEvents, ...newEvents]);
+      if (newEvents){
+        setEvents((prevEvents) => [...prevEvents, ...newEvents]);
+      }
+      else{
+        setEvents((prevEvents) => [...prevEvents]);
+      }
     } catch (error) {
       console.error('Error fetching events:', error);
     }

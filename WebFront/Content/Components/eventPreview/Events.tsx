@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import styles from './events.scss';
 import Event from './event/Event';
 
-const Events = ({ events }) => {
+export const Events = ({ events }) => {
     return (
-            <div className={styles.eventsWrapper}>
-                {events?.map((p) => (
-                    <Event event={p} key={p.img} />
-                ))}
-            </div>
+        <div className={styles.eventsWrapper}>
+            {events?.map((event) => (
+                <Event event={event} key={event.id} />
+            ))}
+        </div>
     );
 };
 
-export default Events;

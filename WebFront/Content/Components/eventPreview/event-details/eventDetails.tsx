@@ -64,7 +64,7 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
                                 </div>
                             </Gapped>
 
-                            <Gapped vertical gap={5}>
+                            <Gapped vertical gap={8}>
                                 {event.description.split('\n').map((line, index) => (
                                     <Label key={index} label={line} size={'small'} />
                                 ))}

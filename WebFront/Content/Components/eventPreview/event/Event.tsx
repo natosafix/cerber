@@ -43,7 +43,9 @@ const Event: React.FC<IProps> = ({ event }) => {
                 </div>
             </div>
             <div className={styles.textWrapper}>
-                <p className={styles.title}>{name}</p>
+                <div className={styles.titleWrapper}>
+                    <p className={styles.title}>{name}</p>
+                </div>
                 <p className={styles.place}>{city}, {address}</p>
                 <p className={styles.time}>{formatDate(fromDate)}</p>
             </div>

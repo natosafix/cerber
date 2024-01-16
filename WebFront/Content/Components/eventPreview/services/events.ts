@@ -3,13 +3,12 @@ import { IEvent } from '../models';
 
 let shouldSendNextRequest = true;
 
-export const getEvents = async (count: number): Promise<IEvent[]> => {
+export const getEvents = async (count: number): Promise<IEvent[] | null> => {
   try {
     if (!shouldSendNextRequest) {
-      return [];
+      return null;
     }
 
-    console.log(count);
     const response = await axios.get<IEvent[]>(`/events/owned?offset=${count}&limit=6`);
 
     const eventsCount = response.data.length;
