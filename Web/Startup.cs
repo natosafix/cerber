@@ -107,6 +107,10 @@ public class Startup
             var request = context.HttpContext.Request;
             var response = context.HttpContext.Response;
 
+            if (response.HttpContext.Request.Path.Value == "/Auth/login" ||
+                response.HttpContext.Request.Path.Value == "/Auth/register")
+                return;
+            
             if (response.StatusCode == (int) HttpStatusCode.Unauthorized)
                 response.Redirect("/home/login");
             if (response.StatusCode == (int) HttpStatusCode.NotFound)
