@@ -17,7 +17,7 @@ function validate(value: string): Nullable<ValidationInfo> {
         return { message: 'Необходимо использовать хотя бы одну цифру', type: 'submit' };
     }
 
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+    if (!/[!@#$%^&*(),.?":{}|<>_-]/.test(value)) {
         return { message: 'Необходимо использовать хотя бы один спец символ', type: 'submit' };
     }
 

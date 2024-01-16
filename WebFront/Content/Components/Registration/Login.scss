@@ -1,9 +1,7 @@
 .mainWrapper {
   display: flex;
-  transform: scale(1.3);
-  transform-origin: top center;
-  height: 75vh;
-  overflow: hidden;
+  max-height: 700px;
+  height: 100vw;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -14,6 +12,11 @@
 label {
   font-size: 33px;
   margin-bottom: 10px;
+
+}
+.errorLabel{
+  order: -1;
+  color: red;
 }
 
 p {
@@ -27,7 +30,7 @@ body {
 
 button {
   width: 100%;
-  height: 7vh;
+  height: 50px;
   font-size: 25px;
   box-sizing: border-box;
   margin-bottom: 1vh;
@@ -38,21 +41,16 @@ button {
   border-radius: 5px;
 }
 
-.errorLabel {
-  order: -1;
-  color: red;
-}
-
 button:hover {
   background-color: darkgreen;
 }
 
 .question {
+  max-height: 150px;
   margin-bottom: 10px;
   margin-top: 10px;
 }
 
-.questionInput {
-  margin-bottom: 10px;
-  margin-top: 10px;
+body{
+  overflow: auto;
 }

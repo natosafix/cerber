@@ -37,27 +37,29 @@ const Registration = () => {
     };
 
     return (
-        <ValidationContainer ref={validWrapper}>
-            <div className={styles.mainWrapper}>
-                {error && <label className={styles.errorLabel}>{error}</label>}
-                <label className={styles.registerLabel}>Регистрация</label>
-                <div className={styles.formContainer}>
-                    <div className={styles.question}>
-                        <EmailInput onChange={setEmail}/>
+        <div className={styles.pageWrapper}>
+            <ValidationContainer ref={validWrapper}>
+                <div className={styles.mainWrapper}>
+                    {error && <label className={styles.errorLabel}>{error}</label>}
+                    <label className={styles.registerLabel}>Регистрация</label>
+                    <div className={styles.formContainer}>
+                        <div className={styles.question}>
+                            <EmailInput onChange={setEmail}/>
+                        </div>
+                        <div className={styles.question}>
+                            <PasswordInput onChange={setPassword}/>
+                        </div>
+                        <div className={styles.question}>
+                            <UsernameInput onChange={setUsername}/>
+                        </div>
+                        <button onClick={handleRegister}>Зарегистрироваться</button>
                     </div>
-                    <div className={styles.question}>
-                        <PasswordInput onChange={setPassword}/>
+                    <div>
+                        <p>Уже зарегистрированы? <a href="/home/login">Войти</a></p>
                     </div>
-                    <div className={styles.question}>
-                        <UsernameInput onChange={setUsername}/>
-                    </div>
-                    <button onClick={handleRegister}>Зарегистрироваться</button>
                 </div>
-                <div>
-                    <p>Уже зарегистрированы? <a href="/home/login">Войти</a></p>
-                </div>
-            </div>
-        </ValidationContainer>
+            </ValidationContainer>
+        </div>
     );
 };
 

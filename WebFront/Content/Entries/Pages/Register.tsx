@@ -1,12 +1,17 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { onDomContentLoaded } from '../../Helpers/DomHelpers';
-import  Authorization from '../../Components/Registration/Authorization'
+import Registration from '../../Components/Registration/Registration/Registration'
+import { CerberThemeProvider } from '../Shared/ThemeProvider/CerberThemeProvider';
+import {Header} from '../Shared/Header/Header'
 
 
 onDomContentLoaded(() =>
     ReactDOM.render(
-       <Authorization/>,
+        <CerberThemeProvider>
+            <Header/>
+            <Registration/>
+        </CerberThemeProvider>,
         document.getElementById('register'),
     ),
 );
