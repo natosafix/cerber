@@ -14,7 +14,7 @@ class EventApiResponse {
   final DateTime from;
   final DateTime to;
   // final CategoryApiResponse category;
-  final CoverApiResponse cover;
+  final CoverApiResponse? cover;
   final String cryptoKey;
 
   EventApiResponse({

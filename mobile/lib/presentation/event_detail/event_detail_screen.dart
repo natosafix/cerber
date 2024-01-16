@@ -49,11 +49,16 @@ class EventDetailScreen extends StatelessWidget {
                 background: Stack(
                   fit: StackFit.expand,
                   children: [
-                    CachedNetworkImage(
-                      cacheManager: DioCacheManager.instance,
-                      imageUrl: event.photoUrl,
-                      fit: BoxFit.cover,
-                    ),
+                    event.photoUrl != null
+                        ? CachedNetworkImage(
+                            cacheManager: DioCacheManager.instance,
+                            imageUrl: event.photoUrl!,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset(
+                            'assets/no_image.png',
+                            fit: BoxFit.cover,
+                          ),
                     const DecoratedBox(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(

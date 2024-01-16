@@ -7,7 +7,7 @@ class Event {
   final String address;
   final DateTime startDate;
   final DateTime endDate;
-  final String photoUrl;
+  final String? photoUrl;
   // final String category;
   final DateTime? lastDownloaded;
   final String cryptoKey;

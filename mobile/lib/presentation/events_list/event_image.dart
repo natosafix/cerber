@@ -34,21 +34,26 @@ class EventImage extends StatelessWidget {
             maxHeight: 230,
           ),
           width: double.infinity,
-          child: CachedNetworkImage(
-            cacheManager: DioCacheManager.instance,
-            imageUrl: event.photoUrl,
-            fit: BoxFit.fitWidth,
-            errorWidget: (context, url, error) {
-              return Expanded(
-                child: Container(
-                  color: Colors.grey.shade400.withOpacity(0.3),
-                  child: const Center(
-                    child: Icon(Icons.error_outline),
-                  ),
+          child: event.photoUrl != null
+              ? CachedNetworkImage(
+                  cacheManager: DioCacheManager.instance,
+                  imageUrl: event.photoUrl!,
+                  fit: BoxFit.fitWidth,
+                  errorWidget: (context, url, error) {
+                    return Expanded(
+                      child: Container(
+                        color: Colors.grey.shade400.withOpacity(0.3),
+                        child: const Center(
+                          child: Icon(Icons.error_outline),
+                        ),
+                      ),
+                    );
+                  },
+                )
+              : Image.asset(
+                  'assets/no_image.png',
+                  fit: BoxFit.fitWidth,
                 ),
-              );
-            },
-          ),
         ),
       ),
     );

@@ -93,7 +93,12 @@ int _eventCollectionEstimateSize(
   bytesCount += 3 + object.cryptoKey.length * 3;
   bytesCount += 3 + object.description.length * 3;
   bytesCount += 3 + object.name.length * 3;
-  bytesCount += 3 + object.photoUrl.length * 3;
+  {
+    final value = object.photoUrl;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.shortDescription.length * 3;
   return bytesCount;
 }
@@ -131,7 +136,7 @@ EventCollection _eventCollectionDeserialize(
     id: id,
     lastDownloaded: reader.readDateTimeOrNull(offsets[5]),
     name: reader.readString(offsets[6]),
-    photoUrl: reader.readString(offsets[7]),
+    photoUrl: reader.readStringOrNull(offsets[7]),
     shortDescription: reader.readString(offsets[8]),
     startDate: reader.readDateTime(offsets[9]),
   );
@@ -160,7 +165,7 @@ P _eventCollectionDeserializeProp<P>(
     case 6:
       return (reader.readString(offset)) as P;
     case 7:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 8:
       return (reader.readString(offset)) as P;
     case 9:
@@ -1132,8 +1137,26 @@ extension EventCollectionQueryFilter
   }
 
   QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      photoUrlIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'photoUrl',
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
+      photoUrlIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'photoUrl',
+      ));
+    });
+  }
+
+  QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
       photoUrlEqualTo(
-    String value, {
+    String? value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1147,7 +1170,7 @@ extension EventCollectionQueryFilter
 
   QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
       photoUrlGreaterThan(
-    String value, {
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -1163,7 +1186,7 @@ extension EventCollectionQueryFilter
 
   QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
       photoUrlLessThan(
-    String value, {
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -1179,8 +1202,8 @@ extension EventCollectionQueryFilter
 
   QueryBuilder<EventCollection, EventCollection, QAfterFilterCondition>
       photoUrlBetween(
-    String lower,
-    String upper, {
+    String? lower,
+    String? upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -1882,7 +1905,7 @@ extension EventCollectionQueryProperty
     });
   }
 
-  QueryBuilder<EventCollection, String, QQueryOperations> photoUrlProperty() {
+  QueryBuilder<EventCollection, String?, QQueryOperations> photoUrlProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'photoUrl');
     });

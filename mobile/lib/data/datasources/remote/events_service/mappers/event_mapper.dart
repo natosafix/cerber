@@ -13,7 +13,7 @@ extension EventMapper on EventApiResponse {
       address: address,
       startDate: from.toLocal(),
       endDate: to.toLocal(),
-      photoUrl: "${Constants.eventsRepositoryBaseUrl}/files/${cover.id}/download",
+      photoUrl: cover != null ? "${Constants.eventsRepositoryBaseUrl}/files/${cover!.id}/download" : null,
       // category: category.name,
       lastDownloaded: null,
       cryptoKey: cryptoKey,
