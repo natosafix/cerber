@@ -28,7 +28,7 @@ class Password extends FormzInput<String, PasswordValidationError> {
   const Password.pure() : super.pure('');
   const Password.dirty([super.value = '']) : super.dirty();
 
-  static const minPasswordLength = 8;
+  static const minPasswordLength = 6;
 
   static final List<int> _allowedChars = [
     ...List.generate(26, (i) => i + 'a'.codeUnitAt(0)), // 'a' to 'z'
@@ -37,7 +37,7 @@ class Password extends FormzInput<String, PasswordValidationError> {
     ...specialChars.split('').map((e) => e.codeUnitAt(0)), // special chars
   ];
 
-  static const String specialChars = r'!@#$%^&*()?_-';
+  static const String specialChars = r'!@#$%^&*(),.?":{}|<>_-+';
 
   @override
   PasswordValidationError? validator(String value) {
