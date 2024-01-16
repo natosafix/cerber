@@ -8,4 +8,5 @@ export interface IEvent {
   address: string;
   from: Date;
   to: Date;
+  ownerId: string;
 }

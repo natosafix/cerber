@@ -5,11 +5,13 @@ import styles from './eventDetails.scss';
 import { InspectorEditor } from '../InspectorsEditor/InspectorEditor';
 import { Gapped } from '@skbkontur/react-ui';
 import { Label } from '../../../Entries/Shared/Label/Label';
-import {Button} from "@skbkontur/react-ui";
+import { Button } from "@skbkontur/react-ui";
+import { getUserInfo } from "../../../Helpers/UserInfoHelper";
 
 export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
     const [event, setEvent] = useState<IEvent | null>(null);
     const [imgSrc, setImgSrc] = useState<string | null>(null);
+    const [userId, setUserId] = useState<string>();
 
     useEffect(() => {
         const fetchEventDetailsAndCover = async () => {
@@ -29,6 +31,12 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
         };
 
         fetchEventDetailsAndCover();
+
+        const userInfo = getUserInfo();
+        if (userInfo) {
+            setUserId(userInfo.id);
+        }
+        
     }, [id]);
 
     const handleClickButton = () => {
@@ -61,8 +69,8 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
                                     <Label key={index} label={line} size={'small'} />
                                 ))}
                             </Gapped>
-                            
-                            <InspectorEditor event={event} />
+
+                            {userId === event.ownerId && <InspectorEditor  event={event}/>}
                             <Button size={"large"} use="success" onClick={handleClickButton}>Заполнить анкету</Button>
                         </Gapped>
                     </div>

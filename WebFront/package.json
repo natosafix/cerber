@@ -47,6 +47,7 @@
     "all": "^0.0.0",
     "axios": "^1.5.1",
     "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "react-router-dom": "^6.21.2",
     "ts-loader": "^9.5.0",
     "typescript": "^5.2.2"
