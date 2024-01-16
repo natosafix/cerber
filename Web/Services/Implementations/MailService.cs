@@ -36,9 +36,12 @@ public class MailService : IMailService
         };
         multipart.Add(body);
 
+        var attachments = new List<MimePart>();
         foreach (var qrCode in imageInfos)
         {
-            multipart.Add(qrCode.ToAttachment());
+            var attachment = qrCode.ToAttachment();
+            attachments.Add(attachment);
+            multipart.Add(attachment);
         }
         
         message.Body = multipart;
@@ -49,6 +52,12 @@ public class MailService : IMailService
             await client.AuthenticateAsync(userName: credentials.Email, password: credentials.Password);
             await client.SendAsync(message);
             await client.DisconnectAsync(quit: true);
+        }
+
+        foreach (var attachment in attachments)
+        {
+            attachment.Content.Dispose();
+            attachment.Dispose();    
         }
     }
 }

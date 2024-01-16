@@ -11,6 +11,6 @@ public class QrCodeService : IQrCodeService
     {
         var qrCodeData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
         var qrCode = new BitmapByteQRCode(qrCodeData);
-        return new ImageInfo(name, qrCode.GetGraphic(20));
+        return new ImageInfo(name, qrCode.GetGraphic(5));
     }
 }
