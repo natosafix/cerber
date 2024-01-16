@@ -149,25 +149,9 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
 
   @override
   Future<QrCodeData> generateQrCode(Event event, List<FilledAnswer> filledAnswers, int ticketId) async {
-    late String newVisitorId;
-    var remoteFailed = false;
-    final networkAvailable = await _networkAvailable();
+    final newVisitorId = await addNewVisitorAnswers(ticketId, filledAnswers, event.id);
 
-    if (networkAvailable) {
-      final id = await remoteEventsRepository.addNewVisitorAnswers(ticketId, filledAnswers, event.id);
-      if (id == null) {
-        remoteFailed = true;
-      } else {
-        newVisitorId = id;
-      }
-    }
-
-    if (!networkAvailable || remoteFailed) {
-      final id = await localEventsRepository.addNewVisitorAnswers(ticketId, filledAnswers, event.id);
-      newVisitorId = id!;
-    }
-
-    final encryptResult = _cryptor.encrypt(newVisitorId, event.cryptoKey);
+    final encryptResult = _cryptor.encrypt(newVisitorId!, event.cryptoKey);
 
     return QrCodeData(
       iv: encryptResult.iv,
@@ -191,7 +175,8 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
     int eventId,
   ) async {
     if (await _networkAvailable()) {
-      return await remoteEventsRepository.addNewVisitorAnswers(ticketId, filledAnswers, eventId);
+      final id = await remoteEventsRepository.addNewVisitorAnswers(ticketId, filledAnswers, eventId);
+      if (id != null) return id;
     }
 
     return await localEventsRepository.addNewVisitorAnswers(ticketId, filledAnswers, eventId);

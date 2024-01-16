@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:project/domain/models/event.dart';
+import 'package:project/domain/models/visitor.dart';
 import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
 import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/qr_code_scanner/qr_code_scanner_bloc/qr_code_scanner_bloc.dart';
@@ -11,8 +12,8 @@ import 'package:project/utils/extensions/context_x.dart';
 import 'package:project/utils/locator.dart';
 import 'package:vibration/vibration.dart';
 
-class QrCodeScannerScreen extends StatelessWidget {
-  QrCodeScannerScreen({required this.event, super.key});
+class QrCodeScannerScreen extends StatefulWidget {
+  const QrCodeScannerScreen({required this.event, super.key});
 
   final Event event;
 
@@ -20,9 +21,16 @@ class QrCodeScannerScreen extends StatelessWidget {
     return MaterialPageRoute(builder: (context) => QrCodeScannerScreen(event: event));
   }
 
+  @override
+  State<QrCodeScannerScreen> createState() => _QrCodeScannerScreenState();
+}
+
+class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
   final scannerController = MobileScannerController(
-    detectionTimeoutMs: 1500,
+    detectionTimeoutMs: 500,
   );
+
+  var scanEnabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +44,7 @@ class QrCodeScannerScreen extends StatelessWidget {
 
     return BlocProvider(
       create: (context) => QrCodeScannerBloc(
-        event: event,
+        event: widget.event,
         compoundEventsRepository: locator<CompoundEventsRepository>(),
       ),
       child: BlocListener<QrCodeScannerBloc, QrCodeScannerState>(
@@ -96,6 +104,10 @@ class QrCodeScannerScreen extends StatelessWidget {
   }
 
   void _onDetectQrCode(BuildContext context, BarcodeCapture capture) async {
+    if (!scanEnabled) return;
+
+    scanEnabled = false;
+
     context.read<QrCodeScannerBloc>().add(QrCodeScanned(capture: capture));
 
     final hasVibrator = await Vibration.hasVibrator();
@@ -107,21 +119,37 @@ class QrCodeScannerScreen extends StatelessWidget {
   void _stateChanged(BuildContext context, QrCodeScannerState scannerState) {
     switch (scannerState) {
       case VisitorExists(visitor: final visitor):
-        Navigator.of(context).push(QuestionsScreen.route(visitor, event));
+        _pushQuestions(visitor, widget.event);
+      // Navigator.of(context).push(QuestionsScreen.route(visitor, widget.event));
       case NoSuchVisitorExists():
-        context.showSnackbar(L10n.current.failedToFindSuchVisitor);
+        _showMessage(L10n.current.failedToFindSuchVisitor);
+      // context.showSnackbar(L10n.current.failedToFindSuchVisitor);
       case BoughtTicketOnSpot():
-        context.showSnackbar(L10n.current.boughtTicketOnSpot);
+        _showMessage(L10n.current.boughtTicketOnSpot);
+      // context.showSnackbar(L10n.current.boughtTicketOnSpot);
       case InitialState():
         break;
       case BadQrCodeFormat():
-        context.showSnackbar(L10n.current.badQrCodeFormat);
+        _showMessage(L10n.current.badQrCodeFormat);
+      // context.showSnackbar(L10n.current.badQrCodeFormat);
       case FailedToReadQrCode():
-        context.showSnackbar(L10n.current.failedToReadQrCode);
+        _showMessage(L10n.current.failedToReadQrCode);
+      // context.showSnackbar(L10n.current.failedToReadQrCode);
     }
   }
 
   void _addPressed(BuildContext context) {
-    Navigator.of(context).push(QuestionsScreen.route(null, event));
+    _pushQuestions(null, widget.event);
+    // Navigator.of(context).push(QuestionsScreen.route(null, widget.event));
+  }
+
+  void _showMessage(String message) {
+    context.showSnackbar(message);
+    scanEnabled = true;
+  }
+
+  void _pushQuestions(Visitor? visitor, Event event) async {
+    await Navigator.of(context).push(QuestionsScreen.route(visitor, event));
+    scanEnabled = true;
   }
 }
