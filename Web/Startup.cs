@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -30,13 +31,13 @@ public class Startup
         services.AddRepositories();
         services.AddServices();
         services.AddRequirements();
-        
+
         services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddEntityFrameworkStores<CerberDbContext>()
             .AddDefaultTokenProviders();
 
         services.AddAutoMapper(typeof(MappingProfile));
-        
+
         services.AddAuthorization(options =>
         {
             options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
@@ -64,7 +65,7 @@ public class Startup
                     policyBuilder.AddRequirements(new MustInspectOrderRequirement());
                 });
         });
-        
+
         services.AddAuthentication()
             .AddJwtBearer(options =>
             {
@@ -91,33 +92,44 @@ public class Startup
 
         services.AddControllersWithViews()
             .AddNewtonsoftJson(options =>
-        {
-            options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Populate;
-            options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        });
+            {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Populate;
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
         services.AddSwaggerGen();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
     {
+        app.UseStatusCodePages(async context =>
+        {
+            var request = context.HttpContext.Request;
+            var response = context.HttpContext.Response;
+
+            if (response.StatusCode == (int) HttpStatusCode.Unauthorized)
+                response.Redirect("/home/login");
+            if (response.StatusCode == (int) HttpStatusCode.NotFound)
+                response.Redirect($"/error?statusCode={response.StatusCode}");
+        });
+
         if (environment.IsDevelopment())
             app.UseDeveloperExceptionPage();
         else
             app.UseMiddleware<ExceptionHandlerMiddleware>();
-        
+
         app.UseStaticFiles();
         app.UseRouting();
-        
+
         app.UseAuthentication();
         app.UseAuthorization();
-        
+
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
             endpoints.MapSwagger();
         });
-        
+
         app.UseSwagger();
         app.UseSwaggerUI();
     }

@@ -27,9 +27,13 @@ public class AuthController : Controller
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-        
+
         var userExists = await userManager.FindByEmailAsync(dto.Email);
         if (userExists != null)
+            return BadRequest("Кажется, такой пользователь уже есть!");
+
+        var usernameExists = await userManager.FindByNameAsync(dto.Username);
+        if (usernameExists != null)
             return BadRequest("Кажется, такой пользователь уже есть!");
 
         User user = new()
@@ -38,19 +42,20 @@ public class AuthController : Controller
             SecurityStamp = Guid.NewGuid().ToString(),
             UserName = dto.Username
         };
+
         var result = await userManager.CreateAsync(user, dto.Password);
         return result.Succeeded
             ? Ok("User created successfully!")
             : StatusCode(StatusCodes.Status500InternalServerError,
                 "Что-то не так, проверьте свои данные!");
     }
-    
+
     [HttpPost("/[controller]/login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-        
+
         var user = await userManager.FindByEmailAsync(dto.Email);
         if (user != null && await userManager.CheckPasswordAsync(user, dto.Password))
         {
@@ -67,7 +72,7 @@ public class AuthController : Controller
 
             var token = GetToken(authClaims);
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-            
+
             Response.Cookies.Append(config["JWT:CookieName"]!, tokenString, new CookieOptions {HttpOnly = false});
             return Ok(new
             {
@@ -75,9 +80,10 @@ public class AuthController : Controller
                 expiration = token.ValidTo
             });
         }
+
         return Unauthorized();
     }
-    
+
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Secret"]!));

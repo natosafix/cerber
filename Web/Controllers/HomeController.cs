@@ -39,6 +39,12 @@ public class HomeController : Controller
         return View();
     }
 
+    [HttpGet("/error")]
+    public IActionResult Error([FromRoute] int statusCode)
+    {
+        return View();
+    }
+
     [HttpGet("/[controller]/privacy")]
     public IActionResult Privacy()
     {
