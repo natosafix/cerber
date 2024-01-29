@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager_dio/flutter_cache_manager_dio.dart';
 import 'package:project/domain/models/event.dart';
-import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
 import 'package:project/domain/repositories/compound_events_repository/download_status.dart';
 import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/event_detail/event_detail_bloc/event_detail_bloc.dart';
 import 'package:project/presentation/qr_code_scanner/qr_code_scanner_screen.dart';
 import 'package:project/presentation/widgets/circular_progress_indicator_inbutton.dart';
 import 'package:project/presentation/widgets/full_width_button.dart';
-import 'package:project/utils/locator.dart';
 import 'package:project/utils/extensions/context_x.dart';
 
 class EventDetailScreen extends StatelessWidget {
@@ -26,10 +24,7 @@ class EventDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => EventDetailBloc(
-        event,
-        compoundEventsRepository: locator<CompoundEventsRepository>(),
-      ),
+      create: (context) => EventDetailBloc(event),
       child: Scaffold(
         body: CustomScrollView(
           physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -137,9 +132,8 @@ class EventDetailScreen extends StatelessWidget {
                         return Column(
                           children: [
                             FullWidthButton(
-                              onPressed: isDownloading
-                                  ? null
-                                  : () => context.read<EventDetailBloc>().add(DownloadDatabase()),
+                              onPressed:
+                                  isDownloading ? null : () => context.read<EventDetailBloc>().add(DownloadDatabase()),
                               child: isDownloading
                                   ? const CircularProgressIndicatorInbutton()
                                   : Text(L10n.current.downloadDatabase),

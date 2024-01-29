@@ -7,15 +7,12 @@ import 'package:project/presentation/authentication/authentication_form/authenti
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/formz_inputs/password.dart';
 
 class SignUpBloc extends AuthenticationFormBloc {
-  SignUpBloc({
-    required super.authenticationRepository,
-  }) : super(
-          initialState: AuthenticationFormState(
-            email: Email.pure(),
-            name: const Name.pure(),
-            password: const Password.pure(),
-          ),
-        );
+  SignUpBloc()
+      : super(AuthenticationFormState(
+          email: Email.pure(),
+          name: const Name.pure(),
+          password: const Password.pure(),
+        ));
 
   @override
   void onFinishPressed(FinishPressed event, Emitter<AuthenticationFormState> emit) async {
@@ -35,7 +32,7 @@ class SignUpBloc extends AuthenticationFormBloc {
     debugPrint(res.failure.stackTrace.toString());
 
     emit(state.copyWith(authenticationStatus: Failure(errorMessage: error)));
-    
+
     emit(state.copyWith(authenticationStatus: const UnknownStatus()));
   }
 }

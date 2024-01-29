@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
 import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/log_in_bloc.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/sign_up_bloc.dart';
@@ -46,7 +44,7 @@ class InitialScreen extends StatelessWidget {
 
   void _signUpPressed(BuildContext context) {
     final signUpScreen = AuthenticationFormScreenBase(
-      authenticationFormBloc: SignUpBloc(authenticationRepository: context.read<AuthenticationRepository>()),
+      authenticationFormBloc: SignUpBloc(),
       inputFields: const [EmailInput(), NameInput(), PasswordInput()],
       title: L10n.current.createAccount,
       finishButtonText: L10n.current.signUp,
@@ -63,7 +61,7 @@ class InitialScreen extends StatelessWidget {
 
   void _logInPressed(BuildContext context) {
     final loginScreen = AuthenticationFormScreenBase(
-      authenticationFormBloc: LogInBloc(authenticationRepository: context.read<AuthenticationRepository>()),
+      authenticationFormBloc: LogInBloc(),
       inputFields: const [EmailInput(), PasswordInput()],
       title: L10n.current.logIntoAccount,
       finishButtonText: L10n.current.logIn,

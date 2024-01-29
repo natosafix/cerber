@@ -6,15 +6,15 @@ import 'package:project/presentation/authentication/authentication_form/authenti
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/formz_inputs/email.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/formz_inputs/name.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/formz_inputs/password.dart';
+import 'package:project/utils/locator.dart';
 
 part 'authentication_form_event.dart';
 part 'authentication_form_state.dart';
 
 abstract class AuthenticationFormBloc extends Bloc<AuthenticationFormEvent, AuthenticationFormState> {
-  AuthenticationFormBloc({
-    required this.authenticationRepository,
-    required AuthenticationFormState initialState,
-  }) : super(initialState) {
+  AuthenticationFormBloc(
+    AuthenticationFormState initialState,
+  ) : super(initialState) {
     on<EmailChanged>(_onEmailChanged);
     on<NameChanged>(_onNameChanged);
     on<PasswordChanged>(_onPasswordChanged);
@@ -22,7 +22,7 @@ abstract class AuthenticationFormBloc extends Bloc<AuthenticationFormEvent, Auth
   }
 
   @protected
-  final AuthenticationRepository authenticationRepository;
+  final authenticationRepository = locator<AuthenticationRepository>();
 
   void _onEmailChanged(EmailChanged event, Emitter<AuthenticationFormState> emit) {
     final email = Email.dirty(event.email);

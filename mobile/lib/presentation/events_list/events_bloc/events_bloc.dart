@@ -2,12 +2,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/repositories/events_repository.dart';
+import 'package:project/utils/locator.dart';
 
 part 'events_event.dart';
 part 'events_state.dart';
 
 class EventsBloc extends Bloc<EventsEvent, EventsState> {
-  EventsBloc(this._eventsRepository) : super(EventsState.initial()) {
+  EventsBloc() : super(EventsState.initial()) {
     on<GetEvents>(_onGetEvents);
 
     state.pagingController.addPageRequestListener((pageKey) {
@@ -15,7 +16,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     });
   }
 
-  final EventsRepository _eventsRepository;
+  final _eventsRepository = locator<EventsRepository>();
 
   static const _limit = 5;
 

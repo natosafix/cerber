@@ -11,11 +11,8 @@ part 'event_detail_event.dart';
 part 'event_detail_state.dart';
 
 class EventDetailBloc extends Bloc<EventDetailEvent, EventDetailState> {
-  EventDetailBloc(
-    this._event, {
-    required CompoundEventsRepository compoundEventsRepository,
-  })  : _compoundEventsRepository = compoundEventsRepository,
-        super(EventDetailState(
+  EventDetailBloc(this._event)
+      : super(EventDetailState(
           downloadStatus: DownloadStatus.unknown,
           lastDownloaded: _event.lastDownloaded,
         )) {
@@ -36,7 +33,7 @@ class EventDetailBloc extends Bloc<EventDetailEvent, EventDetailState> {
   late final StreamSubscription<Event> _eventSubscription;
   final _downloadStatusController = StreamController<DownloadStatus>();
 
-  final CompoundEventsRepository _compoundEventsRepository;
+  final _compoundEventsRepository = locator<CompoundEventsRepository>();
   final _localEventsRepository = locator<LocalEventsRepository>();
 
   final Event _event;

@@ -3,12 +3,13 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_status.dart';
+import 'package:project/utils/locator.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc(this._authenticationRepository) : super(Unknown()) {
+  AuthenticationBloc() : super(Unknown()) {
     on<_AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<CheckAuthentication>(_onCheckAuthentication);
     on<Authenticate>(_onAuthenticate);
@@ -19,7 +20,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     });
   }
 
-  final AuthenticationRepository _authenticationRepository;
+  final _authenticationRepository = locator<AuthenticationRepository>();
 
   late final StreamSubscription<AuthenticationStatus> _authStatusSubscription;
 

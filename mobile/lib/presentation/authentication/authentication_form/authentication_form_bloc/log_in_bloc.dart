@@ -6,14 +6,11 @@ import 'package:project/presentation/authentication/authentication_form/authenti
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/formz_inputs/password.dart';
 
 class LogInBloc extends AuthenticationFormBloc {
-  LogInBloc({
-    required super.authenticationRepository,
-  }) : super(
-          initialState: AuthenticationFormState(
-            email: Email.pure(),
-            password: const Password.pure(),
-          ),
-        );
+  LogInBloc()
+      : super(AuthenticationFormState(
+          email: Email.pure(),
+          password: const Password.pure(),
+        ));
 
   @override
   void onFinishPressed(FinishPressed event, Emitter<AuthenticationFormState> emit) async {

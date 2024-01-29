@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:project/domain/models/event.dart';
-import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/authentication/authentication_bloc/authentication_bloc.dart';
 import 'package:project/presentation/event_detail/event_detail_screen.dart';
@@ -20,7 +19,7 @@ class EventsListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => EventsBloc(context.read<EventsRepository>()),
+      create: (context) => EventsBloc(),
       child: Scaffold(
         appBar: FlatAppBar(
           title: Text(L10n.current.events),

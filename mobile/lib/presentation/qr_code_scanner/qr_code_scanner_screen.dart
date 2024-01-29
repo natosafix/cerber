@@ -3,14 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/models/visitor.dart';
-import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
 import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/qr_code_scanner/qr_code_scanner_bloc/qr_code_scanner_bloc.dart';
 import 'package:project/presentation/qr_code_scanner/scanner_overlay/scanner_overlay.dart';
 import 'package:project/presentation/questions/questions_screen/questions_screen.dart';
 import 'package:project/presentation/widgets/flat_app_bar.dart';
 import 'package:project/utils/extensions/context_x.dart';
-import 'package:project/utils/locator.dart';
 import 'package:vibration/vibration.dart';
 
 class QrCodeScannerScreen extends StatefulWidget {
@@ -46,7 +44,6 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
     return BlocProvider(
       create: (context) => QrCodeScannerBloc(
         event: widget.event,
-        compoundEventsRepository: locator<CompoundEventsRepository>(),
       ),
       child: BlocListener<QrCodeScannerBloc, QrCodeScannerState>(
         listener: _stateChanged,
