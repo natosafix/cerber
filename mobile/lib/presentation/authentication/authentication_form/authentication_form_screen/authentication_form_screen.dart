@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_bloc.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_bloc/authentication_form_status.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/finish_button_widget.dart';
+import 'package:project/presentation/widgets/flat_app_bar.dart';
 import 'package:project/utils/extensions/context_x.dart';
 
 class AuthenticationFormScreenBase extends StatelessWidget {
@@ -29,10 +30,7 @@ class AuthenticationFormScreenBase extends StatelessWidget {
         listener: (context, state) => _statusChanged(context, state.authenticationStatus),
         listenWhen: (previous, current) => current.authenticationStatus is! UnknownStatus,
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            foregroundColor: context.appBarForegroundColor(),
-            elevation: 0,
+          appBar: FlatAppBar(
             title: Text(title),
             centerTitle: true,
           ),

@@ -8,6 +8,7 @@ import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/qr_code_scanner/qr_code_scanner_bloc/qr_code_scanner_bloc.dart';
 import 'package:project/presentation/qr_code_scanner/scanner_overlay/scanner_overlay.dart';
 import 'package:project/presentation/questions/questions_screen/questions_screen.dart';
+import 'package:project/presentation/widgets/flat_app_bar.dart';
 import 'package:project/utils/extensions/context_x.dart';
 import 'package:project/utils/locator.dart';
 import 'package:vibration/vibration.dart';
@@ -50,9 +51,8 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
       child: BlocListener<QrCodeScannerBloc, QrCodeScannerState>(
         listener: _stateChanged,
         child: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
+          appBar: FlatAppBar(
+            switchForegroundColorInDarkMode: false,
             actions: [
               IconButton(
                 onPressed: () {

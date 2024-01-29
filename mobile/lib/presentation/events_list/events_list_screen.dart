@@ -8,7 +8,7 @@ import 'package:project/presentation/authentication/authentication_bloc/authenti
 import 'package:project/presentation/event_detail/event_detail_screen.dart';
 import 'package:project/presentation/events_list/event_widget.dart';
 import 'package:project/presentation/events_list/events_bloc/events_bloc.dart';
-import 'package:project/utils/extensions/context_x.dart';
+import 'package:project/presentation/widgets/flat_app_bar.dart';
 
 class EventsListScreen extends StatelessWidget {
   const EventsListScreen({super.key});
@@ -22,11 +22,8 @@ class EventsListScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => EventsBloc(context.read<EventsRepository>()),
       child: Scaffold(
-        appBar: AppBar(
+        appBar: FlatAppBar(
           title: Text(L10n.current.events),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          foregroundColor: context.appBarForegroundColor(),
           actions: [
             IconButton(
               onPressed: () {

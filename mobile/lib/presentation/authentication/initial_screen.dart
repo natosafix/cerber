@@ -8,6 +8,7 @@ import 'package:project/presentation/authentication/authentication_form/authenti
 import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/inputs/email_input.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/inputs/name_input.dart';
 import 'package:project/presentation/authentication/authentication_form/authentication_form_screen/inputs/password_input.dart';
+import 'package:project/presentation/widgets/full_width_button.dart';
 import 'package:project/utils/extensions/context_x.dart';
 
 class InitialScreen extends StatelessWidget {
@@ -28,20 +29,14 @@ class InitialScreen extends StatelessWidget {
           children: [
             Image.asset("assets/${context.isLight() ? 'logo_light.png' : 'logo_dark.png'}"),
             const SizedBox(height: 150),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed: () => _signUpPressed(context),
-                child: Text(L10n.current.signUp),
-              ),
+            FullWidthButton(
+              onPressed: () => _signUpPressed(context),
+              child: Text(L10n.current.signUp),
             ),
             const SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed: () => _logInPressed(context),
-                child: Text(L10n.current.logIn),
-              ),
+            FullWidthButton(
+              onPressed: () => _logInPressed(context),
+              child: Text(L10n.current.logIn),
             ),
           ],
         ),
@@ -50,37 +45,33 @@ class InitialScreen extends StatelessWidget {
   }
 
   void _signUpPressed(BuildContext context) {
+    final signUpScreen = AuthenticationFormScreenBase(
+      authenticationFormBloc: SignUpBloc(authenticationRepository: context.read<AuthenticationRepository>()),
+      inputFields: const [EmailInput(), NameInput(), PasswordInput()],
+      title: L10n.current.createAccount,
+      finishButtonText: L10n.current.signUp,
+      onSuccess: (context) {
+        context.showSnackbar(L10n.current.youHaveSignUpsuccessfully);
+        Navigator.of(context).pop();
+      },
+    );
+
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return AuthenticationFormScreenBase(
-            authenticationFormBloc: SignUpBloc(authenticationRepository: context.read<AuthenticationRepository>()),
-            inputFields: const [EmailInput(), NameInput(), PasswordInput()],
-            title: L10n.current.createAccount,
-            finishButtonText: L10n.current.signUp,
-            onSuccess: (context) {
-              context.showSnackbar(L10n.current.youHaveSignUpsuccessfully);
-              Navigator.of(context).pop();
-            },
-          );
-        },
-      ),
+      MaterialPageRoute(builder: (context) => signUpScreen),
     );
   }
 
   void _logInPressed(BuildContext context) {
+    final loginScreen = AuthenticationFormScreenBase(
+      authenticationFormBloc: LogInBloc(authenticationRepository: context.read<AuthenticationRepository>()),
+      inputFields: const [EmailInput(), PasswordInput()],
+      title: L10n.current.logIntoAccount,
+      finishButtonText: L10n.current.logIn,
+      onSuccess: (context) {},
+    );
+
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return AuthenticationFormScreenBase(
-            authenticationFormBloc: LogInBloc(authenticationRepository: context.read<AuthenticationRepository>()),
-            inputFields: const [EmailInput(), PasswordInput()],
-            title: L10n.current.logIntoAccount,
-            finishButtonText: L10n.current.logIn,
-            onSuccess: (context) {},
-          );
-        },
-      ),
+      MaterialPageRoute(builder: (context) => loginScreen),
     );
   }
 }

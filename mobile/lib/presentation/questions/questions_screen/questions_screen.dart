@@ -11,6 +11,8 @@ import 'package:project/presentation/questions/questions_screen/inputs/multi_tex
 import 'package:project/presentation/questions/questions_screen/inputs/radio_input.dart';
 import 'package:project/presentation/questions/questions_screen/inputs/text_input.dart';
 import 'package:project/presentation/questions/questions_screen/ticket_selector.dart';
+import 'package:project/presentation/widgets/flat_app_bar.dart';
+import 'package:project/presentation/widgets/full_width_button.dart';
 import 'package:project/utils/extensions/context_x.dart';
 
 class QuestionsScreen extends StatelessWidget {
@@ -37,11 +39,8 @@ class QuestionsScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => QuestionsBloc(visitor: visitor, event: event),
       child: Scaffold(
-        appBar: AppBar(
+        appBar: FlatAppBar(
           title: Text(filling ? L10n.current.addNewVisitor : L10n.current.visitorsInformation),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          foregroundColor: context.appBarForegroundColor(),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -88,12 +87,9 @@ class QuestionsScreen extends StatelessWidget {
               if (filling) {
                 widgets.add(Padding(
                   padding: const EdgeInsets.only(top: midInputsPadding, bottom: 20),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: () => context.read<QuestionsBloc>().add(SaveNewVisitor()),
-                      child: Text(L10n.current.save),
-                    ),
+                  child: FullWidthButton(
+                    onPressed: () => context.read<QuestionsBloc>().add(SaveNewVisitor()),
+                    child: Text(L10n.current.save),
                   ),
                 ));
               }

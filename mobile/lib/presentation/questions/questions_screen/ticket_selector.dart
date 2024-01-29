@@ -31,6 +31,7 @@ class _TicketSelectorState extends State<TicketSelector> {
           ...widget.tickets.map((ticket) {
             return RadioListTile(
               title: Text(ticket.name),
+              subtitle: Text("${ticket.price} ₽"),
               value: ticket,
               groupValue: widget.selectedTicket,
               onChanged: (t) => _onChanged(context, t!),
