@@ -161,14 +161,14 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
   ) async {
     final random = Random.secure();
 
-    final answers = <AnswerCollection>[];
-    for (final filledAnswer in filledAnswers) {
-      answers.add(AnswerCollection(
-        id: random.nextInt(1 << 32),
-        answers: filledAnswer.answers,
-        questionId: filledAnswer.questionId,
-      ));
-    }
+    final answers = [
+      for (final filledAnswer in filledAnswers)
+        AnswerCollection(
+          id: random.nextInt(1 << 32),
+          answers: filledAnswer.answers,
+          questionId: filledAnswer.questionId,
+        ),
+    ];
 
     await _eventsDatabase.addAnswers(answers);
 

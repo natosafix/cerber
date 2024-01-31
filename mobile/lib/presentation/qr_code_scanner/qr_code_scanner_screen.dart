@@ -111,7 +111,7 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
     );
   }
 
-  void _onDetectQrCode(BuildContext context, BarcodeCapture capture) async {
+  void _onDetectQrCode(BuildContext context, BarcodeCapture capture) {
     context.read<QrCodeScannerBloc>().add(QrCodeScanned(capture: capture));
 
     if (hasVibrator) {

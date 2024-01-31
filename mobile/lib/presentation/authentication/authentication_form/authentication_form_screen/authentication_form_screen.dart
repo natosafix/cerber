@@ -40,7 +40,11 @@ class AuthenticationFormScreenBase extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ..._createInputs(),
+                for (final input in inputFields)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: input,
+                  ),
                 const SizedBox(height: 20),
                 FinishButtonWigdet(text: finishButtonText),
               ],
@@ -49,17 +53,6 @@ class AuthenticationFormScreenBase extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  List<Widget> _createInputs() {
-    final result = <Widget>[];
-
-    for (final input in inputFields) {
-      result.add(input);
-      result.add(const SizedBox(height: 10));
-    }
-
-    return result..removeLast();
   }
 
   void _statusChanged(BuildContext context, AuthenticationFormStatus status) {
