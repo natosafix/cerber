@@ -27,10 +27,8 @@ class QrCodeScannerScreen extends StatefulWidget {
 
 class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
   final scannerController = MobileScannerController(
-    detectionTimeoutMs: 500,
+    detectionTimeoutMs: 1000,
   );
-
-  var scanEnabled = true;
 
   late final bool hasVibrator;
 
@@ -114,10 +112,6 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
   }
 
   void _onDetectQrCode(BuildContext context, BarcodeCapture capture) async {
-    if (!scanEnabled) return;
-
-    scanEnabled = false;
-
     context.read<QrCodeScannerBloc>().add(QrCodeScanned(capture: capture));
 
     if (hasVibrator) {
@@ -187,16 +181,22 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
   }
 
   void _pushQuestionsScreen(QuestionsScreen questionsScreen) async {
+    scannerController.stop();
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => questionsScreen,
       ),
     );
-    scanEnabled = true;
+    scannerController.start();
   }
 
   void _showMessage(String message) {
     context.showSnackbar(message);
-    scanEnabled = true;
+  }
+
+  @override
+  void dispose() {
+    scannerController.dispose();
+    super.dispose();
   }
 }
