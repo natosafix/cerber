@@ -1,33 +1,41 @@
-part of 'questions_bloc.dart';
+part of 'questions_bloc_base.dart';
 
-final class QuestionsState {
-  final Map<Question, Answer>? questionsMap;
-  final String? qrCodeData;
+class QuestionsState {
+  final Map<Question, Answer> questionsMap;
   final List<Ticket> tickets;
   final Ticket? selectedTicket;
-  final bool validationFailed;
+  final bool isLoading;
+  final String? messageToShow;
+  final Widget? modalToShow;
+  final void Function(BuildContext)? onModalClosed;
 
   QuestionsState({
     required this.questionsMap,
-    required this.qrCodeData,
     required this.tickets,
     required this.selectedTicket,
-    required this.validationFailed,
+    required this.isLoading,
+    required this.messageToShow,
+    required this.modalToShow,
+    required this.onModalClosed,
   });
 
   QuestionsState copyWith({
     Map<Question, Answer>? questionsMap,
-    String? qrCodeData,
     List<Ticket>? tickets,
     Ticket? selectedTicket,
-    bool? validationFailed,
+    bool? isLoading,
+    ValueGetter<String?>? messageToShow,
+    Widget? modalToShow,
+    void Function(BuildContext)? onModalClosed,
   }) {
     return QuestionsState(
       questionsMap: questionsMap ?? this.questionsMap,
-      qrCodeData: qrCodeData ?? this.qrCodeData,
       tickets: tickets ?? this.tickets,
       selectedTicket: selectedTicket ?? this.selectedTicket,
-      validationFailed: validationFailed ?? this.validationFailed,
+      isLoading: isLoading ?? this.isLoading,
+      messageToShow: messageToShow != null ? messageToShow() : this.messageToShow,
+      modalToShow: modalToShow ?? this.modalToShow,
+      onModalClosed: onModalClosed ?? this.onModalClosed,
     );
   }
 }

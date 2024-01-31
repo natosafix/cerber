@@ -7,7 +7,7 @@ class QrCodeData {
     required this.encryptedVisitorId,
   });
 
-  static const String _separator = ';';
+  static const _separator = ';';
 
   // qrcode format: 'iv;encryptedVisitorId'
 

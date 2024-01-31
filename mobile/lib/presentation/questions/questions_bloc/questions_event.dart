@@ -1,10 +1,10 @@
-part of 'questions_bloc.dart';
+part of 'questions_bloc_base.dart';
 
 sealed class QuestionsEvent {}
 
 final class FillData extends QuestionsEvent {}
 
-final class SaveNewVisitor extends QuestionsEvent {}
+final class FinishPressed extends QuestionsEvent {}
 
 final class TicketChanged extends QuestionsEvent {
   final Ticket ticket;

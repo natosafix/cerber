@@ -4,8 +4,8 @@ import 'package:project/domain/models/answer.dart';
 import 'package:project/domain/models/question.dart';
 import 'package:project/presentation/questions/questions_bloc/questions_bloc_base.dart';
 
-class TextInput extends StatelessWidget {
-  const TextInput(
+class MultiLineTextInput extends StatelessWidget {
+  const MultiLineTextInput(
     this.question,
     this.answer,
     this.allowEdit, {
@@ -22,8 +22,12 @@ class TextInput extends StatelessWidget {
       initialValue: answer.answers.first,
       readOnly: !allowEdit,
       decoration: InputDecoration(
+        border: const OutlineInputBorder(),
         labelText: question.question,
       ),
+      textCapitalization: TextCapitalization.sentences,
+      keyboardType: TextInputType.multiline,
+      maxLines: null,
       onChanged: (value) => _onChanged(context, value),
     );
   }

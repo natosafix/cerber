@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project/domain/models/event.dart';
 import 'package:project/domain/models/question_type.dart';
-import 'package:project/domain/models/visitor.dart';
 import 'package:project/l10n/generated/l10n.dart';
-import 'package:project/presentation/questions/qr_code_modal.dart';
-import 'package:project/presentation/questions/questions_bloc/questions_bloc.dart';
+import 'package:project/presentation/questions/questions_bloc/questions_bloc_base.dart';
 import 'package:project/presentation/questions/questions_screen/inputs/checkbox_input.dart';
-import 'package:project/presentation/questions/questions_screen/inputs/multi_text_input.dart';
+import 'package:project/presentation/questions/questions_screen/inputs/multi_line_text_input.dart';
 import 'package:project/presentation/questions/questions_screen/inputs/radio_input.dart';
 import 'package:project/presentation/questions/questions_screen/inputs/text_input.dart';
 import 'package:project/presentation/questions/questions_screen/ticket_selector.dart';
@@ -17,86 +14,82 @@ import 'package:project/utils/extensions/context_x.dart';
 
 class QuestionsScreen extends StatelessWidget {
   const QuestionsScreen({
-    required this.visitor,
-    required this.event,
+    required this.questionsBloc,
+    required this.title,
+    required this.ticketLabel,
+    required this.questionsLabel,
+    required this.finishButtonText,
+    required this.allowEdit,
+    this.postFrameCallback,
     super.key,
   });
 
-  static Route route(Visitor? visitor, Event event) {
-    return MaterialPageRoute(builder: (context) => QuestionsScreen(visitor: visitor, event: event));
-  }
+  final QuestionsBlocBase questionsBloc;
+  final String title;
+  final String ticketLabel;
+  final String questionsLabel;
+  final String? finishButtonText;
+  final bool allowEdit;
+  final void Function(BuildContext context)? postFrameCallback;
 
-  final Visitor? visitor;
-  final Event event;
-
-  static const double midInputsPadding = 8;
-
-  bool get filling => visitor == null;
+  static const double _midInputsPadding = 8;
 
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) => _postFrameCallback(context));
-    return BlocProvider(
-      create: (context) => QuestionsBloc(visitor: visitor, event: event),
+
+    return BlocProvider.value(
+      value: questionsBloc,
       child: Scaffold(
         appBar: FlatAppBar(
-          title: Text(filling ? L10n.current.addNewVisitor : L10n.current.visitorsInformation),
+          title: Text(title),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: BlocConsumer<QuestionsBloc, QuestionsState>(
+          child: BlocConsumer<QuestionsBlocBase, QuestionsState>(
             listener: _onListen,
             builder: (context, state) {
-              if (state.questionsMap == null || state.questionsMap!.isEmpty) {
+              if (state.isLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (state.questionsMap.isEmpty) {
                 return Center(
                   child: Text(L10n.current.questionsEmpty),
                 );
               }
 
-              final widgets = <Widget>[];
-
-              if (filling) {
-                widgets.add(TicketSelector(state.tickets, state.selectedTicket));
-              } else {
-                final ticket = visitor!.ticket;
-                widgets.add(Text(L10n.current.ticket));
-                widgets.add(RadioListTile(
-                  title: Text(ticket.name),
-                  subtitle: Text("${ticket.price} ₽"),
-                  value: null,
-                  groupValue: null,
-                  onChanged: (_) {},
-                  contentPadding: EdgeInsets.zero,
-                ));
-              }
-
-              widgets.add(const SizedBox(height: midInputsPadding));
-              widgets.add(Text(filling ? L10n.current.fillTheForm : L10n.current.form));
-
-              for (final entry in state.questionsMap!.entries) {
-                final question = entry.key;
-                final answer = entry.value;
-                widgets.add(switch (question.questionType) {
-                  QuestionType.oneLineText => TextInput(question, answer, filling),
-                  QuestionType.multiLineText => MultiLineTextInput(question, answer, filling),
-                  QuestionType.radio => RadioInput(question, answer, filling),
-                  QuestionType.checkbox => CheckboxInput(question, answer, filling),
-                });
-              }
-
-              if (filling) {
-                widgets.add(Padding(
-                  padding: const EdgeInsets.only(top: midInputsPadding, bottom: 20),
-                  child: FullWidthButton(
-                    onPressed: () => context.read<QuestionsBloc>().add(SaveNewVisitor()),
-                    child: Text(L10n.current.save),
-                  ),
-                ));
-              }
-
               return ListView(
                 physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                children: widgets,
+                children: [
+                  const SizedBox(height: _midInputsPadding),
+                  Text(ticketLabel),
+                  TicketSelector(tickets: state.tickets, selectedTicket: state.selectedTicket),
+                  const SizedBox(height: _midInputsPadding),
+                  Text(questionsLabel),
+                  for (final (question, answer) in state.questionsMap.entries.map((e) => (e.key, e.value)))
+                    Padding(
+                      padding: const EdgeInsets.only(top: _midInputsPadding),
+                      child: switch (question.questionType) {
+                        QuestionType.oneLineText => TextInput(question, answer, allowEdit),
+                        QuestionType.multiLineText => Padding(
+                            padding: const EdgeInsets.only(top: _midInputsPadding * 2, bottom: _midInputsPadding),
+                            child: MultiLineTextInput(question, answer, allowEdit),
+                          ),
+                        QuestionType.radio => RadioInput(question, answer, allowEdit),
+                        QuestionType.checkbox => CheckboxInput(question, answer, allowEdit),
+                      },
+                    ),
+                  if (finishButtonText != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: _midInputsPadding, bottom: 20),
+                      child: FullWidthButton(
+                        onPressed: () => context.read<QuestionsBlocBase>().add(FinishPressed()),
+                        child: Text(finishButtonText!),
+                      ),
+                    )
+                ],
               );
             },
           ),
@@ -106,38 +99,25 @@ class QuestionsScreen extends StatelessWidget {
   }
 
   void _onListen(BuildContext context, QuestionsState state) async {
-    if (state.qrCodeData != null) {
+    if (state.messageToShow != null) {
+      context.showSnackbar(state.messageToShow!);
+    }
+
+    if (state.modalToShow != null) {
       await showModalBottomSheet(
         context: context,
-        builder: (context) => QrCodeModal(qrCodeData: state.qrCodeData!),
+        builder: (context) => state.modalToShow!,
       );
 
       if (context.mounted) {
-        Navigator.of(context).pop();
+        state.onModalClosed!(context);
       }
-    } else if (state.validationFailed) {
-      context.showSnackbar(L10n.current.pleaseFillTheEntireForm);
     }
   }
 
   void _postFrameCallback(BuildContext context) {
-    if (visitor?.qrCodeScannedTime == null) return;
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(L10n.current.qrCodeAlreadyBeenScanned),
-          actions: [
-            TextButton(
-              child: const Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+    if (postFrameCallback != null) {
+      postFrameCallback!(context);
+    }
   }
 }
