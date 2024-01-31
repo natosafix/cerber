@@ -32,6 +32,18 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
 
   var scanEnabled = true;
 
+  late final bool hasVibrator;
+
+  @override
+  void initState() {
+    _checkVibrator();
+    super.initState();
+  }
+
+  void _checkVibrator() async {
+    hasVibrator = await Vibration.hasVibrator() ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -108,8 +120,7 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
 
     context.read<QrCodeScannerBloc>().add(QrCodeScanned(capture: capture));
 
-    final hasVibrator = await Vibration.hasVibrator();
-    if (hasVibrator != null && hasVibrator) {
+    if (hasVibrator) {
       Vibration.vibrate();
     }
   }
