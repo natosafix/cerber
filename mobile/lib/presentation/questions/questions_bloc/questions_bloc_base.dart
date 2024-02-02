@@ -14,23 +14,23 @@ abstract class QuestionsBlocBase extends Bloc<QuestionsEvent, QuestionsState> {
     required Map<Question, Answer> questionsMap,
     required List<Ticket> tickets,
     required Ticket? selectedTicket,
-    required bool loadsLater,
+    required bool needsToLoadData,
   }) : super(QuestionsState(
           questionsMap: questionsMap,
           tickets: tickets,
           selectedTicket: selectedTicket,
-          isLoading: loadsLater,
+          isLoading: needsToLoadData,
           messageToShow: null,
           modalToShow: null,
           onModalClosed: null,
         )) {
-    on<FillData>(onFillData);
+    on<LoadData>(onLoadData);
     on<FinishPressed>(onFinishPressed);
     on<TicketChanged>(_onTicketChanged);
     on<InputChanged>(_onInputChanged);
 
-    if (loadsLater) {
-      add(FillData());
+    if (needsToLoadData) {
+      add(LoadData());
     }
   }
 
@@ -38,7 +38,7 @@ abstract class QuestionsBlocBase extends Bloc<QuestionsEvent, QuestionsState> {
   final Event event;
 
   @protected
-  void onFillData(FillData event, Emitter<QuestionsState> emit);
+  void onLoadData(LoadData event, Emitter<QuestionsState> emit);
 
   @protected
   void onFinishPressed(FinishPressed event, Emitter<QuestionsState> emit);

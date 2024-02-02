@@ -126,7 +126,6 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
           questionsBloc: QuestionsViewerBloc(
             event: widget.event,
             questionsMap: visitor.questionsMap,
-            tickets: [visitor.ticket],
             selectedTicket: visitor.ticket,
           ),
           title: L10n.current.visitorsInformation,

@@ -14,7 +14,7 @@ class QuestionsFillerBloc extends QuestionsBlocBase {
   QuestionsFillerBloc({
     required super.event,
   }) : super(
-          loadsLater: true,
+          needsToLoadData: true,
           questionsMap: {},
           tickets: [],
           selectedTicket: null,
@@ -23,7 +23,7 @@ class QuestionsFillerBloc extends QuestionsBlocBase {
   final _compoundEventsRepository = locator<CompoundEventsRepository>();
 
   @override
-  void onFillData(FillData event, Emitter<QuestionsState> emit) async {
+  void onLoadData(LoadData event, Emitter<QuestionsState> emit) async {
     final questions = await _compoundEventsRepository.getQuestions(this.event.id);
     if (questions == null) {
       return emit(state.copyWith(isLoading: false));

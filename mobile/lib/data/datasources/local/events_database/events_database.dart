@@ -131,7 +131,7 @@ class EventsDatabase {
     return await _tickets.where().eventIdEqualTo(eventId).findAll();
   }
 
-  Future<TicketCollection?> getTicket(int ticketId) async {
+  Future<TicketCollection?> getTicket(Id ticketId) async {
     return await _tickets.get(ticketId);
   }
 

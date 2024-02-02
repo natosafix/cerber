@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:isar/isar.dart';
 import 'package:project/domain/models/answer.dart';
 
@@ -17,6 +19,11 @@ class AnswerCollection {
     required this.answers,
     required this.questionId,
   });
+
+  AnswerCollection.autoId({
+    required this.answers,
+    required this.questionId,
+  }) : id = Random().nextInt(1 << 32);
 
   static Answer toModel(AnswerCollection answerCollection) {
     return Answer(

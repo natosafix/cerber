@@ -2,7 +2,7 @@ part of 'questions_bloc_base.dart';
 
 sealed class QuestionsEvent {}
 
-final class FillData extends QuestionsEvent {}
+final class LoadData extends QuestionsEvent {}
 
 final class FinishPressed extends QuestionsEvent {}
 

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:project/data/datasources/local/events_database/collections/answer_collection/answer_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/event_collection/event_collection.dart';
@@ -18,7 +17,6 @@ import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/domain/repositories/local_events_repository.dart';
 import 'package:project/utils/locator.dart';
 import 'package:project/utils/result.dart';
-import 'package:uuid/uuid.dart';
 
 class LocalEventsRepositoryImpl implements LocalEventsRepository {
   LocalEventsRepositoryImpl({
@@ -159,12 +157,9 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
     List<FilledAnswer> filledAnswers,
     int eventId,
   ) async {
-    final random = Random.secure();
-
     final answers = [
       for (final filledAnswer in filledAnswers)
-        AnswerCollection(
-          id: random.nextInt(1 << 32),
+        AnswerCollection.autoId(
           answers: filledAnswer.answers,
           questionId: filledAnswer.questionId,
         ),
@@ -172,10 +167,7 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
 
     await _eventsDatabase.addAnswers(answers);
 
-    final uuid = const Uuid().v4();
-
-    final visitor = VisitorCollection(
-      visitorId: uuid,
+    final visitor = VisitorCollection.autoId(
       eventId: eventId,
       answersIds: answers.map((e) => e.id).toList(),
       ticketId: ticketId,
@@ -183,6 +175,6 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
     );
     await _eventsDatabase.addVisitors([visitor]);
 
-    return uuid;
+    return visitor.visitorId;
   }
 }
