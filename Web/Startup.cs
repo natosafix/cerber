@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Robokassa.NET;
+using Robokassa;
 using Web.Extensions;
 using Web.Mapping;
 using Web.Middlewares;
@@ -98,6 +98,12 @@ public class Startup
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
         services.AddSwaggerGen();
+
+        services.AddRobokassa(
+            config["RobokassaOptions:ShopName"]!, 
+            config["RobokassaOptions:Password1"]!,
+            config["RobokassaOptions:Password2"]!, 
+            true);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
