@@ -9,11 +9,11 @@ namespace Web.Services.Implementations;
 public class MailService : IMailService
 {
     public const string FromName = "Cerber";
-    private readonly EmailCredentials credentials;
+    private readonly SmtpSettings settings;
     
     public MailService(IConfiguration configuration)
     {
-        credentials = configuration.GetSection("EmailCredentials").Get<EmailCredentials>();
+        settings = configuration.GetSection("SmtpSettings").Get<SmtpSettings>();
     }
 
     public async Task SendWithImageAttachments(
@@ -24,7 +24,7 @@ public class MailService : IMailService
         IEnumerable<ImageInfo> imageInfos)
     {
         var message = new MimeMessage();
-        message.From.Add(new MailboxAddress(FromName, credentials.Email));
+        message.From.Add(new MailboxAddress(FromName, settings.Email));
         message.To.Add(new MailboxAddress(username, email));
         message.Subject = subject;
 
@@ -48,8 +48,8 @@ public class MailService : IMailService
         
         using (var client = new SmtpClient())
         {
-            await client.ConnectAsync(host: "smtp.yandex.ru", port: 465, useSsl: true);
-            await client.AuthenticateAsync(userName: credentials.Email, password: credentials.Password);
+            await client.ConnectAsync(host: settings.Server, port: settings.ServerPort, useSsl: true);
+            await client.AuthenticateAsync(userName: settings.Email, password: settings.Password);
             await client.SendAsync(message);
             await client.DisconnectAsync(quit: true);
         }

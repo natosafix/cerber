@@ -2,6 +2,10 @@
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Robokassa;
+using Robokassa.Enums;
+using Robokassa.Exceptions;
+using Robokassa.Models;
 using Web.Dtos.Request;
 using Web.Dtos.Response;
 using Web.Services;
@@ -15,16 +19,18 @@ public class OrdersController : Controller
     private readonly IOrdersService ordersService;
     private readonly ITicketsService ticketsService;
     private readonly IAuthService authService;
+    private readonly IRobokassaService robokassaService;
     private readonly IUserHelper userHelper;
     private readonly IMapper mapper;
     
-    public OrdersController(IOrdersService ordersService, IMapper mapper, ITicketsService ticketsService, IAuthService authService, IUserHelper userHelper)
+    public OrdersController(IOrdersService ordersService, IMapper mapper, ITicketsService ticketsService, IAuthService authService, IUserHelper userHelper, IRobokassaService robokassaService)
     {
         this.ordersService = ordersService;
         this.mapper = mapper;
         this.ticketsService = ticketsService;
         this.authService = authService;
         this.userHelper = userHelper;
+        this.robokassaService = robokassaService;
     }
 
     [Authorize("MustInspectOrder")]    
@@ -51,7 +57,43 @@ public class OrdersController : Controller
             return BadRequest(ModelState);
         
         var order = await ordersService.Create(mapper.Map<Order>(createOrderDto));
-        return Ok(mapper.Map<OrderResponseDto>(order));
+        var receipt = new RobokassaReceiptRequest(
+            SnoType.Patent,
+            new List<ReceiptOrderItem>
+            {
+                new(order.Ticket.Name, 1, order.Ticket.Price, Tax.Vat110, PaymentMethod.FullPayment,
+                    PaymentObject.Payment)
+            });
+        var customFields = new CustomShpParameters();
+        customFields.Add("customer", order.Customer.ToString());
+        
+        return Ok(robokassaService.GenerateAuthLink(receipt.TotalPrice, receipt, customFields));
+    }
+    
+    [AllowAnonymous]
+    [HttpPost("paymentResult")]
+    public async Task<IActionResult> ProcessPaymentResult(
+        [FromServices] IRobokassaPaymentValidator robokassaPaymentValidator,
+        [FromForm] RobokassaCallbackRequest request,
+        [FromForm(Name = "Shp_customer")] string customer)
+    {
+        try
+        {
+            robokassaPaymentValidator.CheckResult(
+                request.OutSum,
+                request.InvId,
+                request.SignatureValue,
+                new KeyValuePair<string, string>("Shp_customer", customer)
+            );
+
+            await ordersService.SetPaid(Guid.Parse(customer));
+        }
+        catch (RobokassaBaseException)
+        {
+            //TODO: _log.Error(e.Message);
+        }
+
+        return Content($"OK{request.InvId}");
     }
     
     [HttpPost("byInspector")]
