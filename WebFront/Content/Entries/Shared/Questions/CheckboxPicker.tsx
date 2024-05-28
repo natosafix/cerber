@@ -5,11 +5,12 @@ import { Label } from '../Label/Label';
 import { ValidationWrapper } from '@skbkontur/react-ui-validations';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
+import { Size } from '../../../Utility/Constants';
 
 interface CheckboxPickerProps {
     title: string;
     variants: string[];
-    size?: 'small' | 'medium' | 'large';
+    size?: Size;
     onValueChange: (checked: string[]) => void;
 }
 
@@ -21,17 +22,11 @@ function validateChosen(checked: number[]): Nullable<ValidationInfo> {
     return null;
 }
 
-export const CheckboxPicker: React.FC<CheckboxPickerProps> = (
-    {
-        variants,
-        title,
-        size = 'large',
-        onValueChange,
-    }) => {
+export const CheckboxPicker: React.FC<CheckboxPickerProps> = ({ variants, title, size = 'large', onValueChange }) => {
     const [checked, setChecked] = useState<number[]>([]);
 
-    let checkboxRefs = variants.map(_ => useRef<Checkbox | null>(null));
-    let checkboxInstances = variants.map(_ => React.useRef<Checkbox>(null));
+    let checkboxRefs = variants.map((_) => useRef<Checkbox | null>(null));
+    let checkboxInstances = variants.map((_) => React.useRef<Checkbox>(null));
 
     const changeChecked = (v: boolean, id: number) => {
         const checkedIdx = checked.indexOf(id);
@@ -64,12 +59,13 @@ export const CheckboxPicker: React.FC<CheckboxPickerProps> = (
             <Gapped gap={5} vertical={true}>
                 {variants.map((variant, i) => (
                     <ValidationWrapper validationInfo={validateChosen(checked)}>
-                        <Checkbox key={i}
-                                  ref={checkboxInstances[i]}
-                                  checked={checked.includes(i)}
-                                  value={variant}
-                                  onValueChange={(v) => changeChecked(v, i)}
-                                  size={size}
+                        <Checkbox
+                            key={i}
+                            ref={checkboxInstances[i]}
+                            checked={checked.includes(i)}
+                            value={variant}
+                            onValueChange={(v) => changeChecked(v, i)}
+                            size={size}
                         >
                             {variant}
                         </Checkbox>

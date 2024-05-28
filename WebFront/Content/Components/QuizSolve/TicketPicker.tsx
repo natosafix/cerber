@@ -36,8 +36,8 @@ export const TicketPicker: React.FC<TicketPickerProps> = ({ tickets, onTicketCha
                 <ValidationWrapper validationInfo={validateChosenTicket(value)}>
                     <RadioGroup onValueChange={onRadioChange} value={value}>
                         <Gapped vertical gap={20}>
-                            {tickets.map((ticket) => (
-                                <Radio value={ticket.id}>
+                            {tickets.map((ticket, index) => (
+                                <Radio key={index} value={ticket.id}>
                                     <Gapped vertical gap={5}>
                                         {ticket.name}
                                         <div style={{ opacity: 0.5 }}>

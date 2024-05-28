@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {Events} from './Events';
-import { useEvents } from './event-context';
-import styles from './eventPreview.scss';
-import { EventCreateButton } from '../../Components/eventPreview/createDraftButton/createDraftButton';
+import { Events } from './Events';
+import { useEvents } from './EventContext';
+import styles from './EventPreview.scss';
+import { EventCreateButton } from './CreateDraftButton/CreateDraftButton';
 
 export const EventPreview = () => {
     const { events, fetchEvents } = useEvents();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -47,9 +47,11 @@ export const EventPreview = () => {
 
     return (
         <div ref={containerRef} className={styles.eventPreviewContainer}>
-            <EventCreateButton/>
-            <Events events={events} />
-            <div className={styles.bottomDev}/>
+            <EventCreateButton />
+
+            <Events loading={loading} events={events} />
+
+            <div className={styles.bottomDev} />
         </div>
     );
 };

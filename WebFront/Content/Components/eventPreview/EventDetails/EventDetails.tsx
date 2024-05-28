@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { getEvent } from '../services/events';
-import { IEvent } from '../models';
-import styles from './eventDetails.scss';
+import { getEvent } from '../Services/Events';
+import { IEvent } from '../Models/IEvent';
+import styles from './EventDetails.scss';
 import { InspectorEditor } from '../InspectorsEditor/InspectorEditor';
 import { Gapped } from '@skbkontur/react-ui';
 import { Label } from '../../../Entries/Shared/Label/Label';
-import { Button } from "@skbkontur/react-ui";
-import { getUserInfo } from "../../../Helpers/UserInfoHelper";
+import { Button } from '@skbkontur/react-ui';
+import { getUserInfo } from '../../../Helpers/UserInfoHelper';
+import { Route } from '../../../Utility/Constants';
 
 export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
     const [event, setEvent] = useState<IEvent | null>(null);
@@ -25,9 +26,7 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
                         setImgSrc(imgSrc);
                     }
                 }
-            } catch (error) {
-                console.error(error);
-            }
+            } catch (error) {}
         };
 
         fetchEventDetailsAndCover();
@@ -36,11 +35,10 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
         if (userInfo) {
             setUserId(userInfo.id);
         }
-        
     }, [id]);
 
     const handleClickButton = () => {
-        window.location.href = `/quiz/solve/${id}`;
+        window.location.href = Route.QUIZ(id);
     };
 
     if (!event) {
@@ -50,13 +48,10 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
         <div className={styles.pageWrapper}>
             <div className={styles.eventWrapper}>
                 <Gapped vertical gap={30}>
-                    <div className={styles.imgWrapper}>
-                        {imgSrc && <img src={imgSrc} alt={event.name} />}
-                    </div>
+                    <div className={styles.imgWrapper}>{imgSrc && <img src={imgSrc} alt={event.name} />}</div>
 
                     <div className={styles.contentWrapper}>
                         <Gapped vertical gap={30}>
-
                             <Gapped vertical gap={10}>
                                 <Label label={event.name} size={'large'} />
                                 <div style={{ opacity: 0.5 }}>
@@ -70,8 +65,10 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
                                 ))}
                             </Gapped>
 
-                            {userId === event.ownerId && <InspectorEditor  event={event}/>}
-                            <Button size={"large"} use="success" onClick={handleClickButton}>Заполнить анкету</Button>
+                            {userId === event.ownerId && <InspectorEditor event={event} />}
+                            <Button size={'large'} use="success" onClick={handleClickButton}>
+                                Заполнить анкету
+                            </Button>
                         </Gapped>
                     </div>
                 </Gapped>

@@ -4,10 +4,12 @@ import { ValidationWrapper } from '@skbkontur/react-ui-validations';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
 import { Label } from '../Label/Label';
+import { Size } from '../../../Utility/Constants';
+import { isNullOrWhiteSpace } from '../../../Utility/HelperFunctions';
 
 interface Props {
     title: string;
-    size?: 'small' | 'medium' | 'large';
+    size?: Size;
     onValueChange: (value: Date) => void;
     defaultValue: Date | null;
 }
@@ -33,10 +35,6 @@ function getTimeStr(date: Date | null): string | undefined {
     const minutes = ('0' + date.getMinutes()).slice(-2);
 
     return `${hours}:${minutes}`;
-}
-
-function isNullOrWhiteSpace(v: string | undefined) {
-    return !v || v.trim() === '';
 }
 
 function validateTime(timeValue: string | undefined, dateTimeValue: Date | null): Nullable<ValidationInfo> {
@@ -70,15 +68,15 @@ function validateDate(dateValue: string | undefined, dateTimeValue: Date | null)
 }
 
 export const DateTimeQuestion: React.FC<Props> = ({ title, defaultValue, onValueChange, size = 'large' }) => {
-    const [dateTimeValue, setDateTimeValue] = useState(defaultValue);
-    const [dateValue, setDateValue] = useState(getDateStr(defaultValue));
-    const [timeValue, setTimeValue] = useState(getTimeStr(defaultValue));
+    const [dateTimeValue, setDateTimeValue] = useState<Date>(defaultValue ?? new Date());
+    const [dateValue, setDateValue] = useState(defaultValue === null ? '' : getDateStr(defaultValue));
+    const [timeValue, setTimeValue] = useState(defaultValue === null ? '' : getTimeStr(defaultValue));
 
     const onDatePickerChange = (v: string) => {
         setDateValue(v);
 
-        const [day, month, year] = v.split('.').map(i => Number(i));
-        const [hours, minutes] = timeValue?.split(':')?.map(i => Number(i)) ?? [null, null];
+        const [day, month, year] = v.split('.').map((i) => Number(i));
+        const [hours, minutes] = timeValue?.split(':')?.map((i) => Number(i)) ?? [null, null];
 
         // @ts-ignore
         // пишет, что Date в часах и минутах принимает number | undefined, но это фейк, так дата не может распарситься
@@ -98,7 +96,7 @@ export const DateTimeQuestion: React.FC<Props> = ({ title, defaultValue, onValue
         if (!dateTimeValue) {
             return;
         }
-        const [hours, minutes] = v.split(':').map(i => Number(i));
+        const [hours, minutes] = v.split(':').map((i) => Number(i));
 
         const year = dateTimeValue.getFullYear();
         const month = dateTimeValue.getMonth();
@@ -118,9 +116,12 @@ export const DateTimeQuestion: React.FC<Props> = ({ title, defaultValue, onValue
             <Label label={title} size={size} />
             <Gapped>
                 <ValidationWrapper validationInfo={validateDate(dateValue, dateTimeValue)}>
-                    <DatePicker value={dateValue}
-                                onValueChange={onDatePickerChange}
-                                minDate={getDateStr(new Date())} />
+                    <DatePicker
+                        value={dateValue}
+                        onValueChange={onDatePickerChange}
+                        minDate={getDateStr(new Date())}
+                        width="auto"
+                    />
                 </ValidationWrapper>
                 <ValidationWrapper validationInfo={validateTime(timeValue, dateTimeValue)}>
                     <Input value={timeValue} onValueChange={onTimeChange} type={'time'} width={100} />

@@ -6,16 +6,14 @@ import { Label } from '../Label/Label';
 import { ValidationWrapper } from '@skbkontur/react-ui-validations';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
+import { Size } from '../../../Utility/Constants';
+import { isNullOrWhiteSpace } from '../../../Utility/HelperFunctions';
 
 interface IMultiStringQuestion {
     title: string;
-    size?: 'small' | 'medium' | 'large';
+    size?: Size;
     onValueChange?: (value: string) => void;
     defaultValue?: string;
-}
-
-function isNullOrWhiteSpace(v: string) {
-    return !v || v.trim() === '';
 }
 
 function validate(value: string): Nullable<ValidationInfo> {
@@ -26,33 +24,25 @@ function validate(value: string): Nullable<ValidationInfo> {
     return null;
 }
 
-export const MultiStringQuestion: React.FC<IMultiStringQuestion> = (
-    {
-        title,
-        size = 'large',
-        onValueChange = null,
-        defaultValue = '',
-    }) => {
-    const [value, setValue] = useState(defaultValue);
+export const MultiStringQuestion: React.FC<IMultiStringQuestion> = ({
+    title,
+    size = 'large',
+    onValueChange = null,
+    defaultValue = '',
+}) => {
+    const [value, setValue] = useState(defaultValue ?? '');
 
     const changeValue = (v: string) => {
         setValue(v);
-        if (onValueChange) {
-            onValueChange(v);
-        }
+        onValueChange && onValueChange(v);
     };
 
     return (
         <Gapped gap={Number.parseInt(variables.titleContentGap)} vertical={true} className={styles.questionInput}>
             <Label label={title} size={size} />
             <ValidationWrapper validationInfo={validate(value)}>
-                <Textarea width={'100%'}
-                          value={value}
-                          onValueChange={changeValue}
-                          maxRows={50}
-                          autoResize={true} />
+                <Textarea width={'100%'} value={value} onValueChange={changeValue} maxRows={50} autoResize={true} />
             </ValidationWrapper>
-
         </Gapped>
     );
 };

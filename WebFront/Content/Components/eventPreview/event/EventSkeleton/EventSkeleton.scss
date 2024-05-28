@@ -1,4 +1,4 @@
-﻿.eventWrapper {
+.eventWrapper {
   overflow: hidden;
   width: 450px;
   height: 400px;
@@ -14,8 +14,8 @@
   border-radius: 25px;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   justify-self: start;
+  cursor: pointer;
 }
-
 
 .imgWrapper {
   flex: 1;
@@ -37,7 +37,6 @@
   color: black;
   border-radius: 25px;
   align-content: center;
-  
 }
 
 .textWrapper .place {
@@ -51,6 +50,7 @@
   margin: 0;
   font-weight: bolder;
 }
+
 .textWrapper .time {
   color: #808080;
   padding-top: 4px;
@@ -71,4 +71,12 @@
 
 .eventWrapper:hover {
   box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+}
+
+.eventsWrapper {
+  margin-left: 5%;
+  margin-right: 5%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }

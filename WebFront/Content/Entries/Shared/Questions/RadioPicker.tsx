@@ -5,11 +5,12 @@ import { Label } from '../Label/Label';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
 import { ValidationWrapper } from '@skbkontur/react-ui-validations';
+import { Size } from '../../../Utility/Constants';
 
 interface RadioPickerProps {
     title: string;
     variants: string[];
-    size?: 'small' | 'medium' | 'large';
+    size?: Size;
     onValueChange: (picked: string) => void;
 }
 
@@ -21,13 +22,7 @@ function validateChosenVariant(value?: string): Nullable<ValidationInfo> {
     return null;
 }
 
-export const RadioPicker: React.FC<RadioPickerProps> = (
-    {
-        variants,
-        title,
-        size = 'large',
-        onValueChange,
-    }) => {
+export const RadioPicker: React.FC<RadioPickerProps> = ({ variants, title, size = 'large', onValueChange }) => {
     const [value, setValue] = useState<string>();
 
     const onRadioChange = (v: string) => {
@@ -42,7 +37,7 @@ export const RadioPicker: React.FC<RadioPickerProps> = (
                 <RadioGroup onValueChange={onRadioChange} value={value}>
                     <Gapped gap={5} vertical={true}>
                         {variants.map((variant, i) => (
-                            <Radio value={variant} size={size}>
+                            <Radio value={variant} size={size} key={i}>
                                 {variant}
                             </Radio>
                         ))}

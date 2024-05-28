@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import styles from './events.scss';
+import styles from './Events.scss';
 import Event from './event/Event';
+import { IEvent } from './Models/IEvent';
+import { CardSkeleton } from './event/EventSkeleton/EventSkeleton';
 
-export const Events = ({ events }) => {
+interface IEventsProps {
+    events: IEvent[];
+    loading: boolean;
+}
+export const Events: React.FC<IEventsProps> = ({ events, loading }) => {
     return (
         <div className={styles.eventsWrapper}>
-            {events?.map((event) => (
-                <Event event={event} key={event.id} />
-            ))}
+            <div className={styles.events}>
+                {events?.map((event) => <Event event={event} key={event.id} />)}
+                {loading && <CardSkeleton cards={6} />}
+            </div>
         </div>
     );
 };
-
