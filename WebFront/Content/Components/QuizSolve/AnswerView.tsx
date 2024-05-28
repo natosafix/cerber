@@ -13,39 +13,47 @@ interface AnswerProps {
 }
 
 export const AnswerView: React.FC<AnswerProps> = ({ answer, onAnswerChange }) => {
+    const onValueChangeArray = (v: string[]) => {
+        return onAnswerChange(answer.withContent(v));
+    };
+
+    const onValueChange = (v: string) => {
+        return onAnswerChange(answer.withContent([v]));
+    };
+
     return (
         <div className={styles.answerWrapper}>
             {
                 answer.Question.type === QuestionTypes.SingleString && (
-                    <SingleStringQuestion title={answer.Question.title} 
-                                          size={'small'} 
-                                          onValueChange={(v) => onAnswerChange(answer.withContent([v]))}
+                    <SingleStringQuestion title={answer.Question.title}
+                                          size={'small'}
+                                          onValueChange={onValueChange}
                     />
                 )
             }
             {
                 answer.Question.type === QuestionTypes.MultiString && (
-                    <MultiStringQuestion title={answer.Question.title} 
+                    <MultiStringQuestion title={answer.Question.title}
                                          size={'small'}
-                                         onValueChange={(v) => onAnswerChange(answer.withContent([v]))}
+                                         onValueChange={onValueChange}
                     />
                 )
             }
             {
                 answer.Question.type === QuestionTypes.OneSelection && (
-                    <RadioPicker title={answer.Question.title} 
-                                 variants={answer.Question.answerChoices} 
+                    <RadioPicker title={answer.Question.title}
+                                 variants={answer.Question.answerChoices}
                                  size={'small'}
-                                 onValueChange={(v) => onAnswerChange(answer.withContent([v]))}
+                                 onValueChange={onValueChange}
                     />
                 )
             }
             {
                 answer.Question.type === QuestionTypes.MultipleSelection && (
-                    <CheckboxPicker title={answer.Question.title} 
-                                    variants={answer.Question.answerChoices} 
+                    <CheckboxPicker title={answer.Question.title}
+                                    variants={answer.Question.answerChoices}
                                     size={'small'}
-                                    onValueChange={(v) => onAnswerChange(answer.withContent(v))}
+                                    onValueChange={onValueChangeArray}
                     />
                 )
             }

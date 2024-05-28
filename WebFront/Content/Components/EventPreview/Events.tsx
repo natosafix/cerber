@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './Events.scss';
-import Event from './event/Event';
+import Event from './Event/Event';
 import { IEvent } from './Models/IEvent';
-import { CardSkeleton } from './event/EventSkeleton/EventSkeleton';
+import { CardSkeleton } from './Event/EventSkeleton/EventSkeleton';
 
 interface IEventsProps {
     events: IEvent[];

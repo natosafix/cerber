@@ -27,7 +27,7 @@ public class UsersRepository : IUsersRepository
     public async Task<List<string>> Find(string username)
     {
         return await dbContext.Users
-            .Where(u => u.UserName.StartsWith(username))
+            .Where(u => u.UserName.ToLower().StartsWith(username.ToLower()))
             .Take(5)
             .Select(u => u.UserName)
             .ToListAsync();

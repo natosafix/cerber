@@ -58,7 +58,7 @@ export const CheckboxPicker: React.FC<CheckboxPickerProps> = ({ variants, title,
             <Label label={title} size={size} />
             <Gapped gap={5} vertical={true}>
                 {variants.map((variant, i) => (
-                    <ValidationWrapper validationInfo={validateChosen(checked)}>
+                    <ValidationWrapper validationInfo={validateChosen(checked)} key={i}>
                         <Checkbox
                             key={i}
                             ref={checkboxInstances[i]}
