@@ -5,9 +5,9 @@ import 'package:project/presentation/authentication/authentication_form/shared/a
 import 'package:project/presentation/authentication/authentication_form/shared/authentication_screen_base.dart';
 import 'package:project/presentation/authentication/authentication_form/widget_inputs/email_input.dart';
 import 'package:project/presentation/authentication/authentication_form/widget_inputs/password_input.dart';
-import 'package:project/presentation/authentication/authentication_form/shared/finish_button_widget.dart';
 import 'package:project/presentation/authentication/authentication_form/widget_inputs/name_input.dart';
 import 'package:project/presentation/authentication/authentication_form/signup/signup_bloc/signup_bloc.dart';
+import 'package:project/presentation/widgets/full_width_button.dart';
 import 'package:project/utils/extensions/context_x.dart';
 import 'package:project/utils/keyboard_utils.dart';
 
@@ -44,11 +44,11 @@ class SignupScreen extends StatelessWidget {
                   onChanged: (value) => context.read<SignupBloc>().add(PasswordChanged(value)),
                 ),
                 const SizedBox(height: 20),
-                FinishButtonWigdet(
-                  text: L10n.current.signUp,
+                FullWidthButton.withLoading(
                   isEnabled: state.isFinishButtonEnabled,
                   showLoadingIndicator: state.showLoadingIndicator,
                   onPressed: () => context.read<SignupBloc>().add(FinishPressed()),
+                  child: Text(L10n.current.signUp),
                 ),
               ],
             );

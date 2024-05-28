@@ -7,7 +7,6 @@ import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/event_detail/event_detail_sliver_app_bar.dart';
 import 'package:project/presentation/event_detail/event_detail_bloc/event_detail_bloc.dart';
 import 'package:project/presentation/qr_code_scanner/qr_code_scanner_screen.dart';
-import 'package:project/presentation/widgets/circular_progress_indicator_inbutton.dart';
 import 'package:project/presentation/widgets/full_width_button.dart';
 import 'package:project/utils/extensions/context_x.dart';
 
@@ -72,6 +71,7 @@ class EventDetailScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 18),
                     BlocBuilder<EventDetailBloc, EventDetailState>(
+                      buildWhen: (previous, current) => previous.lastDownloaded != current.lastDownloaded,
                       builder: (context, state) {
                         final date = state.lastDownloaded;
                         if (date == null) {
@@ -89,16 +89,16 @@ class EventDetailScreen extends StatelessWidget {
                         final isDownloading = state.isDownloading;
                         return Column(
                           children: [
-                            FullWidthButton(
-                              onPressed:
-                                  isDownloading ? null : () => context.read<EventDetailBloc>().add(DownloadDatabase()),
-                              child: isDownloading
-                                  ? const CircularProgressIndicatorInbutton()
-                                  : Text(L10n.current.downloadDatabase),
+                            FullWidthButton.withLoading(
+                              isEnabled: !isDownloading,
+                              showLoadingIndicator: isDownloading,
+                              onPressed: () => context.read<EventDetailBloc>().add(DownloadDatabase()),
+                              child: Text(L10n.current.downloadDatabase),
                             ),
                             const SizedBox(width: 10),
                             FullWidthButton(
-                              onPressed: isDownloading ? null : () => _startCheckingPressed(context),
+                              isEnabled: !isDownloading,
+                              onPressed: () => _startCheckingPressed(context),
                               child: Text(L10n.current.beginChecking),
                             ),
                           ],
