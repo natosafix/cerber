@@ -1,11 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cache_manager_dio/flutter_cache_manager_dio.dart';
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/repositories/compound_events_repository/download_status.dart';
 import 'package:project/l10n/generated/l10n.dart';
+import 'package:project/presentation/event_detail/event_detail_sliver_app_bar.dart';
 import 'package:project/presentation/event_detail/event_detail_bloc/event_detail_bloc.dart';
 import 'package:project/presentation/qr_code_scanner/qr_code_scanner_screen.dart';
 import 'package:project/presentation/widgets/circular_progress_indicator_inbutton.dart';
@@ -29,48 +28,7 @@ class EventDetailScreen extends StatelessWidget {
         body: CustomScrollView(
           physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           slivers: [
-            SliverAppBar(
-              backgroundColor: Colors.transparent,
-              stretch: true,
-              expandedHeight: 250,
-              collapsedHeight: kToolbarHeight * 2,
-              flexibleSpace: FlexibleSpaceBar(
-                stretchModes: const [
-                  StretchMode.zoomBackground,
-                  StretchMode.fadeTitle,
-                ],
-                centerTitle: true,
-                titlePadding: const EdgeInsets.all(8),
-                title: Text(event.name),
-                background: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    event.photoUrl != null
-                        ? CachedNetworkImage(
-                            cacheManager: DioCacheManager.instance,
-                            imageUrl: event.photoUrl!,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.asset(
-                            'assets/no_image.png',
-                            fit: BoxFit.cover,
-                          ),
-                    const DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment(0, 4),
-                          end: Alignment.center,
-                          colors: [
-                            Color(0xFF000000),
-                            Color(0x00000000),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            EventDetailSliverAppBar(event: event),
             SliverPadding(
               padding: const EdgeInsets.all(15),
               sliver: SliverList(
