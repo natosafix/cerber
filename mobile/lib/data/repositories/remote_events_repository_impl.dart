@@ -79,12 +79,12 @@ class RemoteEventsRepositoryImpl implements RemoteEventsRepository {
   }
 
   @override
-  Future<List<Question>?> getQuestions(int eventId) async {
+  Future<Result<List<Question>, Exception>> getQuestions(int eventId) async {
     try {
       final questionsApi = await _eventsService.getQuestions(eventId);
-      return questionsApi.map((e) => e.toModel()).toList();
-    } on DioException catch (_) {
-      return null;
+      return Success(questionsApi.map((e) => e.toModel()).toList());
+    } on DioException catch (e) {
+      return Failure(e);
     }
   }
 

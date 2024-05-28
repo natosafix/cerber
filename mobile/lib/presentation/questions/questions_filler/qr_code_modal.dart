@@ -5,8 +5,8 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 class QrCodeModal extends StatelessWidget {
   const QrCodeModal({
-    required this.qrCodeData,
     super.key,
+    required this.qrCodeData,
   });
 
   final String qrCodeData;

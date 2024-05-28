@@ -15,7 +15,7 @@ abstract class EventsRepository {
 
   Future<Visitor?> findVisitor(String visitorId, int eventId);
 
-  Future<List<Question>?> getQuestions(int eventId);
+  Future<Result<List<Question>, Exception>> getQuestions(int eventId);
 
   Future<List<Ticket>?> getTickets(int eventId);
   

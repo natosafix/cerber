@@ -1,18 +1,18 @@
-part of 'questions_bloc_base.dart';
+part of 'questions_filler_bloc.dart';
 
-sealed class QuestionsEvent {}
+sealed class QuestionsFillerEvent {}
 
-final class LoadData extends QuestionsEvent {}
+final class LoadData extends QuestionsFillerEvent {}
 
-final class FinishPressed extends QuestionsEvent {}
+final class FinishPressed extends QuestionsFillerEvent {}
 
-final class TicketChanged extends QuestionsEvent {
+final class TicketChanged extends QuestionsFillerEvent {
   final Ticket ticket;
 
-  TicketChanged({required this.ticket});
+  TicketChanged(this.ticket);
 }
 
-sealed class InputChanged extends QuestionsEvent {
+sealed class InputChanged extends QuestionsFillerEvent {
   final Question question;
 
   InputChanged({required this.question});
@@ -38,11 +38,11 @@ final class RadioChanged extends InputChanged {
 
 final class CheckboxChanged extends InputChanged {
   final String value;
-  final bool selected;
+  final bool isSelected;
 
   CheckboxChanged({
     required super.question,
     required this.value,
-    required this.selected,
+    required this.isSelected,
   });
 }

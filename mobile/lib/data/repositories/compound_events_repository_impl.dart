@@ -104,14 +104,14 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
     await localEventsRepository.deleteVisitors(eventId);
     await localEventsRepository.saveVisitors(visitors, eventId);
 
-    final questions = await remoteEventsRepository.getQuestions(eventId);
+    final getQuestionsResult = await remoteEventsRepository.getQuestions(eventId);
 
-    if (questions == null) {
+    if (getQuestionsResult.isFailure) {
       return status.add(DownloadStatus.failure);
     }
 
     await localEventsRepository.deleteQuestions(eventId);
-    await localEventsRepository.saveQuestions(questions, eventId);
+    await localEventsRepository.saveQuestions(getQuestionsResult.success, eventId);
 
     final tickets = await remoteEventsRepository.getTickets(eventId);
 
@@ -126,7 +126,7 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
   }
 
   @override
-  Future<List<Question>?> getQuestions(int eventId) async {
+  Future<Result<List<Question>, Exception>> getQuestions(int eventId) async {
     if (await _networkAvailable()) {
       return await remoteEventsRepository.getQuestions(eventId);
     }

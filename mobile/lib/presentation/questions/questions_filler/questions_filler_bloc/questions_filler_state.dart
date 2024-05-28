@@ -1,41 +1,37 @@
-part of 'questions_bloc_base.dart';
+part of 'questions_filler_bloc.dart';
 
-class QuestionsState {
+final class QuestionsFillerState {
   final Map<Question, Answer> questionsMap;
   final List<Ticket> tickets;
-  final Ticket? selectedTicket;
-  final bool isLoading;
+  Ticket? selectedTicket;
+  final QuestionsLoadingStatus questionsLoadingStatus;
   final String? messageToShow;
-  final Widget? modalToShow;
-  final void Function(BuildContext)? onModalClosed;
+  final QrCodeData? generatedQrCodeData;
 
-  QuestionsState({
+  QuestionsFillerState({
     required this.questionsMap,
     required this.tickets,
     required this.selectedTicket,
-    required this.isLoading,
+    required this.questionsLoadingStatus,
     required this.messageToShow,
-    required this.modalToShow,
-    required this.onModalClosed,
+    required this.generatedQrCodeData,
   });
 
-  QuestionsState copyWith({
+  QuestionsFillerState copyWith({
     Map<Question, Answer>? questionsMap,
     List<Ticket>? tickets,
     Ticket? selectedTicket,
-    bool? isLoading,
+    QuestionsLoadingStatus? questionsLoadingStatus,
     ValueGetter<String?>? messageToShow,
-    Widget? modalToShow,
-    void Function(BuildContext)? onModalClosed,
+    QrCodeData? generatedQrCodeData,
   }) {
-    return QuestionsState(
+    return QuestionsFillerState(
       questionsMap: questionsMap ?? this.questionsMap,
       tickets: tickets ?? this.tickets,
       selectedTicket: selectedTicket ?? this.selectedTicket,
-      isLoading: isLoading ?? this.isLoading,
+      questionsLoadingStatus: questionsLoadingStatus ?? this.questionsLoadingStatus,
       messageToShow: messageToShow != null ? messageToShow() : this.messageToShow,
-      modalToShow: modalToShow ?? this.modalToShow,
-      onModalClosed: onModalClosed ?? this.onModalClosed,
+      generatedQrCodeData: generatedQrCodeData ?? this.generatedQrCodeData,
     );
   }
 }

@@ -5,9 +5,8 @@ import 'package:project/domain/models/event.dart';
 import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/qr_code_scanner/qr_code_scanner_bloc/qr_code_scanner_bloc.dart';
 import 'package:project/presentation/qr_code_scanner/scanner_overlay/scanner_overlay.dart';
-import 'package:project/presentation/questions/questions_bloc/impls/questions_filler_bloc.dart';
-import 'package:project/presentation/questions/questions_bloc/impls/questions_viewer_bloc.dart';
-import 'package:project/presentation/questions/questions_screen/questions_screen.dart';
+import 'package:project/presentation/questions/questions_filler/questions_filler_screen.dart';
+import 'package:project/presentation/questions/questions_viewer/questions_viewer_screen.dart';
 import 'package:project/presentation/widgets/flat_app_bar.dart';
 import 'package:project/utils/extensions/context_x.dart';
 import 'package:vibration/vibration.dart';
@@ -53,9 +52,7 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
     );
 
     return BlocProvider(
-      create: (context) => QrCodeScannerBloc(
-        event: widget.event,
-      ),
+      create: (context) => QrCodeScannerBloc(event: widget.event),
       child: BlocListener<QrCodeScannerBloc, QrCodeScannerState>(
         listener: _stateChanged,
         child: Scaffold(
@@ -122,69 +119,34 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
   void _stateChanged(BuildContext context, QrCodeScannerState scannerState) {
     switch (scannerState) {
       case VisitorExists(visitor: final visitor):
-        final screen = QuestionsScreen(
-          questionsBloc: QuestionsViewerBloc(
-            event: widget.event,
-            questionsMap: visitor.questionsMap,
-            selectedTicket: visitor.ticket,
-          ),
-          title: L10n.current.visitorsInformation,
-          ticketLabel: L10n.current.ticket,
-          questionsLabel: L10n.current.form,
-          finishButtonText: null,
-          allowEdit: false,
-          postFrameCallback: (context) {
-            if (visitor.qrCodeScannedTime == null) return;
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text(L10n.current.qrCodeAlreadyBeenScanned),
-                  actions: [
-                    TextButton(
-                      child: const Text("OK"),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
+        final screen = QuestionsViewerScreen(
+          questionsMap: visitor.questionsMap,
+          selectedTicket: visitor.ticket,
+          isQrCodeAlreadyScanned: visitor.qrCodeScannedTime != null,
         );
-        _pushQuestionsScreen(screen);
+        _pushScreen(screen);
       case NoSuchVisitorExists():
         _showMessage(L10n.current.failedToFindSuchVisitor);
       case BoughtTicketOnSpot():
         _showMessage(L10n.current.boughtTicketOnSpot);
-      case InitialState():
-        break;
       case BadQrCodeFormat():
         _showMessage(L10n.current.badQrCodeFormat);
       case FailedToReadQrCode():
         _showMessage(L10n.current.failedToReadQrCode);
+      case InitialState():
+        break;
     }
   }
 
   void _addPressed(BuildContext context) {
-    final screen = QuestionsScreen(
-      questionsBloc: QuestionsFillerBloc(
-        event: widget.event,
-      ),
-      title: L10n.current.addNewVisitor,
-      ticketLabel: L10n.current.chooseTicket,
-      questionsLabel: L10n.current.fillTheForm,
-      finishButtonText: L10n.current.save,
-      allowEdit: true,
-    );
-    _pushQuestionsScreen(screen);
+    final screen = QuestionsFillerScreen(event: widget.event);
+    _pushScreen(screen);
   }
 
-  void _pushQuestionsScreen(QuestionsScreen questionsScreen) async {
+  void _pushScreen(Widget screen) async {
     scannerController.stop();
     await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => questionsScreen,
-      ),
+      MaterialPageRoute(builder: (context) => screen),
     );
     scannerController.start();
   }

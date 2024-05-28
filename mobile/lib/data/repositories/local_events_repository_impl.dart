@@ -113,9 +113,9 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
   }
 
   @override
-  Future<List<Question>> getQuestions(int eventId) async {
+  Future<Result<List<Question>, Exception>> getQuestions(int eventId) async {
     final questions = await _eventsDatabase.getQuestions(eventId);
-    return questions.map((e) => QuestionCollection.toModel(e)).toList();
+    return Success(questions.map((e) => QuestionCollection.toModel(e)).toList());
   }
 
   @override
