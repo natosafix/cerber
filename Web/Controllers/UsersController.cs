@@ -16,8 +16,8 @@ public class UsersController : Controller
     }
 
     [HttpGet("")]
-    public async Task<IActionResult> FindUser([FromQuery] string username)
+    public async Task<IActionResult> FindUser([FromQuery] string? username)
     {
-        return Ok(await usersService.Find(username));
+        return Ok(await usersService.Find(username ?? string.Empty));
     }
 }
