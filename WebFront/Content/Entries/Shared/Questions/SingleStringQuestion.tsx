@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
 import { Label } from '../Label/Label';
-import { Size } from '../../../Utility/Constants';
+import { Size, ValidationMessages } from '../../../Utility/Constants';
 import { isNullOrWhiteSpace } from '../../../Utility/HelperFunctions';
 
 interface Props {
@@ -20,9 +20,9 @@ interface Props {
 
 function validate(value: string): Nullable<ValidationInfo> {
     if (isNullOrWhiteSpace(value)) {
-        return { message: 'Поле обязательно для заполнения', type: 'submit' };
+        return { message: ValidationMessages.FieldRequired, type: 'submit' };
     } else if (value.length >= 100) {
-        return { message: 'Не более 100 символов', type: 'submit' };
+        return { message: ValidationMessages.OneHundredCharactersLimit, type: 'submit' };
     }
 
     return null;

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
 import { isNullOrWhiteSpace } from '../../../Utility/HelperFunctions';
+import { ValidationMessages } from '../../../Utility/Constants';
 
 interface Props {
     placeholder?: string;
@@ -16,7 +17,7 @@ interface Props {
 
 function baseValidate(value: string, validate?: (value: string) => Nullable<ValidationInfo>): Nullable<ValidationInfo> {
     if (isNullOrWhiteSpace(value)) {
-        return { message: 'Поле обязательно для заполнения', type: 'submit' };
+        return { message: ValidationMessages.FieldRequired, type: 'submit' };
     }
     return (validate ?? (() => null))(value);
 }

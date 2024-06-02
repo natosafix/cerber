@@ -4,7 +4,7 @@ import { ValidationWrapper } from '@skbkontur/react-ui-validations';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
 import { Label } from '../Label/Label';
-import { Size } from '../../../Utility/Constants';
+import { Size, ValidationMessages } from '../../../Utility/Constants';
 import { isNullOrWhiteSpace } from '../../../Utility/HelperFunctions';
 
 interface Props {
@@ -39,12 +39,12 @@ function getTimeStr(date: Date | null): string | undefined {
 
 function validateTime(timeValue: string | undefined, dateTimeValue: Date | null): Nullable<ValidationInfo> {
     if (isNullOrWhiteSpace(timeValue)) {
-        return { message: 'Поле обязательно для заполнения', type: 'submit' };
+        return { message: ValidationMessages.FieldRequired, type: 'submit' };
     }
 
     const fromDateTime = getTimeStr(dateTimeValue);
     if (timeValue !== fromDateTime) {
-        return { message: 'Невалидное значение', type: 'submit' };
+        return { message: ValidationMessages.InvalidValue, type: 'submit' };
     }
 
     if (dateTimeValue! < new Date()) {
@@ -56,12 +56,12 @@ function validateTime(timeValue: string | undefined, dateTimeValue: Date | null)
 
 function validateDate(dateValue: string | undefined, dateTimeValue: Date | null): Nullable<ValidationInfo> {
     if (isNullOrWhiteSpace(dateValue)) {
-        return { message: 'Поле обязательно для заполнения', type: 'submit' };
+        return { message: ValidationMessages.FieldRequired, type: 'submit' };
     }
 
     const fromDateTime = getDateStr(dateTimeValue);
     if (dateValue !== fromDateTime) {
-        return { message: 'Невалидное значение', type: 'submit' };
+        return { message: ValidationMessages.InvalidValue, type: 'submit' };
     }
 
     return null;

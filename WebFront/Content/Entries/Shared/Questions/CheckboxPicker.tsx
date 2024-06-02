@@ -5,7 +5,7 @@ import { Label } from '../Label/Label';
 import { ValidationWrapper } from '@skbkontur/react-ui-validations';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
-import { Size } from '../../../Utility/Constants';
+import { Size, ValidationMessages } from '../../../Utility/Constants';
 
 interface CheckboxPickerProps {
     title: string;
@@ -16,7 +16,7 @@ interface CheckboxPickerProps {
 
 function validateChosen(checked: number[]): Nullable<ValidationInfo> {
     if (!checked || checked.length === 0) {
-        return { message: 'Поле обязательно для заполнения', type: 'submit' };
+        return { message: ValidationMessages.FieldRequired, type: 'submit' };
     }
 
     return null;

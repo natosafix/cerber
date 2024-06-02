@@ -33,3 +33,9 @@ export const Route = {
 };
 
 export type Size = 'small' | 'medium' | 'large';
+
+export const ValidationMessages = {
+    FieldRequired: 'Поле обязательно для заполнения',
+    InvalidValue: 'Невалидное значение',
+    OneHundredCharactersLimit: 'Не более 100 символов',
+};

@@ -6,6 +6,7 @@ import { ValidationWrapper } from '@skbkontur/react-ui-validations';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
 import { isNullOrWhiteSpace } from '../../../../Utility/HelperFunctions';
+import { ValidationMessages } from '../../../../Utility/Constants';
 
 interface Props {
     srcChoices: string[];
@@ -14,9 +15,9 @@ interface Props {
 
 function validate(value: string): Nullable<ValidationInfo> {
     if (isNullOrWhiteSpace(value)) {
-        return { message: 'Поле обязательно для заполнения', type: 'submit' };
+        return { message: ValidationMessages.FieldRequired, type: 'submit' };
     } else if (value.length >= 100) {
-        return { message: 'Не более 100 символов', type: 'submit' };
+        return { message: ValidationMessages.OneHundredCharactersLimit, type: 'submit' };
     }
 
     return null;
@@ -53,7 +54,7 @@ export const ChoicesCreator: React.FC<Props> = ({ srcChoices, setSrcChoices }) =
 
     return (
         <Gapped vertical={true}>
-            <Label label={'Варинаты ответа'} size={'small'} />
+            <Label label={'Варианты ответа'} size={'small'} />
             {choices.map((choice, i) => (
                 <div key={i} className={styles.lineWrapper}>
                     <ValidationWrapper validationInfo={validate(choice)}>

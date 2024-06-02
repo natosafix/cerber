@@ -6,7 +6,7 @@ import { Label } from '../Label/Label';
 import { ValidationWrapper } from '@skbkontur/react-ui-validations';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
-import { Size } from '../../../Utility/Constants';
+import { Size, ValidationMessages } from '../../../Utility/Constants';
 import { isNullOrWhiteSpace } from '../../../Utility/HelperFunctions';
 
 interface IMultiStringQuestion {
@@ -18,7 +18,7 @@ interface IMultiStringQuestion {
 
 function validate(value: string): Nullable<ValidationInfo> {
     if (isNullOrWhiteSpace(value)) {
-        return { message: 'Поле обязательно для заполнения', type: 'submit' };
+        return { message: ValidationMessages.FieldRequired, type: 'submit' };
     }
 
     return null;

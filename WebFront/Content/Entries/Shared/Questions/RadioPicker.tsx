@@ -5,7 +5,7 @@ import { Label } from '../Label/Label';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
 import { ValidationWrapper } from '@skbkontur/react-ui-validations';
-import { Size } from '../../../Utility/Constants';
+import { Size, ValidationMessages } from '../../../Utility/Constants';
 
 interface RadioPickerProps {
     title: string;
@@ -16,7 +16,7 @@ interface RadioPickerProps {
 
 function validateChosenVariant(value?: string): Nullable<ValidationInfo> {
     if (!value || value.length === 0) {
-        return { message: 'Поле обязательно для заполнения', type: 'submit' };
+        return { message: ValidationMessages.FieldRequired, type: 'submit' };
     }
 
     return null;
