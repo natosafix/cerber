@@ -73,10 +73,11 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
           ),
           extendBodyBehindAppBar: true,
           floatingActionButton: ValueListenableBuilder(
-            valueListenable: scannerController.torchState,
+            valueListenable: scannerController,
             builder: (context, state, child) {
-              final icon = state == TorchState.on ? Icons.flash_off : Icons.flash_on;
-              final bgColor = state == TorchState.on ? Colors.yellow : Colors.grey;
+              final torchState = state.torchState;
+              final icon = torchState == TorchState.on ? Icons.flash_off : Icons.flash_on;
+              final bgColor = torchState == TorchState.on ? Colors.yellow : Colors.grey;
               return CircleAvatar(
                 backgroundColor: bgColor,
                 radius: 30,
