@@ -43,7 +43,7 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery.sizeOf(context);
     final scanWindowPosition = Offset(screenSize.width * 0.5, screenSize.height * 0.4);
     final scanWindowDimension = screenSize.width * 0.6;
     final scanWindow = Rect.fromCircle(
