@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/repositories/compound_events_repository/download_status.dart';
 import 'package:project/l10n/generated/l10n.dart';
+import 'package:project/presentation/event_detail/event_detail_location.dart';
 import 'package:project/presentation/event_detail/event_detail_sliver_app_bar.dart';
 import 'package:project/presentation/event_detail/event_detail_bloc/event_detail_bloc.dart';
 import 'package:project/presentation/qr_code_scanner/qr_code_scanner_screen.dart';
@@ -33,18 +34,7 @@ class EventDetailScreen extends StatelessWidget {
               sliver: SliverList(
                 delegate: SliverChildListDelegate.fixed(
                   [
-                    Text.rich(
-                      style: Theme.of(context).textTheme.titleLarge,
-                      TextSpan(
-                        children: [
-                          TextSpan(text: "${L10n.current.where}: "),
-                          TextSpan(
-                            text: "${event.city}, ${event.address}",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
+                    EventDetailLocation(event: event),
                     const SizedBox(height: 8),
                     Text.rich(
                       style: Theme.of(context).textTheme.titleLarge,
