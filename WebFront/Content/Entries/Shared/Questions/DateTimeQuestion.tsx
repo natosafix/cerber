@@ -37,7 +37,7 @@ function getTimeStr(date: Date | null): string | undefined {
     return `${hours}:${minutes}`;
 }
 
-function validateTime(timeValue: string | undefined, dateTimeValue: Date | null): Nullable<ValidationInfo> {
+function validateTime(timeValue: string | null, dateTimeValue: Date | null): Nullable<ValidationInfo> {
     if (isNullOrWhiteSpace(timeValue)) {
         return { message: ValidationMessages.FieldRequired, type: 'submit' };
     }
@@ -54,7 +54,7 @@ function validateTime(timeValue: string | undefined, dateTimeValue: Date | null)
     return null;
 }
 
-function validateDate(dateValue: string | undefined, dateTimeValue: Date | null): Nullable<ValidationInfo> {
+function validateDate(dateValue: string | null, dateTimeValue: Date | null): Nullable<ValidationInfo> {
     if (isNullOrWhiteSpace(dateValue)) {
         return { message: ValidationMessages.FieldRequired, type: 'submit' };
     }
@@ -68,12 +68,13 @@ function validateDate(dateValue: string | undefined, dateTimeValue: Date | null)
 }
 
 export const DateTimeQuestion: React.FC<Props> = ({ title, defaultValue, onValueChange, size = 'large' }) => {
-    const [dateTimeValue, setDateTimeValue] = useState<Date>(defaultValue ?? new Date());
-    const [dateValue, setDateValue] = useState(defaultValue === null ? '' : getDateStr(defaultValue));
-    const [timeValue, setTimeValue] = useState(defaultValue === null ? '' : getTimeStr(defaultValue));
+    const [dateTimeValue, setDateTimeValue] = useState(defaultValue);
+    const [dateValue, setDateValue] = useState(getDateStr(defaultValue) ?? null);
+    const [timeValue, setTimeValue] = useState(getTimeStr(defaultValue) ?? null);
 
     const onDatePickerChange = (v: string) => {
         setDateValue(v);
+        alert(v);
 
         const [day, month, year] = v.split('.').map((i) => Number(i));
         const [hours, minutes] = timeValue?.split(':')?.map((i) => Number(i)) ?? [null, null];
@@ -92,6 +93,7 @@ export const DateTimeQuestion: React.FC<Props> = ({ title, defaultValue, onValue
 
     const onTimeChange = (v: string) => {
         setTimeValue(v);
+        alert(v);
 
         if (!dateTimeValue) {
             return;
@@ -124,7 +126,7 @@ export const DateTimeQuestion: React.FC<Props> = ({ title, defaultValue, onValue
                     />
                 </ValidationWrapper>
                 <ValidationWrapper validationInfo={validateTime(timeValue, dateTimeValue)}>
-                    <Input value={timeValue} onValueChange={onTimeChange} type={'time'} width={100} />
+                    <Input value={timeValue ?? ''} onValueChange={onTimeChange} type={'time'} width={100} />
                 </ValidationWrapper>
             </Gapped>
         </Gapped>
