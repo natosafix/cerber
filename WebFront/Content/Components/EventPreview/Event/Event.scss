@@ -20,6 +20,12 @@
   flex: 1;
   overflow: hidden;
   border-radius: 10px;
+  transition: 0.3s ease;
+}
+
+.imgWrapper:hover {
+  transform: scale(1.02);
+  transition: 0.3s ease;
 }
 
 .imgWrapper img {

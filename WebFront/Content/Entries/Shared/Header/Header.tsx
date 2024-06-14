@@ -20,7 +20,7 @@ export const Header: React.FC = () => {
             window.location.href = Route.REGISTER;
         }
     };
-    const deleteCookie = (name) => {
+    const deleteCookie = (name: string) => {
         document.cookie = name + '=; Path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
     };
 

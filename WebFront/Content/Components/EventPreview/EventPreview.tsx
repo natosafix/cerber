@@ -5,6 +5,8 @@ import styles from './EventPreview.scss';
 import { EventCreateButton } from './CreateDraftButton/CreateDraftButton';
 import { MaxWidthWrapper } from '../../Entries/Shared/Wrappers/MaxWidthWrapper';
 import { Gapped } from '@skbkontur/react-ui';
+import { Button } from '@skbkontur/react-ui';
+import event from './Event/Event';
 
 export const EventPreview = () => {
     const { events, fetchEvents } = useEvents();
@@ -12,16 +14,12 @@ export const EventPreview = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const handleScroll = () => {
-        const container = containerRef.current;
-        if (!container || loading) return;
-
-        const { scrollTop, clientHeight, scrollHeight } = container;
-
-        if (scrollTop + clientHeight >= scrollHeight - 20) {
-            setLoading(true);
-            setCurrentPage((prevPage) => prevPage + 1);
+    const handleClickUploadButton = async () => {
+        if (events.length % 6 !== 0) {
+            return;
         }
+        setLoading(true);
+        setCurrentPage((prevPage) => prevPage + 1);
     };
 
     useEffect(() => {
@@ -36,16 +34,16 @@ export const EventPreview = () => {
         loadMoreEvents();
     }, [fetchEvents, currentPage]);
 
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        container.addEventListener('scroll', handleScroll);
-
-        return () => {
-            container.removeEventListener('scroll', handleScroll);
-        };
-    }, [handleScroll]);
+    // useEffect(() => {
+    //     const container = containerRef.current;
+    //     if (!container) return;
+    //
+    //     container.addEventListener('scroll', handleScroll);
+    //
+    //     return () => {
+    //         container.removeEventListener('scroll', handleScroll);
+    //     };
+    // }, [handleScroll]);
 
     return (
         <div ref={containerRef}>
@@ -54,6 +52,8 @@ export const EventPreview = () => {
                     <EventCreateButton />
 
                     <Events loading={loading} events={events} />
+                    {events.length % 6 === 0 && <Button onClick={handleClickUploadButton}>{'Показать ещё'}</Button>}
+                    <div className={styles.bottomDev} />
                 </Gapped>
             </MaxWidthWrapper>
         </div>
