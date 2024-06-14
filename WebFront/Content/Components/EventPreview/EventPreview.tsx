@@ -3,6 +3,8 @@ import { Events } from './Events';
 import { useEvents } from './EventContext';
 import styles from './EventPreview.scss';
 import { EventCreateButton } from './CreateDraftButton/CreateDraftButton';
+import { MaxWidthWrapper } from '../../Entries/Shared/Wrappers/MaxWidthWrapper';
+import { Gapped } from '@skbkontur/react-ui';
 
 export const EventPreview = () => {
     const { events, fetchEvents } = useEvents();
@@ -46,12 +48,14 @@ export const EventPreview = () => {
     }, [handleScroll]);
 
     return (
-        <div ref={containerRef} className={styles.eventPreviewContainer}>
-            <EventCreateButton />
+        <div ref={containerRef}>
+            <MaxWidthWrapper>
+                <Gapped vertical={true}>
+                    <EventCreateButton />
 
-            <Events loading={loading} events={events} />
-
-            <div className={styles.bottomDev} />
+                    <Events loading={loading} events={events} />
+                </Gapped>
+            </MaxWidthWrapper>
         </div>
     );
 };

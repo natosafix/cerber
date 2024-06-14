@@ -1,0 +1,10 @@
+﻿@use "Content/Utility/Constants";
+
+.maxWidthWrapper {
+    max-width: Constants.$PageWidth;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 0 1%;
+    margin: 0 auto;
+}
