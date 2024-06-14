@@ -1,14 +1,26 @@
 import * as React from 'react';
-import styles from './Footer.scss';
-import { MaxWidthWrapper } from '../Wrappers/MaxWidthWrapper';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import { Box } from '@mui/material';
 import file from '../../../../Files/Public-Oferta.docx';
-
-export const Footer: React.FC = () => {
+export default function Footer() {
     return (
-        <footer className={styles.footerWrapper}>
-            <MaxWidthWrapper>
-                <a href={file}>{'Публичная оферта'}</a>
-            </MaxWidthWrapper>
-        </footer>
+        <Box
+            sx={{
+                p: 6,
+                width: 'auto',
+                backgroundColor: 'white',
+            }}
+            component="footer"
+        >
+            <Container maxWidth="sm">
+                <Typography variant="body2" color="text.secondary" align="center">
+                    <Link color="inherit" href={file}>
+                        {'Публичная оферта'}
+                    </Link>
+                </Typography>
+            </Container>
+        </Box>
     );
-};
+}
