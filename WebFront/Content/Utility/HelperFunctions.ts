@@ -1,3 +1,3 @@
-export const isNullOrWhiteSpace = (v?: string) => {
-    return !v || v.trim() === '';
+export const isNullOrWhiteSpace = (v?: string | null) => {
+    return v === null || !v || v.trim() === '';
 };
