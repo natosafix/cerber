@@ -3,7 +3,12 @@
     export default content;
 }
 
-declare module "*.png" {
+declare module '*.png' {
+    const value: any;
+    export default value;
+}
+
+declare module '*.docx' {
     const value: any;
     export default value;
 }

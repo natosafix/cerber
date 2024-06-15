@@ -24,19 +24,21 @@ export const EventStepsNav: React.FC<Props> = ({ step, setStepNav }) => {
         new ButtonInfo('Анкета регистрации', EventAdminPageNav.EventQuizCreator),
         new ButtonInfo('Публикация', EventAdminPageNav.EventPublish),
     ];
-    
+
     return (
         <div className={styles.stepsWrapper}>
-            {buttonsInfo.map((info, idx) => 
-                <Button active={info.matchType === step}
-                        disabled={info.matchType > step}
-                        size={'medium'}
-                        borderless={true}
-                        onClick={() => setStepNav(info.matchType)}
+            {buttonsInfo.map((info, idx) => (
+                <Button
+                    key={idx}
+                    active={info.matchType === step}
+                    disabled={info.matchType > step}
+                    size={'medium'}
+                    borderless={true}
+                    onClick={() => setStepNav(info.matchType)}
                 >
                     {info.content}
                 </Button>
-            )}
+            ))}
         </div>
     );
 };

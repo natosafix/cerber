@@ -1,17 +1,19 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { onDomContentLoaded } from '../../Helpers/DomHelpers';
-import Registration from '../../Components/Registration/Registration/Registration'
+import Registration from '../../Components/Registration/Registration/Registration';
 import { CerberThemeProvider } from '../Shared/ThemeProvider/CerberThemeProvider';
-import {Header} from '../Shared/Header/Header'
+import { Header } from '../Shared/Header/Header';
+import { Page } from '../Page';
 
-
-onDomContentLoaded(() =>
-    ReactDOM.render(
-        <CerberThemeProvider>
-            <Header/>
-            <Registration/>
-        </CerberThemeProvider>,
-        document.getElementById('register'),
-    ),
-);
+onDomContentLoaded(() => {
+    const container = document.getElementById('register');
+    if (container) {
+        const root = createRoot(container);
+        root.render(
+            <Page>
+                <Registration />
+            </Page>,
+        );
+    }
+});

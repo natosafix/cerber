@@ -3,7 +3,6 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Robokassa;
-using Robokassa.Enums;
 using Robokassa.Exceptions;
 using Robokassa.Models;
 using Web.Dtos.Request;
@@ -34,7 +33,7 @@ public class OrdersController : Controller
     }
 
     [Authorize("MustInspectOrder")]    
-    [HttpGet("{customer}")]
+    [HttpGet("{customer:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid customer)
     {
         var order = await ordersService.Get(customer);
@@ -57,17 +56,21 @@ public class OrdersController : Controller
             return BadRequest(ModelState);
         
         var order = await ordersService.Create(mapper.Map<Order>(createOrderDto));
-        var receipt = new RobokassaReceiptRequest(
-            SnoType.Patent,
-            new List<ReceiptOrderItem>
-            {
-                new(order.Ticket.Name, 1, order.Ticket.Price, Tax.Vat110, PaymentMethod.FullPayment,
-                    PaymentObject.Payment)
-            });
         var customFields = new CustomShpParameters();
         customFields.Add("customer", order.Customer.ToString());
         
-        return Ok(robokassaService.GenerateAuthLink(receipt.TotalPrice, receipt, customFields));
+        return Ok(robokassaService.GenerateAuthLink(order.Ticket.Price, order.Ticket.Name, customFields));
+    }
+    
+    [AllowAnonymous]
+    [HttpGet("{customer:guid}/retryPayment")]
+    public async Task<IActionResult> RetryPayment([FromRoute] Guid customer)
+    {
+        var order = await ordersService.Get(customer);
+        var customFields = new CustomShpParameters();
+        customFields.Add("customer", order.Customer.ToString());
+        
+        return Ok(robokassaService.GenerateAuthLink(order.Ticket.Price, order.Ticket.Name, customFields));
     }
     
     [AllowAnonymous]
@@ -88,9 +91,11 @@ public class OrdersController : Controller
 
             await ordersService.SetPaid(Guid.Parse(customer));
         }
-        catch (RobokassaBaseException)
+        catch (RobokassaBaseException e)
         {
-            //TODO: _log.Error(e.Message);
+            Console.WriteLine("Robokassa payment result handling error occured:");
+            Console.Write(e.Message);
+            //TODO: log.Error(e.Message);
         }
 
         return Content($"OK{request.InvId}");
@@ -113,7 +118,7 @@ public class OrdersController : Controller
     }
     
     [Authorize("MustInspectOrder")]    
-    [HttpPut("{customer}/paid")]
+    [HttpPut("{customer:guid}/paid")]
     public async Task<IActionResult> SetPaid([FromRoute] Guid customer)
     {
         await ordersService.SetPaid(customer);

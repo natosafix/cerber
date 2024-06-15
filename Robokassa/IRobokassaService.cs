@@ -4,6 +4,9 @@ namespace Robokassa
 {
     public interface IRobokassaService
     {
-        PaymentUrl GenerateAuthLink(decimal totalAmount, RobokassaReceiptRequest receipt = null, CustomShpParameters shpParameters = null);
+        string GenerateAuthLink(
+            decimal totalAmount, 
+            string description,
+            CustomShpParameters? shpParameters = null);
     }
 }

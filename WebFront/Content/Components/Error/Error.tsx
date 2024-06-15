@@ -3,13 +3,14 @@ import { Label } from '../../Entries/Shared/Label/Label';
 import styles from './Error.scss';
 import img from '../../Images/sad_face.png';
 import { Button, Gapped } from '@skbkontur/react-ui';
+import { Route } from '../../Utility/Constants';
 
 export const Error: React.FC = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const statusCode = searchParams.get('statusCode') ?? '???';
 
     const onBackBtn = () => {
-        window.location.href = '/home/index';
+        window.location.href = Route.INDEX;
     };
 
     return (

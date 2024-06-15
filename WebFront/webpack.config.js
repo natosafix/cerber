@@ -56,17 +56,21 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(png|jpg|gif)$/,
+                test: /\.(png|jpg|gif|docx)$/,
                 use: [
                     {
                         loader: 'file-loader',
                         options: {
                             publicPath: PUBLIC_PATH,
                             outputPath: 'assets',
-                            name: '[path][name].[ext]'
+                            name: '[path][name].[ext]',
                         },
                     },
                 ],
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader'],
             },
         ],
     },

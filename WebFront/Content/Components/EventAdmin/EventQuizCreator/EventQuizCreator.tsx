@@ -70,20 +70,6 @@ export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
         }
     };
 
-    const Create: React.FC<QuizBuilderCreatorProps> = ({ question, num }) => {
-        return (
-            <div key={question.key} className={styles.relativeWrapper}>
-                <div className={styles.binBtnWrapper}>
-                    <BinButton onClick={() => onDeleteQuestion(question.key)} />
-                </div>
-                <QuestionBuilder onQuestionUpdate={onUpdateQuestion}
-                                 question={question}
-                                 questionNum={num + 4}
-                />
-            </div>
-        );
-    };
-
     return (
         <ValidationContainer ref={validWrapper}>
             <Gapped gap={40} vertical={true}>
@@ -103,7 +89,15 @@ export const EventQuizCreator: React.FC<Props> = ({ onSave }) => {
                                       size={'medium'}
                 />
                 {questions.map((question, num) =>
-                    Create({ question, num }),
+                    <div key={question.key} className={styles.relativeWrapper}>
+                        <div className={styles.binBtnWrapper}>
+                            <BinButton onClick={() => onDeleteQuestion(question.key)} />
+                        </div>
+                        <QuestionBuilder onQuestionUpdate={onUpdateQuestion}
+                                         question={question}
+                                         questionNum={num + 4}
+                        />
+                    </div>
                 )}
                 <Button borderless={true} onClick={onAddQuestion}>Добавить вопрос</Button>
                 <EventAdminSaveBtn onSave={onSaveBtnClick} />

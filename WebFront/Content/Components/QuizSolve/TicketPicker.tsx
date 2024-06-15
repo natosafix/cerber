@@ -7,6 +7,7 @@ import variables from '../../Entries/Shared/Questions/QuestionVariables.scss';
 import { ValidationWrapper } from '@skbkontur/react-ui-validations';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
+import { ValidationMessages } from '../../Utility/Constants';
 
 interface TicketPickerProps {
     tickets: TicketDto[];
@@ -15,7 +16,7 @@ interface TicketPickerProps {
 
 function validateChosenTicket(value?: number): Nullable<ValidationInfo> {
     if (!value) {
-        return { message: 'Поле обязательно для заполнения', type: 'submit' };
+        return { message: ValidationMessages.FieldRequired, type: 'submit' };
     }
 
     return null;
@@ -36,8 +37,8 @@ export const TicketPicker: React.FC<TicketPickerProps> = ({ tickets, onTicketCha
                 <ValidationWrapper validationInfo={validateChosenTicket(value)}>
                     <RadioGroup onValueChange={onRadioChange} value={value}>
                         <Gapped vertical gap={20}>
-                            {tickets.map((ticket) => (
-                                <Radio value={ticket.id}>
+                            {tickets.map((ticket, index) => (
+                                <Radio key={index} value={ticket.id}>
                                     <Gapped vertical gap={5}>
                                         {ticket.name}
                                         <div style={{ opacity: 0.5 }}>
