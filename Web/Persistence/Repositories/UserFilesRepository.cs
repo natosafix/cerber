@@ -6,7 +6,7 @@ namespace Web.Persistence.Repositories;
 public class UserFilesRepository : IUserFilesRepository
 {
     private readonly CerberDbContext dbContext;
-    
+
     public UserFilesRepository(CerberDbContext dbContext)
     {
         this.dbContext = dbContext;
@@ -27,6 +27,12 @@ public class UserFilesRepository : IUserFilesRepository
     public async Task Remove(UserFile userFile)
     {
         await dbContext.UserFiles.Where(uf => uf.Id == userFile.Id).ExecuteDeleteAsync();
+        await dbContext.SaveChangesAsync();
+    }
+
+    public async Task Remove(int userFileId)
+    {
+        await dbContext.UserFiles.Where(uf => uf.Id == userFileId).ExecuteDeleteAsync();
         await dbContext.SaveChangesAsync();
     }
 }

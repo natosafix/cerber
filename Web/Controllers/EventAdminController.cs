@@ -19,6 +19,7 @@ public class EventAdminController : Controller
     private readonly IDraftQuestionsService draftQuestionsService;
     private readonly IDraftEventPublisherService draftEventPublisherService;
     private readonly IDraftEventValidator draftEventValidator;
+    private readonly IDraftTicketsService draftTicketsService;
 
     public EventAdminController(
         IUserHelper userHelper,
@@ -27,7 +28,8 @@ public class EventAdminController : Controller
         IMapper mapper,
         IUserFilesService userFilesService,
         IDraftEventPublisherService draftEventPublisherService,
-        IDraftEventValidator draftEventValidator)
+        IDraftEventValidator draftEventValidator,
+        IDraftTicketsService draftTicketsService)
     {
         this.userHelper = userHelper;
         this.draftEventsService = draftEventsService;
@@ -36,6 +38,7 @@ public class EventAdminController : Controller
         this.userFilesService = userFilesService;
         this.draftEventPublisherService = draftEventPublisherService;
         this.draftEventValidator = draftEventValidator;
+        this.draftTicketsService = draftTicketsService;
     }
 
     [HttpGet("[controller]/draft")]
@@ -139,6 +142,63 @@ public class EventAdminController : Controller
         }
 
         return Ok();
+    }
+
+    [HttpGet("[controller]/tickets")]
+    public async Task<IActionResult> Tickets()
+    {
+        if (!ModelState.IsValid)
+            return BadRequest();
+
+        var userId = userHelper.UserId;
+        var srcDraft = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (srcDraft is null)
+            return NotFound();
+
+        var tickets = await draftTicketsService.GetDraftTicketsByEventIdAsync(srcDraft.Id);
+        return Ok(tickets);
+    }
+    
+    [HttpPost("[controller]/tickets")]
+    public async Task<IActionResult> Tickets([FromBody] CreateTicketDto[] tickets)
+    {
+        if (!ModelState.IsValid || !tickets.Any())
+            return BadRequest();
+
+        var userId = userHelper.UserId;
+        var srcDraft = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (srcDraft is null)
+            return NotFound();
+
+        foreach (var ticket in tickets)
+        {
+            var savedFile = await userFilesService.Save(ticket.CoverImage, true);
+            ticket.ImageId = savedFile.Id;
+        }
+
+        var newDraftTickets = mapper.Map<DraftTicket[]>(tickets);
+        await draftTicketsService.SetDraftTicketsAsync(newDraftTickets, srcDraft.Id);
+        return Ok();
+    }
+
+    [HttpGet("[controller]/ticketImage/{ticketId:int}")]
+    public async Task<IActionResult> TicketImage([FromRoute] int ticketId)
+    {
+        var userId = userHelper.UserId;
+        var srcDraft = await draftEventsService.FindDraftByUserIdAsync(userId);
+        if (srcDraft is null)
+            return NotFound();
+
+        var foundTicket = await draftTicketsService.GetDraftTicketAsync(ticketId);
+        if (foundTicket.IsFailed || foundTicket.Value.DraftEventId != srcDraft.Id)
+            return NotFound();
+
+        var imageFile = await userFilesService.TryGet(foundTicket.Value.CoverImageId);
+        if (imageFile is null)
+            return NotFound();
+
+        var fileStream = userFilesService.GetContentStream(imageFile);
+        return File(fileStream, "APPLICATION/octet-stream");
     }
 
     [HttpDelete("[controller]/coverImage")]

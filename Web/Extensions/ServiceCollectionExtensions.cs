@@ -13,6 +13,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IDraftEventsRepository, DraftEventsRepository>();
         services.AddScoped<IDraftQuestionRepository, DraftQuestionRepository>();
+        services.AddScoped<IDraftTicketsRepository, DraftTicketsRepository>();
         services.AddScoped<IDraftEventPublisherService, DraftEventPublisherService>();
         services.AddScoped<IEventsRepository, EventsRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
@@ -30,6 +31,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDraftEventsService, DraftEventsService>();
         services.AddScoped<IDraftQuestionsService, DraftQuestionsService>();
         services.AddScoped<IDraftEventValidator, DraftEventValidator>();
+        services.AddScoped<IDraftTicketsService, DraftTicketsService>();
         services.AddScoped<IEventsPublisherRepository, EventsPublisherRepository>();
         services.AddScoped<IEventsService, EventsService>();
         services.AddScoped<ITicketsService, TicketsService>();

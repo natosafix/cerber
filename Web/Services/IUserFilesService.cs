@@ -12,7 +12,11 @@ public interface IUserFilesService
 
     Stream GetContentStream(UserFile userFile);
 
-    Task<UserFile> Save(IFormFile formFile);
+    Task<UserFile> Save(IFormFile formFile, bool generateName = false);
+
+    Task<IReadOnlyCollection<UserFile>> Save(IReadOnlyCollection<IFormFile> formFile, bool generateName = false);
 
     Task Remove(UserFile userFile);
+
+    Task Remove(int userFileId);
 }

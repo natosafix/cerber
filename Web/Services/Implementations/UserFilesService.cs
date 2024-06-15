@@ -11,7 +11,9 @@ public class UserFilesService : IUserFilesService
     private readonly IStorageManager storageManager;
     private readonly IUserHelper userHelper;
 
-    public UserFilesService(IUserFilesRepository userFilesRepository, IStorageManager storageManager,
+    public UserFilesService(
+        IUserFilesRepository userFilesRepository,
+        IStorageManager storageManager,
         IUserHelper userHelper)
     {
         this.userFilesRepository = userFilesRepository;
@@ -39,21 +41,43 @@ public class UserFilesService : IUserFilesService
         return storageManager.GetFileStream(userFile.Path);
     }
 
-    public async Task<UserFile> Save(IFormFile formFile)
+    public async Task<UserFile> Save(IFormFile formFile, bool generateName = false)
     {
         var username = userHelper.Username;
         var userFile = new UserFile
         {
-            Name = formFile.FileName,
+            Name = generateName ? Guid.NewGuid().ToString() : formFile.FileName,
             Path = Path.Combine(DefaultPath, username, formFile.FileName)
         };
         await storageManager.Save(formFile, userFile.Path);
         return await userFilesRepository.Save(userFile);
     }
 
+    public async Task<IReadOnlyCollection<UserFile>> Save(
+        IReadOnlyCollection<IFormFile> formFile,
+        bool generateName = false)
+    {
+        var result = new List<UserFile>(formFile.Count);
+
+        foreach (var file in formFile)
+        {
+            var userFile = await Save(file, generateName);
+            result.Add(userFile);
+        }
+
+        return result;
+    }
+
     public async Task Remove(UserFile userFile)
     {
         await userFilesRepository.Remove(userFile);
+        storageManager.Remove(userFile.Path);
+    }
+
+    public async Task Remove(int userFileId)
+    {
+        var userFile = await Get(userFileId);
+        await userFilesRepository.Remove(userFileId);
         storageManager.Remove(userFile.Path);
     }
 }
