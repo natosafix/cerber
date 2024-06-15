@@ -3,3 +3,10 @@
   max-width: 90vw;
   margin: 10% auto;
 }
+
+.textWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

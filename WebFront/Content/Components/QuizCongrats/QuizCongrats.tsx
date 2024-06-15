@@ -6,11 +6,11 @@ import { QuizSolveClient } from '../../../Api/QuizSolve/QuizSolveClient';
 
 export const QuizCongrats: React.FC = () => {
     const searchParams = new URLSearchParams(window.location.search);
-    const eventId = searchParams.get('eventId');
+    const eventId = searchParams.get('Shp_eventId');
 
     const onNextBtn = () => {
         window.location.href = QuizSolveClient.getEventDetailsUrl(Number(eventId));
-    }
+    };
 
     return (
         <div className={styles.centerWrapper}>
@@ -18,14 +18,15 @@ export const QuizCongrats: React.FC = () => {
                 <Label label={'Спасибо за регистрацию на мероприятие!'} size={'large'} />
                 <Gapped vertical gap={10}>
                     <Label label={'Ваша анкета успешно зарегистрирована'} />
-                    <Label label={
-                        'В ближайшее время на указанный вами адрес электронной ' +
-                        'почты придет билет для участия в мероприятии'} />
+                    <Label
+                        label={
+                            'В ближайшее время на указанный вами адрес электронной ' +
+                            'почты придет билет для участия в мероприятии'
+                        }
+                    />
                 </Gapped>
-                
-                <Button onClick={onNextBtn}>
-                    Вернуться к мероприятию
-                </Button>
+
+                <Button onClick={onNextBtn}>Вернуться к мероприятию</Button>
             </Gapped>
         </div>
     );
