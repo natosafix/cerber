@@ -11,30 +11,24 @@ namespace Robokassa
         private readonly RobokassaOptions options;
         private readonly bool isTestEnv;
 
-
         public RobokassaService(RobokassaOptions options, bool isTestEnv)
         {
             this.isTestEnv = isTestEnv;
             this.options = options;
         }
-
-
-        public PaymentUrl GenerateAuthLink(
+        
+        public string GenerateAuthLink(
             decimal totalAmount,
             string description,
-            RobokassaReceiptRequest receipt,
             CustomShpParameters? customShpParameters = null)
         {
-            var receiptEncodedJson = receipt?.ToString();
-
             var customFieldsLine = customShpParameters?.ToString();
 
             var amountStr = totalAmount.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
 
             var signatureValue = Md5HashService.GenerateMd5Hash(PrepareMd5SumString(amountStr, customFieldsLine));
 
-            return new PaymentUrl(BuildPaymentLink(amountStr, description, signatureValue,
-                customShpParameters));
+            return BuildPaymentLink(amountStr, description, signatureValue, customShpParameters);
         }
 
         private string BuildPaymentLink(string amount, string description, string signature,
@@ -64,8 +58,7 @@ namespace Robokassa
             return url;
         }
 
-        private string PrepareMd5SumString(string amount,
-            string customParameters)
+        private string PrepareMd5SumString(string amount, string customParameters)
         {
             var str = string.Join(":", new List<string>
             {
