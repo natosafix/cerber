@@ -10,8 +10,10 @@ interface PageProps {
 export const Page: React.FC<PageProps> = ({ children }) => {
     return (
         <CerberThemeProvider>
-            <Header />
-            <Box sx={{ minHeight: '80%' }}> {children}</Box>
+            <Box sx={{ minHeight: '100vh' }}>
+                <Header />
+                {children}
+            </Box>
             <Footer />
         </CerberThemeProvider>
     );

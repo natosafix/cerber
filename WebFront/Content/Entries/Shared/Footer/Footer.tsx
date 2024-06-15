@@ -11,6 +11,9 @@ export default function Footer() {
                 p: 6,
                 width: 'auto',
                 backgroundColor: 'white',
+                display: 'flex',
+                alignItem: 'center',
+                justifyContent: 'center',
             }}
             component="footer"
         >
@@ -19,6 +22,14 @@ export default function Footer() {
                     <Link color="inherit" href={file}>
                         {'Публичная оферта'}
                     </Link>
+                </Typography>
+                <Typography variant="body2" color="text.secondary" align="center">
+                    {'Copyright © '}
+                    <Link color="inherit" href="/home/login">
+                        Cerber
+                    </Link>{' '}
+                    {new Date().getFullYear()}
+                    {'.'}
                 </Typography>
             </Container>
         </Box>
