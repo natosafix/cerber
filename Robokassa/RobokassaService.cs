@@ -17,7 +17,7 @@ namespace Robokassa
             this.options = options;
         }
         
-        public string GenerateAuthLink(
+        public string GeneratePaymentLink(
             decimal totalAmount,
             string description,
             CustomShpParameters? customShpParameters = null)
