@@ -73,4 +73,9 @@ public class EventsService : IEventsService
     {
         return await eventsRepository.GetOwned(username, offset, limit);
     }
+
+    public Task<Event> GetStats(int id)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -67,7 +67,7 @@ public class OrdersController : Controller
         var customFields = new CustomShpParameters();
         customFields.Add("customer", order.Customer.ToString());
         
-        return Ok(robokassaService.GenerateAuthLink(receipt.TotalPrice, receipt, customFields));
+        return Ok(robokassaService.GenerateAuthLink(receipt.TotalPrice, order.Ticket.Name,  receipt, customFields).Link);
     }
     
     [AllowAnonymous]

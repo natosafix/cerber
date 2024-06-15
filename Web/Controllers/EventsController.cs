@@ -21,7 +21,8 @@ public class EventsController : Controller
     public EventsController(
         IMapper mapper,
         IEventsService eventsService,
-        IUserHelper userHelper, IUserFilesService userFilesService)
+        IUserHelper userHelper, 
+        IUserFilesService userFilesService)
     {
         this.mapper = mapper;
         this.eventsService = eventsService;
@@ -103,6 +104,13 @@ public class EventsController : Controller
         await eventsService.DeleteInspector(id, username);
 
         return NoContent();
+    }
+    
+    [Authorize("MustOwnEvent")]
+    [HttpPut("{id}/stats")]
+    public async Task<IActionResult> AddInspector([FromRoute] int id)
+    {
+        return Ok(await eventsService.GetStats(id));
     }
     
     [AllowAnonymous]
