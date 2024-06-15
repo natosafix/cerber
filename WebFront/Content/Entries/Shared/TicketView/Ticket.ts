@@ -11,7 +11,7 @@
         this.Name = name;
         return this;
     }
-    
+
     public withPrice(price?: number): Ticket {
         this.Price = price;
         return this;

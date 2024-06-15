@@ -74,7 +74,6 @@ export const DateTimeQuestion: React.FC<Props> = ({ title, defaultValue, onValue
 
     const onDatePickerChange = (v: string) => {
         setDateValue(v);
-        alert(v);
 
         const [day, month, year] = v.split('.').map((i) => Number(i));
         const [hours, minutes] = timeValue?.split(':')?.map((i) => Number(i)) ?? [null, null];
@@ -93,7 +92,6 @@ export const DateTimeQuestion: React.FC<Props> = ({ title, defaultValue, onValue
 
     const onTimeChange = (v: string) => {
         setTimeValue(v);
-        alert(v);
 
         if (!dateTimeValue) {
             return;

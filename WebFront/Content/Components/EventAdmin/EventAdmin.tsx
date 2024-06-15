@@ -8,8 +8,8 @@ import { EventQuizCreator } from './EventQuizCreator/EventQuizCreator';
 import { EventPublish } from './EventPublish/EventPublish';
 import { Gapped } from '@skbkontur/react-ui';
 import { EventAdminClient } from '../../../Api/EventAdmin/EventAdminClient';
-import { Ticket } from './EventPublish/Ticket';
 import { TicketDto } from '../../../Api/Models/TicketDto';
+import { Ticket } from '../../Entries/Shared/TicketView/Ticket';
 
 
 export const EventAdmin: React.FC = () => {

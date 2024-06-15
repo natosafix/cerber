@@ -1,15 +1,13 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
 import { EventAdminSaveBtn } from '../EventStepsNav/EventAdminSaveBtn';
-import { Ticket } from './Ticket';
-import { TicketView } from './TicketView';
 import { Button, Gapped } from '@skbkontur/react-ui';
 import { BinButton } from '../../../Entries/Shared/BinButton/BinButton';
 import binBtnStyles from '../../../Entries/Shared/BinButton/BinButton.scss';
 import { ValidationContainer, ValidationWrapper } from '@skbkontur/react-ui-validations';
-import { DraftQuestionDto } from '../../../../Api/EventAdmin/DraftQuestionDto';
-import { EventAdminClient } from '../../../../Api/EventAdmin/EventAdminClient';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
+import { Ticket } from '../../../Entries/Shared/TicketView/Ticket';
+import { TicketView } from '../../../Entries/Shared/TicketView/TicketView';
 
 interface Props {
     onSave: () => void;
