@@ -11,7 +11,6 @@ import { CreateAnswerDto } from '../../../Api/QuizSolve/CreateAnswerDto';
 import { CreateOrderDto } from '../../../Api/QuizSolve/CreateOrderDto';
 import { ValidationContainer } from '@skbkontur/react-ui-validations';
 
-
 export const QuizSolve: React.FC = () => {
     const location = window.location.href;
     const segments = location.split('/');
@@ -23,10 +22,9 @@ export const QuizSolve: React.FC = () => {
     const [tickets, setTickets] = useState<TicketDto[] | undefined>();
     const [chosenTicket, setChosenTicket] = useState<number>();
 
-
     useEffect(() => {
         QuizSolveClient.getQuestions(quizId).then((r) => {
-            setAnswers(r.data.map(question => new Answer(question)));
+            setAnswers(r.data.map((question) => new Answer(question)));
         });
 
         QuizSolveClient.getTickets(quizId).then((r) => {
@@ -35,11 +33,7 @@ export const QuizSolve: React.FC = () => {
     }, []);
 
     if (!answers || !tickets) {
-        return (
-            <>
-                Загрузка
-            </>
-        );
+        return <>Загрузка</>;
     }
 
     const onAnswerChange = (answer: Answer, id: number) => {
@@ -51,11 +45,11 @@ export const QuizSolve: React.FC = () => {
         if (validWrapper.current) {
             const isValid = await validWrapper.current.validate();
             if (isValid) {
-                const answerDtos = answers.map(ans => new CreateAnswerDto(ans.Content, ans.Question.id));
+                const answerDtos = answers.map((ans) => new CreateAnswerDto(ans.Content, ans.Question.id));
                 const createOrderDto = new CreateOrderDto(chosenTicket!, answerDtos);
 
-                QuizSolveClient.createOrder(createOrderDto).then(r => {
-                    window.location.href = QuizSolveClient.getCongratsUrl(quizId);
+                QuizSolveClient.createOrder(createOrderDto).then((url) => {
+                    window.location.href = url;
                 });
             }
         }
@@ -66,10 +60,7 @@ export const QuizSolve: React.FC = () => {
             <div className={styles.pageWrapper}>
                 <div className={styles.answersWrapper}>
                     {answers.map((answer, id) => (
-                        <AnswerView key={id}
-                                    answer={answer}
-                                    onAnswerChange={(ans) => onAnswerChange(ans, id)}
-                        />
+                        <AnswerView key={id} answer={answer} onAnswerChange={(ans) => onAnswerChange(ans, id)} />
                     ))}
 
                     <TicketPicker tickets={tickets!} onTicketChange={setChosenTicket} />

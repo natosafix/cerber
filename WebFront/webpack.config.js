@@ -17,6 +17,7 @@ module.exports = {
         quizSolve: './Content/Entries/Pages/QuizSolve.tsx',
         quizCongrats: './Content/Entries/Pages/QuizCongrats.tsx',
         errorPage: './Content/Entries/Pages/ErrorPage.tsx',
+        paymentFailed: './Content/Entries/Pages/PaymentFail.tsx',
     },
     output: {
         path: OUTPUT_PATH,

@@ -10,8 +10,14 @@ public class QuizController : Controller
         return View();
     }
 
-    [HttpGet("[controller]/congrats")]
+    [HttpGet("[controller]/congrats/")]
     public async Task<IActionResult> Congrats([FromQuery] int eventId)
+    {
+        return View();
+    }
+
+    [HttpGet("[controller]/fail")]
+    public async Task<IActionResult> Failed([FromQuery(Name = "Shp_customer")] Guid ShopCustomer)
     {
         return View();
     }

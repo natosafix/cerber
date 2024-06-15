@@ -15,12 +15,16 @@ export class QuizSolveClient {
         return api.get<TicketDto[]>(Route.GET_TICKETS, { params: { eventId: eventId } });
     }
 
-    public static createOrder(createOrderDto: CreateOrderDto) {
-        return api.post(Route.CREATE_ORDER, createOrderDto);
+    public static createOrder(createOrderDto: CreateOrderDto): Promise<string> {
+        return api.post<string>(Route.CREATE_ORDER, createOrderDto).then((r) => r.data);
     }
 
     public static getCongratsUrl(eventId: number): string {
         return api.getUri({ url: Route.GET_CONGRATS, params: { eventId: eventId } });
+    }
+
+    public static getRetryPaymentUrl(customer: string): Promise<string> {
+        return api.get<string>(Route.RETRY_PAYMENT(customer)).then((url) => url.data);
     }
 
     public static getEventDetailsUrl(eventId: number): string {

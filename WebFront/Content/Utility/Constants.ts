@@ -18,6 +18,7 @@ export const Route = {
     GET_TICKETS: '/Tickets',
     GET_EVENT_DETAILS: (eventId: Number) => `/Home/preview/${eventId}`,
     GET_CONGRATS: '/Quiz/congrats',
+    RETRY_PAYMENT: (customer: string) => `/orders/${customer}/retryPayment`,
     GET_QUESTIONS_TO_SOLVE: '/Questions',
     CREATE_ORDER: '/Orders',
     GET_EVENTS: (count: Number) => `/events/owned?offset=${count}&limit=6`,
