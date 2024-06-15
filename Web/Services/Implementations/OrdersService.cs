@@ -34,11 +34,24 @@ public class OrdersService : IOrdersService
 
     public async Task<Order> Create(Order order)
     {
-        var answers = JsonConvert.DeserializeObject<string[]>(order.Answers[2].Content)!;
-        var email = answers[0];
-            
         order.Customer = Guid.NewGuid();
         order = await ordersRepository.Create(order);
+        
+        return order;
+    }
+
+    public async Task SetPaid(Guid customer)
+    {
+        await ordersRepository.SetPaid(customer);
+
+        var order = await ordersRepository.Get(customer);
+        if (order is null)
+            return;
+        
+        var email = order.Answers
+            .Where(answer => answer.Question.Title == "Email")
+            .Select(answer => JsonConvert.DeserializeObject<string[]>(answer.Content)!.First())
+            .First();
         
         var @event = await eventsService.GetByTicketId(order.TicketId);
         var cryptoKey = Convert.FromBase64String(@event.CryptoKey);
@@ -51,12 +64,5 @@ public class OrdersService : IOrdersService
             "Tickets",
             "Спасибо за заказ. Ваши билеты во вложениях.",
             new List<ImageInfo> {qrCode});
-        
-        return order;
-    }
-
-    public async Task SetPaid(Guid customer)
-    {
-        await ordersRepository.SetPaid(customer);
     }
 }

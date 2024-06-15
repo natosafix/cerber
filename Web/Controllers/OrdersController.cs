@@ -56,10 +56,14 @@ public class OrdersController : Controller
             return BadRequest(ModelState);
         
         var order = await ordersService.Create(mapper.Map<Order>(createOrderDto));
-        var customFields = new CustomShpParameters();
-        customFields.Add("customer", order.Customer.ToString());
+        var ticket = await ticketsService.Get(order.TicketId);
         
-        return Ok(robokassaService.GenerateAuthLink(order.Ticket.Price, order.Ticket.Name, customFields));
+        var paymentLink = robokassaService.GeneratePaymentLink(
+            ticket.Price,
+            ticket.Name,
+            GetCustomShpParameters(order));
+        
+        return Ok(paymentLink);
     }
     
     [AllowAnonymous]
@@ -67,10 +71,14 @@ public class OrdersController : Controller
     public async Task<IActionResult> RetryPayment([FromRoute] Guid customer)
     {
         var order = await ordersService.Get(customer);
-        var customFields = new CustomShpParameters();
-        customFields.Add("customer", order.Customer.ToString());
+        var ticket = await ticketsService.Get(order.TicketId);
+
+        var paymentLink = robokassaService.GeneratePaymentLink(
+            ticket.Price,
+            ticket.Name,
+            GetCustomShpParameters(order));
         
-        return Ok(robokassaService.GenerateAuthLink(order.Ticket.Price, order.Ticket.Name, customFields));
+        return Ok(paymentLink);
     }
     
     [AllowAnonymous]
@@ -78,7 +86,8 @@ public class OrdersController : Controller
     public async Task<IActionResult> ProcessPaymentResult(
         [FromServices] IRobokassaPaymentValidator robokassaPaymentValidator,
         [FromForm] RobokassaCallbackRequest request,
-        [FromForm(Name = "Shp_customer")] string customer)
+        [FromForm(Name = "Shp_customer")] string customer,
+        [FromForm(Name = "Shp_eventId")] string eventId)
     {
         try
         {
@@ -86,7 +95,8 @@ public class OrdersController : Controller
                 request.OutSum,
                 request.InvId,
                 request.SignatureValue,
-                new KeyValuePair<string, string>("Shp_customer", customer)
+                new KeyValuePair<string, string>("Shp_customer", customer),
+                new KeyValuePair<string, string>("Shp_eventId", eventId)
             );
 
             await ordersService.SetPaid(Guid.Parse(customer));
@@ -112,8 +122,8 @@ public class OrdersController : Controller
         if (!await authService.IsInspector(userHelper.UserId, ticket.EventId))
             return StatusCode(403);
         
-        order.Paid = true;
         var createdOrder = await ordersService.Create(order);
+        await ordersService.SetPaid(createdOrder.Customer);
         return Ok(createdOrder.Customer.ToString());
     }
     
@@ -123,5 +133,13 @@ public class OrdersController : Controller
     {
         await ordersService.SetPaid(customer);
         return Ok();
+    }
+
+    private static CustomShpParameters GetCustomShpParameters(Order order)
+    {
+        var customFields = new CustomShpParameters();
+        customFields.Add("customer", order.Customer.ToString());
+        customFields.Add("eventId", order.Ticket.EventId.ToString());
+        return customFields;
     }
 }
