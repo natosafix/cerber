@@ -4,6 +4,7 @@ import { FileUploaderAttachedFile } from '@skbkontur/react-ui';
 import { DraftQuestionDto } from './DraftQuestionDto';
 import { TicketDto } from '../Models/TicketDto';
 import { Route } from '../../Content/Utility/Constants';
+import { Form } from 'react-router-dom';
 
 const api = axios.create();
 
@@ -42,12 +43,29 @@ export class EventAdminClient {
         });
     }
 
+    public static setTickets(tickets: TicketDto[]) {
+        let formData = new FormData();
+        
+        tickets.map((ticket, i) => {
+            formData.append(`tickets[${i}].name`, ticket.name);
+            formData.append(`tickets[${i}].price`, ticket.price!.toString());
+            formData.append(`tickets[${i}].coverImage`, ticket.cover!, ticket.cover!.name);
+            return formData;
+        });
+
+        return api.post(Route.SET_TICKETS, formData, {
+            headers: {
+                'Content-Type': `multipart/form-data`,
+            },
+        });
+    }
+
     public static removeCoverImage() {
         return api.delete(Route.REMOVE_COVER_IMAGE);
     }
 
-    public static publishDraft(tickets: TicketDto[]) {
-        return api.post(Route.PUBLISH_DRAFT, tickets);
+    public static publishDraft() {
+        return api.post(Route.PUBLISH_DRAFT);
     }
 
     public static createDraft() {

@@ -158,9 +158,9 @@ public class EventAdminController : Controller
         var tickets = await draftTicketsService.GetDraftTicketsByEventIdAsync(srcDraft.Id);
         return Ok(tickets);
     }
-    
+
     [HttpPost("[controller]/tickets")]
-    public async Task<IActionResult> Tickets([FromBody] CreateTicketDto[] tickets)
+    public async Task<IActionResult> Tickets([FromForm] List<CreateTicketDto> tickets)
     {
         if (!ModelState.IsValid || !tickets.Any())
             return BadRequest();

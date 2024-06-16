@@ -13,7 +13,7 @@ interface RectangleProps {
     children?: ReactNode;
 }
 
-const Rectangle: React.FC<RectangleProps> = ({
+export const TicketForm: React.FC<RectangleProps> = ({
     backgroundColor,
     borderColor,
     borderWidth,
@@ -52,5 +52,3 @@ const Rectangle: React.FC<RectangleProps> = ({
         </Box>
     );
 };
-
-export default Rectangle;

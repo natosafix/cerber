@@ -1,12 +1,15 @@
 ﻿import React from 'react';
 import { Ticket } from './Ticket';
-import { CurrencyInput, Gapped } from '@skbkontur/react-ui';
+import { CurrencyInput, FileUploaderAttachedFile, Gapped } from '@skbkontur/react-ui';
 import { Label } from '../Label/Label';
 import { SingleStringQuestion } from '../Questions/SingleStringQuestion';
 import styles from './TicketView.scss';
-import TicketForm from './TicketForm/TicketForm';
+import { TicketForm } from './TicketForm/TicketForm';
 import { Box } from '@mui/material';
 import { TicketImageLoader } from './TicketImageLoader/TicketImageLoader';
+import { ValidationWrapper } from '@skbkontur/react-ui-validations';
+import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
+import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
 
 interface TicketViewProps {
     ticket: Ticket;
@@ -23,6 +26,11 @@ export const TicketView: React.FC<TicketViewProps> = ({ ticket, ticketNum, onTic
         // TODO не присылает ивент, если стёрли значение
         onTicketChange(ticket.withPrice(v));
     };
+
+    const onFileUpload = async (file: FileUploaderAttachedFile) => {
+        onTicketChange(ticket.withCover(file.originalFile));
+    };
+
     return (
         <div className={styles.ticketWrapper}>
             <Gapped vertical={true} gap={10}>
@@ -45,7 +53,7 @@ export const TicketView: React.FC<TicketViewProps> = ({ ticket, ticketNum, onTic
                         margin={'0 0 0 -1px'}
                         polygon="91.74% 0.00%,100.00% 12.57%,100.00% 87.04%,93.14% 100%,0.00% 100%,0.00% 0.00%"
                     >
-                        <TicketImageLoader hideInput={true}></TicketImageLoader>
+                        <TicketImageLoader hideInput={true} uploader={onFileUpload}></TicketImageLoader>
                     </TicketForm>
                 </Box>
                 <SingleStringQuestion

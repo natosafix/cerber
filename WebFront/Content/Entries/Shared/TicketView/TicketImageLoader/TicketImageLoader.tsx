@@ -2,13 +2,25 @@ import React, { useEffect, useRef, useState } from 'react';
 import styles from './TicketImageLoader.scss';
 import { FileUploader, FileUploaderAttachedFile } from '@skbkontur/react-ui';
 import { Box } from '@mui/material';
+import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
+import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
+import { ValidationWrapper } from '@skbkontur/react-ui-validations';
 
 interface TicketImageLoaderProps {
     onRemove?: () => void;
+    uploader: (file: FileUploaderAttachedFile) => void;
     hideInput?: boolean;
 }
 
-export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({ onRemove, hideInput }) => {
+function coverExistsValidate(cover: Blob | undefined): Nullable<ValidationInfo> {
+    if (!cover) {
+        return { message: 'Необходимо загрузить обложку', type: 'submit' };
+    }
+
+    return null;
+}
+
+export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({ onRemove, hideInput, uploader }) => {
     const [selectedFile, setSelectedFile] = useState<Blob | undefined>();
     const [preview, setPreview] = useState<string | null | undefined>();
     let firstRender = useRef(true);
@@ -21,6 +33,7 @@ export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({ onRemove, 
         }
         if (files[0].status === 'Uploaded' || files[0].status === 'Attached') {
             setSelectedFile(files[0].originalFile);
+            uploader(files[0]);
         }
     };
 
@@ -41,7 +54,11 @@ export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({ onRemove, 
 
     return (
         <Box>
-            {(!hideInput || !preview) && <FileUploader accept={'image/*'} onValueChange={onValueChange} />}
+            {(!hideInput || !preview) &&
+                <ValidationWrapper validationInfo={coverExistsValidate(selectedFile)}>
+                    <FileUploader accept={'image/*'} onValueChange={onValueChange} />
+                </ValidationWrapper>
+            }
 
             {preview && <img src={preview} className={styles.imagePreview} alt={''}></img>}
         </Box>

@@ -12,6 +12,7 @@ export const Route = {
     SET_QUESTIONS: '/EventAdmin/questions',
     GET_COVER_IMAGE: '/EventAdmin/coverImage',
     SET_COVER_IMAGE: '/EventAdmin/coverImage',
+    SET_TICKETS: '/EventAdmin/tickets',
     REMOVE_COVER_IMAGE: '/EventAdmin/coverImage',
     PUBLISH_DRAFT: '/EventAdmin/publishDraft',
     CREATE_DRAFT: '/EventAdmin/createDraft',
