@@ -117,7 +117,7 @@ public class EventAdminController : Controller
         if (userFile is null)
             return NotFound();
 
-        var fileStream = userFilesService.GetContentStream(userFile);
+        var fileStream = await userFilesService.GetContent(userFile);
         return File(fileStream, "APPLICATION/octet-stream");
     }
 
@@ -197,7 +197,7 @@ public class EventAdminController : Controller
         if (imageFile is null)
             return NotFound();
 
-        var fileStream = userFilesService.GetContentStream(imageFile);
+        var fileStream = await userFilesService.GetContent(imageFile);
         return File(fileStream, "APPLICATION/octet-stream");
     }
 

@@ -10,8 +10,6 @@ public interface IUserFilesService
 
     Task<byte[]> GetContent(UserFile userFile);
 
-    Stream GetContentStream(UserFile userFile);
-
     Task<UserFile> Save(IFormFile formFile, bool generateName = false);
 
     Task<IReadOnlyCollection<UserFile>> Save(IReadOnlyCollection<IFormFile> formFile, bool generateName = false);

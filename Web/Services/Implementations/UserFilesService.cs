@@ -33,12 +33,7 @@ public class UserFilesService : IUserFilesService
 
     public async Task<byte[]> GetContent(UserFile userFile)
     {
-        return await storageManager.Get(userFile.Path);
-    }
-
-    public Stream GetContentStream(UserFile userFile)
-    {
-        return storageManager.GetFileStream(userFile.Path);
+        return await storageManager.Get(userFile);
     }
 
     public async Task<UserFile> Save(IFormFile formFile, bool generateName = false)
@@ -53,10 +48,11 @@ public class UserFilesService : IUserFilesService
         }
         var userFile = new UserFile
         {
+            Id = Guid.NewGuid(),
             Name = fileName,
             Path = Path.Combine(DefaultPath, username, fileName)
         };
-        await storageManager.Save(formFile, userFile.Path);
+        await storageManager.Save(formFile, userFile);
         return await userFilesRepository.Save(userFile);
     }
 
@@ -78,13 +74,13 @@ public class UserFilesService : IUserFilesService
     public async Task Remove(UserFile userFile)
     {
         await userFilesRepository.Remove(userFile);
-        storageManager.Remove(userFile.Path);
+        storageManager.Remove(userFile);
     }
 
     public async Task Remove(Guid userFileId)
     {
         var userFile = await Get(userFileId);
         await userFilesRepository.Remove(userFileId);
-        storageManager.Remove(userFile.Path);
+        storageManager.Remove(userFile);
     }
 }
