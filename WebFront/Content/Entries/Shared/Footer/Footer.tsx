@@ -13,7 +13,11 @@ export default function Footer() {
                 backgroundColor: 'white',
                 display: 'flex',
                 alignItem: 'center',
+                height: '100px',
+                padding: '0',
+                marginTop: '50px',
                 justifyContent: 'center',
+                alignItems: 'center',
             }}
             component="footer"
         >

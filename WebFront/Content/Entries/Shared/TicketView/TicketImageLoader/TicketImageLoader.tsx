@@ -1,20 +1,16 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
-import styles from './QuestionStyles.scss';
-import variables from './QuestionVariables.scss';
-import { FileUploader, FileUploaderAttachedFile, Gapped } from '@skbkontur/react-ui';
-import { Label } from '../Label/Label';
+import React, { useEffect, useRef, useState } from 'react';
+import styles from './TicketImageLoader.scss';
+import { FileUploader, FileUploaderAttachedFile } from '@skbkontur/react-ui';
+import { Box } from '@mui/material';
 
-interface IImageLoaderQuestion {
-    title?: string;
-    defaultUrl?: string | null | undefined;
-    uploader?: (file: FileUploaderAttachedFile) => Promise<void>;
+interface TicketImageLoaderProps {
     onRemove?: () => void;
     hideInput?: boolean;
 }
 
-export const ImageLoader: React.FC<IImageLoaderQuestion> = ({ title, defaultUrl, uploader, onRemove, hideInput }) => {
+export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({ onRemove, hideInput }) => {
     const [selectedFile, setSelectedFile] = useState<Blob | undefined>();
-    const [preview, setPreview] = useState<string | null | undefined>(defaultUrl);
+    const [preview, setPreview] = useState<string | null | undefined>();
     let firstRender = useRef(true);
 
     const onValueChange = (files: FileUploaderAttachedFile[]) => {
@@ -44,14 +40,10 @@ export const ImageLoader: React.FC<IImageLoaderQuestion> = ({ title, defaultUrl,
     }, [selectedFile]);
 
     return (
-        <Gapped gap={Number.parseInt(variables.titleContentGap)} vertical={true} className={styles.questionInput}>
-            {title && <Label label={title} size={'large'} />}
-
-            {(!hideInput || !preview) && (
-                <FileUploader accept={'image/*'} onValueChange={onValueChange} request={uploader} />
-            )}
+        <Box>
+            {(!hideInput || !preview) && <FileUploader accept={'image/*'} onValueChange={onValueChange} />}
 
             {preview && <img src={preview} className={styles.imagePreview} alt={''}></img>}
-        </Gapped>
+        </Box>
     );
 };

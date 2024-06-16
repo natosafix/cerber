@@ -3,6 +3,7 @@ import { CerberThemeProvider } from './Shared/ThemeProvider/CerberThemeProvider'
 import { Header } from './Shared/Header/Header';
 import Footer from './Shared/Footer/Footer';
 import { Box } from '@mui/material';
+
 interface PageProps {
     children: ReactNode;
 }
@@ -10,7 +11,7 @@ interface PageProps {
 export const Page: React.FC<PageProps> = ({ children }) => {
     return (
         <CerberThemeProvider>
-            <Box sx={{ minHeight: '100vh' }}>
+            <Box sx={{ minHeight: 'calc(100vh - 150px)' }}>
                 <Header />
                 {children}
             </Box>

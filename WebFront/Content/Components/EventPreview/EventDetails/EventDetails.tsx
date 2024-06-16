@@ -8,6 +8,7 @@ import { Label } from '../../../Entries/Shared/Label/Label';
 import { Button } from '@skbkontur/react-ui';
 import { getUserInfo } from '../../../Helpers/UserInfoHelper';
 import { Route } from '../../../Utility/Constants';
+import { EventDetailsSkeleton } from './EventDetailsSkeleton';
 
 export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
     const [event, setEvent] = useState<IEvent | null>(null);
@@ -42,7 +43,11 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
     };
 
     if (!event) {
-        return <div>Loading...</div>;
+        return (
+            <div>
+                <EventDetailsSkeleton />
+            </div>
+        );
     }
     return (
         <div className={styles.pageWrapper}>

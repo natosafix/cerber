@@ -5,19 +5,16 @@ import styles from './EventPreview.scss';
 import { EventCreateButton } from './CreateDraftButton/CreateDraftButton';
 import { MaxWidthWrapper } from '../../Entries/Shared/Wrappers/MaxWidthWrapper';
 import { Gapped } from '@skbkontur/react-ui';
-import { Button } from '@skbkontur/react-ui';
-import event from './Event/Event';
+import { Box } from '@mui/material';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 export const EventPreview = () => {
-    const { events, fetchEvents } = useEvents();
+    const { events, fetchEvents, haveMore } = useEvents();
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const containerRef = useRef<HTMLDivElement>(null);
-
     const handleClickUploadButton = async () => {
-        if (events.length % 6 !== 0) {
-            return;
-        }
         setLoading(true);
         setCurrentPage((prevPage) => prevPage + 1);
     };
@@ -34,17 +31,6 @@ export const EventPreview = () => {
         loadMoreEvents();
     }, [fetchEvents, currentPage]);
 
-    // useEffect(() => {
-    //     const container = containerRef.current;
-    //     if (!container) return;
-    //
-    //     container.addEventListener('scroll', handleScroll);
-    //
-    //     return () => {
-    //         container.removeEventListener('scroll', handleScroll);
-    //     };
-    // }, [handleScroll]);
-
     return (
         <div ref={containerRef}>
             <MaxWidthWrapper>
@@ -52,8 +38,26 @@ export const EventPreview = () => {
                     <EventCreateButton />
 
                     <Events loading={loading} events={events} />
-                    {events.length % 6 === 0 && <Button onClick={handleClickUploadButton}>{'Показать ещё'}</Button>}
-                    <div className={styles.bottomDev} />
+                    <Box className={styles.loadMoreButton}>
+                        {haveMore && (
+                            <LoadingButton
+                                loading={loading}
+                                sx={{
+                                    color: '#7c7c7c',
+                                    borderColor: '#7c7c7c',
+                                    '&:hover': {
+                                        backgroundColor: 'rgb(124,124,124, 0.1)',
+                                        borderColor: '#7c7c7c',
+                                    },
+                                }}
+                                variant="outlined"
+                                startIcon={<AddCircleOutlineIcon />}
+                                onClick={handleClickUploadButton}
+                            >
+                                {'Показать ещё'}
+                            </LoadingButton>
+                        )}
+                    </Box>
                 </Gapped>
             </MaxWidthWrapper>
         </div>
