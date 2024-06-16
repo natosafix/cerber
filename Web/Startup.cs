@@ -109,7 +109,7 @@ public class Startup
         services.AddMinio(client => client
             .WithEndpoint("s3.yandexcloud.net")
             .WithRegion("ru-central1")
-            .WithCredentials(config["MinioOptions:AccessKey"], config["MinioOptions:SecretKey"])
+            .WithCredentials(config["CloudStorageOptions:AccessKey"], config["CloudStorageOptions:SecretKey"])
             .WithSSL(false)
             .Build());
     }
