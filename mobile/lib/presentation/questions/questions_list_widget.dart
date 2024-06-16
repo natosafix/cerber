@@ -46,26 +46,30 @@ class QuestionsListWidget extends StatelessWidget {
                 QuestionType.oneLineText => TextInput(
                     label: question.question,
                     initialValue: answer.answers.first,
-                    onChanged: onTextChanged == null ? null : (value) => onTextChanged!(question, value),
+                    onChanged:
+                        onTextChanged == null ? null : (value) => onTextChanged!(question, value),
                   ),
                 QuestionType.multiLineText => Padding(
                     padding: const EdgeInsets.symmetric(vertical: _midInputsPadding + 8),
                     child: MultilineTextInput(
                       label: question.question,
                       initialValue: answer.answers.first,
-                      onChanged: onTextChanged == null ? null : (value) => onTextChanged!(question, value),
+                      onChanged:
+                          onTextChanged == null ? null : (value) => onTextChanged!(question, value),
                     ),
                   ),
                 QuestionType.radio => RadioInput(
                     label: question.question,
                     options: question.options,
                     selectedOption: null,
-                    onChanged: onRadioChanged == null ? null : (value) => onRadioChanged!(question, value),
+                    onChanged:
+                        onRadioChanged == null ? null : (value) => onRadioChanged!(question, value),
                   ),
                 QuestionType.checkbox => CheckboxInput(
                     label: question.question,
                     options: [
-                      for (final option in question.options) (option, answer.answers.contains(option)),
+                      for (final option in question.options)
+                        (option, answer.answers.contains(option)),
                     ],
                     onChanged: onCheckboxChanged == null
                         ? null

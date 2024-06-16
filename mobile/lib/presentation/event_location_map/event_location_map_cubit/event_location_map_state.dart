@@ -1,13 +1,21 @@
 part of 'event_location_map_cubit.dart';
 
-sealed class EventLocationMapState {}
+sealed class EventLocationMapState {
+  EventLocationMapState({
+    required this.mapController,
+  });
 
-final class Loading extends EventLocationMapState {}
+  final MapController mapController;
+}
 
-final class LoadFailed extends EventLocationMapState {}
+final class Loading extends EventLocationMapState {
+  Loading({required super.mapController});
+}
+
+final class LoadFailed extends EventLocationMapState {
+  LoadFailed({required super.mapController});
+}
 
 final class LoadSuccees extends EventLocationMapState {
-  LoadSuccees({required this.coords});
-  
-  final Coords coords;
+  LoadSuccees({required super.mapController});
 }

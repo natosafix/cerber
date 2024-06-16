@@ -14,25 +14,27 @@ class InitialScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset("assets/${context.isLight() ? 'logo_light.png' : 'logo_dark.png'}"),
-            const SizedBox(height: 150),
-            FullWidthButton(
-              onPressed: () => _signUpPressed(context),
-              child: Text(L10n.current.signUp),
-            ),
-            const SizedBox(height: 8),
-            FullWidthButton(
-              onPressed: () => _logInPressed(context),
-              child: Text(L10n.current.logIn),
-            ),
-          ],
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset("assets/${context.isLight() ? 'logo_light.png' : 'logo_dark.png'}"),
+              const SizedBox(height: 150),
+              FullWidthButton(
+                onPressed: () => _signUpPressed(context),
+                child: Text(L10n.current.signUp),
+              ),
+              const SizedBox(height: 8),
+              FullWidthButton(
+                onPressed: () => _logInPressed(context),
+                child: Text(L10n.current.logIn),
+              ),
+            ],
+          ),
         ),
       ),
     );

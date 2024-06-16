@@ -25,7 +25,10 @@ class EventDetailSliverAppBar extends StatelessWidget {
         ],
         centerTitle: true,
         titlePadding: const EdgeInsets.all(8),
-        title: Text(event.name),
+        title: Text(
+          event.name,
+          style: const TextStyle(color: Colors.white),
+        ),
         background: Stack(
           fit: StackFit.expand,
           children: [

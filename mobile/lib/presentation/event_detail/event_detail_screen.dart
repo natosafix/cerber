@@ -1,9 +1,9 @@
-import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/repositories/compound_events_repository/download_status.dart';
 import 'package:project/l10n/generated/l10n.dart';
+import 'package:project/presentation/event_detail/event_description_widget.dart';
 import 'package:project/presentation/event_detail/event_detail_location.dart';
 import 'package:project/presentation/event_detail/event_detail_sliver_app_bar.dart';
 import 'package:project/presentation/event_detail/event_detail_bloc/event_detail_bloc.dart';
@@ -24,16 +24,16 @@ class EventDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => EventDetailBloc(event),
-      child: Scaffold(
-        body: CustomScrollView(
-          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          slivers: [
-            EventDetailSliverAppBar(event: event),
-            SliverPadding(
-              padding: const EdgeInsets.all(15),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate.fixed(
-                  [
+      child: SafeArea(
+        child: Scaffold(
+          body: CustomScrollView(
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            slivers: [
+              EventDetailSliverAppBar(event: event),
+              SliverPadding(
+                padding: const EdgeInsets.all(15),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate.fixed([
                     EventDetailLocation(event: event),
                     const SizedBox(height: 8),
                     Text.rich(
@@ -49,32 +49,28 @@ class EventDetailScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    ExpandableText(
-                      event.description,
-                      expandText: L10n.current.more,
-                      collapseText: L10n.current.less,
-                      collapseOnTextTap: true,
-                      linkEllipsis: false,
-                      animation: true,
-                      maxLines: 7,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                    EventDescriptionWidget(text: event.description),
                     const SizedBox(height: 18),
                     BlocBuilder<EventDetailBloc, EventDetailState>(
-                      buildWhen: (previous, current) => previous.lastDownloaded != current.lastDownloaded,
+                      buildWhen: (previous, current) =>
+                          previous.lastDownloaded != current.lastDownloaded,
                       builder: (context, state) {
                         final date = state.lastDownloaded;
                         if (date == null) {
                           return Text("⚠ ${L10n.current.notDownloaded}");
                         }
-                        return Text("${L10n.current.lastDownloaded} ${L10n.current.formattedDateTime(date, date)}");
+                        final formattedDate = L10n.current.formattedDateTime(date, date);
+                        return Text("${L10n.current.lastDownloaded} $formattedDate");
                       },
                     ),
                     const SizedBox(height: 8),
                     BlocConsumer<EventDetailBloc, EventDetailState>(
-                      listenWhen: (previous, current) => current.downloadStatus == DownloadStatus.failure,
-                      listener: (context, state) => context.showSnackbar(L10n.current.somethingWentWrong),
-                      buildWhen: (previous, current) => previous.isDownloading != current.isDownloading,
+                      listenWhen: (previous, current) =>
+                          current.downloadStatus == DownloadStatus.failure,
+                      listener: (context, state) =>
+                          context.showSnackbar(L10n.current.somethingWentWrong),
+                      buildWhen: (previous, current) =>
+                          previous.isDownloading != current.isDownloading,
                       builder: (context, state) {
                         final isDownloading = state.isDownloading;
                         return Column(
@@ -82,7 +78,8 @@ class EventDetailScreen extends StatelessWidget {
                             FullWidthButton.withLoading(
                               isEnabled: !isDownloading,
                               showLoadingIndicator: isDownloading,
-                              onPressed: () => context.read<EventDetailBloc>().add(DownloadDatabase()),
+                              onPressed: () =>
+                                  context.read<EventDetailBloc>().add(DownloadDatabase()),
                               child: Text(L10n.current.downloadDatabase),
                             ),
                             const SizedBox(width: 10),
@@ -95,11 +92,11 @@ class EventDetailScreen extends StatelessWidget {
                         );
                       },
                     ),
-                  ],
+                  ]),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

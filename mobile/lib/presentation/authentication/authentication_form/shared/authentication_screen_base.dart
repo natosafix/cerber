@@ -13,14 +13,16 @@ class AuthenticationScreenBase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: FlatAppBar(
-        title: Text(title),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: child,
+    return SafeArea(
+      child: Scaffold(
+        appBar: FlatAppBar(
+          title: Text(title),
+          centerTitle: true,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(20),
+          child: child,
+        ),
       ),
     );
   }

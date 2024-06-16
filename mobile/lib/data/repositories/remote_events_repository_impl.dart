@@ -99,7 +99,7 @@ class RemoteEventsRepositoryImpl implements RemoteEventsRepository {
       answers: filledAnswers.map((e) => e.toApi()).toList(),
     );
     try {
-      final response = await _eventsService.sendAnswers(request);
+      final String response = await _eventsService.sendAnswers(request);
       return response;
     } on DioException catch (_) {
       return null;

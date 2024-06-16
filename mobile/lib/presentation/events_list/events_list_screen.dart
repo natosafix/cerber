@@ -20,46 +20,48 @@ class EventsListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => EventsBloc(),
-      child: Scaffold(
-        appBar: FlatAppBar(
-          title: Text(L10n.current.events),
-          actions: [
-            IconButton(
-              onPressed: () {
-                context.read<AuthenticationBloc>().add(Unauthenticate());
-              },
-              icon: const Icon(Icons.logout),
-            ),
-          ],
-        ),
-        body: BlocBuilder<EventsBloc, EventsState>(
-          builder: (context, state) {
-            return RefreshIndicator(
-              onRefresh: () => Future.sync(
-                () => state.pagingController.refresh(),
+      child: SafeArea(
+        child: Scaffold(
+          appBar: FlatAppBar(
+            title: Text(L10n.current.events),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  context.read<AuthenticationBloc>().add(Unauthenticate());
+                },
+                icon: const Icon(Icons.logout),
               ),
-              child: PagedListView<int, Event>(
-                pagingController: state.pagingController,
-                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                builderDelegate: PagedChildBuilderDelegate<Event>(
-                  itemBuilder: (context, event, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      child: GestureDetector(
-                        onTap: () => Navigator.of(context).push(EventDetailScreen.route(event)),
-                        child: EventWidget(event),
-                      ),
-                    );
-                  },
-                  noItemsFoundIndicatorBuilder: (context) {
-                    return Center(
-                      child: Text(L10n.current.youHaveNoEvents),
-                    );
-                  },
+            ],
+          ),
+          body: BlocBuilder<EventsBloc, EventsState>(
+            builder: (context, state) {
+              return RefreshIndicator(
+                onRefresh: () => Future.sync(
+                  () => state.pagingController.refresh(),
                 ),
-              ),
-            );
-          },
+                child: PagedListView<int, Event>(
+                  pagingController: state.pagingController,
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  builderDelegate: PagedChildBuilderDelegate<Event>(
+                    itemBuilder: (context, event, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        child: GestureDetector(
+                          onTap: () => Navigator.of(context).push(EventDetailScreen.route(event)),
+                          child: EventWidget(event),
+                        ),
+                      );
+                    },
+                    noItemsFoundIndicatorBuilder: (context) {
+                      return Center(
+                        child: Text(L10n.current.youHaveNoEvents),
+                      );
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

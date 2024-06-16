@@ -13,13 +13,15 @@ class QuestionsScreenBase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: FlatAppBar(
-        title: Text(title),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: child,
+    return SafeArea(
+      child: Scaffold(
+        appBar: FlatAppBar(
+          title: Text(title),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: child,
+        ),
       ),
     );
   }

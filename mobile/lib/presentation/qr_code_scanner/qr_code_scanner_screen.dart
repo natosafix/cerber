@@ -57,7 +57,7 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
         listener: _stateChanged,
         child: Scaffold(
           appBar: FlatAppBar(
-            switchForegroundColorInDarkMode: false,
+            foregroundColor: Colors.white,
             actions: [
               IconButton(
                 onPressed: () {
