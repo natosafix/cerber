@@ -21,12 +21,12 @@ public class UserFilesService : IUserFilesService
         this.userHelper = userHelper;
     }
 
-    public async Task<UserFile> Get(int id)
+    public async Task<UserFile> Get(Guid id)
     {
         return await userFilesRepository.Get(id) ?? throw new BadHttpRequestException($"Not found file with id {id}");
     }
 
-    public async Task<UserFile?> TryGet(int id)
+    public async Task<UserFile?> TryGet(Guid id)
     {
         return await userFilesRepository.Get(id);
     }
@@ -74,7 +74,7 @@ public class UserFilesService : IUserFilesService
         storageManager.Remove(userFile.Path);
     }
 
-    public async Task Remove(int userFileId)
+    public async Task Remove(Guid userFileId)
     {
         var userFile = await Get(userFileId);
         await userFilesRepository.Remove(userFileId);

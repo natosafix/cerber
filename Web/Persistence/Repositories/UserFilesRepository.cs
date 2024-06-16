@@ -12,7 +12,7 @@ public class UserFilesRepository : IUserFilesRepository
         this.dbContext = dbContext;
     }
 
-    public async Task<UserFile?> Get(int id)
+    public async Task<UserFile?> Get(Guid id)
     {
         return await dbContext.UserFiles.FindAsync(id);
     }
@@ -30,7 +30,7 @@ public class UserFilesRepository : IUserFilesRepository
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task Remove(int userFileId)
+    public async Task Remove(Guid userFileId)
     {
         await dbContext.UserFiles.Where(uf => uf.Id == userFileId).ExecuteDeleteAsync();
         await dbContext.SaveChangesAsync();

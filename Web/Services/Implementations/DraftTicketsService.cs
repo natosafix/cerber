@@ -42,6 +42,6 @@ public class DraftTicketsService : IDraftTicketsService
         await draftTicketsRepository.SetDraftTicketsAsync(newDraftTickets);
 
         foreach (var draftTicket in oldDraftTickets)
-            await userFilesService.Remove(draftTicket.DraftEventId);
+            await userFilesService.Remove(draftTicket.CoverImageId);
     }
 }

@@ -14,7 +14,7 @@ public class CreateTicketDto : IValidatableObject
     [Required]
     public IFormFile CoverImage { get; set; }
 
-    public int? ImageId { get; set; }
+    public Guid? ImageId { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

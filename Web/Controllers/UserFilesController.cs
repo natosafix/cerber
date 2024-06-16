@@ -15,14 +15,14 @@ public class UserFilesController : Controller
         this.userFilesService = userFilesService;
     }
     
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Get([FromRoute] int id)
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         return Ok(await userFilesService.Get(id));
     }
     
-    [HttpGet("{id}/download")]
-    public async Task<IActionResult> Download([FromRoute] int id)
+    [HttpGet("{id:guid}/download")]
+    public async Task<IActionResult> Download([FromRoute] Guid id)
     {
         var userFile = await userFilesService.Get(id);
         var bytes = await userFilesService.GetContent(userFile);
