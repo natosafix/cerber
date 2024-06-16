@@ -9,11 +9,13 @@ public class EventsService : IEventsService
 {
     private readonly IUsersRepository usersRepository;
     private readonly IEventsRepository eventsRepository;
+    private readonly IOrdersRepository ordersRepository;
 
-    public EventsService(IUsersRepository usersRepository, IEventsRepository eventsRepository)
+    public EventsService(IUsersRepository usersRepository, IEventsRepository eventsRepository, IOrdersRepository ordersRepository)
     {
         this.usersRepository = usersRepository;
         this.eventsRepository = eventsRepository;
+        this.ordersRepository = ordersRepository;
     }
 
     public async Task<Event> Get(int id)
@@ -74,8 +76,25 @@ public class EventsService : IEventsService
         return await eventsRepository.GetOwned(username, offset, limit);
     }
 
-    public Task<Event> GetStats(int id)
+    public async Task<EventStats> GetStats(int id)
     {
-        throw new NotImplementedException();
+        var stats = new EventStats();
+        var @event = await Get(id);
+        var orders = await ordersRepository.GetByEvent(id);
+        var paidOrders = orders.Where(o => o.Paid).ToList();
+        var tickets = paidOrders.Select(o => o.Ticket).DistinctBy(t => t.Name);
+        foreach (var order in paidOrders)
+        {
+            var ticketName = order.Ticket.Name;
+            stats.TicketsInfo.TryAdd(ticketName, 0);
+            stats.TicketsInfo[ticketName]++;
+        }
+
+        stats.SoldTicketsCount = paidOrders.Count;
+        stats.TotalProfit = stats.TicketsInfo
+            .Select(pair => tickets.First(t => t.Name == pair.Key).Price * pair.Value)
+            .Sum();
+        
+        return stats;
     }
 }

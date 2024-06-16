@@ -30,7 +30,7 @@ public class EventsController : Controller
     }
 
     [AllowAnonymous]
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
         var inspectedEvents = await eventsService.Get(id);
@@ -65,14 +65,14 @@ public class EventsController : Controller
     }
 
     [Authorize("MustOwnEvent")]
-    [HttpGet("{id}/inspectors")]
+    [HttpGet("{id:int}/inspectors")]
     public async Task<IActionResult> GetInspectors([FromRoute] int id)
     {
         return Ok(await eventsService.GetInspectors(id));
     }
     
     [Authorize("MustOwnEvent")]
-    [HttpPut("{id}/inspector")]
+    [HttpPut("{id:int}/inspector")]
     public async Task<IActionResult> AddInspector([FromRoute] int id, [FromBody] SetInspectorDto setInspectorDto)
     {
         if (!ModelState.IsValid)
@@ -85,7 +85,7 @@ public class EventsController : Controller
     }
     
     [Authorize("MustOwnEvent")]
-    [HttpPut("{id}/inspectorByUsername")]
+    [HttpPut("{id:int}/inspectorByUsername")]
     public async Task<IActionResult> AddInspectorByUsername([FromRoute] int id, [FromBody] SetInspectorByUsernameDto setInspectorDto)
     {
         if (!ModelState.IsValid)
@@ -97,7 +97,7 @@ public class EventsController : Controller
     }
     
     [Authorize("MustOwnEvent")]
-    [HttpDelete("{id}/inspector")]
+    [HttpDelete("{id:int}/inspector")]
     public async Task<IActionResult> DeleteInspector([FromRoute] int id, [FromQuery] string username)
     {
         await eventsService.DeleteInspector(id, username);
@@ -106,14 +106,14 @@ public class EventsController : Controller
     }
     
     [Authorize("MustOwnEvent")]
-    [HttpPut("{id}/stats")]
-    public async Task<IActionResult> AddInspector([FromRoute] int id)
+    [HttpGet("{id:int}/stats")]
+    public async Task<IActionResult> GetStats([FromRoute] int id)
     {
         return Ok(await eventsService.GetStats(id));
     }
     
     [AllowAnonymous]
-    [HttpGet("{id}/cover")]
+    [HttpGet("{id:int}/cover")]
     public async Task<IActionResult> GetCover([FromRoute] int id)
     {
         var @event = await eventsService.Get(id);
