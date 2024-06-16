@@ -11,7 +11,7 @@ public class Ticket
     public int EventId { get; set; }
     public Event Event { get; set; }
     
-    public int? CoverId { get; set; }
+    public Guid? CoverId { get; set; }
     public UserFile? Cover { get; set; }
 
     public List<Order> Orders { get; set; }
