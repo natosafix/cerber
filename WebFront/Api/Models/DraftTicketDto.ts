@@ -2,10 +2,10 @@
     public id: number;
     public name: string;
     public price?: number;
-    public cover?: File;
+    public cover?: Blob;
     public coverImageId?: string;
 
-    constructor(name: string, price: number, cover?: File, coverImageId?: string) {
+    constructor(name: string, price: number, cover?: Blob, coverImageId?: string) {
         this.name = name;
         this.price = price;
         this.cover = cover;

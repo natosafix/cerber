@@ -13,6 +13,7 @@ export const Route = {
     GET_COVER_IMAGE: '/EventAdmin/coverImage',
     SET_COVER_IMAGE: '/EventAdmin/coverImage',
     GET_DRAFT_TICKETS: '/EventAdmin/tickets',
+    GET_TICKET_IMAGE: (ticketId: number) => `/EventAdmin/ticketImage/${ticketId}`,
     SET_DRAFT_TICKETS: '/EventAdmin/tickets',
     REMOVE_COVER_IMAGE: '/EventAdmin/coverImage',
     PUBLISH_DRAFT: '/EventAdmin/publishDraft',

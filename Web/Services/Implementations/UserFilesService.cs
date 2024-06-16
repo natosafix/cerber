@@ -44,7 +44,13 @@ public class UserFilesService : IUserFilesService
     public async Task<UserFile> Save(IFormFile formFile, bool generateName = false)
     {
         var username = userHelper.Username;
-        var fileName = generateName ? Guid.NewGuid().ToString() : formFile.FileName;
+        var fileName = formFile.FileName;
+        
+        if (generateName)
+        {
+            var fileInfo = new FileInfo(fileName);
+            fileName =  $"{Guid.NewGuid().ToString()}{fileInfo.Extension}";
+        }
         var userFile = new UserFile
         {
             Name = fileName,

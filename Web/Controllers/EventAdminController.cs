@@ -173,7 +173,7 @@ public class EventAdminController : Controller
         foreach (var ticket in tickets)
         {
             var savedFile = await userFilesService.Save(ticket.CoverImage, true);
-            ticket.ImageId = savedFile.Id;
+            ticket.CoverImageId = savedFile.Id;
         }
 
         var newDraftTickets = mapper.Map<DraftTicket[]>(tickets);

@@ -2,3 +2,22 @@
   width: 100%;
   height: 100%;
 }
+
+.resizableBox {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  .react-resizable-handle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    bottom: 0;
+    right: 0;
+    background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="%23ccc" d="M0 18v2h2l8-8-2-2zm0-8v2h2l8-8-2-2zm0-8v2h2l8-8-2-2z"/></svg>') no-repeat right bottom;
+  }
+}

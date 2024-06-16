@@ -1,17 +1,18 @@
-﻿import { TicketDto } from '../../../../Api/Models/TicketDto';
-import { DraftTicketDto } from '../../../../Api/Models/DraftTicketDto';
+﻿import { DraftTicketDto } from '../../../../Api/Models/DraftTicketDto';
+import { EventAdminClient } from '../../../../Api/EventAdmin/EventAdminClient';
 
 export class Ticket {
-    public static fromDto(viewId: number, ticketDto: DraftTicketDto): Ticket {
-        let ticket = new Ticket(viewId);
-        // TODO вместе с cover нужен CoverId
+    public static async fromDto(viewId: number, ticketDto: DraftTicketDto): Promise<Ticket> {
+        const file = await EventAdminClient.getTicketImage(ticketDto.id);
+        let ticket = new Ticket(viewId).withPrice(ticketDto.price).withName(ticketDto.name).withCover(file);
+        console.log(ticket);
         return ticket;
     }
-    
+
     public ViewId: number;
     public Name: string;
     public Price?: number;
-    public Cover: File;
+    public Cover: Blob;
 
     constructor(viewId: number) {
         this.ViewId = viewId;
@@ -27,7 +28,7 @@ export class Ticket {
         return this;
     }
 
-    public withCover(cover: File): Ticket {
+    public withCover(cover: Blob): Ticket {
         this.Cover = cover;
         return this;
     }

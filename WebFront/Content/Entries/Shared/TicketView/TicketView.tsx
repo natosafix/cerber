@@ -7,6 +7,7 @@ import styles from './TicketView.scss';
 import { TicketForm } from './TicketForm/TicketForm';
 import { Box } from '@mui/material';
 import { TicketImageLoader } from './TicketImageLoader/TicketImageLoader';
+import { EventAdminClient } from '../../../../Api/EventAdmin/EventAdminClient';
 
 interface TicketViewProps {
     ticket: Ticket;
@@ -21,6 +22,7 @@ export const TicketView: React.FC<TicketViewProps> = ({ ticket, ticketNum, onTic
 
     const onChangeTicketPrice = (v?: number) => {
         // TODO не присылает ивент, если стёрли значение
+        console.log(v);
         onTicketChange(ticket.withPrice(v));
     };
 
@@ -36,21 +38,12 @@ export const TicketView: React.FC<TicketViewProps> = ({ ticket, ticketNum, onTic
                     <TicketForm
                         backgroundColor="white"
                         borderWidth={2}
-                        width={((148 * 4) / 3) * 2}
+                        width={148 * 4}
                         borderColor="black"
                         height={200}
                         polygon="0.00% 0.00%,100.00% 0.00%,100.00% 100%,0.00% 100%"
-                    ></TicketForm>
-                    <TicketForm
-                        backgroundColor="white"
-                        borderWidth={2}
-                        width={(148 * 4) / 3}
-                        borderColor="black"
-                        height={200}
-                        margin={'0 0 0 -1px'}
-                        polygon="91.74% 0.00%,100.00% 12.57%,100.00% 87.04%,93.14% 100%,0.00% 100%,0.00% 0.00%"
                     >
-                        <TicketImageLoader hideInput={true} uploader={onFileUpload}></TicketImageLoader>
+                        <TicketImageLoader hideInput={true} uploader={onFileUpload} ticket={ticket}></TicketImageLoader>
                     </TicketForm>
                 </Box>
                 <SingleStringQuestion

@@ -31,7 +31,9 @@ export class EventAdminClient {
     }
 
     public static getCoverImageUrl(): string {
-        return api.getUri({ url: Route.GET_COVER_IMAGE });
+        const uri = api.getUri({ url: Route.GET_COVER_IMAGE });
+        console.log(uri);
+        return uri;
     }
 
     public static setCoverImage(file: FileUploaderAttachedFile): Promise<void> {
@@ -45,16 +47,24 @@ export class EventAdminClient {
     }
 
     public static getTickets() {
-        return api.get<DraftTicketDto[]>(Route.GET_DRAFT_TICKETS)
+        return api.get<DraftTicketDto[]>(Route.GET_DRAFT_TICKETS);
     }
-    
+
+    public static async getTicketImage(ticketId: number): Promise<Blob> {
+        return await api
+            .get<Blob>(Route.GET_TICKET_IMAGE(ticketId), {
+                responseType: 'blob',
+            })
+            .then((x) => x.data);
+    }
+
     public static setTickets(tickets: DraftTicketDto[]) {
         let formData = new FormData();
-        
+
         tickets.map((ticket, i) => {
             formData.append(`tickets[${i}].name`, ticket.name);
             formData.append(`tickets[${i}].price`, ticket.price!.toString());
-            formData.append(`tickets[${i}].coverImage`, ticket.cover!, ticket.cover!.name);
+            formData.append(`tickets[${i}].coverImage`, ticket.cover!, `tickets[${i}].coverImage`);
             return formData;
         });
 

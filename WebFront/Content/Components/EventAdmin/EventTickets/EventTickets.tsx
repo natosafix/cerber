@@ -29,12 +29,12 @@ export const EventTickets: React.FC<Props> = ({ onSave }) => {
     const validWrapper = useRef<ValidationContainer>(null);
 
     useEffect(() => {
-        EventAdminClient.getTickets().then(r => {
-            const loadedDraft =  r.data.map(((dt, i) => Ticket.fromDto(i, dt)));
+        EventAdminClient.getTickets().then(async (r) => {
+            const loadedDraft = await Promise.all(r.data.map((dt, i) => Ticket.fromDto(i, dt)));
             setTickets(loadedDraft);
         });
     }, []);
-    
+
     const onAddTicketBtn = () => {
         setTickets([...tickets, new Ticket(ticketsCount)]);
         setTicketsCount(ticketsCount + 1);
@@ -44,19 +44,22 @@ export const EventTickets: React.FC<Props> = ({ onSave }) => {
         const matchIdx = tickets.findIndex((t) => t.ViewId === ticket.ViewId);
 
         tickets[matchIdx] = ticket;
+        console.log(ticket);
         setTickets(tickets);
+        console.log(tickets);
     };
 
     const onRemoveTicket = (viewId: number) => {
-        setTickets(tickets.filter(t => t.ViewId !== viewId));
+        setTickets(tickets.filter((t) => t.ViewId !== viewId));
     };
 
     const onSaveBtnClick = async () => {
         if (validWrapper.current) {
             const isValid = await validWrapper.current.validate();
             if (isValid) {
-                EventAdminClient.setTickets(tickets.map(ticket => new DraftTicketDto(ticket.Name, ticket.Price ?? 0, ticket.Cover)))
-                    .then(_ => onSave())
+                EventAdminClient.setTickets(
+                    tickets.map((ticket) => new DraftTicketDto(ticket.Name, ticket.Price ?? 0, ticket.Cover)),
+                ).then((_) => onSave());
             }
         }
     };
@@ -74,9 +77,7 @@ export const EventTickets: React.FC<Props> = ({ onSave }) => {
                 ))}
 
                 <ValidationWrapper validationInfo={ticketExistsValidate(tickets)}>
-                    <Button onClick={onAddTicketBtn}>
-                        Добавить билет
-                    </Button>
+                    <Button onClick={onAddTicketBtn}>Добавить билет</Button>
                 </ValidationWrapper>
 
                 <EventAdminSaveBtn onSave={onSaveBtnClick} />

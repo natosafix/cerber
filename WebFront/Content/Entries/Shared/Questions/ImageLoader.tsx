@@ -40,6 +40,7 @@ export const ImageLoader: React.FC<IImageLoaderQuestion> = ({ title, defaultUrl,
 
         let objectUrl = URL.createObjectURL(selectedFile);
         setPreview(objectUrl);
+        alert(objectUrl);
         return () => URL.revokeObjectURL(objectUrl);
     }, [selectedFile]);
 
