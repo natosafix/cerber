@@ -17,10 +17,5 @@ public class UserFileConfiguration : IEntityTypeConfiguration<UserFile>
         
         builder.Property(uf => uf.Path)
             .IsRequired();
-        
-        builder.HasOne(userFile => userFile.Event)
-            .WithOne(@event => @event.Cover)
-            .HasForeignKey<Event>(@event => @event.CoverId)
-            .OnDelete(DeleteBehavior.SetNull);
     }
 }

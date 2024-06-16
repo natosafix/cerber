@@ -25,5 +25,11 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
         builder.HasMany(ticket => ticket.Orders)
             .WithOne(order => order.Ticket)
             .OnDelete(DeleteBehavior.SetNull);
+        
+        builder.HasOne(ticket => ticket.Cover)
+            .WithMany()
+            .HasForeignKey(@event => @event.CoverId)
+            .OnDelete(DeleteBehavior.SetNull);
+        builder.Navigation(e => e.Cover).AutoInclude();
     }
 }
