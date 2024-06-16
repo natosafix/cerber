@@ -12,9 +12,16 @@ public class CreateTicketDto : IValidatableObject
     public int Price { get; set; }
     
     [Required]
+    public int QrCodeX { get; set; }
+    
+    [Required]
+    public int QrCodeY { get; set; }
+    
+    [Required]
+    public int QrCodeSize { get; set; }
+    
+    [Required]
     public IFormFile CoverImage { get; set; }
-
-    public Guid? CoverImageId { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

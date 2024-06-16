@@ -170,13 +170,14 @@ public class EventAdminController : Controller
         if (srcDraft is null)
             return NotFound();
 
+        var newDraftTickets = new List<DraftTicket>();
         foreach (var ticket in tickets)
         {
             var savedFile = await userFilesService.Save(ticket.CoverImage, true);
-            ticket.CoverImageId = savedFile.Id;
+            var newDraftTicket = mapper.Map<DraftTicket>(ticket);
+            newDraftTicket.CoverImageId = savedFile.Id;
+            newDraftTickets.Add(newDraftTicket);
         }
-
-        var newDraftTickets = mapper.Map<DraftTicket[]>(tickets);
         await draftTicketsService.SetDraftTicketsAsync(newDraftTickets, srcDraft.Id);
         return Ok();
     }

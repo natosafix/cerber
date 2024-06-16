@@ -16,5 +16,8 @@ public class DraftTicketConfiguration : IEntityTypeConfiguration<DraftTicket>
         builder.Property(e => e.Name).IsRequired();
         builder.Property(e => e.CoverImageId).IsRequired();
         builder.Property(e => e.Price).IsRequired();
+        builder.Property(e => e.QrCodeX).IsRequired();
+        builder.Property(e => e.QrCodeY).IsRequired();
+        builder.Property(e => e.QrCodeSize).IsRequired();
     }
 }
