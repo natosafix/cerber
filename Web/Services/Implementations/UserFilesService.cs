@@ -44,10 +44,11 @@ public class UserFilesService : IUserFilesService
     public async Task<UserFile> Save(IFormFile formFile, bool generateName = false)
     {
         var username = userHelper.Username;
+        var fileName = generateName ? Guid.NewGuid().ToString() : formFile.FileName;
         var userFile = new UserFile
         {
-            Name = generateName ? Guid.NewGuid().ToString() : formFile.FileName,
-            Path = Path.Combine(DefaultPath, username, formFile.FileName)
+            Name = fileName,
+            Path = Path.Combine(DefaultPath, username, fileName)
         };
         await storageManager.Save(formFile, userFile.Path);
         return await userFilesRepository.Save(userFile);

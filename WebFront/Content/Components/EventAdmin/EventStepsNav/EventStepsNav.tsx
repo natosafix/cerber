@@ -22,6 +22,7 @@ export const EventStepsNav: React.FC<Props> = ({ step, setStepNav }) => {
     const buttonsInfo = [
         new ButtonInfo('Описание события', EventAdminPageNav.EventCoverSheet),
         new ButtonInfo('Анкета регистрации', EventAdminPageNav.EventQuizCreator),
+        new ButtonInfo('Билеты', EventAdminPageNav.EventTickets),
         new ButtonInfo('Публикация', EventAdminPageNav.EventPublish),
     ];
 

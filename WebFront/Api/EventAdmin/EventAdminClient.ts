@@ -5,6 +5,7 @@ import { DraftQuestionDto } from './DraftQuestionDto';
 import { TicketDto } from '../Models/TicketDto';
 import { Route } from '../../Content/Utility/Constants';
 import { Form } from 'react-router-dom';
+import { DraftTicketDto } from '../Models/DraftTicketDto';
 
 const api = axios.create();
 
@@ -43,7 +44,11 @@ export class EventAdminClient {
         });
     }
 
-    public static setTickets(tickets: TicketDto[]) {
+    public static getTickets() {
+        return api.get<DraftTicketDto[]>(Route.GET_DRAFT_TICKETS)
+    }
+    
+    public static setTickets(tickets: DraftTicketDto[]) {
         let formData = new FormData();
         
         tickets.map((ticket, i) => {
@@ -53,7 +58,7 @@ export class EventAdminClient {
             return formData;
         });
 
-        return api.post(Route.SET_TICKETS, formData, {
+        return api.post(Route.SET_DRAFT_TICKETS, formData, {
             headers: {
                 'Content-Type': `multipart/form-data`,
             },

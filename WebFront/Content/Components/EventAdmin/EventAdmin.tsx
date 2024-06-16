@@ -1,16 +1,14 @@
-﻿import * as React from 'react';
+﻿import styles from './EventAdmin.scss';
+import * as React from 'react';
 import { useState } from 'react';
-import styles from './EventAdmin.scss';
-import { EventStepsNav } from './EventStepsNav/EventStepsNav';
-import { EventCoverSheet } from './EventCoverSheet/EventCoverSheet';
-import { EventAdminPageNav } from './EventStepsNav/EventAdminPageNav';
-import { EventQuizCreator } from './EventQuizCreator/EventQuizCreator';
-import { EventTickets } from './EventTickets/EventTickets';
 import { Gapped } from '@skbkontur/react-ui';
 import { EventAdminClient } from '../../../Api/EventAdmin/EventAdminClient';
-import { TicketDto } from '../../../Api/Models/TicketDto';
-import { Ticket } from '../../Entries/Shared/TicketView/Ticket';
+import { EventAdminPageNav } from './EventStepsNav/EventAdminPageNav';
+import { EventCoverSheet } from './EventCoverSheet/EventCoverSheet';
 import { EventPublish } from './EventPublish/EventPublish';
+import { EventQuizCreator } from './EventQuizCreator/EventQuizCreator';
+import { EventStepsNav } from './EventStepsNav/EventStepsNav';
+import { EventTickets } from './EventTickets/EventTickets';
 
 
 export const EventAdmin: React.FC = () => {

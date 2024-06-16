@@ -7,9 +7,6 @@ import styles from './TicketView.scss';
 import { TicketForm } from './TicketForm/TicketForm';
 import { Box } from '@mui/material';
 import { TicketImageLoader } from './TicketImageLoader/TicketImageLoader';
-import { ValidationWrapper } from '@skbkontur/react-ui-validations';
-import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
-import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
 
 interface TicketViewProps {
     ticket: Ticket;

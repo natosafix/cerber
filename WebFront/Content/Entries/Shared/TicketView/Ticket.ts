@@ -1,4 +1,13 @@
-﻿export class Ticket {
+﻿import { TicketDto } from '../../../../Api/Models/TicketDto';
+import { DraftTicketDto } from '../../../../Api/Models/DraftTicketDto';
+
+export class Ticket {
+    public static fromDto(viewId: number, ticketDto: DraftTicketDto): Ticket {
+        let ticket = new Ticket(viewId);
+        // TODO вместе с cover нужен CoverId
+        return ticket;
+    }
+    
     public ViewId: number;
     public Name: string;
     public Price?: number;

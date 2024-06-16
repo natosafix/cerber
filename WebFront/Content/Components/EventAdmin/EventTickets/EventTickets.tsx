@@ -9,7 +9,7 @@ import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWr
 import { Ticket } from '../../../Entries/Shared/TicketView/Ticket';
 import { TicketView } from '../../../Entries/Shared/TicketView/TicketView';
 import { EventAdminClient } from '../../../../Api/EventAdmin/EventAdminClient';
-import { TicketDto } from '../../../../Api/Models/TicketDto';
+import { DraftTicketDto } from '../../../../Api/Models/DraftTicketDto';
 
 interface Props {
     onSave: () => void;
@@ -28,6 +28,13 @@ export const EventTickets: React.FC<Props> = ({ onSave }) => {
     const [ticketsCount, setTicketsCount] = useState(0);
     const validWrapper = useRef<ValidationContainer>(null);
 
+    useEffect(() => {
+        EventAdminClient.getTickets().then(r => {
+            const loadedDraft =  r.data.map(((dt, i) => Ticket.fromDto(i, dt)));
+            setTickets(loadedDraft);
+        });
+    }, []);
+    
     const onAddTicketBtn = () => {
         setTickets([...tickets, new Ticket(ticketsCount)]);
         setTicketsCount(ticketsCount + 1);
@@ -48,7 +55,7 @@ export const EventTickets: React.FC<Props> = ({ onSave }) => {
         if (validWrapper.current) {
             const isValid = await validWrapper.current.validate();
             if (isValid) {
-                EventAdminClient.setTickets(tickets.map(ticket => new TicketDto(ticket.Name, ticket.Price ?? 0, ticket.Cover)))
+                EventAdminClient.setTickets(tickets.map(ticket => new DraftTicketDto(ticket.Name, ticket.Price ?? 0, ticket.Cover)))
                     .then(_ => onSave())
             }
         }
