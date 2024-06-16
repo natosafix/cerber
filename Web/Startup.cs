@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Minio;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Robokassa;
@@ -104,6 +105,13 @@ public class Startup
             config["RobokassaOptions:Password1"]!,
             config["RobokassaOptions:Password2"]!, 
             true);
+
+        services.AddMinio(client => client
+            .WithEndpoint("s3.yandexcloud.net")
+            .WithRegion("ru-central1")
+            .WithCredentials(config["MinioOptions:AccessKey"], config["MinioOptions:SecretKey"])
+            .WithSSL(false)
+            .Build());
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)

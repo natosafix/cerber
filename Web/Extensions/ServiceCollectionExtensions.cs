@@ -39,7 +39,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IQuestionsService, QuestionsService>();
         services.AddScoped<IAnswersService, AnswersService>();
         services.AddScoped<IUserFilesService, UserFilesService>();
-        services.AddScoped<IStorageManager, StorageManager>();
+        services.AddSingleton<IStorageManager, CloudStorageManager>();
         services.AddScoped<IMailService, MailService>();
         services.AddScoped<IQrCodeService, QrCodeService>();
         services.AddScoped<IEncryptionService, EncryptionService>();
