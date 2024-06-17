@@ -58,7 +58,17 @@ export const EventTickets: React.FC<Props> = ({ onSave }) => {
             const isValid = await validWrapper.current.validate();
             if (isValid) {
                 EventAdminClient.setTickets(
-                    tickets.map((ticket) => new DraftTicketDto(ticket.Name, ticket.Price ?? 0, ticket.Cover)),
+                    tickets.map(
+                        (ticket) =>
+                            new DraftTicketDto(
+                                ticket.Name,
+                                ticket.Price ?? 0,
+                                ticket.Cover,
+                                ticket.QrCodeX ?? 0,
+                                ticket.QrCodeY ?? 0,
+                                ticket.QrCodeSize ?? 50,
+                            ),
+                    ),
                 ).then((_) => onSave());
             }
         }

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import styles from './TicketImageLoader.scss';
-import { FileUploader, FileUploaderAttachedFile } from '@skbkontur/react-ui';
+import { FileUploaderAttachedFile } from '@skbkontur/react-ui';
 import { Box } from '@mui/material';
 import { Nullable } from '@skbkontur/react-ui/typings/utility-types';
 import { ValidationInfo } from '@skbkontur/react-ui-validations/src/ValidationWrapper';
@@ -10,12 +10,17 @@ import Typography from '@mui/material/Typography';
 import { ResizableBox } from 'react-resizable';
 import Draggable from 'react-draggable';
 import 'react-resizable/css/styles.css';
+import { styled } from '@mui/material/styles';
+import { useDropzone } from 'react-dropzone';
+import ImageIcon from '@mui/icons-material/Image';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface TicketImageLoaderProps {
     onRemove?: () => void;
     uploader: (file: FileUploaderAttachedFile) => void;
     hideInput?: boolean;
     ticket: Ticket;
+    onSizeUpdater: (qrCodeX?: number, qrCodeY?: number, qrCodeSize?: number) => void;
 }
 
 function coverExistsValidate(cover: Blob | undefined): Nullable<ValidationInfo> {
@@ -25,29 +30,59 @@ function coverExistsValidate(cover: Blob | undefined): Nullable<ValidationInfo> 
     return null;
 }
 
-export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({ onRemove, hideInput, uploader, ticket }) => {
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: '100%',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: '100%',
+});
+
+export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({
+    onRemove,
+    hideInput,
+    uploader,
+    ticket,
+    onSizeUpdater,
+}) => {
     const [selectedFile, setSelectedFile] = useState<Blob | undefined>(ticket.Cover);
     const [preview, setPreview] = useState<string | null | undefined>();
     const firstRender = useRef(true);
-    const [width, setWidth] = useState<number>(50);
-    const [height, setHeight] = useState<number>(50);
-    const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+    const [width, setWidth] = useState<number>(ticket.QrCodeSize || 50);
+    const [height, setHeight] = useState<number>(ticket.QrCodeSize || 50);
+    const [position, setPosition] = useState<{ x: number; y: number }>({
+        x: ticket.QrCodeX || 0,
+        y: ticket.QrCodeY || 0,
+    });
 
-    const onValueChange = (files: FileUploaderAttachedFile[]) => {
-        if (files.length === 0) {
-            onRemove && onRemove();
-            setSelectedFile(undefined);
-            return;
-        }
-        if (files[0].status === 'Uploaded' || files[0].status === 'Attached') {
-            setSelectedFile(files[0].originalFile);
-            uploader(files[0]);
-        }
+    const handleRemoveImage = () => {
+        setSelectedFile(undefined);
+        setPreview(undefined);
+        onRemove && onRemove();
     };
+    const onDrop = useCallback(
+        (acceptedFiles: File[]) => {
+            if (acceptedFiles.length > 0) {
+                const file = acceptedFiles[0];
+                setSelectedFile(file);
+                uploader({ originalFile: file, status: 'Attached' } as FileUploaderAttachedFile);
+            }
+        },
+        [uploader],
+    );
+
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop,
+        accept: { 'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.bmp', '.webp'] },
+    });
 
     useEffect(() => {
         if (firstRender.current) {
             firstRender.current = false;
+            console.log(position);
             if (ticket.Cover) {
                 const objectUrl = URL.createObjectURL(ticket.Cover);
                 setPreview(objectUrl);
@@ -65,10 +100,7 @@ export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({ onRemove, 
         return () => URL.revokeObjectURL(objectUrl);
     }, [selectedFile]);
 
-    useEffect(() => {
-        console.log([preview]);
-        console.log(firstRender.current);
-    }, [preview]);
+    useEffect(() => {}, [preview]);
 
     const onResize = (event: any, { size }: { size: { width: number; height: number } }) => {
         console.log(event);
@@ -77,6 +109,13 @@ export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({ onRemove, 
         setWidth(width + newSize);
         setHeight(height + newSize);
     };
+
+    useEffect(() => {
+        const handleChange = () => {
+            onSizeUpdater(position.x, position.y, width);
+        };
+        handleChange();
+    }, [width, position, onSizeUpdater]);
 
     const handleDrag = (e: any, ui: any) => {
         const { x, y } = position;
@@ -88,19 +127,57 @@ export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({ onRemove, 
     };
 
     return (
-        <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
-            {(!hideInput || !preview) && (
+        <Box sx={{ position: 'relative', width: '100%', height: '100%' }} className={styles.iconHoverContainer}>
+            {preview == undefined && (
                 <ValidationWrapper validationInfo={coverExistsValidate(selectedFile)}>
-                    <FileUploader accept={'image/*'} onValueChange={onValueChange} />
+                    <Box
+                        {...getRootProps()}
+                        sx={{
+                            textAlign: 'center',
+                            width: '592px',
+                            height: '200px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <input {...getInputProps()} className={styles.visuallyHiddenInput} />
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '10px',
+                            }}
+                        >
+                            <ImageIcon fontSize="large" className={styles.iconHoverEffect} />
+                            <Typography className={styles.iconHoverEffect}>{'600x200'}</Typography>
+                        </Box>
+                    </Box>
                 </ValidationWrapper>
             )}
+
             {preview && (
                 <Box sx={{ position: 'relative', display: 'inline-block', width: '100%', height: '100%' }}>
-                    <img src={preview} className={styles.imagePreview} alt={''} />
+                    <img src={preview} className={styles.imagePreview} alt="Preview" />
+                    <CloseIcon
+                        sx={{
+                            position: 'absolute',
+                            top: '8px',
+                            right: '8px',
+                            cursor: 'pointer',
+                            backgroundColor: 'white',
+                            borderRadius: '50%',
+                        }}
+                        onClick={handleRemoveImage}
+                    />
+
                     <Draggable
                         bounds="parent"
                         cancel=".react-resizable-handle"
-                        defaultPosition={{ x: 0, y: 0 }}
+                        defaultPosition={position}
                         onDrag={handleDrag}
                         onStop={handleStop}
                     >
@@ -112,6 +189,7 @@ export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({ onRemove, 
                             resizeHandles={['se']}
                             onResize={onResize}
                             className={styles.resizableBox}
+                            style={{ borderRadius: '10px' }}
                         >
                             <Box
                                 sx={{
@@ -122,6 +200,8 @@ export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({ onRemove, 
                                     width: '100%',
                                     height: '100%',
                                     position: 'relative',
+                                    cursor: 'pointer',
+                                    borderRadius: '10px',
                                 }}
                             >
                                 <Typography sx={{ lineHeight: 'normal' }} id="outlined-disabled">
