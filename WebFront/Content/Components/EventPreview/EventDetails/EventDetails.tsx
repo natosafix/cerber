@@ -1,100 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { getEvent } from '../Services/Events';
-import { IEvent } from '../Models/IEvent';
 import styles from './EventDetails.scss';
-import { InspectorEditor } from '../InspectorsEditor/InspectorEditor';
+import { ButtonInfo, EventStepsNav } from '../../EventAdmin/EventStepsNav/EventStepsNav';
+import { EventDetailsPageNav } from './EventDetailsPageNav';
 import { Gapped } from '@skbkontur/react-ui';
-import { Label } from '../../../Entries/Shared/Label/Label';
-import { Button } from '@skbkontur/react-ui';
-import { getUserInfo } from '../../../Helpers/UserInfoHelper';
-import { Route } from '../../../Utility/Constants';
-import { EventDetailsSkeleton } from './EventDetailsSkeleton';
-import { EventAdminClient } from '../../../../Api/EventAdmin/EventAdminClient';
-import { DraftEvent } from '../../../../Api/EventAdmin/DraftEvent';
+import { EventPreviewDetails } from './EventPreviewDetails/EventPreviewDetails';
 import { EventStats } from '../../EventStats/EventStats';
+import { IEvent } from '../Models/IEvent';
+import { getEvent } from '../Services/Events';
+import { EventsClient } from '../../../../Api/Events/EventsClient';
+import { IEventStats } from '../../../../Api/Events/IEventStats';
 
 export const EventDetails: React.FC<{ id?: string }> = ({ id }) => {
-    const [event, setEvent] = useState<IEvent | null>(null);
-    const [imgSrc, setImgSrc] = useState<string | null>(null);
-    const [userId, setUserId] = useState<string>();
+    const [step, setStep] = useState(EventDetailsPageNav.EventDetails);
+    const [event, setEvent] = useState<IEventStats | null>(null);
+
+    const buttonsInfo = [
+        new ButtonInfo('Обзор', EventDetailsPageNav.EventDetails, false),
+        new ButtonInfo('Статистика', EventDetailsPageNav.EventStats, event === null || event.ticketsStats.length === 0),
+    ];
 
     useEffect(() => {
         const fetchEventDetailsAndCover = async () => {
             try {
                 if (id) {
-                    await getEvent(id).then((x) => setEvent(x));
-                } else {
-                    EventAdminClient.getDraftCover().then(async (x) => {
-                        const event = await DraftEvent.fromDto(x.data).toIEvent();
-                        setEvent(event);
-                    });
+                    await EventsClient.getEventStats(parseInt(id)).then((x) => setEvent(x.data));
                 }
             } catch (error) {}
         };
 
         fetchEventDetailsAndCover();
-
-        const userInfo = getUserInfo();
-        if (userInfo) {
-            setUserId(userInfo.id);
-        }
     }, [id]);
 
     useEffect(() => {
-        const fetchEventCover = async () => {
-            try {
-                if (event?.img) {
-                    const imgSrc = URL.createObjectURL(event.img);
-                    setImgSrc(imgSrc);
-                }
-            } catch (error) {}
+        const fetchEventDetailsAndCover = async () => {
+            console.log(event);
         };
 
-        fetchEventCover();
+        fetchEventDetailsAndCover();
     }, [event]);
 
-    const handleClickButton = () => {
-        window.location.href = Route.QUIZ(id);
-    };
-
-    if (!event) {
-        return (
-            <div>
-                <EventDetailsSkeleton />
-            </div>
-        );
-    }
     return (
-        <div className={styles.pageWrapper}>
-            <div className={styles.eventWrapper}>
-                <Gapped vertical gap={30}>
-                    <div className={styles.imgWrapper}>{imgSrc && <img src={imgSrc} alt={event.name} />}</div>
+        <div className={styles.mainWrapper}>
+            <EventStepsNav<EventDetailsPageNav> buttons={buttonsInfo} step={step} setStepNav={setStep} />
 
-                    <div className={styles.contentWrapper}>
-                        <Gapped vertical gap={30}>
-                            <Gapped vertical gap={10}>
-                                <Label label={event.name} size={'large'} />
-                                <div style={{ opacity: 0.5 }}>
-                                    <Label label={`${event.city}, ${event.address}`} size={'small'} />
-                                </div>
-                            </Gapped>
-
-                            <Gapped vertical gap={8}>
-                                {event.description.split('\n').map((line, index) => (
-                                    <Label key={index} label={line} size={'small'} />
-                                ))}
-                            </Gapped>
-
-                            {userId === event.ownerId && id && <InspectorEditor event={event} />}
-                            {id && (
-                                <Button size={'large'} use="success" onClick={handleClickButton}>
-                                    Заполнить анкету
-                                </Button>
-                            )}
-                            <EventStats event={event} />
-                        </Gapped>
-                    </div>
-                </Gapped>
+            <div className={styles.contentPageWrapper}>
+                <div className={styles.contentWrapper}>
+                    <Gapped gap={30} vertical={true}>
+                        {step === EventDetailsPageNav.EventDetails && <EventPreviewDetails id={id} />}
+                        {step === EventDetailsPageNav.EventStats && event !== null && event.ticketsStats.length > 0 && (
+                            <EventStats eventStats={event} />
+                        )}
+                    </Gapped>
+                </div>
             </div>
         </div>
     );

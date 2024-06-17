@@ -1,10 +1,10 @@
 import React from 'react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import styles from './EventDetails.scss';
+import styles from './EventPreviewDetails.scss';
 import { Gapped } from '@skbkontur/react-ui';
 
-export const EventDetailsSkeleton = () => {
+export const EventPreviewDetailsSkeleton = () => {
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.eventWrapper}>
