@@ -27,7 +27,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(minLength) => "Должен иметь минимум ${minLength} символов";
 
-  static String m3(count) => "Незагруженные посетители: \$${count}";
+  static String m3(count) => "Незагруженные посетители: ${count}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{

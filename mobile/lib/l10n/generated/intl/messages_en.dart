@@ -27,7 +27,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(minLength) => "Must have at least ${minLength} characters";
 
-  static String m3(count) => "Unsynced visitors: \$${count}";
+  static String m3(count) => "Unsynced visitors: ${count}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{

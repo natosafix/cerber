@@ -4,7 +4,7 @@ part 'cover_api_response.g.dart';
 
 @JsonSerializable(createToJson: false)
 class CoverApiResponse {
-  final int id;
+  final String id;
   final String name;
   final String path;
 

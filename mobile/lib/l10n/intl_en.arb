@@ -77,7 +77,7 @@
     "visitorsInformation": "Visitor Information",
     "form": "Form",
     "ticket": "Ticket",
-    "unsyncedVisitors": "Unsynced visitors: ${count}",
+    "unsyncedVisitors": "Unsynced visitors: {count}",
     "@unsyncedVisitors": {
         "placeholders": {
             "count": {

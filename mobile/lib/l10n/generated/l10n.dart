@@ -516,10 +516,10 @@ class L10n {
     );
   }
 
-  /// `Unsynced visitors: ${count}`
+  /// `Unsynced visitors: {count}`
   String unsyncedVisitors(int count) {
     return Intl.message(
-      'Unsynced visitors: \$$count',
+      'Unsynced visitors: $count',
       name: 'unsyncedVisitors',
       desc: '',
       args: [count],

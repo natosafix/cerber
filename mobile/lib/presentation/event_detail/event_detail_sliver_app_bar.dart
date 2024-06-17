@@ -45,7 +45,7 @@ class EventDetailSliverAppBar extends StatelessWidget {
             const DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment(0, 4),
+                  begin: Alignment.bottomCenter,
                   end: Alignment.center,
                   colors: [
                     Color(0xFF000000),

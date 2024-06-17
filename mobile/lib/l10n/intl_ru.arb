@@ -77,7 +77,7 @@
     "visitorsInformation": "Информация о посетителе",
     "form": "Анкета",
     "ticket": "Билет",
-    "unsyncedVisitors": "Незагруженные посетители: ${count}",
+    "unsyncedVisitors": "Незагруженные посетители: {count}",
     "@unsyncedVisitors": {
         "placeholders": {
             "count": {
