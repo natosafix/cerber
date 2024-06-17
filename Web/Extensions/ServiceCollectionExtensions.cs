@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using RabbitMQListener;
+using RabbitMqListener.Listeners;
+using RabbitMqListener.Listeners.TicketSender;
 using Web.Persistence.Repositories;
 using Web.Requirements;
 using Web.Services;
@@ -13,6 +15,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddExternals(this IServiceCollection services)
     {
         services.AddSingleton<IRabbitMqConnectionsPool, RabbitMqConnectionsPool>();
+        services.AddSingleton<BaseRabbitMqProducer<TicketDestinationMessage>>(
+            di => new TicketSenderListenerFactory(di.GetService<IRabbitMqConnectionsPool>()!).CreateProducer());
         return services;
     }
 

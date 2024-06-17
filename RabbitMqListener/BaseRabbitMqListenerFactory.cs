@@ -28,13 +28,13 @@ public abstract class BaseRabbitMqListenerFactory<TMessage> : BaseRabbitMqListen
         ConnectionsPool = connectionsPool;
     }
 
-    public override BaseRabbitMqConsumer CreateConsumer()
+    public override BaseRabbitMqConsumer<TMessage> CreateConsumer()
     {
         QueueDeclare();
         return CreateTConsumer();
     }
 
-    public override BaseRabbitMqProducer CreateProducer()
+    public override BaseRabbitMqProducer<TMessage> CreateProducer()
     {
         QueueDeclare();
         return CreateTProducer();
@@ -47,7 +47,7 @@ public abstract class BaseRabbitMqListenerFactory<TMessage> : BaseRabbitMqListen
 
         using var channel = ConnectionsPool.Get().CreateModel();
         channel.QueueDeclare(RabbitMqQueueConfig.CreateDefault(QueueName));
-        queueDeclared = false;
+        queueDeclared = true;
     }
 
     protected abstract BaseRabbitMqConsumer<TMessage> CreateTConsumer();

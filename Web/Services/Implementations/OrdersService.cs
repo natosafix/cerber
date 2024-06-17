@@ -74,6 +74,8 @@ public class OrdersService : IOrdersService
             order.Ticket.QrCodeX,
             order.Ticket.QrCodeY);
         ticketsProducer.Send(message);
+
+        return;
         // TODO
         
         var qrCode = qrCodeService.Create($"ticket.png", encryptedCustomer);
