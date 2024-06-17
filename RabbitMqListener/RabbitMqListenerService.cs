@@ -16,68 +16,63 @@ namespace RabbitMQListener;
 
 public class RabbitMqListenerService : BackgroundService
 {
-    private static readonly List<BaseRabbitMqListener> listeners = new()
+    private static readonly IRabbitMqConnectionsPool connectionsPool = new RabbitMqConnectionsPool();
+    private static readonly List<BaseRabbitMqListenerFactory> listeners = new()
     {
-        new TicketSenderListener(),
-        new HelloWorldListener(),
+        new TicketSenderListenerFactory(connectionsPool),
+        // new HelloWorldConsumer(),
     };
 
-    private readonly IConnection connection;
     private readonly List<IModel> channelsToDispose = new();
-
-    public RabbitMqListenerService()
-    {
-        var factory = new ConnectionFactory {HostName = "localhost"};
-        connection = factory.CreateConnection();
-    }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         stoppingToken.ThrowIfCancellationRequested();
 
-        foreach (var mqListener in listeners)
+        foreach (var listenerFactory in listeners)
         {
-            var channel = connection.CreateModel();
-            channel.QueueDeclare(mqListener.RabbitMqQueueConfig);
-
-            var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += async (ch, ea) =>
+            var channel = connectionsPool.Get().CreateModel();
+            var eventingBasic = new EventingBasicConsumer(channel);
+            
+            var consumer = listenerFactory.CreateConsumer();
+            
+            eventingBasic.Received += async (ch, ea) =>
             {
-                var success = await OnReceived(mqListener, ch, ea);
+                var success = await OnReceived(consumer, listenerFactory.QueueName, ch, ea);
                 if (success)
                     channel.BasicAck(ea.DeliveryTag, false);
                 else
                     channel.BasicNack(ea.DeliveryTag, false, true); // TODO будет бесконечно спамиться, нужно ограничить попытки, делается с помощью заголовков
             };
 
-            channel.BasicConsume(mqListener.RabbitMqQueueConfig.QueueName, false, consumer);
+            channel.BasicConsume(listenerFactory.QueueName, false, eventingBasic);
             channelsToDispose.Add(channel);
         }
 
         return Task.CompletedTask;
     }
 
-    private static async Task<bool> OnReceived(BaseRabbitMqListener listener, object? channel, BasicDeliverEventArgs args)
+    private static async Task<bool> OnReceived(BaseRabbitMqConsumer consumer, string queueName, object? channel, BasicDeliverEventArgs args)
     {
         try
         {
             var content = Encoding.UTF8.GetString(args.Body.ToArray());
 
             object? message;
-            if (listener.MessageType == typeof(string))
+            if (consumer.MessageType == typeof(string))
                 message = content;
             else
-                message = JsonConvert.DeserializeObject(content, listener.MessageType);
+                message = JsonConvert.DeserializeObject(content, consumer.MessageType);
 
             if (message is null)
-                throw new ArgumentException($"Can't deserialize message to type: {listener.MessageType}");
+                throw new ArgumentException($"Can't deserialize message to type: {consumer.MessageType}");
 
-            await listener.Handle(message);
+            await consumer.Handle(message);
             return true;
         }
         catch (Exception)
         {
-            Console.WriteLine($"Error during execution message from {listener.RabbitMqQueueConfig.QueueName}");
+            Console.WriteLine($"Error during execution message from queue: {queueName}");
             return false;
         }
     }
@@ -87,7 +82,7 @@ public class RabbitMqListenerService : BackgroundService
         foreach (var channel in channelsToDispose)
             channel.Dispose();
 
-        connection.Close();
+        connectionsPool.Dispose();;
         base.Dispose();
     }
 }

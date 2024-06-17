@@ -1,13 +1,12 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using RabbitMQListener.Config;
 using RabbitMqListener.Listeners.TicketSender.TicketViewGenerator;
 using RabbitMqListener.Listeners.TicketSender.TicketViewModel;
 using RabbitMQListener.StaticFiles;
 
 namespace RabbitMqListener.Listeners.TicketSender;
 
-public class TicketSenderListener : BaseRabbitMqListener<TicketDestinationMessage>
+public class TicketSenderConsumer : BaseRabbitMqConsumer<TicketDestinationMessage>
 {
     private static readonly ITicketViewGenerator<HtmlTicketViewModel> ticketViewGenerator =
         WkHtmlToPdfTicketGenerator.WithDefaultSettings(
@@ -24,6 +23,4 @@ public class TicketSenderListener : BaseRabbitMqListener<TicketDestinationMessag
 
         return Task.CompletedTask;
     }
-
-    public override RabbitMqQueueConfig RabbitMqQueueConfig => RabbitMqQueueConfig.CreateDefault("Tickets.Sender");
 }

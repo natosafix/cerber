@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using RabbitMQListener.Config;
 
 namespace RabbitMqListener.Listeners;
 
-public abstract class BaseRabbitMqListener
+public abstract class BaseRabbitMqConsumer
 {
-    protected BaseRabbitMqListener(Type messageType)
+    protected BaseRabbitMqConsumer(Type messageType)
     {
         MessageType = messageType;
     }
@@ -14,13 +13,12 @@ public abstract class BaseRabbitMqListener
     public Type MessageType { get; }
 
     public abstract Task Handle(object? message);
-    public abstract RabbitMqQueueConfig RabbitMqQueueConfig { get; }
 }
 
-public abstract class BaseRabbitMqListener<TMessage> : BaseRabbitMqListener
+public abstract class BaseRabbitMqConsumer<TMessage> : BaseRabbitMqConsumer
     where TMessage : class
 {
-    protected BaseRabbitMqListener() : base(typeof(TMessage))
+    protected BaseRabbitMqConsumer() : base(typeof(TMessage))
     {
     }
 

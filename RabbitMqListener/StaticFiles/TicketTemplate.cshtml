@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 
-<link rel="stylesheet" type="text/css" href="file:///C:/Users/Нитро/Desktop/programming/cerber/RabbitMqListener/Result.html" media="screen" />
+<link rel="stylesheet" type="text/css" href="@Model.StylesPath" media="screen" />
 
 <html>
 <head>
@@ -8,7 +8,11 @@
 </head>
 <body>
 <div class="userName">
-    @Model.UserName
+    <div>@Model.Email</div>
+    <div>@Model.QrEncrypted</div>
+    <div>@Model.QrCodeSize</div>
+    <div>@Model.QrCodeX</div>
+    <div>@Model.QrCodeY</div>
 </div>
 </body>
 </html>

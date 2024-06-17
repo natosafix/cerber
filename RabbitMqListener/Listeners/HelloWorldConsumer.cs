@@ -7,7 +7,7 @@ namespace RabbitMqListener.Listeners;
 /// <summary>
 /// Listener for test
 /// </summary>
-public class HelloWorldListener : BaseRabbitMqListener<string>
+public class HelloWorldConsumer : BaseRabbitMqConsumer<string>
 {
     protected override Task Handle(string message)
     {
@@ -15,6 +15,4 @@ public class HelloWorldListener : BaseRabbitMqListener<string>
 
         return Task.CompletedTask;
     }
-
-    public override RabbitMqQueueConfig RabbitMqQueueConfig => RabbitMqQueueConfig.CreateDefault("TestQueue");
 }
