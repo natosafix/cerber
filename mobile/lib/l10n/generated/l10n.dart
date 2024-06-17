@@ -515,6 +515,26 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Unsynced visitors: ${count}`
+  String unsyncedVisitors(int count) {
+    return Intl.message(
+      'Unsynced visitors: \$$count',
+      name: 'unsyncedVisitors',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Sync`
+  String get sync {
+    return Intl.message(
+      'Sync',
+      name: 'sync',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

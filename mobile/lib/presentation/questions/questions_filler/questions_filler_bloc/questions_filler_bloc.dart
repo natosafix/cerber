@@ -75,7 +75,7 @@ class QuestionsFillerBloc extends Bloc<QuestionsFillerEvent, QuestionsFillerStat
       return;
     }
 
-    final answers = [
+    final List<FilledAnswer> answers = [
       for (final (question, answer) in state.questionsMap.entries.map((e) => (e.key, e.value)))
         FilledAnswer(
           questionId: question.id,
@@ -83,7 +83,7 @@ class QuestionsFillerBloc extends Bloc<QuestionsFillerEvent, QuestionsFillerStat
         ),
     ];
 
-    final qrCodeData = await _compoundEventsRepository.generateQrCode(
+    final QrCodeData qrCodeData = await _compoundEventsRepository.generateQrCode(
       _event,
       answers,
       state.selectedTicket!.id,

@@ -27,6 +27,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(minLength) => "Должен иметь минимум ${minLength} символов";
 
+  static String m3(count) => "Незагруженные посетители: \$${count}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "add": MessageLookupByLibrary.simpleMessage("Добавить"),
@@ -88,7 +90,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "signUp": MessageLookupByLibrary.simpleMessage("Зарегаться"),
         "somethingWentWrong":
             MessageLookupByLibrary.simpleMessage("Что-то пошло не так..."),
+        "sync": MessageLookupByLibrary.simpleMessage("Загрузить"),
         "ticket": MessageLookupByLibrary.simpleMessage("Билет"),
+        "unsyncedVisitors": m3,
         "visitors": MessageLookupByLibrary.simpleMessage("Посетители"),
         "visitorsInformation":
             MessageLookupByLibrary.simpleMessage("Информация о посетителе"),

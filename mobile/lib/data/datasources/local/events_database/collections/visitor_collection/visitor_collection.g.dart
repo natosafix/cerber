@@ -27,18 +27,23 @@ const VisitorCollectionSchema = CollectionSchema(
       name: r'eventId',
       type: IsarType.long,
     ),
-    r'qrCodeScannedTime': PropertySchema(
+    r'isGenerated': PropertySchema(
       id: 2,
+      name: r'isGenerated',
+      type: IsarType.bool,
+    ),
+    r'qrCodeScannedTime': PropertySchema(
+      id: 3,
       name: r'qrCodeScannedTime',
       type: IsarType.dateTime,
     ),
     r'ticketId': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'ticketId',
       type: IsarType.long,
     ),
     r'visitorId': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'visitorId',
       type: IsarType.string,
     )
@@ -108,9 +113,10 @@ void _visitorCollectionSerialize(
 ) {
   writer.writeLongList(offsets[0], object.answersIds);
   writer.writeLong(offsets[1], object.eventId);
-  writer.writeDateTime(offsets[2], object.qrCodeScannedTime);
-  writer.writeLong(offsets[3], object.ticketId);
-  writer.writeString(offsets[4], object.visitorId);
+  writer.writeBool(offsets[2], object.isGenerated);
+  writer.writeDateTime(offsets[3], object.qrCodeScannedTime);
+  writer.writeLong(offsets[4], object.ticketId);
+  writer.writeString(offsets[5], object.visitorId);
 }
 
 VisitorCollection _visitorCollectionDeserialize(
@@ -122,9 +128,10 @@ VisitorCollection _visitorCollectionDeserialize(
   final object = VisitorCollection(
     answersIds: reader.readLongList(offsets[0]) ?? [],
     eventId: reader.readLong(offsets[1]),
-    qrCodeScannedTime: reader.readDateTimeOrNull(offsets[2]),
-    ticketId: reader.readLong(offsets[3]),
-    visitorId: reader.readString(offsets[4]),
+    isGenerated: reader.readBoolOrNull(offsets[2]),
+    qrCodeScannedTime: reader.readDateTimeOrNull(offsets[3]),
+    ticketId: reader.readLong(offsets[4]),
+    visitorId: reader.readString(offsets[5]),
   );
   return object;
 }
@@ -141,10 +148,12 @@ P _visitorCollectionDeserializeProp<P>(
     case 1:
       return (reader.readLong(offset)) as P;
     case 2:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     case 3:
-      return (reader.readLong(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 4:
+      return (reader.readLong(offset)) as P;
+    case 5:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -779,6 +788,34 @@ extension VisitorCollectionQueryFilter
   }
 
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      isGeneratedIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'isGenerated',
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      isGeneratedIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'isGenerated',
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
+      isGeneratedEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isGenerated',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterFilterCondition>
       isarIdEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1124,6 +1161,20 @@ extension VisitorCollectionQuerySortBy
   }
 
   QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
+      sortByIsGenerated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isGenerated', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
+      sortByIsGeneratedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isGenerated', Sort.desc);
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
       sortByQrCodeScannedTime() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'qrCodeScannedTime', Sort.asc);
@@ -1179,6 +1230,20 @@ extension VisitorCollectionQuerySortThenBy
       thenByEventIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'eventId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
+      thenByIsGenerated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isGenerated', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QAfterSortBy>
+      thenByIsGeneratedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isGenerated', Sort.desc);
     });
   }
 
@@ -1256,6 +1321,13 @@ extension VisitorCollectionQueryWhereDistinct
   }
 
   QueryBuilder<VisitorCollection, VisitorCollection, QDistinct>
+      distinctByIsGenerated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isGenerated');
+    });
+  }
+
+  QueryBuilder<VisitorCollection, VisitorCollection, QDistinct>
       distinctByQrCodeScannedTime() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'qrCodeScannedTime');
@@ -1295,6 +1367,13 @@ extension VisitorCollectionQueryProperty
   QueryBuilder<VisitorCollection, int, QQueryOperations> eventIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'eventId');
+    });
+  }
+
+  QueryBuilder<VisitorCollection, bool?, QQueryOperations>
+      isGeneratedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isGenerated');
     });
   }
 

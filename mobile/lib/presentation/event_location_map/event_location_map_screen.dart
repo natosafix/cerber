@@ -51,6 +51,7 @@ class EventLocationMapScreen extends StatelessWidget {
               body: OSMFlutter(
                 controller: state.mapController,
                 osmOption: OSMOption(
+                  enableRotationByGesture: false,
                   zoomOption: const ZoomOption(
                     initZoom: 13,
                   ),

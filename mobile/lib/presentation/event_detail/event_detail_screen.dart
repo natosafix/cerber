@@ -64,6 +64,30 @@ class EventDetailScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 8),
+                    BlocBuilder<EventDetailBloc, EventDetailState>(
+                      buildWhen: (previous, current) {
+                        return previous.generatedVisitorsCount != current.generatedVisitorsCount;
+                      },
+                      builder: (context, state) {
+                        if (state.generatedVisitorsCount == 0) {
+                          return const SizedBox.shrink();
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Row(
+                            children: [
+                              Text(L10n.current.unsyncedVisitors(state.generatedVisitorsCount)),
+                              TextButton(
+                                onPressed: () {
+                                  context.read<EventDetailBloc>().add(SyncGeneratedVisitors());
+                                },
+                                child: Text(L10n.current.sync),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                     BlocConsumer<EventDetailBloc, EventDetailState>(
                       listenWhen: (previous, current) =>
                           current.downloadStatus == DownloadStatus.failure,

@@ -76,5 +76,14 @@
     "pleaseFillTheEntireForm": "Пожалуйста, заполните анкету полностью",
     "visitorsInformation": "Информация о посетителе",
     "form": "Анкета",
-    "ticket": "Билет"
+    "ticket": "Билет",
+    "unsyncedVisitors": "Незагруженные посетители: ${count}",
+    "@unsyncedVisitors": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "sync": "Загрузить"
 }

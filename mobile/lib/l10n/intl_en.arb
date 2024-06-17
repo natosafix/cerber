@@ -76,5 +76,14 @@
     "pleaseFillTheEntireForm": "Please fill the entire form",
     "visitorsInformation": "Visitor Information",
     "form": "Form",
-    "ticket": "Ticket"
+    "ticket": "Ticket",
+    "unsyncedVisitors": "Unsynced visitors: ${count}",
+    "@unsyncedVisitors": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "sync": "Sync"
 }

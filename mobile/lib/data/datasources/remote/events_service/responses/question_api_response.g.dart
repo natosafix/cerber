@@ -8,7 +8,7 @@ part of 'question_api_response.dart';
 
 QuestionApiResponse _$QuestionApiResponseFromJson(Map<String, dynamic> json) =>
     QuestionApiResponse(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       type: $enumDecode(_$QuestionTypeResponseEnumMap, json['type']),
       title: json['title'] as String,
       required: json['required'] as bool,

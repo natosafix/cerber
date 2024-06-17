@@ -79,7 +79,8 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
         .toList();
     await _eventsDatabase.addAnswers(answers);
 
-    final visitorsCollections = visitors.map((e) => VisitorCollection.fromModel(e, eventId)).toList();
+    final visitorsCollections =
+        visitors.map((e) => VisitorCollection.fromModel(e, eventId)).toList();
     await _eventsDatabase.addVisitors(visitorsCollections);
 
     await _eventsDatabase.updateLastDownloaded(eventId);
@@ -120,7 +121,8 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
 
   @override
   Future<void> saveQuestions(List<Question> questions, int eventId) async {
-    final questionsCollections = questions.map((e) => QuestionCollection.fromModel(e, eventId)).toList();
+    final questionsCollections =
+        questions.map((e) => QuestionCollection.fromModel(e, eventId)).toList();
     await _eventsDatabase.addQuestions(questionsCollections);
   }
 
@@ -172,9 +174,34 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
       answersIds: answers.map((e) => e.id).toList(),
       ticketId: ticketId,
       qrCodeScannedTime: DateTime.now(),
+      isGenerated: true,
     );
     await _eventsDatabase.addVisitors([visitor]);
 
     return visitor.visitorId;
+  }
+
+  @override
+  Future<List<Visitor>> getGeneratedVisitors(int eventId) async {
+    final List<VisitorCollection> visitors = await _eventsDatabase.getGeneratedVisitors(eventId);
+
+    final result = <Visitor>[];
+
+    for (final visitorCollection in visitors) {
+      final Visitor? model = await findVisitor(visitorCollection.visitorId, eventId);
+      result.add(model!);
+    }
+
+    return result;
+  }
+
+  @override
+  Future<void> setVisitorSynced(String oldId, String newId, int eventId) async {
+    await _eventsDatabase.setVisitorSynced(oldId, newId, eventId);
+  }
+
+  @override
+  Stream<int> getGeneratedVisitorsCountStream(int eventId) async* {
+    yield* _eventsDatabase.generatedVisitorsCountStream(eventId);
   }
 }

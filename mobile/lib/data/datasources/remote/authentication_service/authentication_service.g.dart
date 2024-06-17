@@ -20,7 +20,7 @@ class _AuthenticationService implements AuthenticationService {
 
   @override
   Future<LogInResponse> login(LogInRequest logInRequest) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
@@ -48,7 +48,7 @@ class _AuthenticationService implements AuthenticationService {
 
   @override
   Future<void> register(RegisterRequest registerRequest) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};

@@ -73,6 +73,16 @@ class EventsDatabase {
     });
   }
 
+  Future<void> addAnswers(List<AnswerCollection> answers) async {
+    await _isar.writeTxn(() async {
+      _answers.putAll(answers);
+    });
+  }
+
+  Future<List<AnswerCollection?>> findAnswers(List<Id> answersIds) async {
+    return await _answers.getAll(answersIds);
+  }
+
   Future<void> addVisitors(List<VisitorCollection> visitors) async {
     await _isar.writeTxn(() async {
       await _visitors.putAll(visitors);
@@ -85,28 +95,8 @@ class EventsDatabase {
     });
   }
 
-  Future<void> addAnswers(List<AnswerCollection> answers) async {
-    await _isar.writeTxn(() async {
-      _answers.putAll(answers);
-    });
-  }
-
-  Future<List<AnswerCollection?>> findAnswers(List<Id> answersIds) async {
-    return await _answers.getAll(answersIds);
-  }
-
   Future<VisitorCollection?> findVisitor(String visitorId, Id eventId) async {
     return await _visitors.getByVisitorIdEventId(visitorId, eventId);
-  }
-
-  Future<List<QuestionCollection>> getQuestions(Id eventId) async {
-    return await _questions.where().eventIdEqualTo(eventId).findAll();
-  }
-
-  Future<void> addQuestions(List<QuestionCollection> questions) async {
-    await _isar.writeTxn(() async {
-      _questions.putAll(questions);
-    });
   }
 
   Future<void> setVisitorsQrCodeScanned(String visitorId, Id eventId) async {
@@ -116,8 +106,56 @@ class EventsDatabase {
       if (visitor == null) return;
 
       visitor.qrCodeScannedTime = now;
-      
+
       await _visitors.put(visitor);
+    });
+  }
+
+  Future<List<VisitorCollection>> getGeneratedVisitors(Id eventId) async {
+    return await _visitors
+        .where()
+        .eventIdEqualTo(eventId)
+        .filter()
+        .isGeneratedEqualTo(true)
+        .findAll();
+  }
+
+  Stream<int> generatedVisitorsCountStream(Id eventId) async* {
+    final query = _visitors.where().eventIdEqualTo(eventId).filter().isGeneratedEqualTo(true);
+
+    yield* query.watch(fireImmediately: true).map((visitors) {
+      return visitors.length;
+    });
+  }
+
+  Future<void> setVisitorSynced(String oldId, String newId, Id eventId) async {
+    await _isar.writeTxn(() async {
+      final old = await findVisitor(oldId, eventId);
+      if (old == null) {
+        return;
+      }
+
+      final newVisitor = VisitorCollection(
+        visitorId: old.visitorId,
+        eventId: old.eventId,
+        answersIds: old.answersIds,
+        ticketId: old.ticketId,
+        qrCodeScannedTime: old.qrCodeScannedTime,
+        isGenerated: null,
+      );
+
+      await _visitors.delete(old.isarId);
+      await _visitors.put(newVisitor);
+    });
+  }
+
+  Future<List<QuestionCollection>> getQuestions(Id eventId) async {
+    return await _questions.where().eventIdEqualTo(eventId).findAll();
+  }
+
+  Future<void> addQuestions(List<QuestionCollection> questions) async {
+    await _isar.writeTxn(() async {
+      _questions.putAll(questions);
     });
   }
 

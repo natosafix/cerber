@@ -8,7 +8,7 @@ part of 'event_api_response.dart';
 
 EventApiResponse _$EventApiResponseFromJson(Map<String, dynamic> json) =>
     EventApiResponse(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       description: json['description'] as String,
       city: json['city'] as String,

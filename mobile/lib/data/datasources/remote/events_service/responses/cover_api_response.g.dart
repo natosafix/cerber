@@ -8,7 +8,7 @@ part of 'cover_api_response.dart';
 
 CoverApiResponse _$CoverApiResponseFromJson(Map<String, dynamic> json) =>
     CoverApiResponse(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       path: json['path'] as String,
     );

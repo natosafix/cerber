@@ -24,12 +24,15 @@ class VisitorCollection {
 
   DateTime? qrCodeScannedTime;
 
+  bool? isGenerated;
+
   VisitorCollection({
     required this.visitorId,
     required this.eventId,
     required this.answersIds,
     required this.ticketId,
     required this.qrCodeScannedTime,
+    this.isGenerated,
   });
 
   VisitorCollection.autoId({
@@ -37,9 +40,11 @@ class VisitorCollection {
     required this.answersIds,
     required this.ticketId,
     required this.qrCodeScannedTime,
+    this.isGenerated,
   }) : visitorId = const Uuid().v4();
 
-  static Visitor toModel(VisitorCollection visitor, TicketCollection ticket, Map<Question, Answer> answers) {
+  static Visitor toModel(
+      VisitorCollection visitor, TicketCollection ticket, Map<Question, Answer> answers) {
     return Visitor(
       id: visitor.visitorId,
       questionsMap: answers,

@@ -18,6 +18,8 @@ abstract class CompoundEventsRepository implements EventsRepository {
 
   Future<QrCodeData> generateQrCode(Event event, List<FilledAnswer> filledAnswers, int ticketId);
 
+  Future<void> sendGeneratedVisitors(int eventId);
+
   @protected
   abstract final LocalEventsRepository localEventsRepository;
 

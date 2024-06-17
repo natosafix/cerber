@@ -45,7 +45,7 @@ class _MyHttpOverrides extends HttpOverrides {
 
 final locator = GetIt.instance;
 
-const _mockRepos = true;
+const _mockRepos = false;
 
 void setupLocator() async {
   if (kDebugMode) HttpOverrides.global = _MyHttpOverrides();

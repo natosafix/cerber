@@ -15,10 +15,13 @@ class EventDetailBloc extends Bloc<EventDetailEvent, EventDetailState> {
       : super(EventDetailState(
           downloadStatus: DownloadStatus.unknown,
           lastDownloaded: _event.lastDownloaded,
+          generatedVisitorsCount: 0,
         )) {
     on<_DownloadStatusChanged>(_onDownloadStatusChanged);
     on<_EventChanged>(_onEventChanged);
+    on<_GeneratedVisitorCountChanged>(_onGeneratedVisitorCountChanged);
     on<DownloadDatabase>(_onDownloadDatabase);
+    on<SyncGeneratedVisitors>(_onSyncGeneratedVisitors);
 
     _downloadStatusSubscription = _downloadStatusController.stream.listen((status) {
       add(_DownloadStatusChanged(status));
@@ -27,10 +30,16 @@ class EventDetailBloc extends Bloc<EventDetailEvent, EventDetailState> {
     _eventSubscription = _localEventsRepository.watchEvent(_event.id).listen((event) {
       add(_EventChanged(event));
     });
+
+    _generatedVisitorsCountSubscription =
+        _localEventsRepository.getGeneratedVisitorsCountStream(_event.id).listen((count) {
+      add(_GeneratedVisitorCountChanged(count));
+    });
   }
 
   late final StreamSubscription<DownloadStatus> _downloadStatusSubscription;
   late final StreamSubscription<Event> _eventSubscription;
+  late final StreamSubscription<int> _generatedVisitorsCountSubscription;
   final _downloadStatusController = StreamController<DownloadStatus>();
 
   final _compoundEventsRepository = locator<CompoundEventsRepository>();
@@ -46,14 +55,24 @@ class EventDetailBloc extends Bloc<EventDetailEvent, EventDetailState> {
     emit(state.copyWith(lastDownloaded: event.event.lastDownloaded));
   }
 
+  void _onGeneratedVisitorCountChanged(
+      _GeneratedVisitorCountChanged event, Emitter<EventDetailState> emit) {
+    emit(state.copyWith(generatedVisitorsCount: event.count));
+  }
+
   void _onDownloadDatabase(DownloadDatabase event, Emitter<EventDetailState> emit) {
     _compoundEventsRepository.downloadDatabase(_event.id, _downloadStatusController.sink);
+  }
+
+  void _onSyncGeneratedVisitors(SyncGeneratedVisitors event, Emitter<EventDetailState> emit) async {
+    await _compoundEventsRepository.sendGeneratedVisitors(_event.id);
   }
 
   @override
   Future<void> close() async {
     await _downloadStatusSubscription.cancel();
     await _eventSubscription.cancel();
+    await _generatedVisitorsCountSubscription.cancel();
     return super.close();
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:project/domain/models/answer.dart';
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/models/filled_answer.dart';
 import 'package:project/domain/models/qr_code_data.dart';
@@ -13,6 +14,7 @@ import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/domain/repositories/local_events_repository.dart';
 import 'package:project/domain/repositories/remote_events_repository.dart';
 import 'package:project/utils/cryptor/cryptor.dart';
+import 'package:project/utils/cryptor/encrypt_result.dart';
 import 'package:project/utils/network_checker/network_checker.dart';
 import 'package:project/utils/locator.dart';
 import 'package:project/utils/result.dart';
@@ -136,7 +138,11 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
 
   @override
   Future<QrCodeProcessResult> processQrCode(QrCodeData qrCodeData, Event event) async {
-    final visitorIdDecrypted = _cryptor.decrypt(qrCodeData.encryptedVisitorId, event.cryptoKey, qrCodeData.iv);
+    final String? visitorIdDecrypted = _cryptor.decrypt(
+      qrCodeData.encryptedVisitorId,
+      event.cryptoKey,
+      qrCodeData.iv,
+    );
     if (visitorIdDecrypted == null) return VisitorNotFound();
 
     final visitor = await findVisitor(visitorIdDecrypted, event.id);
@@ -148,10 +154,14 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
   }
 
   @override
-  Future<QrCodeData> generateQrCode(Event event, List<FilledAnswer> filledAnswers, int ticketId) async {
-    final newVisitorId = await addNewVisitorAnswers(ticketId, filledAnswers, event.id);
+  Future<QrCodeData> generateQrCode(
+    Event event,
+    List<FilledAnswer> filledAnswers,
+    int ticketId,
+  ) async {
+    final String? newVisitorId = await addNewVisitorAnswers(ticketId, filledAnswers, event.id);
 
-    final encryptResult = _cryptor.encrypt(newVisitorId!, event.cryptoKey);
+    final EncryptResult encryptResult = _cryptor.encrypt(newVisitorId!, event.cryptoKey);
 
     return QrCodeData(
       iv: encryptResult.iv,
@@ -175,10 +185,49 @@ class CompoundEventsRepositoryImpl implements CompoundEventsRepository {
     int eventId,
   ) async {
     if (await _networkAvailable()) {
-      final id = await remoteEventsRepository.addNewVisitorAnswers(ticketId, filledAnswers, eventId);
+      final id = await remoteEventsRepository.addNewVisitorAnswers(
+        ticketId,
+        filledAnswers,
+        eventId,
+      );
       if (id != null) return id;
     }
 
     return await localEventsRepository.addNewVisitorAnswers(ticketId, filledAnswers, eventId);
+  }
+
+  @override
+  Future<void> sendGeneratedVisitors(int eventId) async {
+    final generatedVisitors = await localEventsRepository.getGeneratedVisitors(eventId);
+
+    final newIds = <NewVisitorId>[];
+
+    for (final Visitor visitor in generatedVisitors) {
+      final List<FilledAnswer> filledAnswers = [
+        for (final MapEntry<Question, Answer> entry in visitor.questionsMap.entries)
+          FilledAnswer(
+            questionId: entry.key.id,
+            answers: entry.value.answers,
+          ),
+      ];
+
+      final newId = await remoteEventsRepository.addNewVisitorAnswers(
+        visitor.ticket.id,
+        filledAnswers,
+        eventId,
+      );
+
+      if (newId == null) {
+        break;
+      }
+
+      newIds.add(newId);
+    }
+
+    for (var i = 0; i < newIds.length; i++) {
+      final Visitor visitor = generatedVisitors[i];
+      final String newId = newIds[i];
+      await localEventsRepository.setVisitorSynced(visitor.id, newId, eventId);
+    }
   }
 }

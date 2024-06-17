@@ -8,7 +8,9 @@ import 'package:project/data/datasources/remote/events_service/mappers/ticket_ma
 import 'package:project/data/datasources/remote/events_service/mappers/visitor_mapper.dart';
 import 'package:project/data/datasources/remote/events_service/requests/send_answers_api_request.dart';
 import 'package:project/data/datasources/remote/events_service/responses/question_api_response.dart';
+import 'package:project/data/datasources/remote/events_service/responses/ticket_api_response.dart';
 import 'package:project/data/datasources/remote/events_service/responses/visitor_api_response.dart';
+import 'package:project/domain/models/answer.dart';
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/models/filled_answer.dart';
 import 'package:project/domain/models/question.dart';
@@ -67,12 +69,13 @@ class RemoteEventsRepositoryImpl implements RemoteEventsRepository {
     List<VisitorApiResponse> visitorsApi,
     List<QuestionApiResponse> questionsApi,
   ) {
-    final questions = questionsApi.map((e) => e.toModel());
+    final Iterable<Question> questions = questionsApi.map((e) => e.toModel());
 
     return visitorsApi.map((visitorApi) {
-      final answers = visitorApi.answers.map((e) => e.toModel());
+      final Iterable<Answer> answers = visitorApi.answers.map((e) => e.toModel());
       final questionsMap = {
-        for (final question in questions) question: answers.firstWhere((a) => a.questionId == question.id)
+        for (final question in questions)
+          question: answers.firstWhere((a) => a.questionId == question.id)
       };
       return visitorApi.toModel(questionsMap);
     }).toList();
@@ -81,7 +84,7 @@ class RemoteEventsRepositoryImpl implements RemoteEventsRepository {
   @override
   Future<Result<List<Question>, Exception>> getQuestions(int eventId) async {
     try {
-      final questionsApi = await _eventsService.getQuestions(eventId);
+      final List<QuestionApiResponse> questionsApi = await _eventsService.getQuestions(eventId);
       return Success(questionsApi.map((e) => e.toModel()).toList());
     } on DioException catch (e) {
       return Failure(e);
@@ -99,8 +102,8 @@ class RemoteEventsRepositoryImpl implements RemoteEventsRepository {
       answers: filledAnswers.map((e) => e.toApi()).toList(),
     );
     try {
-      final String response = await _eventsService.sendAnswers(request);
-      return response;
+      final String newId = await _eventsService.sendAnswers(request);
+      return newId;
     } on DioException catch (_) {
       return null;
     }
@@ -109,7 +112,7 @@ class RemoteEventsRepositoryImpl implements RemoteEventsRepository {
   @override
   Future<List<Ticket>?> getTickets(int eventId) async {
     try {
-      final ticketsResponse = await _eventsService.getTickets(eventId);
+      final List<TicketApiResponse> ticketsResponse = await _eventsService.getTickets(eventId);
       return ticketsResponse.map((e) => e.toModel()).toList();
     } on DioException catch (_) {
       return null;
