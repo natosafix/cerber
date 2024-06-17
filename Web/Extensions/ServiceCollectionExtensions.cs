@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using RabbitMQListener;
+using RabbitMqListener.Listeners;
+using RabbitMqListener.Listeners.TicketSender;
 using Web.Persistence.Repositories;
 using Web.Requirements;
 using Web.Services;
@@ -9,6 +12,14 @@ namespace Web.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    public static IServiceCollection AddExternals(this IServiceCollection services)
+    {
+        services.AddSingleton<IRabbitMqConnectionsPool, RabbitMqConnectionsPool>();
+        services.AddSingleton<BaseRabbitMqProducer<TicketDestinationMessage>>(
+            di => new TicketSenderListenerFactory(di.GetService<IRabbitMqConnectionsPool>()!).CreateProducer());
+        return services;
+    }
+
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IDraftEventsRepository, DraftEventsRepository>();
@@ -24,7 +35,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserFilesRepository, UserFilesRepository>();
         return services;
     }
-    
+
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddScoped<IUserHelper, UserHelper>();
@@ -45,16 +56,16 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IEncryptionService, EncryptionService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUsersService, UsersService>();
-        
+
         return services;
     }
-    
+
     public static IServiceCollection AddRequirements(this IServiceCollection services)
     {
         services.AddScoped<IAuthorizationHandler, MustOwnEventHandler>();
         services.AddScoped<IAuthorizationHandler, MustInspectEventHandler>();
         services.AddScoped<IAuthorizationHandler, MustInspectOrderHandler>();
-        
+
         return services;
     }
 }

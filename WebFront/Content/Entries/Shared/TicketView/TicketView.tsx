@@ -30,6 +30,14 @@ export const TicketView: React.FC<TicketViewProps> = ({ ticket, ticketNum, onTic
         onTicketChange(ticket.withCover(file.originalFile));
     };
 
+    const onFileRemove = async () => {
+        onTicketChange(ticket.withCover(undefined));
+    };
+
+    const onSizeUpdate = async (qrCodeX?: number, qrCodeY?: number, qrCodeSize?: number) => {
+        onTicketChange(ticket.withQr(qrCodeX, qrCodeY, qrCodeSize));
+    };
+
     return (
         <div className={styles.ticketWrapper}>
             <Gapped vertical={true} gap={10}>
@@ -37,13 +45,19 @@ export const TicketView: React.FC<TicketViewProps> = ({ ticket, ticketNum, onTic
                 <Box sx={{ display: 'flex' }}>
                     <TicketForm
                         backgroundColor="white"
-                        borderWidth={2}
+                        borderWidth={1}
                         width={148 * 4}
                         borderColor="black"
                         height={200}
                         polygon="0.00% 0.00%,100.00% 0.00%,100.00% 100%,0.00% 100%"
                     >
-                        <TicketImageLoader hideInput={true} uploader={onFileUpload} ticket={ticket}></TicketImageLoader>
+                        <TicketImageLoader
+                            onRemove={onFileRemove}
+                            hideInput={true}
+                            uploader={onFileUpload}
+                            ticket={ticket}
+                            onSizeUpdater={onSizeUpdate}
+                        ></TicketImageLoader>
                     </TicketForm>
                 </Box>
                 <SingleStringQuestion

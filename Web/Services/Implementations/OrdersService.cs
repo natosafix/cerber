@@ -1,6 +1,8 @@
 ﻿using Domain.Entities;
 using Domain.Infrastructure;
 using Newtonsoft.Json;
+using RabbitMqListener.Listeners;
+using RabbitMqListener.Listeners.TicketSender;
 using Web.Persistence.Repositories;
 
 namespace Web.Services.Implementations;
@@ -12,14 +14,22 @@ public class OrdersService : IOrdersService
     private readonly IQrCodeService qrCodeService;
     private readonly IEventsService eventsService;
     private readonly IEncryptionService encryptionService;
-    
-    public OrdersService(IOrdersRepository ordersRepository, IMailService mailService, IQrCodeService qrCodeService, IEventsService eventsService, IEncryptionService encryptionService)
+    private readonly BaseRabbitMqProducer<TicketDestinationMessage> ticketsProducer;
+
+    public OrdersService(
+        IOrdersRepository ordersRepository,
+        IMailService mailService,
+        IQrCodeService qrCodeService,
+        IEventsService eventsService,
+        IEncryptionService encryptionService,
+        BaseRabbitMqProducer<TicketDestinationMessage> ticketsProducer)
     {
         this.ordersRepository = ordersRepository;
         this.mailService = mailService;
         this.qrCodeService = qrCodeService;
         this.eventsService = eventsService;
         this.encryptionService = encryptionService;
+        this.ticketsProducer = ticketsProducer;
     }
 
     public async Task<Order> Get(Guid customer)
@@ -56,6 +66,17 @@ public class OrdersService : IOrdersService
         var @event = await eventsService.GetByTicketId(order.TicketId);
         var cryptoKey = Convert.FromBase64String(@event.CryptoKey);
         var encryptedCustomer = encryptionService.EncryptString(order.Customer.ToString(), cryptoKey);
+
+        var message = new TicketDestinationMessage(
+            email,
+            encryptedCustomer,
+            order.Ticket.QrCodeSize,
+            order.Ticket.QrCodeX,
+            order.Ticket.QrCodeY);
+        ticketsProducer.Send(message);
+
+        return;
+        // TODO
         
         var qrCode = qrCodeService.Create($"ticket.png", encryptedCustomer);
         await mailService.SendWithImageAttachments(

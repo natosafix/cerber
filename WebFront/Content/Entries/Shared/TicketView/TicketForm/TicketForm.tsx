@@ -33,6 +33,7 @@ export const TicketForm: React.FC<RectangleProps> = ({
                     backgroundColor: `${borderColor}`,
                     clipPath: `polygon(${polygon})`,
                     margin: `${margin}`,
+                    borderRadius: '10px',
                 }}
             >
                 <Box
@@ -44,6 +45,7 @@ export const TicketForm: React.FC<RectangleProps> = ({
                         height: `${height - 2 * borderWidth}px`,
                         background: backgroundColor,
                         clipPath: `polygon(${polygon})`,
+                        borderRadius: '10px',
                     }}
                 >
                     {children}
