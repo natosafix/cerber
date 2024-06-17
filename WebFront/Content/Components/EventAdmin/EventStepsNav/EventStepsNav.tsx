@@ -1,38 +1,33 @@
 ﻿import * as React from 'react';
-import styles from '../EventAdmin.scss';
+import styles from './EventStepsNav.scss';
 import { Button } from '@skbkontur/react-ui';
-import { EventAdminPageNav } from './EventAdminPageNav';
 
-interface Props {
-    step: EventAdminPageNav;
-    setStepNav: (stepNav: EventAdminPageNav) => void;
+interface Props<T> {
+    step: T;
+    setStepNav: (stepNav: T) => void;
+    buttons: ButtonInfo<T>[];
 }
 
-class ButtonInfo {
-    public matchType: EventAdminPageNav;
+export class ButtonInfo<T> {
+    public matchType: T;
     public content: string;
+    public disabled?: boolean;
 
-    constructor(content: string, matchType: EventAdminPageNav) {
+    constructor(content: string, matchType: T, disabled?: boolean) {
         this.content = content;
         this.matchType = matchType;
+        this.disabled = disabled;
     }
 }
 
-export const EventStepsNav: React.FC<Props> = ({ step, setStepNav }) => {
-    const buttonsInfo = [
-        new ButtonInfo('Описание события', EventAdminPageNav.EventCoverSheet),
-        new ButtonInfo('Анкета регистрации', EventAdminPageNav.EventQuizCreator),
-        new ButtonInfo('Билеты', EventAdminPageNav.EventTickets),
-        new ButtonInfo('Публикация', EventAdminPageNav.EventPublish),
-    ];
-
+export const EventStepsNav = <T,>({ step, setStepNav, buttons }: Props<T>) => {
     return (
         <div className={styles.stepsWrapper}>
-            {buttonsInfo.map((info, idx) => (
+            {buttons.map((info, idx) => (
                 <Button
                     key={idx}
                     active={info.matchType === step}
-                    disabled={info.matchType > step}
+                    disabled={info.disabled === undefined ? info.matchType > step : info.disabled}
                     size={'medium'}
                     borderless={true}
                     onClick={() => setStepNav(info.matchType)}

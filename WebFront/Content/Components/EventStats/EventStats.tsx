@@ -11,31 +11,25 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 interface IEventsProps {
-    event: IEvent;
+    eventStats: IEventStats;
 }
 
-export const EventStats: React.FC<IEventsProps> = ({ event }) => {
+export const EventStats: React.FC<IEventsProps> = ({ eventStats }) => {
     const [inspectors, setInspectors] = useState<string[]>([]);
     const [ticketsRows, setTicketsRows] = useState<Row[]>([]);
-    const [inspectorsRows, setInspectorsRows] = useState<Map<string, Row[]>>(new Map);
+    const [inspectorsRows, setInspectorsRows] = useState<Map<string, Row[]>>(new Map());
 
     useEffect(() => {
-        EventsClient.getEventStats(event.id)
-            .then(response => {
-                const eventStats = response.data;
-                setTicketsRows(eventStats.ticketsStats
-                    .map(ts => createRow(ts.name, ts.quantity, ts.price)));
-                if (eventStats.inspectors.length === 0)
-                    return;
-                setInspectors(eventStats.inspectors);
-                let inspectorsRowsInternal = new Map<string, Row[]>();
-                for (const inspector of eventStats.inspectors) {
-                    inspectorsRowsInternal[inspector] = eventStats.ticketsByInspector[inspector]
-                        .map(ts => createRow(ts.name, ts.quantity, ts.price));
-                }
-                setInspectorsRows(inspectorsRowsInternal);
-            })
-            .catch(reason => console.error(reason));
+        setTicketsRows(eventStats.ticketsStats.map((ts) => createRow(ts.name, ts.quantity, ts.price)));
+        if (eventStats.inspectors.length === 0) return;
+        setInspectors(eventStats.inspectors);
+        let inspectorsRowsInternal = new Map<string, Row[]>();
+        for (const inspector of eventStats.inspectors) {
+            inspectorsRowsInternal[inspector] = eventStats.ticketsByInspector[inspector].map((ts) =>
+                createRow(ts.name, ts.quantity, ts.price),
+            );
+        }
+        setInspectorsRows(inspectorsRowsInternal);
     }, []);
 
     function ccyFormat(num: number) {
@@ -73,21 +67,24 @@ export const EventStats: React.FC<IEventsProps> = ({ event }) => {
                     <TableCell align="right">{row.unit}</TableCell>
                     <TableCell align="right">{ccyFormat(row.price)}</TableCell>
                 </TableRow>
-            ))
+            ));
             elements = elements.concat(jsxRows);
             elements.push(
                 <TableRow>
                     <TableCell colSpan={3} />
                     <TableCell align="center">Итого</TableCell>
-                    <TableCell colSpan={2} align="right">{ccyFormat(subtotal(inspectorsRows[inspector]))}</TableCell>
-                </TableRow>);
+                    <TableCell colSpan={2} align="right">
+                        {ccyFormat(subtotal(inspectorsRows[inspector]))}
+                    </TableCell>
+                </TableRow>,
+            );
         }
         return elements;
-    }
+    };
 
     return (
         <div>
-            {ticketsRows.length > 0 &&
+            {ticketsRows.length > 0 && (
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 700 }} aria-label="spanning table">
                         <TableHead>
@@ -115,9 +112,9 @@ export const EventStats: React.FC<IEventsProps> = ({ event }) => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-            }
-            <br/>
-            {inspectors.length > 0 &&
+            )}
+            <br />
+            {inspectors.length > 0 && (
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 700 }} aria-label="spanning table">
                         <TableHead>
@@ -129,12 +126,10 @@ export const EventStats: React.FC<IEventsProps> = ({ event }) => {
                                 <TableCell align="right">Сумма</TableCell>
                             </TableRow>
                         </TableHead>
-                        <TableBody>
-                            {getInspectorsRows()}
-                        </TableBody>
+                        <TableBody>{getInspectorsRows()}</TableBody>
                     </Table>
                 </TableContainer>
-            }
+            )}
         </div>
     );
 };
