@@ -28,6 +28,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddExternals();
         services.AddPersistence(config);
         services.AddRepositories();
         services.AddServices();
