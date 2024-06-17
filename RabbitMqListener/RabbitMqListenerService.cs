@@ -10,6 +10,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQListener.Extensions;
 using RabbitMqListener.Listeners;
+using RabbitMqListener.Listeners.TicketSender;
 
 namespace RabbitMQListener;
 
@@ -40,9 +41,9 @@ public class RabbitMqListenerService : BackgroundService
             channel.QueueDeclare(mqListener.RabbitMqQueueConfig);
 
             var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += (ch, ea) =>
+            consumer.Received += async (ch, ea) =>
             {
-                var success = OnReceived(mqListener, ch, ea);
+                var success = await OnReceived(mqListener, ch, ea);
                 if (success)
                     channel.BasicAck(ea.DeliveryTag, false);
                 else
@@ -56,7 +57,7 @@ public class RabbitMqListenerService : BackgroundService
         return Task.CompletedTask;
     }
 
-    private static bool OnReceived(BaseRabbitMqListener listener, object? channel, BasicDeliverEventArgs args)
+    private static async Task<bool> OnReceived(BaseRabbitMqListener listener, object? channel, BasicDeliverEventArgs args)
     {
         try
         {
@@ -71,7 +72,7 @@ public class RabbitMqListenerService : BackgroundService
             if (message is null)
                 throw new ArgumentException($"Can't deserialize message to type: {listener.MessageType}");
 
-            listener.Handle(message);
+            await listener.Handle(message);
             return true;
         }
         catch (Exception)

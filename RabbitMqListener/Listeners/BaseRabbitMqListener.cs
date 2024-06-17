@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using RabbitMQListener.Config;
 
 namespace RabbitMqListener.Listeners;
@@ -11,8 +12,9 @@ public abstract class BaseRabbitMqListener
     }
 
     public Type MessageType { get; }
+
+    public abstract Task Handle(object? message);
     public abstract RabbitMqQueueConfig RabbitMqQueueConfig { get; }
-    public abstract void Handle(object? message);
 }
 
 public abstract class BaseRabbitMqListener<TMessage> : BaseRabbitMqListener
@@ -22,13 +24,13 @@ public abstract class BaseRabbitMqListener<TMessage> : BaseRabbitMqListener
     {
     }
 
-    public override void Handle(object? message)
+    public override async Task Handle(object? message)
     {
         if (message is not TMessage parsed)
             throw new ArgumentNullException(nameof(message));
 
-        Handle(parsed);
+        await Handle(parsed);
     }
 
-    protected abstract void Handle(TMessage message);
+    protected abstract Task Handle(TMessage message);
 }
