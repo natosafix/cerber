@@ -10,4 +10,6 @@ public class Order
     
     public int TicketId { get; set; }
     public Ticket Ticket { get; set; }
+    
+    public string? InspectorName { get; set; }
 }

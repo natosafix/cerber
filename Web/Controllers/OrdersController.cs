@@ -105,7 +105,6 @@ public class OrdersController : Controller
         {
             Console.WriteLine("Robokassa payment result handling error occured:");
             Console.Write(e.Message);
-            //TODO: log.Error(e.Message);
         }
 
         return Content($"OK{request.InvId}");
@@ -121,6 +120,9 @@ public class OrdersController : Controller
         var ticket = await ticketsService.Get(order.TicketId);
         if (!await authService.IsInspector(userHelper.UserId, ticket.EventId))
             return StatusCode(403);
+
+        var inspector = await userHelper.GetUser();
+        order.InspectorName = inspector!.UserName;
         
         var createdOrder = await ordersService.Create(order);
         await ordersService.SetPaid(createdOrder.Customer);
