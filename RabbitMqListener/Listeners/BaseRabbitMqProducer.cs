@@ -18,7 +18,7 @@ public abstract class BaseRabbitMqProducer<TMessage> : BaseRabbitMqProducer
         this.queue = queue;
     }
 
-    public void Send(TMessage message)
+    public virtual void Send(TMessage message)
     {
         var body = HandleMessage(message);
 

@@ -18,7 +18,7 @@ public class TicketSenderConsumer : BaseRabbitMqConsumer<TicketDestinationMessag
             File.ReadAllText(Path.Combine(StaticFiles.BaseDirectory, TemplateFileName)));
 
     private const string TemplateFileName = "TicketTemplate.cshtml";
-    
+
     private readonly EmailSender.EmailSender emailSender;
     private readonly QRCodeGenerator qrGenerator = new();
     private readonly IMinioClient minio;
@@ -37,16 +37,22 @@ public class TicketSenderConsumer : BaseRabbitMqConsumer<TicketDestinationMessag
     protected override Task Handle(TicketDestinationMessage message)
     {
         var stylesPath = new FileInfo(Path.Combine(StaticFiles.BaseDirectory, $"{TemplateFileName}.css"));
-        
+
         var qrBase64 = GetQrBase64(message.QrEncrypted);
-        var coverBase64 = GetCoverBase64(message.CoverImageId.ToString());
+        var coverBase64 = GetCover(message.CoverImageId.ToString());
         
-        var viewModel = HtmlTicketViewModel.CreateFromMessage(message, stylesPath.FullName, qrBase64, coverBase64);
-        
+
+        var viewModel = HtmlTicketViewModel.CreateFromMessage(message, stylesPath.FullName, qrBase64, "");
+
         var pdf = ticketViewGenerator.Generate(viewModel);
-        
+
         emailSender.SendWithImageAttachments(
-            "", message.Email, "Ticket", "Спасибо за заказ. Ваши билеты во вложениях", pdf, "Ticket.pdf")
+                "",
+                message.Email,
+                "Ticket",
+                "Спасибо за заказ. Ваши билеты во вложениях",
+                pdf,
+                "Ticket.pdf")
             .GetAwaiter()
             .GetResult();
 
@@ -61,7 +67,7 @@ public class TicketSenderConsumer : BaseRabbitMqConsumer<TicketDestinationMessag
         return qrBase64;
     }
 
-    private string GetCoverBase64(string imageId)
+    private byte[] GetCover(string imageId)
     {
         using var bytesStream = new MemoryStream();
         var goArgs = new GetObjectArgs()
@@ -70,7 +76,6 @@ public class TicketSenderConsumer : BaseRabbitMqConsumer<TicketDestinationMessag
             .WithCallbackStream(stream => stream.CopyTo(bytesStream));
         minio.GetObjectAsync(goArgs).GetAwaiter().GetResult();
         var bytes = bytesStream.ToArray();
-        var coverBase64 = Convert.ToBase64String(bytes);
-        return coverBase64;
+        return bytes;
     }
 }
