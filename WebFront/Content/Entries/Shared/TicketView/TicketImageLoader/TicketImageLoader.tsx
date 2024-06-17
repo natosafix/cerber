@@ -51,8 +51,8 @@ export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({
     const [selectedFile, setSelectedFile] = useState<Blob | undefined>(ticket.Cover);
     const [preview, setPreview] = useState<string | null | undefined>();
     const firstRender = useRef(true);
-    const [width, setWidth] = useState<number>(ticket.QrCodeSize || 50);
-    const [height, setHeight] = useState<number>(ticket.QrCodeSize || 50);
+    const [width, setWidth] = useState<number>(ticket.QrCodeSize || 75);
+    const [height, setHeight] = useState<number>(ticket.QrCodeSize || 75);
     const [position, setPosition] = useState<{ x: number; y: number }>({
         x: ticket.QrCodeX || 0,
         y: ticket.QrCodeY || 0,
@@ -184,7 +184,7 @@ export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({
                         <ResizableBox
                             width={width}
                             height={height}
-                            minConstraints={[50, 50]}
+                            minConstraints={[75, 75]}
                             maxConstraints={[150, 150]}
                             resizeHandles={['se']}
                             onResize={onResize}
