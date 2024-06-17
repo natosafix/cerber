@@ -9,6 +9,7 @@ import { Button } from '@skbkontur/react-ui';
 import { getUserInfo } from '../../../Helpers/UserInfoHelper';
 import { Route } from '../../../Utility/Constants';
 import { EventDetailsSkeleton } from './EventDetailsSkeleton';
+import { EventStats } from '../../EventStats/EventStats';
 
 export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
     const [event, setEvent] = useState<IEvent | null>(null);
@@ -74,6 +75,7 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
                             <Button size={'large'} use="success" onClick={handleClickButton}>
                                 Заполнить анкету
                             </Button>
+                            <EventStats event={event} />
                         </Gapped>
                     </div>
                 </Gapped>
