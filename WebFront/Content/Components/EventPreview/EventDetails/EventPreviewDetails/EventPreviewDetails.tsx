@@ -43,7 +43,7 @@ export const EventPreviewDetails: React.FC<{ id?: string }> = ({ id }) => {
     useEffect(() => {
         const fetchEventCover = async () => {
             try {
-                if (event?.img && event.img.type === 'application/octet-stream') {
+                if (event?.img && (event.img.type === 'application/octet-stream' || event.img.type === 'image/*')) {
                     console.log(event);
                     const imgSrc = URL.createObjectURL(event.img);
                     setImgSrc(imgSrc);
