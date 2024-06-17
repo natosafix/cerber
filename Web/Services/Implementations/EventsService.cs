@@ -79,21 +79,20 @@ public class EventsService : IEventsService
     public async Task<EventStats> GetStats(int id)
     {
         var stats = new EventStats();
-        var @event = await Get(id);
         var orders = await ordersRepository.GetByEvent(id);
         var paidOrders = orders.Where(o => o.Paid).ToList();
         var tickets = paidOrders.Select(o => o.Ticket).DistinctBy(t => t.Name);
-        foreach (var order in paidOrders)
+        var ticket2Count = new Dictionary<string, int>();
+        foreach (var ticketName in paidOrders.Select(order => order.Ticket.Name))
         {
-            var ticketName = order.Ticket.Name;
-            stats.TicketsInfo.TryAdd(ticketName, 0);
-            stats.TicketsInfo[ticketName]++;
+            ticket2Count.TryAdd(ticketName, 0);
+            ticket2Count[ticketName]++;
         }
 
         stats.SoldTicketsCount = paidOrders.Count;
-        stats.TotalProfit = stats.TicketsInfo
-            .Select(pair => tickets.First(t => t.Name == pair.Key).Price * pair.Value)
-            .Sum();
+        stats.TicketsStats = ticket2Count
+            .Select(pair => new TicketStats(pair.Key, pair.Value, tickets.First(t => t.Name == pair.Key).Price))
+            .ToArray();
         
         return stats;
     }

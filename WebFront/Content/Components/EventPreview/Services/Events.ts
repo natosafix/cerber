@@ -124,7 +124,7 @@ export const deleteInspector = async (event: IEvent, username: string) => {
 
 export const getInspectors = async (event: IEvent) => {
     try {
-        const response = await axios.get<string[]>(Route.GET_INSPECTORS(event));
+        const response = await axios.get<string[]>(Route.GET_INSPECTORS(event.id));
         return response.data;
     } catch (error) {}
 };
