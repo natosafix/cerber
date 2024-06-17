@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project/domain/models/event.dart';
-import 'package:project/domain/repositories/compound_events_repository/download_status.dart';
+import 'package:project/domain/models/download_status.dart';
 import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/event_detail/event_description_widget.dart';
 import 'package:project/presentation/event_detail/event_detail_location.dart';

@@ -9,25 +9,16 @@ import 'package:project/data/datasources/local/events_database/events_database.d
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/models/filled_answer.dart';
 import 'package:project/domain/models/question.dart';
+import 'package:project/domain/models/new_visitor_id.dart';
 import 'package:project/domain/models/ticket.dart';
 import 'package:project/domain/models/visitor.dart';
-import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
-import 'package:project/domain/repositories/authentication_repository/authentication_status.dart';
-import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/domain/repositories/local_events_repository.dart';
-import 'package:project/utils/locator.dart';
 import 'package:project/utils/result.dart';
 
 class LocalEventsRepositoryImpl implements LocalEventsRepository {
   LocalEventsRepositoryImpl({
     required EventsDatabase eventsDatabase,
-  }) : _eventsDatabase = eventsDatabase {
-    locator<AuthenticationRepository>().authenticationStatus.listen((status) {
-      if (status == AuthenticationStatus.unauthenticated) {
-        deleteAllData();
-      }
-    });
-  }
+  }) : _eventsDatabase = eventsDatabase;
 
   final EventsDatabase _eventsDatabase;
 
@@ -178,7 +169,7 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
     );
     await _eventsDatabase.addVisitors([visitor]);
 
-    return visitor.visitorId;
+    return NewVisitorId(visitor.visitorId);
   }
 
   @override
@@ -201,7 +192,7 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
   }
 
   @override
-  Stream<int> getGeneratedVisitorsCountStream(int eventId) async* {
+  Stream<int> watchGeneratedVisitorsCount(int eventId) async* {
     yield* _eventsDatabase.generatedVisitorsCountStream(eventId);
   }
 }

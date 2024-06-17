@@ -23,7 +23,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final _secureStorage = locator<FlutterSecureStorage>();
   final _networkChecker = locator<NetworkChecker>();
 
-  final _authenticationController = StreamController<AuthenticationStatus>.broadcast();
+  final _authenticationController = StreamController<AuthenticationStatus>();
 
   @override
   Stream<AuthenticationStatus> get authenticationStatus async* {

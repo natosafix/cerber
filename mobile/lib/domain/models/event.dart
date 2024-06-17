@@ -8,7 +8,6 @@ class Event {
   final DateTime startDate;
   final DateTime endDate;
   final String? photoUrl;
-  // final String category;
   final DateTime? lastDownloaded;
   final String cryptoKey;
 
@@ -22,7 +21,6 @@ class Event {
     required this.startDate,
     required this.endDate,
     required this.photoUrl,
-    // required this.category,
     required this.lastDownloaded,
     required this.cryptoKey,
   });

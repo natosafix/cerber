@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project/domain/models/event.dart';
-import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
-import 'package:project/domain/repositories/compound_events_repository/download_status.dart';
-import 'package:project/domain/repositories/local_events_repository.dart';
+import 'package:project/domain/models/download_status.dart';
+import 'package:project/domain/usecases/download_database_usecase.dart';
+import 'package:project/domain/usecases/send_generated_visitors_usecase.dart';
+import 'package:project/domain/usecases/watch_event_usecase.dart';
+import 'package:project/domain/usecases/watch_generated_visitors_count_usecase.dart';
 import 'package:project/utils/locator.dart';
 
 part 'event_detail_event.dart';
@@ -23,27 +25,28 @@ class EventDetailBloc extends Bloc<EventDetailEvent, EventDetailState> {
     on<DownloadDatabase>(_onDownloadDatabase);
     on<SyncGeneratedVisitors>(_onSyncGeneratedVisitors);
 
-    _downloadStatusSubscription = _downloadStatusController.stream.listen((status) {
+    _downloadStatusSub = _downloadStatusController.stream.listen((status) {
       add(_DownloadStatusChanged(status));
     });
 
-    _eventSubscription = _localEventsRepository.watchEvent(_event.id).listen((event) {
+    _eventSub = _watchEventUsecase(eventId: _event.id).listen((event) {
       add(_EventChanged(event));
     });
 
-    _generatedVisitorsCountSubscription =
-        _localEventsRepository.getGeneratedVisitorsCountStream(_event.id).listen((count) {
+    _generatedVisitorsCountSub = _watchGeneratedVisitorsUsecase(eventId: _event.id).listen((count) {
       add(_GeneratedVisitorCountChanged(count));
     });
   }
 
-  late final StreamSubscription<DownloadStatus> _downloadStatusSubscription;
-  late final StreamSubscription<Event> _eventSubscription;
-  late final StreamSubscription<int> _generatedVisitorsCountSubscription;
+  late final StreamSubscription<DownloadStatus> _downloadStatusSub;
+  late final StreamSubscription<Event> _eventSub;
+  late final StreamSubscription<int> _generatedVisitorsCountSub;
   final _downloadStatusController = StreamController<DownloadStatus>();
 
-  final _compoundEventsRepository = locator<CompoundEventsRepository>();
-  final _localEventsRepository = locator<LocalEventsRepository>();
+  final _watchEventUsecase = locator<WatchEventUsecase>();
+  final _downloadDatabaseUsecase = locator<DownloadDatabaseUsecase>();
+  final _sendGeneratedVisitorsUsecase = locator<SendGeneratedVisitorsUsecase>();
+  final _watchGeneratedVisitorsUsecase = locator<WatchGeneratedVisitorsCountUsecase>();
 
   final Event _event;
 
@@ -61,18 +64,18 @@ class EventDetailBloc extends Bloc<EventDetailEvent, EventDetailState> {
   }
 
   void _onDownloadDatabase(DownloadDatabase event, Emitter<EventDetailState> emit) {
-    _compoundEventsRepository.downloadDatabase(_event.id, _downloadStatusController.sink);
+    _downloadDatabaseUsecase(eventId: _event.id, statusSink: _downloadStatusController.sink);
   }
 
-  void _onSyncGeneratedVisitors(SyncGeneratedVisitors event, Emitter<EventDetailState> emit) async {
-    await _compoundEventsRepository.sendGeneratedVisitors(_event.id);
+  void _onSyncGeneratedVisitors(SyncGeneratedVisitors event, Emitter<EventDetailState> emit) {
+    _sendGeneratedVisitorsUsecase(eventId: _event.id);
   }
 
   @override
   Future<void> close() async {
-    await _downloadStatusSubscription.cancel();
-    await _eventSubscription.cancel();
-    await _generatedVisitorsCountSubscription.cancel();
+    await _downloadStatusSub.cancel();
+    await _eventSub.cancel();
+    await _generatedVisitorsCountSub.cancel();
     return super.close();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:project/domain/models/event.dart';
-import 'package:project/domain/repositories/events_repository.dart';
+import 'package:project/domain/usecases/get_events_usecase.dart';
 import 'package:project/utils/locator.dart';
 
 part 'events_event.dart';
@@ -16,12 +16,12 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     });
   }
 
-  final _eventsRepository = locator<EventsRepository>();
+  final _getEventsUsecase = locator<GetEventsUsecase>();
 
   static const _limit = 5;
 
   void _onGetEvents(GetEvents event, Emitter<EventsState> emit) async {
-    final result = await _eventsRepository.getEvents(
+    final result = await _getEventsUsecase(
       offset: event.pageKey,
       limit: _limit,
     );

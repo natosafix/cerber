@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/models/filled_answer.dart';
 import 'package:project/domain/models/question.dart';
+import 'package:project/domain/models/new_visitor_id.dart';
 import 'package:project/domain/models/ticket.dart';
 import 'package:project/domain/models/visitor.dart';
-import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/domain/repositories/remote_events_repository.dart';
 import 'package:project/utils/result.dart';
 

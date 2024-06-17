@@ -6,8 +6,12 @@ import 'package:project/domain/models/filled_answer.dart';
 import 'package:project/domain/models/qr_code_data.dart';
 import 'package:project/domain/models/question.dart';
 import 'package:project/domain/models/question_type.dart';
+import 'package:project/domain/models/new_visitor_id.dart';
 import 'package:project/domain/models/ticket.dart';
-import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
+import 'package:project/domain/usecases/add_new_visitor_usecase.dart';
+import 'package:project/domain/usecases/generate_new_qr_code_usecase.dart';
+import 'package:project/domain/usecases/get_questions_usecase.dart';
+import 'package:project/domain/usecases/get_tickets_usecase.dart';
 import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/utils/locator.dart';
 
@@ -38,10 +42,13 @@ class QuestionsFillerBloc extends Bloc<QuestionsFillerEvent, QuestionsFillerStat
 
   final Event _event;
 
-  final _compoundEventsRepository = locator<CompoundEventsRepository>();
+  final _getQuestionsUsecase = locator<GetQuestionsUsecase>();
+  final _getTicketsUsecase = locator<GetTicketsUsecase>();
+  final _addNewVisitorUsecase = locator<AddNewVisitorUsecase>();
+  final _generateNewQrCodeUsecase = locator<GenerateNewQrCodeUsecase>();
 
   void _onLoadData(LoadData event, Emitter<QuestionsFillerState> emit) async {
-    final getQuestionsResult = await _compoundEventsRepository.getQuestions(_event.id);
+    final getQuestionsResult = await _getQuestionsUsecase(eventId: _event.id);
 
     if (getQuestionsResult.isFailure) {
       emit(state.copyWith(questionsLoadingStatus: QuestionsLoadingStatus.failure));
@@ -58,7 +65,7 @@ class QuestionsFillerBloc extends Bloc<QuestionsFillerEvent, QuestionsFillerStat
       questionsMap[question] = Answer(id: 0, answers: answers, questionId: question.id);
     }
 
-    final tickets = await _compoundEventsRepository.getTickets(_event.id);
+    final tickets = await _getTicketsUsecase(eventId: _event.id);
 
     emit(state.copyWith(
       questionsMap: questionsMap,
@@ -83,10 +90,15 @@ class QuestionsFillerBloc extends Bloc<QuestionsFillerEvent, QuestionsFillerStat
         ),
     ];
 
-    final QrCodeData qrCodeData = await _compoundEventsRepository.generateQrCode(
-      _event,
-      answers,
-      state.selectedTicket!.id,
+    final NewVisitorId newVisitorId = await _addNewVisitorUsecase(
+      eventId: _event.id,
+      ticketId: state.selectedTicket!.id,
+      filledAnswers: answers,
+    );
+
+    final QrCodeData qrCodeData = _generateNewQrCodeUsecase(
+      newVisitorId: newVisitorId,
+      event: _event,
     );
 
     emit(state.copyWith(generatedQrCodeData: qrCodeData));

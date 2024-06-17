@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
+import 'package:project/domain/usecases/authentication/log_in_usecase.dart';
 import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/authentication/authentication_form/formz_inputs/email.dart';
 import 'package:project/presentation/authentication/authentication_form/formz_inputs/password.dart';
@@ -22,7 +22,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<FinishPressed>(_onFinishPressed);
   }
 
-  final _authenticationRepository = locator<AuthenticationRepository>();
+  final _logInUsecase = locator<LogInUsecase>();
 
   void _onEmailChanged(EmailChanged event, Emitter<LoginState> emit) {
     final email = Email.dirty(event.email);
@@ -37,7 +37,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   void _onFinishPressed(FinishPressed event, Emitter<LoginState> emit) async {
     emit(state.copyWith(authenticationFormStatus: const Processing()));
 
-    final res = await _authenticationRepository.logIn(
+    final res = await _logInUsecase(
       email: state.email.value.trim(),
       password: state.password.value.trim(),
     );

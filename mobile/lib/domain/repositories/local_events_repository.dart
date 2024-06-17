@@ -31,7 +31,7 @@ abstract class LocalEventsRepository implements EventsRepository {
 
   Future<List<Visitor>> getGeneratedVisitors(int eventId);
 
-  Stream<int> getGeneratedVisitorsCountStream(int eventId);
+  Stream<int> watchGeneratedVisitorsCount(int eventId);
 
   Future<void> setVisitorSynced(String oldId, String newId, int eventId);
 }
