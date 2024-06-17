@@ -26,14 +26,16 @@ export class EventAdminClient {
         return api.post(Route.SET_QUESTIONS, questions);
     }
 
-    public static getCoverImage() {
-        return api.get(Route.GET_COVER_IMAGE);
+    public static getCoverImageUrl(): string {
+        return api.getUri({ url: Route.GET_COVER_IMAGE });
     }
 
-    public static getCoverImageUrl(): string {
-        const uri = api.getUri({ url: Route.GET_COVER_IMAGE });
-        console.log(uri);
-        return uri;
+    public static async getCoverImage(): Promise<Blob> {
+        return await api
+            .get<Blob>(Route.GET_COVER_IMAGE, {
+                responseType: 'blob',
+            })
+            .then((x) => x.data);
     }
 
     public static setCoverImage(file: FileUploaderAttachedFile): Promise<void> {
@@ -60,11 +62,14 @@ export class EventAdminClient {
 
     public static setTickets(tickets: DraftTicketDto[]) {
         let formData = new FormData();
-
         tickets.map((ticket, i) => {
             formData.append(`tickets[${i}].name`, ticket.name);
             formData.append(`tickets[${i}].price`, ticket.price!.toString());
             formData.append(`tickets[${i}].coverImage`, ticket.cover!, `tickets[${i}].coverImage`);
+            formData.append(`tickets[${i}].qrCodeX`, ticket.qrCodeX!.toString());
+            formData.append(`tickets[${i}].qrCodeY`, ticket.qrCodeY!.toString());
+            formData.append(`tickets[${i}].qrCodeSize`, ticket.qrCodeSize!.toString());
+
             return formData;
         });
 

@@ -34,7 +34,6 @@ export const InspectorEditor: React.FC<IProps> = ({ event }) => {
             </div>
             <div className={styles.editorText}>
                 <TokenInput
-                    className="inspectorEditor-tokenInput"
                     width="100%"
                     placeholder="Введите username инспектора"
                     selectedItems={selectedItems}

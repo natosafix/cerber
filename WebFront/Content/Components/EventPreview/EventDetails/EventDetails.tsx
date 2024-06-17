@@ -9,9 +9,11 @@ import { Button } from '@skbkontur/react-ui';
 import { getUserInfo } from '../../../Helpers/UserInfoHelper';
 import { Route } from '../../../Utility/Constants';
 import { EventDetailsSkeleton } from './EventDetailsSkeleton';
+import { EventAdminClient } from '../../../../Api/EventAdmin/EventAdminClient';
+import { DraftEvent } from '../../../../Api/EventAdmin/DraftEvent';
 import { EventStats } from '../../EventStats/EventStats';
 
-export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
+export const EventDetails: React.FC<{ id?: string }> = ({ id }) => {
     const [event, setEvent] = useState<IEvent | null>(null);
     const [imgSrc, setImgSrc] = useState<string | null>(null);
     const [userId, setUserId] = useState<string>();
@@ -20,13 +22,12 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
         const fetchEventDetailsAndCover = async () => {
             try {
                 if (id) {
-                    const eventData = await getEvent(id);
-                    setEvent(eventData);
-
-                    if (eventData.img) {
-                        const imgSrc = URL.createObjectURL(eventData.img);
-                        setImgSrc(imgSrc);
-                    }
+                    await getEvent(id).then((x) => setEvent(x));
+                } else {
+                    EventAdminClient.getDraftCover().then(async (x) => {
+                        const event = await DraftEvent.fromDto(x.data).toIEvent();
+                        setEvent(event);
+                    });
                 }
             } catch (error) {}
         };
@@ -38,6 +39,19 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
             setUserId(userInfo.id);
         }
     }, [id]);
+
+    useEffect(() => {
+        const fetchEventCover = async () => {
+            try {
+                if (event?.img) {
+                    const imgSrc = URL.createObjectURL(event.img);
+                    setImgSrc(imgSrc);
+                }
+            } catch (error) {}
+        };
+
+        fetchEventCover();
+    }, [event]);
 
     const handleClickButton = () => {
         window.location.href = Route.QUIZ(id);
@@ -71,10 +85,12 @@ export const EventDetails: React.FC<{ id: string | undefined }> = ({ id }) => {
                                 ))}
                             </Gapped>
 
-                            {userId === event.ownerId && <InspectorEditor event={event} />}
-                            <Button size={'large'} use="success" onClick={handleClickButton}>
-                                Заполнить анкету
-                            </Button>
+                            {userId === event.ownerId && id && <InspectorEditor event={event} />}
+                            {id && (
+                                <Button size={'large'} use="success" onClick={handleClickButton}>
+                                    Заполнить анкету
+                                </Button>
+                            )}
                             <EventStats event={event} />
                         </Gapped>
                     </div>
