@@ -1,16 +1,16 @@
 ﻿using Newtonsoft.Json;
-using RabbitMQ.Client;
 using RabbitMQListener;
 
 namespace RabbitMqListener.Listeners.TicketSender;
 
 public class TicketSenderProducer : BaseRabbitMqProducer<TicketDestinationMessage>
 {
-    internal TicketSenderProducer()
+    internal TicketSenderProducer(IRabbitMqConnectionsPool connectionsPool, string queue)
+        : base(connectionsPool, queue)
     {
     }
 
-    protected override byte[] SendInternal(TicketDestinationMessage message)
+    protected override byte[] HandleMessage(TicketDestinationMessage message)
     {
         var messageSerialized = JsonConvert.SerializeObject(message);
         var body = System.Text.Encoding.UTF8.GetBytes(messageSerialized);

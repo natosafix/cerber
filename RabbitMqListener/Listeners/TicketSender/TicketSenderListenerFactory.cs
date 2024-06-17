@@ -11,5 +11,5 @@ public class TicketSenderListenerFactory : BaseRabbitMqListenerFactory<TicketDes
 
     protected override BaseRabbitMqConsumer<TicketDestinationMessage> CreateTConsumer() => new TicketSenderConsumer();
 
-    protected override BaseRabbitMqProducer<TicketDestinationMessage> CreateTProducer() => new TicketSenderProducer();
+    protected override BaseRabbitMqProducer<TicketDestinationMessage> CreateTProducer() => new TicketSenderProducer(ConnectionsPool, QueueName);
 }
