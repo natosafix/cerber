@@ -1,25 +1,28 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using RabbitMQListener.Config;
+using RabbitMqListener.Listeners.TicketSender.TicketViewGenerator;
+using RabbitMqListener.Listeners.TicketSender.TicketViewModel;
 using RabbitMQListener.StaticFiles;
-using RazorEngine;
-using RazorEngine.Templating;
 
 namespace RabbitMqListener.Listeners.TicketSender;
 
 public class TicketSenderListener : BaseRabbitMqListener<TicketDestinationMessage>
 {
-    private static readonly string ticketTemplate = File.ReadAllText(Path.Combine(StaticFiles.BaseDirectory, "TicketTemplate.cshtml"));
-    private const string TicketTemplateKey = "ticketTemplate"; // Нужно для хэширования, чтобы Razor не компилил файл несколько раз
+    private static readonly ITicketViewGenerator<HtmlTicketViewModel> ticketViewGenerator =
+        WkHtmlToPdfTicketGenerator.WithDefaultSettings(
+            File.ReadAllText(Path.Combine(StaticFiles.BaseDirectory, "TicketTemplate.cshtml")));
 
-    protected override async Task Handle(TicketDestinationMessage message)
+    protected override Task Handle(TicketDestinationMessage message)
     {
         var stylesPath = new FileInfo(Path.Combine(StaticFiles.BaseDirectory, "TicketTemplate.cshtml.css"));
-        var model = new TicketTemplateModel("User name", stylesPath.FullName);
+        var viewModel = new HtmlTicketViewModel("User name", stylesPath.FullName);
+        
+        var pdf = ticketViewGenerator.Generate(viewModel);
 
-        var html = Engine.Razor.RunCompile(ticketTemplate, TicketTemplateKey, typeof(TicketTemplateModel), model);
+        File.WriteAllBytes("Result.pdf", pdf);
 
-        await File.WriteAllTextAsync("Result.html", html);
+        return Task.CompletedTask;
     }
 
     public override RabbitMqQueueConfig RabbitMqQueueConfig => RabbitMqQueueConfig.CreateDefault("Tickets.Sender");
