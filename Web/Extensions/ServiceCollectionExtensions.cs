@@ -16,7 +16,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<IRabbitMqConnectionsPool, RabbitMqConnectionsPool>();
         services.AddSingleton<BaseRabbitMqProducer<TicketDestinationMessage>>(
-            di => new TicketSenderListenerFactory(di.GetService<IRabbitMqConnectionsPool>()!).CreateProducer());
+            di => new TicketSenderListenerFactory(di.GetService<IRabbitMqConnectionsPool>()!, di.GetService<IConfiguration>()!).CreateProducer());
         return services;
     }
 

@@ -1,4 +1,5 @@
-﻿using RabbitMQListener.Config;
+﻿using Microsoft.Extensions.Configuration;
+using RabbitMQListener.Config;
 using RabbitMQListener.Extensions;
 using RabbitMqListener.Listeners;
 
@@ -6,8 +7,11 @@ namespace RabbitMQListener;
 
 public abstract class BaseRabbitMqListenerFactory
 {
-    protected BaseRabbitMqListenerFactory(string queueName)
+    protected readonly IConfiguration Configuration;
+
+    protected BaseRabbitMqListenerFactory(string queueName, IConfiguration configuration)
     {
+        Configuration = configuration;
         QueueName = queueName;
     }
 
@@ -23,7 +27,8 @@ public abstract class BaseRabbitMqListenerFactory<TMessage> : BaseRabbitMqListen
     protected readonly IRabbitMqConnectionsPool ConnectionsPool;
     private bool queueDeclared;
 
-    protected BaseRabbitMqListenerFactory(IRabbitMqConnectionsPool connectionsPool, string queueName) : base(queueName)
+    protected BaseRabbitMqListenerFactory(IRabbitMqConnectionsPool connectionsPool, IConfiguration configuration, string queueName)
+        : base(queueName, configuration)
     {
         ConnectionsPool = connectionsPool;
     }

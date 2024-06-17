@@ -72,7 +72,8 @@ public class OrdersService : IOrdersService
             encryptedCustomer,
             order.Ticket.QrCodeSize,
             order.Ticket.QrCodeX,
-            order.Ticket.QrCodeY);
+            order.Ticket.QrCodeY,
+            order.Ticket.CoverId);
         ticketsProducer.Send(message);
 
         return;

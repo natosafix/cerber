@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -17,13 +18,18 @@ namespace RabbitMQListener;
 public class RabbitMqListenerService : BackgroundService
 {
     private static readonly IRabbitMqConnectionsPool connectionsPool = new RabbitMqConnectionsPool();
-    private static readonly List<BaseRabbitMqListenerFactory> listeners = new()
-    {
-        new TicketSenderListenerFactory(connectionsPool),
-        // new HelloWorldConsumer(),
-    };
 
+    private readonly List<BaseRabbitMqListenerFactory> listeners;
     private readonly List<IModel> channelsToDispose = new();
+
+    public RabbitMqListenerService(IConfiguration configuration)
+    {
+        listeners = new List<BaseRabbitMqListenerFactory>
+        {
+            new TicketSenderListenerFactory(connectionsPool, configuration),
+            // new HelloWorldConsumer(),
+        };
+    }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {

@@ -1,5 +1,4 @@
-﻿using System;
-using RabbitMqListener.Listeners.TicketSender.TicketViewModel;
+﻿using RabbitMqListener.Listeners.TicketSender.TicketViewModel;
 using RazorEngine;
 using RazorEngine.Templating;
 using WkHtmlToPdfDotNet;

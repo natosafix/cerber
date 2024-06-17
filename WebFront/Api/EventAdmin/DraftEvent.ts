@@ -71,7 +71,7 @@ export class DraftEvent {
             description: this.Description,
             address: this.Address,
             city: this.City,
-            from: this.To,
+            from: this.From,
             img: await EventAdminClient.getCoverImage(),
         } as IEvent;
     }
