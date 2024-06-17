@@ -1,11 +1,5 @@
 ﻿namespace RabbitMqListener.Listeners.TicketSender.TicketViewModel;
 
-public class BaseTicketViewModel
+public interface ITicketViewModel
 {
-    public BaseTicketViewModel(string userName)
-    {
-        UserName = userName;
-    }
-
-    public string UserName { get; }
 }

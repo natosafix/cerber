@@ -16,7 +16,7 @@ public class TicketSenderListener : BaseRabbitMqListener<TicketDestinationMessag
     protected override Task Handle(TicketDestinationMessage message)
     {
         var stylesPath = new FileInfo(Path.Combine(StaticFiles.BaseDirectory, "TicketTemplate.cshtml.css"));
-        var viewModel = new HtmlTicketViewModel("User name", stylesPath.FullName);
+        var viewModel = HtmlTicketViewModel.CreateFromMessage(message, stylesPath.FullName);
         
         var pdf = ticketViewGenerator.Generate(viewModel);
 
