@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Minio;
 using Minio.DataModel.Args;
 using QRCoder;
+using RabbitMQListener.Helpers;
 using RabbitMqListener.Listeners.TicketSender.TicketViewGenerator;
 using RabbitMqListener.Listeners.TicketSender.TicketViewModel;
 using RabbitMQListener.StaticFiles;
@@ -39,12 +40,14 @@ public class TicketSenderConsumer : BaseRabbitMqConsumer<TicketDestinationMessag
         var stylesPath = new FileInfo(Path.Combine(StaticFiles.BaseDirectory, $"{TemplateFileName}.css"));
 
         var qrBase64 = GetQrBase64(message.QrEncrypted);
-        var coverBase64 = GetCover(message.CoverImageId.ToString());
-        
+        var coverImage = GetCover(message.CoverImageId.ToString());
 
-        var viewModel = HtmlTicketViewModel.CreateFromMessage(message, stylesPath.FullName, qrBase64, "");
-
-        var pdf = ticketViewGenerator.Generate(viewModel);
+        byte[] pdf;
+        using (var tmpFile = TmpFileStorage.FromBytes(message.CoverImageId.ToString(), coverImage))
+        {
+            var viewModel = HtmlTicketViewModel.CreateFromMessage(message, stylesPath.FullName, qrBase64, tmpFile.FileInfo.FullName);
+            pdf = ticketViewGenerator.Generate(viewModel);
+        }
 
         emailSender.SendWithImageAttachments(
                 "",

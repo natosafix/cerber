@@ -1,16 +1,6 @@
-﻿<link rel="stylesheet" type="text/css" href="@Model.StylesPath" media="screen" />
+﻿<link rel="stylesheet" type="text/css" href="@Model.StylesPath" media="screen"/>
 
-<div class="MuiBox-root css-k008qs">
-    <div class="DkDjzdyiQC2If3w4toyS MuiBox-root css-0">
-        <div class="MuiBox-root css-18qdnu7">
-            <div class="MuiBox-root css-1q2kcg5">
-                <div class="gCKGDBi3SRZls5Z5uijI MuiBox-root css-1f8sh1y">
-                    <div class="MuiBox-root css-198qen4">
-                        <img src="data:image/png;base64,@Model.CoverImageBase64" class="EzdY1txt7UcfPO7a0GmA" alt="Preview">
-                        <img src="data:image/png;base64,@Model.QrBase64" class="lbvbQ7zC9kU508nWEL9e react-draggable react-resizable" style="border-radius: 10px; transform: translate(@Model.QrCodeX.ToString()px, @Model.QrCodeY.ToString()px); width: @Model.QrCodeSize.ToString()px; height: @Model.QrCodeSize.ToString()px;" alt="QrCode">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="MuiBox-root css-198qen4">
+    <img src="@Model.CoverPath" class="EzdY1txt7UcfPO7a0GmA" alt="Preview">
+    <img src="data:image/png;base64,@Model.QrBase64" class="lbvbQ7zC9kU508nWEL9e react-draggable react-draggable-dragged react-resizable" style="border-radius: 10px; margin-left: @Model.QrCodeX.ToString()px; margin-top: @Model.QrCodeY.ToString()px; width: @Model.QrCodeSize.ToString()px; height: @Model.QrCodeSize.ToString()px;" alt="QrCode">
 </div>

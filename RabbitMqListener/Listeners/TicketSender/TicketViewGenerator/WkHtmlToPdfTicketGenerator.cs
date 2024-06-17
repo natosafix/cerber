@@ -1,8 +1,8 @@
-﻿using RabbitMqListener.Listeners.TicketSender.TicketViewModel;
+﻿using DinkToPdf;
+using DinkToPdf.Contracts;
+using RabbitMqListener.Listeners.TicketSender.TicketViewModel;
 using RazorEngine;
 using RazorEngine.Templating;
-using WkHtmlToPdfDotNet;
-using WkHtmlToPdfDotNet.Contracts;
 
 namespace RabbitMqListener.Listeners.TicketSender.TicketViewGenerator;
 
@@ -14,8 +14,8 @@ public class WkHtmlToPdfTicketGenerator : ITicketViewGenerator<HtmlTicketViewMod
         {
             ColorMode = ColorMode.Color,
             Orientation = Orientation.Portrait,
-            PaperSize = PaperKind.A4,
-            Margins = new MarginSettings {Top = 10, Bottom = 10, Left = 10, Right = 10},
+            PaperSize = new PechkinPaperSize("480px", "160px"),
+            Margins = new MarginSettings {Top = 0, Bottom = 0, Left = 0, Right = 0},
             DocumentTitle = "Your ticket"
         });
 
@@ -40,7 +40,13 @@ public class WkHtmlToPdfTicketGenerator : ITicketViewGenerator<HtmlTicketViewMod
             typeof(HtmlTicketViewModel),
             ticketViewModel);
 
-        return ConvertHtmlToPdf(html, ticketViewModel.StylesPath);
+        var pdf = ConvertHtmlToPdf(html, ticketViewModel.StylesPath);
+
+        // TODO delete
+        // File.WriteAllText("Result.html", html);
+        // File.WriteAllBytes("Result.pdf", pdf);
+
+        return pdf;
     }
 
     private byte[] ConvertHtmlToPdf(string html, string pathToStyles)
@@ -48,9 +54,10 @@ public class WkHtmlToPdfTicketGenerator : ITicketViewGenerator<HtmlTicketViewMod
         var objectSettings = new ObjectSettings
         {
             PagesCount = true,
+            ProduceForms = true,
             HtmlContent = html,
             WebSettings = {DefaultEncoding = "utf-8", UserStyleSheet = pathToStyles, LoadImages = true},
-            LoadSettings = {BlockLocalFileAccess = false},
+            LoadSettings = {BlockLocalFileAccess = false, StopSlowScript = false},
         };
 
         var pdf = new HtmlToPdfDocument
