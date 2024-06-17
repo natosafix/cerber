@@ -4,5 +4,6 @@ public class EventStats
 {
     public int SoldTicketsCount;
     public TicketStats[] TicketsStats = Array.Empty<TicketStats>();
-    // public Dictionary<string, int> TicketsByInspector = new();
+    public Dictionary<string, TicketStats[]> TicketsByInspector = new();
+    public string[] Inspectors = Array.Empty<string>();
 }

@@ -15,6 +15,10 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(e => e.Paid)
             .HasDefaultValue(false);
         
+        builder.Property(e => e.InspectorName)
+            .IsRequired(false)
+            .HasDefaultValue(null);
+        
         builder.HasMany(order => order.Answers)
             .WithOne(answer => answer.Order)
             .OnDelete(DeleteBehavior.SetNull);

@@ -81,19 +81,37 @@ public class EventsService : IEventsService
         var stats = new EventStats();
         var orders = await ordersRepository.GetByEvent(id);
         var paidOrders = orders.Where(o => o.Paid).ToList();
-        var tickets = paidOrders.Select(o => o.Ticket).DistinctBy(t => t.Name);
+        var tickets = paidOrders.Select(o => o.Ticket).DistinctBy(t => t.Name).ToArray();
         var ticket2Count = new Dictionary<string, int>();
-        foreach (var ticketName in paidOrders.Select(order => order.Ticket.Name))
+        var inspector2Tickets = new Dictionary<string, Dictionary<string, int>>();
+        foreach (var paidOrder in paidOrders)
         {
+            var ticketName = paidOrder.Ticket.Name;
             ticket2Count.TryAdd(ticketName, 0);
             ticket2Count[ticketName]++;
+            if (paidOrder.InspectorName is null)
+                continue;
+            inspector2Tickets.TryAdd(paidOrder.InspectorName, new Dictionary<string, int>());
+            inspector2Tickets[paidOrder.InspectorName].TryAdd(ticketName, 0);
+            inspector2Tickets[paidOrder.InspectorName][ticketName]++;
         }
 
         stats.SoldTicketsCount = paidOrders.Count;
-        stats.TicketsStats = ticket2Count
-            .Select(pair => new TicketStats(pair.Key, pair.Value, tickets.First(t => t.Name == pair.Key).Price))
+        stats.TicketsStats = ToTicketStatsArray(ticket2Count, tickets);
+        stats.TicketsByInspector = inspector2Tickets.ToDictionary(pair => pair.Key, pair => ToTicketStatsArray(pair.Value, tickets));
+        stats.Inspectors = paidOrders
+            .Where(po => po.InspectorName is not null)
+            .Select(po => po.InspectorName!)
+            .Distinct()
             .ToArray();
         
         return stats;
+    }
+
+    private static TicketStats[] ToTicketStatsArray(Dictionary<string, int> tickets2Count, Ticket[] tickets)
+    {
+        return tickets2Count
+            .Select(pair => new TicketStats(pair.Key, pair.Value, tickets.First(t => t.Name == pair.Key).Price))
+            .ToArray();
     }
 }
