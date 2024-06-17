@@ -18,7 +18,7 @@ public class DraftEventPublisherService : IDraftEventPublisherService
         DraftEvent srcDraftEvent,
         Event dstEvent,
         IReadOnlyCollection<Question> dstQuestions,
-        IReadOnlyCollection<Ticket> tickets)
+        IReadOnlyCollection<Ticket> dstTickets)
     {
         var defaultQuestions = new[]
         {
@@ -50,8 +50,9 @@ public class DraftEventPublisherService : IDraftEventPublisherService
         dstEvent.CryptoKey = Convert.ToBase64String(bytes);
 
         return await eventsPublisherRepository.Publish(
-            srcDraftEvent, dstEvent,
+            srcDraftEvent, 
+            dstEvent,
             defaultQuestions.Concat(dstQuestions).ToList(),
-            tickets);
+            dstTickets);
     }
 }

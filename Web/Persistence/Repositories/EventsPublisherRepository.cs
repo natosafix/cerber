@@ -9,7 +9,7 @@ public interface IEventsPublisherRepository
         DraftEvent srcDraftEvent,
         Event dstEvent,
         IReadOnlyCollection<Question> dstQuestions,
-        IReadOnlyCollection<Ticket> tickets);
+        IReadOnlyCollection<Ticket> dstTickets);
 }
 
 public class EventsPublisherRepository : IEventsPublisherRepository
@@ -30,11 +30,14 @@ public class EventsPublisherRepository : IEventsPublisherRepository
         DraftEvent srcDraftEvent,
         Event dstEvent,
         IReadOnlyCollection<Question> dstQuestions,
-        IReadOnlyCollection<Ticket> tickets)
+        IReadOnlyCollection<Ticket> dstTickets)
     {
         await using var transaction = await dbContext.Database.BeginTransactionAsync();
         try
         {
+            await dbContext.DraftTickets.Where(dt => dt.DraftEventId == srcDraftEvent.Id).ExecuteDeleteAsync();
+            await dbContext.SaveChangesAsync();
+            
             await dbContext.DraftQuestions.Where(dq => dq.DraftEventId == srcDraftEvent.Id).ExecuteDeleteAsync();
             await dbContext.SaveChangesAsync();
 
@@ -44,10 +47,10 @@ public class EventsPublisherRepository : IEventsPublisherRepository
             dstEvent = (await dbContext.Events.AddAsync(dstEvent)).Entity;
             await dbContext.SaveChangesAsync();
 
-            foreach (var ticket in tickets)
+            foreach (var ticket in dstTickets)
                 ticket.EventId = dstEvent.Id;
 
-            await dbContext.Tickets.AddRangeAsync(tickets);
+            await dbContext.Tickets.AddRangeAsync(dstTickets);
             await dbContext.SaveChangesAsync();
 
             foreach (var dstQuestion in dstQuestions)

@@ -13,4 +13,15 @@ public static class TicketsMappingConfig
                 dst => dst.Id,
                 opt => opt.Ignore());
     }
+    
+    public static void Configure(this IMappingExpression<DraftTicket, Ticket> mapping)
+    {
+        mapping
+            .ForMember(
+                dst => dst.Id,
+                opt => opt.Ignore())
+            .ForMember(
+                dst => dst.CoverId,
+                opt => opt.MapFrom(dt => dt.CoverImageId));
+    }
 }

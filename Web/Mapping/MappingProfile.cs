@@ -31,6 +31,6 @@ public class MappingProfile : Profile
         // Draft to Clean
         CreateMap<DraftEvent, Event>().Configure();
         CreateMap<DraftQuestion, Question>().Configure();
-        CreateMap<DraftTicket, Ticket>(); // TODO config
+        CreateMap<DraftTicket, Ticket>().Configure();
     }
 }

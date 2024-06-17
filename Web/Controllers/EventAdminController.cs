@@ -223,9 +223,9 @@ public class EventAdminController : Controller
     }
 
     [HttpPost("[controller]/publishDraft")]
-    public async Task<IActionResult> PublishDraft([FromBody] CreateTicketDto[] tickets)
+    public async Task<IActionResult> PublishDraft()
     {
-        if (!ModelState.IsValid || !tickets.Any())
+        if (!ModelState.IsValid)
             return BadRequest();
 
         var userId = userHelper.UserId;
@@ -238,10 +238,11 @@ public class EventAdminController : Controller
             return BadRequest();
 
         var srcDraftQuestions = await draftQuestionsService.GetDraftQuestionsByDraftEventIdAsync(srcDraft.Id);
+        var srcDraftTickets = await draftTicketsService.GetDraftTicketsByEventIdAsync(srcDraft.Id);
 
         var dstEvent = mapper.Map<Event>(srcDraft);
         var dstQuestions = mapper.Map<Question[]>(srcDraftQuestions);
-        var dstTickets = mapper.Map<Ticket[]>(tickets);
+        var dstTickets = mapper.Map<Ticket[]>(srcDraftTickets);
 
         var newEvent = await draftEventPublisherService.Publish(srcDraft, dstEvent, dstQuestions, dstTickets);
 
