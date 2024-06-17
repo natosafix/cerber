@@ -4,7 +4,7 @@ const UsernameSchema = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/na
 const EmailSchema = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress';
 const IdSchema = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier';
 
-class UserInfo {
+export class UserInfo {
     username: string;
     email: string;
     id: string;
@@ -28,15 +28,13 @@ export function getUserInfo(): UserInfo | undefined {
 
 function getCookie(name: string) {
     console.log(document.cookie.split(';'));
-    return document.cookie.split(';').some(c => {
+    return document.cookie.split(';').some((c) => {
         return c.trim().startsWith(name + '=');
     });
 }
 
 function getCookieValue(name: string) {
-    const cookie = document.cookie
-        .split(';')
-        .find(c => c.trim().startsWith(name + '='));
+    const cookie = document.cookie.split(';').find((c) => c.trim().startsWith(name + '='));
 
     if (cookie) {
         return cookie.split('=')[1];

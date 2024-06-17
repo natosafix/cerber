@@ -1,64 +1,71 @@
-import React, { useEffect, useState } from 'react';
-import { getEvent } from '../../Services/Events';
+import React, { useEffect, useRef, useState } from 'react';
 import { IEvent } from '../../Models/IEvent';
 import styles from './EventPreviewDetails.scss';
 import { InspectorEditor } from '../../InspectorsEditor/InspectorEditor';
 import { Gapped } from '@skbkontur/react-ui';
 import { Label } from '../../../../Entries/Shared/Label/Label';
 import { Button } from '@skbkontur/react-ui';
-import { getUserInfo } from '../../../../Helpers/UserInfoHelper';
 import { Route } from '../../../../Utility/Constants';
 import { EventPreviewDetailsSkeleton } from './EventPreviewDetailsSkeleton';
+import { getEvent } from '../../Services/Events';
 import { EventAdminClient } from '../../../../../Api/EventAdmin/EventAdminClient';
 import { DraftEvent } from '../../../../../Api/EventAdmin/DraftEvent';
-import { EventStats } from '../../../EventStats/EventStats';
 
-export const EventPreviewDetails: React.FC<{ id?: string }> = ({ id }) => {
-    const [event, setEvent] = useState<IEvent | null>(null);
+export const EventPreviewDetails: React.FC<{ userId?: string; event?: IEvent | null }> = ({ userId, event }) => {
     const [imgSrc, setImgSrc] = useState<string | null>(null);
-    const [userId, setUserId] = useState<string>();
+    const [currentEvent, setCurrentEvent] = useState<IEvent | null | undefined>(event);
+    const firstRender = useRef(true);
 
     useEffect(() => {
         const fetchEventDetailsAndCover = async () => {
-            try {
-                if (id) {
-                    await getEvent(id).then((x) => setEvent(x));
-                } else {
+            if (firstRender.current) {
+                firstRender.current = false;
+
+                if (currentEvent == undefined) {
                     EventAdminClient.getDraftCover().then(async (x) => {
                         const event = await DraftEvent.fromDto(x.data).toIEvent();
-                        setEvent(event);
+                        console.log('EVENT');
+                        setCurrentEvent(event);
+                        if (
+                            event?.img &&
+                            (event.img.type === 'application/octet-stream' || event.img.type === 'image/*')
+                        ) {
+                            const imgSrc = URL.createObjectURL(event.img);
+                            setImgSrc(imgSrc);
+                        }
                     });
+                } else {
+                    try {
+                        if (
+                            currentEvent?.img &&
+                            (currentEvent.img.type === 'application/octet-stream' ||
+                                currentEvent.img.type === 'image/*')
+                        ) {
+                            const imgSrc = URL.createObjectURL(currentEvent.img);
+                            setImgSrc(imgSrc);
+                        }
+                    } catch (error) {}
                 }
-            } catch (error) {}
+                return;
+            }
         };
 
         fetchEventDetailsAndCover();
-
-        const userInfo = getUserInfo();
-        if (userInfo) {
-            setUserId(userInfo.id);
-        }
-    }, [id]);
+    }, [currentEvent]);
 
     useEffect(() => {
-        const fetchEventCover = async () => {
-            try {
-                if (event?.img && (event.img.type === 'application/octet-stream' || event.img.type === 'image/*')) {
-                    console.log(event);
-                    const imgSrc = URL.createObjectURL(event.img);
-                    setImgSrc(imgSrc);
-                }
-            } catch (error) {}
+        const fetchEventDetailsAndCover = async () => {
+            console.log(imgSrc);
         };
 
-        fetchEventCover();
-    }, [event]);
+        fetchEventDetailsAndCover();
+    }, [imgSrc]);
 
     const handleClickButton = () => {
-        window.location.href = Route.QUIZ(id);
+        window.location.href = Route.QUIZ(currentEvent?.id.toString());
     };
 
-    if (!event) {
+    if (!currentEvent) {
         return (
             <div>
                 <EventPreviewDetailsSkeleton />
@@ -70,26 +77,30 @@ export const EventPreviewDetails: React.FC<{ id?: string }> = ({ id }) => {
             <div className={styles.eventWrapper}>
                 <Gapped vertical>
                     {imgSrc && (
-                        <div className={styles.imgWrapper}>{imgSrc && <img src={imgSrc} alt={event.name} />}</div>
+                        <div className={styles.imgWrapper}>
+                            <img src={imgSrc} alt={currentEvent.name} />
+                        </div>
                     )}
 
                     <div className={styles.contentWrapper}>
                         <Gapped vertical gap={30}>
                             <Gapped vertical gap={10}>
-                                <Label label={event.name} size={'large'} />
+                                <Label label={currentEvent.name} size={'large'} />
                                 <div style={{ opacity: 0.5 }}>
-                                    <Label label={`${event.city}, ${event.address}`} size={'small'} />
+                                    <Label label={`${currentEvent.city}, ${currentEvent.address}`} size={'small'} />
                                 </div>
                             </Gapped>
 
                             <Gapped vertical gap={8}>
-                                {event.description.split('\n').map((line, index) => (
+                                {currentEvent.description.split('\n').map((line, index) => (
                                     <Label key={index} label={line} size={'small'} />
                                 ))}
                             </Gapped>
 
-                            {userId === event.ownerId && id && <InspectorEditor event={event} />}
-                            {id && (
+                            {userId === currentEvent?.ownerId && currentEvent?.id && (
+                                <InspectorEditor event={currentEvent} />
+                            )}
+                            {currentEvent?.id && (
                                 <Button size={'large'} use="success" onClick={handleClickButton}>
                                     Заполнить анкету
                                 </Button>
