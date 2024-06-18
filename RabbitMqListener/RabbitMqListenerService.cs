@@ -76,9 +76,9 @@ public class RabbitMqListenerService : BackgroundService
             await consumer.Handle(message);
             return true;
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            Console.WriteLine($"Error during execution message from queue: {queueName}");
+            Console.WriteLine($"Error during execution message from queue: {queueName}. Error: {e.Message}");
             return false;
         }
     }

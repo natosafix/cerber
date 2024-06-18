@@ -130,7 +130,7 @@ public class Startup
             if (response.StatusCode == (int) HttpStatusCode.Unauthorized && response.HttpContext.Request.Method != HttpMethod.Get.Method)
                 response.Redirect("/home/login");
             var firstDigit = response.StatusCode / 100;
-            if (firstDigit is 5)
+            if (firstDigit is 5 ||  response.StatusCode == 404)
                 response.Redirect($"/error?statusCode={response.StatusCode}");
         });
 

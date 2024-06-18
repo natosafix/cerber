@@ -5,11 +5,19 @@ import { getUserInfo } from '../../../Helpers/UserInfoHelper';
 import { Route } from '../../../Utility/Constants';
 import { MaxWidthWrapper } from '../Wrappers/MaxWidthWrapper';
 import { Button, SxProps, Theme } from '@mui/material';
-const buttonStyle: SxProps<Theme> = {
+const buttonNavStyle: SxProps<Theme> = {
     color: '#000000',
     fontWeight: 'bold',
     '&:hover': {
         backgroundColor: 'rgb(124,124,124, 0.1)',
+    },
+};
+const buttonAccountStyle: SxProps<Theme> = {
+    color: '#000000',
+    borderColor: '#3D3D3D',
+    '&:hover': {
+        backgroundColor: 'rgb(124,124,124, 0.1)',
+        borderColor: '#3D3D3D',
     },
 };
 
@@ -56,22 +64,22 @@ export const Header: React.FC = () => {
                             CERBER
                         </p>
 
-                        <Button sx={buttonStyle} size={'medium'} onClick={handleClickLogo}>
+                        <Button sx={buttonNavStyle} size={'medium'} onClick={handleClickLogo}>
                             {'Мероприятия'}
                         </Button>
                         {userName && (
-                            <Button size={'medium'} sx={buttonStyle} onClick={handleClickMyEvents}>
+                            <Button size={'medium'} sx={buttonNavStyle} onClick={handleClickMyEvents}>
                                 Мои мероприятия
                             </Button>
                         )}
                     </Gapped>
                     <Gapped gap={20} verticalAlign={'middle'}>
                         {userName && (
-                            <Button sx={buttonStyle} size={'medium'}>
+                            <Button sx={buttonAccountStyle} size={'medium'}>
                                 {userName}
                             </Button>
                         )}
-                        <Button sx={buttonStyle} size={'medium'} onClick={handleClickLogOut}>
+                        <Button sx={buttonAccountStyle} variant={'outlined'} size={'medium'} onClick={handleClickLogOut}>
                             {buttonText}
                         </Button>
                     </Gapped>

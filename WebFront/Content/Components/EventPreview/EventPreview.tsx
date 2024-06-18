@@ -8,6 +8,7 @@ import { Gapped } from '@skbkontur/react-ui';
 import { Box } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { GetLoadingButtonStyle } from '../../Utility/Constants';
 
 interface EventPreviewProps {
     isPrivate: boolean;

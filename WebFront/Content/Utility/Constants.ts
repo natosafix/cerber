@@ -1,4 +1,6 @@
 import { IEvent } from '../Components/EventPreview/Models/IEvent';
+import { SxProps } from '@mui/system';
+import { Theme } from '@mui/material/styles';
 
 export const Route = {
     INDEX: '/home/index',
@@ -40,9 +42,29 @@ export const Route = {
 };
 
 export type Size = 'small' | 'medium' | 'large';
+export type ButtonColor = 'black' | 'green';
 
 export const ValidationMessages = {
     FieldRequired: 'Поле обязательно для заполнения',
     InvalidValue: 'Невалидное значение',
     OneHundredCharactersLimit: 'Не более 100 символов',
+};
+
+export const GetLoadingButtonStyle = (color: ButtonColor): SxProps<Theme> => {
+    let btnColor = 'white';
+    if (color === 'green') {
+        btnColor = '#78BF2B';
+    } else if (color === 'black') {
+        btnColor = '#3D3D3D';
+    }
+
+    return {
+        backgroundColor: btnColor,
+        borderColor: btnColor,
+        '&:hover': {
+            opacity: 0.9,
+            borderColor: btnColor,
+            backgroundColor: btnColor,
+        },
+    };
 };

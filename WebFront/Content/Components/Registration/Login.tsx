@@ -5,9 +5,8 @@ import { PasswordInput } from './Inputs/PasswordInput';
 import { login } from '../EventPreview/Services/Events';
 import { ValidationContainer } from '@skbkontur/react-ui-validations';
 import styles from './Login.scss';
-import { Route } from '../../Utility/Constants';
+import { GetLoadingButtonStyle, Route } from '../../Utility/Constants';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Alert } from '@mui/material';
 import { ClosingAlert } from '../../Entries/Shared/Alert/ClosingAlert';
 
 const Login = () => {
@@ -56,6 +55,7 @@ const Login = () => {
                     </div>
                     <LoadingButton
                         className={styles.button}
+                        sx={GetLoadingButtonStyle('black')}
                         loading={loading}
                         variant="contained"
                         color="success"

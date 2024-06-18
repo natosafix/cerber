@@ -5,7 +5,7 @@ import { UsernameInput } from '../Inputs/UsernameInput';
 import { ValidationContainer } from '@skbkontur/react-ui-validations';
 import { register } from '../../EventPreview/Services/Events';
 import styles from './Registration.scss';
-import { Route } from '../../../Utility/Constants';
+import { GetLoadingButtonStyle, Route } from '../../../Utility/Constants';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { ClosingAlert } from '../../../Entries/Shared/Alert/ClosingAlert';
 
@@ -49,14 +49,15 @@ const Registration = () => {
                             <EmailInput onChange={setEmail} />
                         </div>
                         <div className={styles.question}>
-                            <PasswordInput onChange={setPassword} />
+                            <UsernameInput onChange={setUsername} />
                         </div>
                         <div className={styles.question}>
-                            <UsernameInput onChange={setUsername} />
+                            <PasswordInput onChange={setPassword} />
                         </div>
                         <LoadingButton
                             className={styles.button}
                             loading={loading}
+                            sx={GetLoadingButtonStyle('black')}
                             variant="contained"
                             color="success"
                             onClick={handleRegister}
