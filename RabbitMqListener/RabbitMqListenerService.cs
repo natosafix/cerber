@@ -45,10 +45,10 @@ public class RabbitMqListenerService : BackgroundService
             eventingBasic.Received += async (ch, ea) =>
             {
                 var success = await OnReceived(consumer, listenerFactory.QueueName, ch, ea);
-                if (success)
+                // if (success)
                     channel.BasicAck(ea.DeliveryTag, false);
-                else
-                    channel.BasicNack(ea.DeliveryTag, false, true); // TODO будет бесконечно спамиться, нужно ограничить попытки, делается с помощью заголовков
+                // else
+                //     channel.BasicNack(ea.DeliveryTag, false, true); // TODO будет бесконечно спамиться, нужно ограничить попытки, делается с помощью заголовков
             };
 
             channel.BasicConsume(listenerFactory.QueueName, false, eventingBasic);
