@@ -6,6 +6,8 @@ import { ValidationContainer } from '@skbkontur/react-ui-validations';
 import { register } from '../../EventPreview/Services/Events';
 import styles from './Registration.scss';
 import { Route } from '../../../Utility/Constants';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { ClosingAlert } from '../../../Entries/Shared/Alert/ClosingAlert';
 
 const Registration = () => {
     const [username, setUsername] = useState('');
@@ -13,7 +15,7 @@ const Registration = () => {
     const [error, setError] = useState();
     const [password, setPassword] = useState('');
     const validWrapper = useRef<ValidationContainer>(null);
-
+    const [loading, setLoading] = useState<boolean>(false);
     if (get_cookie('CerberAuth')) {
         window.location.href = Route.INDEX;
     }
@@ -22,9 +24,11 @@ const Registration = () => {
             if (validWrapper.current) {
                 const isValid = await validWrapper.current.validate();
                 if (isValid) {
+                    setLoading(true);
                     const result = await register({ username, email, password });
                     if (!result.success) {
                         setError(result.data);
+                        setLoading(false);
                     } else {
                         window.location.href = Route.LOGIN;
                     }
@@ -37,7 +41,8 @@ const Registration = () => {
         <div className={styles.pageWrapper}>
             <ValidationContainer ref={validWrapper}>
                 <div className={styles.mainWrapper}>
-                    {error && <label className={styles.errorLabel}>{error}</label>}
+                    {error && <ClosingAlert type="error" setError={setError} error={error} />}
+
                     <label className={styles.registerLabel}>Регистрация</label>
                     <div className={styles.formContainer}>
                         <div className={styles.question}>
@@ -49,7 +54,15 @@ const Registration = () => {
                         <div className={styles.question}>
                             <UsernameInput onChange={setUsername} />
                         </div>
-                        <button onClick={handleRegister}>Зарегистрироваться</button>
+                        <LoadingButton
+                            className={styles.button}
+                            loading={loading}
+                            variant="contained"
+                            color="success"
+                            onClick={handleRegister}
+                        >
+                            Зарегистрироваться
+                        </LoadingButton>
                     </div>
                     <div>
                         <p>

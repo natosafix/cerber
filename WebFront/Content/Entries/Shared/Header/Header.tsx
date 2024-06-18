@@ -12,6 +12,7 @@ export const Header: React.FC = () => {
     const handleClickLogo = () => {
         window.location.href = Route.INDEX;
     };
+
     const handleClickLogOut = () => {
         if (buttonText === 'Выйти' || buttonText === 'Войти') {
             window.location.href = Route.LOGIN;
@@ -41,6 +42,15 @@ export const Header: React.FC = () => {
                     <p className={styles.logo} onClick={handleClickLogo}>
                         CERBER
                     </p>
+
+                    <Button size={'medium'} use={'text'} onClick={handleClickLogo}>
+                        {'Мероприятия'}
+                    </Button>
+                    {userName && (
+                        <Button size={'medium'} use={'text'} onClick={handleClickLogo}>
+                            Мои мероприятия
+                        </Button>
+                    )}
                     <Gapped gap={20} verticalAlign={'middle'}>
                         {userName && (
                             <Button size={'medium'} use={'text'}>
