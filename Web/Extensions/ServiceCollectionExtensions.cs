@@ -15,10 +15,10 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddExternals(this IServiceCollection services)
     {
         services.AddSingleton<IRabbitMqConnectionsPool, RabbitMqConnectionsPool>();
-        // services.AddScoped<BaseRabbitMqProducer<TicketDestinationMessage>>(
-        //     di => new TicketSenderListenerFactory(di.GetService<IRabbitMqConnectionsPool>()!, di.GetService<IConfiguration>()!).CreateProducer());
         services.AddScoped<BaseRabbitMqProducer<TicketDestinationMessage>>(
-            di => new StabRabbitMqProducer<TicketDestinationMessage>(di.GetService<IRabbitMqConnectionsPool>()!, ""));
+            di => new TicketSenderListenerFactory(di.GetService<IRabbitMqConnectionsPool>()!, di.GetService<IConfiguration>()!).CreateProducer());
+        // services.AddScoped<BaseRabbitMqProducer<TicketDestinationMessage>>(
+        //     di => new StabRabbitMqProducer<TicketDestinationMessage>(di.GetService<IRabbitMqConnectionsPool>()!, ""));
         return services;
     }
 

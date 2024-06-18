@@ -45,10 +45,10 @@ public class RabbitMqListenerService : BackgroundService
             eventingBasic.Received += async (ch, ea) =>
             {
                 var success = await OnReceived(consumer, listenerFactory.QueueName, ch, ea);
-                // if (success)
+                if (success)
                     channel.BasicAck(ea.DeliveryTag, false);
-                // else
-                //     channel.BasicNack(ea.DeliveryTag, false, true); // TODO будет бесконечно спамиться, нужно ограничить попытки, делается с помощью заголовков
+                else
+                    channel.BasicNack(ea.DeliveryTag, false, true); // TODO будет бесконечно спамиться, нужно ограничить попытки, делается с помощью заголовков
             };
 
             channel.BasicConsume(listenerFactory.QueueName, false, eventingBasic);
@@ -74,11 +74,12 @@ public class RabbitMqListenerService : BackgroundService
                 throw new ArgumentException($"Can't deserialize message to type: {consumer.MessageType}");
 
             await consumer.Handle(message);
+            Console.WriteLine($"Success handeled message from queue {queueName}. Message: {content}");
             return true;
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Error during execution message from queue: {queueName}. Error: {e.Message}");
+            Console.WriteLine($"Error during execution message from queue: {queueName}. Error: {e}");
             return false;
         }
     }
