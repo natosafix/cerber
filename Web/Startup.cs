@@ -122,10 +122,12 @@ public class Startup
             var request = context.HttpContext.Request;
             var response = context.HttpContext.Response;
 
-            if (response.HttpContext.Request.Path.Value is "/Auth/login" or "/Auth/register")
+            if (response.HttpContext.Request.Path.Value is "/auth/login" or "/auth/register" or "/favicon.ico")
                 return;
             
-            if (response.StatusCode == (int) HttpStatusCode.Unauthorized)
+            if (response.HttpContext.Request.Path.Value is "/")
+                response.Redirect("/home/login");
+            if (response.StatusCode == (int) HttpStatusCode.Unauthorized && response.HttpContext.Request.Method != HttpMethod.Get.Method)
                 response.Redirect("/home/login");
             var firstDigit = response.StatusCode / 100;
             if (firstDigit is 5)
