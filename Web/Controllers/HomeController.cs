@@ -14,9 +14,39 @@ public class HomeController : Controller
         this.logger = logger;
     }
 
-    [Authorize]
     [HttpGet("/[controller]/index")]
     public IActionResult Index()
+    {
+        return View();
+    }
+    
+    [Authorize]
+    [HttpGet("/[controller]/myEvents")]
+    public IActionResult My()
+    {
+        return View();
+    }
+    
+    [HttpGet("/[controller]/register")]
+    public IActionResult Register()
+    {
+        return View();
+    }
+    
+    [HttpGet("/[controller]/login")]
+    public IActionResult Login()
+    {
+        return View();
+    }
+    
+    [HttpGet("/[controller]/preview/{id}")]
+    public IActionResult Preview()
+    {
+        return View();
+    }
+
+    [HttpGet("/error")]
+    public IActionResult Error([FromRoute] int statusCode)
     {
         return View();
     }

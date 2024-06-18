@@ -66,6 +66,105 @@ namespace Web.Migrations
                     b.ToTable("categories", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.DraftEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("City")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("CoverImageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("From")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("To")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("draftEvents", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.DraftQuestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AnswerChoices")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DraftEventId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("draftQuestions", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.DraftTicket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("CoverImageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("DraftEventId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QrCodeSize")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QrCodeX")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QrCodeY")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("draftTickets", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Entities.Event", b =>
                 {
                     b.Property<int>("Id")
@@ -78,15 +177,19 @@ namespace Web.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("integer");
 
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("CoverId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("CoverId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CryptoKey")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -104,7 +207,6 @@ namespace Web.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("ShortDescription")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
@@ -115,8 +217,7 @@ namespace Web.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("CoverId")
-                        .IsUnique();
+                    b.HasIndex("CoverId");
 
                     b.HasIndex("OwnerId");
 
@@ -128,6 +229,14 @@ namespace Web.Migrations
                     b.Property<Guid>("Customer")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("InspectorName")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Paid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<int>("TicketId")
                         .HasColumnType("integer");
@@ -147,8 +256,7 @@ namespace Web.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Content")
-                        .IsRequired()
+                    b.Property<string>("AnswerChoices")
                         .HasColumnType("text");
 
                     b.Property<int>("EventId")
@@ -156,6 +264,10 @@ namespace Web.Migrations
 
                     b.Property<bool>("Required")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
@@ -175,6 +287,9 @@ namespace Web.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<Guid?>("CoverId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("EventId")
                         .HasColumnType("integer");
 
@@ -185,7 +300,18 @@ namespace Web.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("integer");
 
+                    b.Property<int>("QrCodeSize")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QrCodeX")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QrCodeY")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CoverId");
 
                     b.HasIndex("EventId");
 
@@ -258,11 +384,9 @@ namespace Web.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserFile", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -448,12 +572,11 @@ namespace Web.Migrations
                     b.HasOne("Domain.Entities.Category", "Category")
                         .WithMany("Events")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.UserFile", "Cover")
-                        .WithOne("Event")
-                        .HasForeignKey("Domain.Entities.Event", "CoverId")
+                        .WithMany()
+                        .HasForeignKey("CoverId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.User", "Owner")
@@ -493,11 +616,18 @@ namespace Web.Migrations
 
             modelBuilder.Entity("Domain.Entities.Ticket", b =>
                 {
+                    b.HasOne("Domain.Entities.UserFile", "Cover")
+                        .WithMany()
+                        .HasForeignKey("CoverId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("Domain.Entities.Event", "Event")
                         .WithMany("Tickets")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
+
+                    b.Navigation("Cover");
 
                     b.Navigation("Event");
                 });
@@ -598,12 +728,6 @@ namespace Web.Migrations
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Navigation("OwnedEvents");
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserFile", b =>
-                {
-                    b.Navigation("Event")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

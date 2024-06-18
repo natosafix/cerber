@@ -1,32 +1,31 @@
 ﻿import React, { useState } from 'react';
-import { SingleStringQuestion } from '../SingleStringQuestion';
 import { QuestionTypePicker } from './QuestionTypePicker';
 import { Label } from '../../../../Entries/Shared/Label/Label';
 import { Gapped } from '@skbkontur/react-ui';
-import { QuestionTypes } from './QuestionTypes';
-import { Question } from './Question';
 import { ChoicesCreator } from './ChoicesCreator';
 import styles from './QuestionBuilder.scss';
+import { Question } from '../../../../../Api/Models/Question';
+import { QuestionTypes } from '../../../../../Api/Models/QuestionTypes';
+import { SingleStringQuestion } from '../../../../Entries/Shared/Questions/SingleStringQuestion';
 
 interface Props {
-    storageSaver: ILocalStorageSaver;
     question: Question;
     onQuestionUpdate: (question: Question) => void;
     questionNum: number;
 }
 
-export const QuestionBuilder: React.FC<Props> = ({ storageSaver, question, onQuestionUpdate, questionNum }) => {
+export const QuestionBuilder: React.FC<Props> = ({ question, onQuestionUpdate, questionNum }) => {
     const [type, setType] = useState(question.type);
-    
+
     const onTitleUpdate = (v: string) => {
         onQuestionUpdate(question.withTitle(v));
     };
 
     const onTypeChange = (type: QuestionTypes) => {
-        setType(type)
+        setType(type);
         onQuestionUpdate(question.withType(type));
     };
-    
+
     const onChoicesChange = (choices: string[]) => {
         onQuestionUpdate(question.withAnswerChoices(choices));
     };
@@ -34,7 +33,7 @@ export const QuestionBuilder: React.FC<Props> = ({ storageSaver, question, onQue
     return (
         <Gapped gap={10} vertical={true}>
             <Label label={`Вопрос №${questionNum}`} size={'medium'} />
-            <SingleStringQuestion title={'Текст вопроса'} size={'small'} 
+            <SingleStringQuestion title={'Текст вопроса'} size={'small'}
                                   onValueChange={onTitleUpdate}
                                   defaultValue={question.title} />
             <QuestionTypePicker onValueChange={onTypeChange} defaultValue={type} />

@@ -6,11 +6,11 @@ public class Event
     
     public string Name { get; set; }
 
-    public string ShortDescription { get; set; }
+    public string? ShortDescription { get; set; }
 
     public string Description { get; set; }
     
-    public int? CoverId { get; set; }
+    public Guid? CoverId { get; set; }
     public UserFile? Cover { get; set; }
 
     public string City { get; set; }
@@ -24,8 +24,10 @@ public class Event
     public string OwnerId { get; set; }
     public User Owner { get; set; }
     
-    public int CategoryId { get; set; }
-    public Category Category { get; set; }
+    public int? CategoryId { get; set; }
+    public Category? Category { get; set; }
+    
+    public string CryptoKey { get; set; }
     
     public List<Ticket> Tickets { get; set; }
     

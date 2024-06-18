@@ -23,4 +23,13 @@ public class UsersRepository : IUsersRepository
         return await dbContext.Users
             .FirstOrDefaultAsync(u => string.Equals(u.UserName, username));
     }
+
+    public async Task<List<string>> Find(string username)
+    {
+        return await dbContext.Users
+            .Where(u => u.UserName.ToLower().StartsWith(username.ToLower()))
+            .Take(5)
+            .Select(u => u.UserName)
+            .ToListAsync();
+    }
 }

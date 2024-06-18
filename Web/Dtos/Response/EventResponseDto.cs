@@ -23,4 +23,6 @@ public class EventResponseDto
     public Category Category { get; set; }
     
     public UserFile Cover { get; set; }
+    
+    public string OwnerId { get; set; }
 }

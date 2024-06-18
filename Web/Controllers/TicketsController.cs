@@ -16,8 +16,9 @@ public class TicketsController : Controller
     private readonly IMapper mapper;
     private readonly IAuthService authService;
     private readonly IUserHelper userHelper;
-    
-    public TicketsController(ITicketsService ticketsService, IMapper mapper, IAuthService authService, IUserHelper userHelper)
+
+    public TicketsController(ITicketsService ticketsService, IMapper mapper, IAuthService authService,
+        IUserHelper userHelper)
     {
         this.ticketsService = ticketsService;
         this.mapper = mapper;
@@ -25,16 +26,24 @@ public class TicketsController : Controller
         this.userHelper = userHelper;
     }
 
+    [AllowAnonymous]
+    [HttpGet("")]
+    public async Task<IActionResult> Get([FromQuery] int eventId)
+    {
+        var tickets = await ticketsService.GetByEvent(eventId);
+        return Ok(mapper.Map<List<TicketResponseDto>>(tickets));
+    }
+
     [HttpPost("")]
-    public async Task<IActionResult> Create([FromBody] CreateTicketDto createTicketDto)
+    public async Task<IActionResult> Create([FromBody] CreateTicketDto[] createTicketDto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-        
+
         var ticket = mapper.Map<Ticket>(createTicketDto);
         if (!await authService.IsOwner(userHelper.UserId, ticket.EventId))
             return StatusCode(403);
-        
+
         var ticketCreated = await ticketsService.Create(ticket);
         return Ok(mapper.Map<TicketResponseDto>(ticketCreated));
     }

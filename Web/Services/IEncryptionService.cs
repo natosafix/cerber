@@ -6,5 +6,5 @@ public interface IEncryptionService
 
     string EncryptString(string text, byte[] key);
 
-    bool IsEncrypted(string text);
+    byte[] GenerateInitializationVector();
 }

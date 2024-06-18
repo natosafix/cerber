@@ -11,6 +11,14 @@ module.exports = {
     entry: {
         index: './Content/Entries/Pages/Index.tsx',
         eventAdmin: './Content/Entries/Pages/EventAdmin.tsx',
+        preview: './Content/Entries/Pages/Preview.tsx',
+        register: './Content/Entries/Pages/Register.tsx',
+        login: './Content/Entries/Pages/Login.tsx',
+        quizSolve: './Content/Entries/Pages/QuizSolve.tsx',
+        quizCongrats: './Content/Entries/Pages/QuizCongrats.tsx',
+        errorPage: './Content/Entries/Pages/ErrorPage.tsx',
+        paymentFailed: './Content/Entries/Pages/PaymentFail.tsx',
+        myEvents: './Content/Entries/Pages/MyEvents.tsx',
     },
     output: {
         path: OUTPUT_PATH,
@@ -50,17 +58,21 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(png|jpg|gif)$/,
+                test: /\.(png|jpg|gif|docx)$/,
                 use: [
                     {
                         loader: 'file-loader',
                         options: {
                             publicPath: PUBLIC_PATH,
                             outputPath: 'assets',
-                            name: '[path][name].[ext]'
+                            name: '[path][name].[ext]',
                         },
                     },
                 ],
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader'],
             },
         ],
     },

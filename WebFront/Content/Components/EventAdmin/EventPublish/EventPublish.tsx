@@ -1,15 +1,22 @@
 ﻿import React from 'react';
 import { EventAdminSaveBtn } from '../EventStepsNav/EventAdminSaveBtn';
+import { EventDetails } from '../../EventPreview/EventDetails/EventDetails';
+import { Box } from '@mui/material';
+import { EventPreviewDetails } from '../../EventPreview/EventDetails/EventPreviewDetails/EventPreviewDetails';
 
-interface Props {
-    onSave: () => void;
+interface IEventPublishProps {
+    onSave: () => Promise<void>;
 }
 
-export const EventPublish: React.FC<Props> = ({onSave}) => {
+export const EventPublish: React.FC<IEventPublishProps> = ({ onSave }) => {
+    const onSaveBtnClick = async () => {
+        await onSave();
+    };
+
     return (
-        <div>
-            EventPublish
-            <EventAdminSaveBtn onSave={onSave} />
-        </div>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <EventPreviewDetails />
+            <EventAdminSaveBtn onSave={onSaveBtnClick} title={'Опубликовать'} />
+        </Box>
     );
 };

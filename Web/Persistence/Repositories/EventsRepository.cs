@@ -18,6 +18,14 @@ public class EventsRepository : IEventsRepository
         return await dbContext.Events.FindAsync(id);
     }
     
+    public async Task<Event?> GetByTicketId(int ticketId)
+    {
+        var ticket = await dbContext.Tickets
+            .Include(t => t.Event)
+            .FirstOrDefaultAsync(t => t.Id == ticketId);
+        return ticket?.Event;
+    }
+    
     public async Task<Event?> GetWithInspectors(int id)
     {
         return await dbContext.Events
@@ -34,7 +42,15 @@ public class EventsRepository : IEventsRepository
        return entity;
    }
 
-   public async Task AddInspector(Event @event, User inspector)
+    public async Task<List<string>> GetInspectors(int id)
+    {
+        var @event = await dbContext.Events
+            .Include(e => e.Inspectors)
+            .FirstOrDefaultAsync(e => e.Id == id);
+        return @event?.Inspectors.Select(i => i.UserName).ToList() ?? throw new BadHttpRequestException($"Not found event with id {id}");
+    }
+
+    public async Task AddInspector(Event @event, User inspector)
    {
        @event.Inspectors ??= new List<User>();
        @event.Inspectors.Add(inspector);
@@ -42,10 +58,17 @@ public class EventsRepository : IEventsRepository
        await dbContext.SaveChangesAsync();
    }
 
-   public async Task<PageList<Event>> GetInspected(string username, int offset, int limit)
+    public async Task DeleteInspector(Event @event, string username)
+    {
+        @event.Inspectors = @event.Inspectors.Where(u => !u.UserName.Equals(username)).ToList();
+        dbContext.Events.Update(@event);
+        await dbContext.SaveChangesAsync();
+    }
+
+    public async Task<PageList<Event>> GetInspected(string username, int offset, int limit)
    {
        var events = await dbContext.Events.FromSqlInterpolated(
-           $@"SELECT e.""Id"", e.""OwnerId"", e.""CategoryId"", e.""Address"", e.""City"", e.""Description"", e.""From"", e.""Name"", e.""ShortDescription"", e.""To"", e.""CoverId""
+           $@"SELECT e.""Id"", e.""OwnerId"", e.""CategoryId"", e.""Address"", e.""City"", e.""Description"", e.""From"", e.""Name"", e.""ShortDescription"", e.""To"", e.""CoverId"", e.""CryptoKey""
               FROM ""EventUser"" as eu
               JOIN ""AspNetUsers"" as u on u.""Id"" = eu.""InspectorsId""
               JOIN events e on e.""Id"" = eu.""InspectedEventsId""
@@ -59,8 +82,20 @@ public class EventsRepository : IEventsRepository
 
    public async Task<PageList<Event>> GetOwned(string username, int offset, int limit)
    {
-       var events = await dbContext.Events.
-           Where(e => e.Owner.UserName.Equals(username))
+       var events = await dbContext.Events
+           .Where(e => e.Owner.UserName.Equals(username))
+           .Skip(offset)
+           .Take(limit)
+           .ToListAsync();
+
+       return new PageList<Event>(events ?? new List<Event>(), offset, limit);
+   }
+   
+   public async Task<PageList<Event>> GetIncoming(int offset, int limit)
+   {
+       var events = await dbContext.Events
+           .Where(e => e.From.CompareTo(DateTimeOffset.UtcNow) > 0)
+           .OrderBy(e => e.From)
            .Skip(offset)
            .Take(limit)
            .ToListAsync();

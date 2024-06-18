@@ -1,6 +1,19 @@
-﻿.binBtn {
+﻿.relativeWrapper {
+  position: relative;
+
+  .binBtnWrapper {
+    position: absolute;
+    display: flex;
+    height: 1.4rem;
+    text-align: center;
+    left: -30px;
+  }
+}
+
+.binBtn {
   background: transparent;
   border: none;
+  cursor: pointer;
 
   &:hover {
     opacity: 0.6

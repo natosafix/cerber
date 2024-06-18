@@ -1,0 +1,33 @@
+﻿.mainWrapper {
+  display: flex;
+  gap: 20px;
+
+  margin: 40px 5%;
+
+  .stepsWrapper {
+    display: flex;
+    flex-direction: column;
+
+    background-color: white;
+    padding: 15px 5px;
+    border-radius: 10px;
+    width: 210px;
+    height: 100%;
+  }
+
+  .contentPageWrapper {
+    width: 70%;
+    margin: auto;
+
+
+    .contentWrapper {
+      width: 70%;
+
+      .questionLabel {
+        font-size: 1.75rem;
+        font-weight: bold;
+      }
+    }
+  }
+}
+

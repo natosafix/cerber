@@ -1,29 +1,26 @@
 ﻿import * as React from 'react';
-import * as ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Header } from '../Shared/Header/Header';
 import { CerberThemeProvider } from '../Shared/ThemeProvider/CerberThemeProvider';
 import { onDomContentLoaded } from '../../Helpers/DomHelpers';
-import { EventPreview } from '../../Components/eventPreview/eventPreview';
-import { EventsProvider } from '../../Components/eventPreview/event-context';
+import { EventPreview } from '../../Components/EventPreview/EventPreview';
+import { EventsProvider } from '../../Components/EventPreview/EventContext';
+import { SkeletonTheme } from 'react-loading-skeleton';
+import { Error } from '../../Components/Error/Error';
+import { Page } from '../Page';
 
-
-onDomContentLoaded(() =>
-    ReactDom.render(
-        <CerberThemeProvider>
-            <Header />
-            <EventsProvider>
-                <EventPreview />
-            </EventsProvider>
-        </CerberThemeProvider>,
-        document.getElementById('index'),
-    ),
-);
-
-// let place = document.getElementById('index');
-// let root = createRoot(place!);
-// root.render(
-//     <>
-//         <Header />
-//         Hello, World!!
-//     </>,
-// );
+onDomContentLoaded(() => {
+    const container = document.getElementById('index');
+    if (container) {
+        const root = createRoot(container);
+        root.render(
+            <Page>
+                <SkeletonTheme baseColor="#f2f2f2" highlightColor="#b3b3b3">
+                    <EventsProvider>
+                        <EventPreview isPrivate={false} />
+                    </EventsProvider>
+                </SkeletonTheme>
+            </Page>,
+        );
+    }
+});

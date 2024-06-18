@@ -5,34 +5,30 @@ namespace Web.Services.Implementations;
 
 public class EncryptionService : IEncryptionService
 {
-    private const string EncryptedValuePrefix = "EncryptedValue:";
-    
     public string DecryptString(string text, byte[] key)
     {
-        if (string.IsNullOrWhiteSpace(text) || !IsEncrypted(text))
+        if (string.IsNullOrWhiteSpace(text))
             return text;
- 
-        var vector = Convert.FromBase64String(text.Split(';')[0].Split(':')[1]);
-        return Decrypt(Convert.FromBase64String(text.Split(';')[1]), key, vector);
+
+        var split = text.Split(';');
+        var vector = Convert.FromBase64String(split[0]);
+        return Decrypt(Convert.FromBase64String(split[1]), key, vector);
     }
     
     public string EncryptString(string text, byte[] key)
     {
-        if (string.IsNullOrWhiteSpace(text) || IsEncrypted(text))
+        if (string.IsNullOrWhiteSpace(text))
             return text;
         
         var vector = GenerateInitializationVector();
-        var encryptedText = Convert.ToBase64String(Encrypt(text, key, vector));
-        return EncryptedValuePrefix + Convert.ToBase64String(vector) + ";" + encryptedText;
+        var encryptedText = Encrypt(text, key, vector);
+        return Convert.ToBase64String(vector) + ";" + Convert.ToBase64String(encryptedText);
     }
- 
-    public bool IsEncrypted(string text) => 
-        text.StartsWith(EncryptedValuePrefix, StringComparison.OrdinalIgnoreCase);
     
     private string Decrypt(byte[] encryptedBytes, byte[] key, byte[] vector)
     {
         using (var aesAlgorithm = Aes.Create())
-        using (var decryptor    = aesAlgorithm.CreateDecryptor(key, vector))
+        using (var decryptor = aesAlgorithm.CreateDecryptor(key, vector))
         using (var memoryStream = new MemoryStream(encryptedBytes))
         using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
         using (var streamReader = new StreamReader(cryptoStream, Encoding.UTF8))
@@ -44,7 +40,7 @@ public class EncryptionService : IEncryptionService
     private byte[] Encrypt(string plainText, byte[] key, byte[] vector)
     {
         using (var aesAlgorithm = Aes.Create())
-        using (var encryptor    = aesAlgorithm.CreateEncryptor(key, vector))
+        using (var encryptor = aesAlgorithm.CreateEncryptor(key, vector))
         using (var memoryStream = new MemoryStream())
         using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
         {
@@ -57,7 +53,7 @@ public class EncryptionService : IEncryptionService
         }
     }
  
-    private byte[] GenerateInitializationVector()
+    public byte[] GenerateInitializationVector()
     {
         var aesAlgorithm = Aes.Create();
         aesAlgorithm.GenerateIV();

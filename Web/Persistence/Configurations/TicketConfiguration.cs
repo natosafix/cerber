@@ -16,6 +16,13 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
         
         builder.Property(e => e.Price)
             .IsRequired();
+        
+        builder.Property(e => e.QrCodeX)
+            .IsRequired();
+        builder.Property(e => e.QrCodeY)
+            .IsRequired();
+        builder.Property(e => e.QrCodeSize)
+            .IsRequired();
 
         builder.HasOne(ticket => ticket.Event)
             .WithMany(@event => @event.Tickets)
@@ -25,5 +32,11 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
         builder.HasMany(ticket => ticket.Orders)
             .WithOne(order => order.Ticket)
             .OnDelete(DeleteBehavior.SetNull);
+        
+        builder.HasOne(ticket => ticket.Cover)
+            .WithMany()
+            .HasForeignKey(@event => @event.CoverId)
+            .OnDelete(DeleteBehavior.SetNull);
+        builder.Navigation(e => e.Cover).AutoInclude();
     }
 }
