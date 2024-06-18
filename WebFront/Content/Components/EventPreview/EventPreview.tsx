@@ -40,7 +40,7 @@ export const EventPreview: React.FC<EventPreviewProps> = ({ isPrivate }) => {
         <div ref={containerRef}>
             <MaxWidthWrapper>
                 <Gapped vertical={true}>
-                    <EventCreateButton />
+                    {isPrivate && <EventCreateButton />}
 
                     <Events loading={loading} events={events} />
                     <Box className={styles.loadMoreButton}>
