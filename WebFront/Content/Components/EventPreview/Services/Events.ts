@@ -10,7 +10,7 @@ export const getEvents = async (count: number): Promise<IEvent[] | null> => {
             return null;
         }
 
-        const response = await axios.get<IEvent[]>(Route.GET_EVENTS(count));
+        const response = await axios.get<IEvent[]>(Route.GET_OWNED_EVENTS(count));
 
         const eventsCount = response.data.length;
 

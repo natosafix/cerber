@@ -22,4 +22,6 @@ public interface IEventsRepository
     Task<PageList<Event>> GetInspected(string username, int offset, int limit);
     
     Task<PageList<Event>> GetOwned(string username, int offset, int limit);
+    
+    Task<PageList<Event>> GetIncoming(int offset, int limit);
 }

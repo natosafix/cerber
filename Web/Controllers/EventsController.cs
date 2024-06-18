@@ -42,13 +42,21 @@ public class EventsController : Controller
     {
         var inspectedEvents =
             await eventsService.GetInspected(userHelper.Username, paginationDto.Offset, paginationDto.Limit);
-        return Ok(mapper.Map<List<EventResponseDto>>(inspectedEvents));
+        return Ok(mapper.Map<List<SecuredEventResponseDto>>(inspectedEvents));
     }
 
     [HttpGet("owned")]
     public async Task<IActionResult> GetOwned([FromQuery] PaginationDto paginationDto)
     {
         var ownedEvents = await eventsService.GetOwned(userHelper.Username, paginationDto.Offset, paginationDto.Limit);
+        return Ok(mapper.Map<List<SecuredEventResponseDto>>(ownedEvents));
+    }
+    
+    [AllowAnonymous]
+    [HttpGet("incoming")]
+    public async Task<IActionResult> GetIncoming([FromQuery] PaginationDto paginationDto)
+    {
+        var ownedEvents = await eventsService.GetIncoming(paginationDto.Offset, paginationDto.Limit);
         return Ok(mapper.Map<List<EventResponseDto>>(ownedEvents));
     }
 

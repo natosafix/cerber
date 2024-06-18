@@ -21,6 +21,7 @@ public class MappingProfile : Profile
 
         // Entity to Dto
         CreateMap<Event, EventResponseDto>();
+        CreateMap<Event, SecuredEventResponseDto>();
         CreateMap<Ticket, TicketResponseDto>();
         CreateMap<Question, QuestionResponseDto>().Configure();
         CreateMap<Order, OrderResponseDto>();

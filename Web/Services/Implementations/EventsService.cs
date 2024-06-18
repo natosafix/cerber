@@ -76,6 +76,11 @@ public class EventsService : IEventsService
         return await eventsRepository.GetOwned(username, offset, limit);
     }
 
+    public async Task<PageList<Event>> GetIncoming(int offset, int limit)
+    {
+        return await eventsRepository.GetIncoming(offset, limit);
+    }
+
     public async Task<EventStats> GetStats(int id)
     {
         var stats = new EventStats();

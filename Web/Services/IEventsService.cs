@@ -25,5 +25,7 @@ public interface IEventsService
     
     Task<PageList<Event>> GetOwned(string username, int offset, int limit);
     
+    Task<PageList<Event>> GetIncoming(int offset, int limit);
+    
     Task<EventStats> GetStats(int id);
 }
