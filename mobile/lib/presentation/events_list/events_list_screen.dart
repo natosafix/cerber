@@ -37,7 +37,7 @@ class EventsListScreen extends StatelessWidget {
             builder: (context, state) {
               return RefreshIndicator(
                 onRefresh: () => Future.sync(
-                  () => state.pagingController.refresh(),
+                  () => context.read<EventsBloc>().add(Refresh()),
                 ),
                 child: PagedListView<int, Event>(
                   pagingController: state.pagingController,
@@ -54,7 +54,34 @@ class EventsListScreen extends StatelessWidget {
                     },
                     noItemsFoundIndicatorBuilder: (context) {
                       return Center(
-                        child: Text(L10n.current.youHaveNoEvents),
+                        child: Text(
+                          L10n.current.youHaveNoEvents,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                      );
+                    },
+                    firstPageErrorIndicatorBuilder: (context) {
+                      return Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.error_outline,
+                              color: Colors.red[900],
+                              size: 80,
+                            ),
+                            const SizedBox(height: 5),
+                            TextButton(
+                              onPressed: () {
+                                context.read<EventsBloc>().add(Refresh());
+                              },
+                              child: Text(
+                                L10n.current.retry,
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     },
                   ),

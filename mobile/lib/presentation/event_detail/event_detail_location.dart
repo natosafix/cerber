@@ -15,23 +15,15 @@ class EventDetailLocation extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.grey[300],
+        color: Theme.of(context).colorScheme.surfaceContainerHigh,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: Row(
         children: [
           Expanded(
-            child: Text.rich(
-              // style: Theme.of(context).textTheme.titleLarge,
-              TextSpan(
-                children: [
-                  // TextSpan(text: "${L10n.current.where}: "),
-                  TextSpan(
-                    text: "${event.city}, ${event.address}",
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+            child: Text(
+              "${event.city}, ${event.address}",
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           IconButton.filled(

@@ -82,6 +82,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "This QR code has already been scanned"),
         "questionsEmpty":
             MessageLookupByLibrary.simpleMessage("Questionnaire is empty"),
+        "retry": MessageLookupByLibrary.simpleMessage("Retry"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "scanVisitorsQrCode":
             MessageLookupByLibrary.simpleMessage("Scan visitor\'\'s QR code"),

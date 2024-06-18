@@ -21,7 +21,7 @@ class QrCodeModal extends StatelessWidget {
         child: QrImageView(
           data: qrCodeData,
           backgroundColor: Colors.white,
-          size: MediaQuery.of(context).size.width * 0.8,
+          size: MediaQuery.sizeOf(context).width * 0.8,
         ),
       ),
     );

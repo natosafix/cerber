@@ -3,6 +3,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/usecases/get_events_usecase.dart';
 import 'package:project/utils/locator.dart';
+import 'package:project/utils/result.dart';
 
 part 'events_event.dart';
 part 'events_state.dart';
@@ -10,6 +11,7 @@ part 'events_state.dart';
 class EventsBloc extends Bloc<EventsEvent, EventsState> {
   EventsBloc() : super(EventsState.initial()) {
     on<GetEvents>(_onGetEvents);
+    on<Refresh>(_onRefresh);
 
     state.pagingController.addPageRequestListener((pageKey) {
       add(GetEvents(pageKey: pageKey));
@@ -21,15 +23,13 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   static const _limit = 5;
 
   void _onGetEvents(GetEvents event, Emitter<EventsState> emit) async {
-    final result = await _getEventsUsecase(
+    final Result<List<Event>, Exception> result = await _getEventsUsecase(
       offset: event.pageKey,
       limit: _limit,
     );
 
-    final controller = state.pagingController;
-
     if (result.isFailure) {
-      controller.error = result.failure;
+      state.pagingController.error = result.failure;
       return;
     }
 
@@ -38,10 +38,14 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     final isLastPage = newEvents.length < _limit;
 
     if (isLastPage) {
-      controller.appendLastPage(newEvents);
+      state.pagingController.appendLastPage(newEvents);
     } else {
       final nextPageKey = event.pageKey + newEvents.length;
-      controller.appendPage(newEvents, nextPageKey);
+      state.pagingController.appendPage(newEvents, nextPageKey);
     }
+  }
+
+  void _onRefresh(Refresh event, Emitter<EventsState> emit) {
+    state.pagingController.refresh();
   }
 }

@@ -82,6 +82,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "qrCodeAlreadyBeenScanned": MessageLookupByLibrary.simpleMessage(
             "Этот QR-код уже был отсканирован"),
         "questionsEmpty": MessageLookupByLibrary.simpleMessage("Анкета пуста"),
+        "retry": MessageLookupByLibrary.simpleMessage("Перезагрузить"),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "scanVisitorsQrCode": MessageLookupByLibrary.simpleMessage(
             "Сканировать QR-код посетителя"),

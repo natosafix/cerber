@@ -7,3 +7,5 @@ final class GetEvents extends EventsEvent {
 
   final int pageKey;
 }
+
+final class Refresh extends EventsEvent {}

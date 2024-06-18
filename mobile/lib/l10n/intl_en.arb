@@ -85,5 +85,6 @@
             }
         }
     },
-    "sync": "Sync"
+    "sync": "Sync",
+    "retry": "Retry"
 }

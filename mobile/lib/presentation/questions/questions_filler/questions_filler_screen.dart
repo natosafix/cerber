@@ -51,10 +51,14 @@ class QuestionsFillerScreen extends StatelessWidget {
                     context.read<QuestionsFillerBloc>().add(TicketChanged(ticket));
                   },
                   onTextChanged: (question, text) {
-                    context.read<QuestionsFillerBloc>().add(TextChanged(question: question, newValue: text));
+                    context
+                        .read<QuestionsFillerBloc>()
+                        .add(TextChanged(question: question, newValue: text));
                   },
                   onRadioChanged: (question, value) {
-                    context.read<QuestionsFillerBloc>().add(RadioChanged(question: question, selectedValue: value));
+                    context
+                        .read<QuestionsFillerBloc>()
+                        .add(RadioChanged(question: question, selectedValue: value));
                   },
                   onCheckboxChanged: (question, value, isSelected) {
                     context.read<QuestionsFillerBloc>().add(CheckboxChanged(
