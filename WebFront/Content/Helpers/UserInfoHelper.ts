@@ -12,7 +12,6 @@ export class UserInfo {
 
 export function getUserInfo(): UserInfo | undefined {
     const cerberAuthCookieExists = getCookie('CerberAuth');
-    console.log(cerberAuthCookieExists);
     if (!cerberAuthCookieExists) {
         return;
     }
@@ -22,12 +21,10 @@ export function getUserInfo(): UserInfo | undefined {
     userInfo.username = payload[UsernameSchema];
     userInfo.email = payload[EmailSchema];
     userInfo.id = payload[IdSchema];
-    console.log(userInfo);
     return userInfo;
 }
 
 function getCookie(name: string) {
-    console.log(document.cookie.split(';'));
     return document.cookie.split(';').some((c) => {
         return c.trim().startsWith(name + '=');
     });

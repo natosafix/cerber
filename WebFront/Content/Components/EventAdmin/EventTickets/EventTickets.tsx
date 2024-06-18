@@ -44,9 +44,7 @@ export const EventTickets: React.FC<Props> = ({ onSave }) => {
         const matchIdx = tickets.findIndex((t) => t.ViewId === ticket.ViewId);
 
         tickets[matchIdx] = ticket;
-        console.log(ticket);
         setTickets(tickets);
-        console.log(tickets);
     };
 
     const onRemoveTicket = (viewId: number) => {

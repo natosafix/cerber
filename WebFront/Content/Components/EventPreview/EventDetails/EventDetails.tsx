@@ -30,26 +30,16 @@ export const EventDetails: React.FC<{ id?: string }> = ({ id }) => {
 
     useEffect(() => {
         const fetchEventDetailsAndCover = async () => {
-            try {
-                if (id) {
-                    await EventsClient.getEventStats(parseInt(id)).then((x) => setEventStats(x.data));
-                }
-            } catch (error) {}
-        };
-
-        fetchEventDetailsAndCover();
-    }, [id]);
-
-    useEffect(() => {
-        const fetchEventDetailsAndCover = async () => {
             const userInfo = getUserInfo();
             if (userInfo) {
                 setUserId(userInfo.id);
+            } else {
+                setUserId(undefined);
             }
         };
 
         fetchEventDetailsAndCover();
-    }, [event]);
+    }, []);
 
     useEffect(() => {
         const fetchEventDetailsAndCover = async () => {
@@ -66,7 +56,18 @@ export const EventDetails: React.FC<{ id?: string }> = ({ id }) => {
         };
 
         fetchEventDetailsAndCover();
-    }, [id]);
+    }, [userId]);
+
+    useEffect(() => {
+        const fetchEventDetailsAndCover = async () => {
+            if (event == null) return;
+            if (userId == event?.ownerId) {
+                await EventsClient.getEventStats(event.id).then((x) => setEventStats(x.data));
+            }
+        };
+
+        fetchEventDetailsAndCover();
+    }, [event]);
 
     return (
         <div className={styles.mainWrapper}>

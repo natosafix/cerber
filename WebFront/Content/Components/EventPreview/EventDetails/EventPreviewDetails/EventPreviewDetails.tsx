@@ -24,7 +24,6 @@ export const EventPreviewDetails: React.FC<{ userId?: string; event?: IEvent | n
                 if (currentEvent == undefined) {
                     EventAdminClient.getDraftCover().then(async (x) => {
                         const event = await DraftEvent.fromDto(x.data).toIEvent();
-                        console.log('EVENT');
                         setCurrentEvent(event);
                         if (
                             event?.img &&
@@ -54,9 +53,7 @@ export const EventPreviewDetails: React.FC<{ userId?: string; event?: IEvent | n
     }, [currentEvent]);
 
     useEffect(() => {
-        const fetchEventDetailsAndCover = async () => {
-            console.log(imgSrc);
-        };
+        const fetchEventDetailsAndCover = async () => {};
 
         fetchEventDetailsAndCover();
     }, [imgSrc]);

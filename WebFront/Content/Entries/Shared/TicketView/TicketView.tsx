@@ -60,7 +60,6 @@ export const TicketView: React.FC<TicketViewProps> = ({ ticket, ticketNum, onTic
 
     const onChangeTicketPrice = (v?: number) => {
         // TODO не присылает ивент, если стёрли значение
-        console.log(v);
         onTicketChange(ticket.withPrice(v));
     };
 

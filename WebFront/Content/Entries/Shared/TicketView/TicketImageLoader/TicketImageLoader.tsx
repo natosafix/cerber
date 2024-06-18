@@ -82,7 +82,6 @@ export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({
     useEffect(() => {
         if (firstRender.current) {
             firstRender.current = false;
-            console.log(position);
             if (ticket.Cover) {
                 const objectUrl = URL.createObjectURL(ticket.Cover);
                 setPreview(objectUrl);
@@ -103,7 +102,6 @@ export const TicketImageLoader: React.FC<TicketImageLoaderProps> = ({
     useEffect(() => {}, [preview]);
 
     const onResize = (event: any, { size }: { size: { width: number; height: number } }) => {
-        console.log(event);
         const newSize = event.movementX === 0 ? event.movementY : event.movementX;
         if (width + newSize > 150 || width + newSize < 50) return;
         setWidth(width + newSize);
