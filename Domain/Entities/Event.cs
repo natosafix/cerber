@@ -10,7 +10,7 @@ public class Event
 
     public string Description { get; set; }
     
-    public int? CoverId { get; set; }
+    public Guid? CoverId { get; set; }
     public UserFile? Cover { get; set; }
 
     public string City { get; set; }

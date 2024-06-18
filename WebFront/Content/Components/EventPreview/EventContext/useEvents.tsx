@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
 import { useEventsContext } from './EventsContextProvider';
-import { getEvents } from '../Services/Events';
+import { getEvents, getIncomingEvents } from '../Services/Events';
 
-export const useEvents = () => {
+export const useEvents = (isPrivate) => {
     const { events, setEvents, haveMore, setHaveMore } = useEventsContext();
     const fetchEvents = useCallback(
         async (page) => {
             try {
-                const newEvents = await getEvents(page);
+                const newEvents = isPrivate ? await getEvents(page) : await getIncomingEvents(page);
                 if (newEvents) {
                     setEvents((prevEvents) => [...prevEvents, ...newEvents]);
                 } else {

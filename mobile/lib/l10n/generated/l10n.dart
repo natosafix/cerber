@@ -485,6 +485,66 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Visitor Information`
+  String get visitorsInformation {
+    return Intl.message(
+      'Visitor Information',
+      name: 'visitorsInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Form`
+  String get form {
+    return Intl.message(
+      'Form',
+      name: 'form',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ticket`
+  String get ticket {
+    return Intl.message(
+      'Ticket',
+      name: 'ticket',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unsynced visitors: {count}`
+  String unsyncedVisitors(int count) {
+    return Intl.message(
+      'Unsynced visitors: $count',
+      name: 'unsyncedVisitors',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Sync`
+  String get sync {
+    return Intl.message(
+      'Sync',
+      name: 'sync',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get retry {
+    return Intl.message(
+      'Retry',
+      name: 'retry',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

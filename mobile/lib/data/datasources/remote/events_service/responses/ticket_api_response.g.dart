@@ -8,7 +8,7 @@ part of 'ticket_api_response.dart';
 
 TicketApiResponse _$TicketApiResponseFromJson(Map<String, dynamic> json) =>
     TicketApiResponse(
-      id: json['id'] as int,
-      price: (json['price'] as num).toDouble(),
+      id: (json['id'] as num).toInt(),
+      price: (json['price'] as num).toInt(),
       name: json['name'] as String,
     );

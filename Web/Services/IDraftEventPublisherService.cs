@@ -8,5 +8,5 @@ public interface IDraftEventPublisherService
         DraftEvent srcDraftEvent,
         Event dstEvent,
         IReadOnlyCollection<Question> dstQuestions,
-        IReadOnlyCollection<Ticket> tickets);
+        IReadOnlyCollection<Ticket> dstTickets);
 }

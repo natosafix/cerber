@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Minio;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Robokassa;
@@ -27,6 +28,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddExternals();
         services.AddPersistence(config);
         services.AddRepositories();
         services.AddServices();
@@ -104,6 +106,13 @@ public class Startup
             config["RobokassaOptions:Password1"]!,
             config["RobokassaOptions:Password2"]!, 
             true);
+
+        services.AddMinio(client => client
+            .WithEndpoint("s3.yandexcloud.net")
+            .WithRegion("ru-central1")
+            .WithCredentials(config["CloudStorageOptions:AccessKey"], config["CloudStorageOptions:SecretKey"])
+            .WithSSL(false)
+            .Build());
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
@@ -113,13 +122,15 @@ public class Startup
             var request = context.HttpContext.Request;
             var response = context.HttpContext.Response;
 
-            if (response.HttpContext.Request.Path.Value is "/Auth/login" or "/Auth/register")
+            if (response.HttpContext.Request.Path.Value is "/auth/login" or "/auth/register" or "/favicon.ico")
                 return;
             
-            if (response.StatusCode == (int) HttpStatusCode.Unauthorized)
+            if (response.HttpContext.Request.Path.Value is "/")
+                response.Redirect("/home/login");
+            if (response.StatusCode == (int) HttpStatusCode.Unauthorized && response.HttpContext.Request.Method == HttpMethod.Get.Method)
                 response.Redirect("/home/login");
             var firstDigit = response.StatusCode / 100;
-            if (firstDigit is 4 or 5)
+            if (firstDigit is 5 ||  response.StatusCode == 404)
                 response.Redirect($"/error?statusCode={response.StatusCode}");
         });
 

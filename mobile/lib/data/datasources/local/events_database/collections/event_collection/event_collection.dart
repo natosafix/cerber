@@ -16,7 +16,7 @@ class EventCollection {
   DateTime startDate;
   DateTime endDate;
   // String category;
-  String photoUrl;
+  String? photoUrl;
   DateTime? lastDownloaded;
   String cryptoKey;
 

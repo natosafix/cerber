@@ -8,8 +8,6 @@ final class _AuthenticationStatusChanged extends AuthenticationEvent {
   final AuthenticationStatus status;
 }
 
-final class CheckAuthentication extends AuthenticationEvent {}
-
-final class Authenticate extends AuthenticationEvent {}
+final class _CheckAuthentication extends AuthenticationEvent {}
 
 final class Unauthenticate extends AuthenticationEvent {}

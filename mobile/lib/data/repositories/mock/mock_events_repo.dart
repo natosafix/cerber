@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/models/filled_answer.dart';
 import 'package:project/domain/models/question.dart';
+import 'package:project/domain/models/new_visitor_id.dart';
 import 'package:project/domain/models/ticket.dart';
 import 'package:project/domain/models/visitor.dart';
-import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/domain/repositories/remote_events_repository.dart';
 import 'package:project/utils/result.dart';
 
@@ -36,9 +36,9 @@ class MockEventsRepo implements RemoteEventsRepository {
   }
 
   @override
-  Future<List<Question>?> getQuestions(int eventId) async {
+  Future<Result<List<Question>, Exception>> getQuestions(int eventId) async {
     await Future.delayed(const Duration(seconds: 1));
-    return [];
+    return const Success([]);
   }
 
   static List<Event> mockEvents = [
@@ -53,7 +53,7 @@ class MockEventsRepo implements RemoteEventsRepository {
 «Я терпел здесь множество неудобств, страдал от зноя, холода и дурной воды, вшивел, покрывался фурункулами, болел дизентерией, — но никогда и нигде не чувствовал себя свободнее, чем в Монголии. Я не нашел в ней того, что искал, не написал роман, не стал буддистом; зато, в отличие от Петербурга, где близость верховной власти искажает пропорции вещей, где призраки выдают себя за мужчин и еще чаще — за женщин, где книги сочатся туманом и на звон золота покупают запах пищи, где нет правды, а есть только целесообразность, — здесь, на этой скудной земле, я жил среди живых, видел все цвета мира, ходил рядом со смертью, любил и был счастлив». Леонид Юзефович
 Леонид Юзефович – писатель, историк, лауреат премий "Большая книга" и "Национальный бестселлер".""",
       city: "Ekaterinburg",
-      address: "Екатеринбург ЭКСПО",
+      address: "Чапаева 16а",
       startDate: DateTime.now().add(const Duration(days: 2)),
       endDate: DateTime.now().add(const Duration(days: 3)),
       photoUrl: "https://www.sinara-group.com/upload/iblock/8ef/DSC09139.jpg",

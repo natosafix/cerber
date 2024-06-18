@@ -1,10 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:project/domain/models/event.dart';
-import 'package:project/domain/models/qr_code_data.dart';
 import 'package:project/domain/models/visitor.dart';
-import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
-import 'package:project/domain/repositories/compound_events_repository/qr_code_process_result.dart';
+import 'package:project/domain/models/qr_code_process_result.dart';
+import 'package:project/domain/usecases/find_visitor_usecase.dart';
+import 'package:project/domain/usecases/process_qr_code_usecase.dart';
+import 'package:project/utils/locator.dart';
 
 part 'qr_code_scanner_event.dart';
 part 'qr_code_scanner_state.dart';
@@ -12,38 +13,47 @@ part 'qr_code_scanner_state.dart';
 class QrCodeScannerBloc extends Bloc<QrCodeScannerEvent, QrCodeScannerState> {
   QrCodeScannerBloc({
     required Event event,
-    required CompoundEventsRepository compoundEventsRepository,
   })  : _event = event,
-        _compoundEventsRepository = compoundEventsRepository,
         super(InitialState()) {
     on<QrCodeScanned>(_onQrCodeScanned);
   }
 
-  final CompoundEventsRepository _compoundEventsRepository;
   final Event _event;
 
+  final _processQrCodeUsecase = locator<ProcessQrCodeUsecase>();
+  final _findVisitorUsecase = locator<FindVisitorUsecase>();
+
   void _onQrCodeScanned(QrCodeScanned event, Emitter<QrCodeScannerState> emit) async {
-    final value = event.capture.barcodes.first.rawValue;
+    final String? value = event.capture.barcodes.first.rawValue;
 
     if (value == null) {
       return emit(FailedToReadQrCode());
     }
 
-    final qrCodeData = QrCodeData.fromString(value);
-
-    if (qrCodeData == null) {
-      return emit(BadQrCodeFormat());
-    }
-
-    final qrCodeProcessResult = await _compoundEventsRepository.processQrCode(qrCodeData, _event);
+    final QrCodeProcessResult qrCodeProcessResult = _processQrCodeUsecase(
+      value: value,
+      event: _event,
+    );
 
     switch (qrCodeProcessResult) {
-      case VisitorFound(visitor: final visitor):
-        emit(VisitorExists(visitor));
-      case VisitorNotFound():
+      case QrCodeInvalid():
+        emit(BadQrCodeFormat());
+
+      case DecryptionFail():
         emit(NoSuchVisitorExists());
-      case VisitorIdValidButNotFound():
-        emit(BoughtTicketOnSpot());
+
+      case DecryptionSuccess(visitorId: final visitorId):
+        final Visitor? visitor = await _findVisitorUsecase(
+          visitorId: visitorId,
+          eventId: _event.id,
+        );
+
+        if (visitor == null) {
+          emit(BoughtTicketOnSpot());
+          return;
+        }
+
+        emit(VisitorExists(visitor));
     }
   }
 }

@@ -22,7 +22,6 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       navigatorKey: _navigatorKey,
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),

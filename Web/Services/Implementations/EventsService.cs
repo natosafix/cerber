@@ -76,25 +76,47 @@ public class EventsService : IEventsService
         return await eventsRepository.GetOwned(username, offset, limit);
     }
 
+    public async Task<PageList<Event>> GetIncoming(int offset, int limit)
+    {
+        return await eventsRepository.GetIncoming(offset, limit);
+    }
+
     public async Task<EventStats> GetStats(int id)
     {
         var stats = new EventStats();
-        var @event = await Get(id);
         var orders = await ordersRepository.GetByEvent(id);
         var paidOrders = orders.Where(o => o.Paid).ToList();
-        var tickets = paidOrders.Select(o => o.Ticket).DistinctBy(t => t.Name);
-        foreach (var order in paidOrders)
+        var tickets = paidOrders.Select(o => o.Ticket).DistinctBy(t => t.Name).ToArray();
+        var ticket2Count = new Dictionary<string, int>();
+        var inspector2Tickets = new Dictionary<string, Dictionary<string, int>>();
+        foreach (var paidOrder in paidOrders)
         {
-            var ticketName = order.Ticket.Name;
-            stats.TicketsInfo.TryAdd(ticketName, 0);
-            stats.TicketsInfo[ticketName]++;
+            var ticketName = paidOrder.Ticket.Name;
+            ticket2Count.TryAdd(ticketName, 0);
+            ticket2Count[ticketName]++;
+            if (paidOrder.InspectorName is null)
+                continue;
+            inspector2Tickets.TryAdd(paidOrder.InspectorName, new Dictionary<string, int>());
+            inspector2Tickets[paidOrder.InspectorName].TryAdd(ticketName, 0);
+            inspector2Tickets[paidOrder.InspectorName][ticketName]++;
         }
 
         stats.SoldTicketsCount = paidOrders.Count;
-        stats.TotalProfit = stats.TicketsInfo
-            .Select(pair => tickets.First(t => t.Name == pair.Key).Price * pair.Value)
-            .Sum();
+        stats.TicketsStats = ToTicketStatsArray(ticket2Count, tickets);
+        stats.TicketsByInspector = inspector2Tickets.ToDictionary(pair => pair.Key, pair => ToTicketStatsArray(pair.Value, tickets));
+        stats.Inspectors = paidOrders
+            .Where(po => po.InspectorName is not null)
+            .Select(po => po.InspectorName!)
+            .Distinct()
+            .ToArray();
         
         return stats;
+    }
+
+    private static TicketStats[] ToTicketStatsArray(Dictionary<string, int> tickets2Count, Ticket[] tickets)
+    {
+        return tickets2Count
+            .Select(pair => new TicketStats(pair.Key, pair.Value, tickets.First(t => t.Name == pair.Key).Price))
+            .ToArray();
     }
 }

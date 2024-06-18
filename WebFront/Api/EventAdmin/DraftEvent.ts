@@ -1,4 +1,7 @@
-﻿export class DraftEvent {
+﻿import { IEvent } from '../../Content/Components/EventPreview/Models/IEvent';
+import { EventAdminClient } from './EventAdminClient';
+
+export class DraftEvent {
     public CoverImageId: number;
     public Title: string;
     public Description: string;
@@ -7,8 +10,15 @@
     public From: Date | null;
     public To: Date;
 
-    constructor(coverImageId: number, title: string, description: string, city: string, address: string, from: Date | null, to: Date) {
-
+    constructor(
+        coverImageId: number,
+        title: string,
+        description: string,
+        city: string,
+        address: string,
+        from: Date | null,
+        to: Date,
+    ) {
         this.CoverImageId = coverImageId;
         this.Title = title;
         this.Description = description;
@@ -26,7 +36,8 @@
             dto.city,
             dto.address,
             dto.from ? new Date(dto.from) : null,
-            new Date(dto.to));
+            new Date(dto.to),
+        );
     }
 
     public withTitle(title: string): DraftEvent {
@@ -52,6 +63,17 @@
     public withFrom(value: Date): DraftEvent {
         this.From = value;
         return this;
+    }
+
+    public async toIEvent(): Promise<IEvent> {
+        return {
+            name: this.Title,
+            description: this.Description,
+            address: this.Address,
+            city: this.City,
+            from: this.From,
+            img: await EventAdminClient.getCoverImage(),
+        } as IEvent;
     }
 }
 

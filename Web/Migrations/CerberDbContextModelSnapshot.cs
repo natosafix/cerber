@@ -80,8 +80,8 @@ namespace Web.Migrations
                     b.Property<string>("City")
                         .HasColumnType("text");
 
-                    b.Property<int?>("CoverImageId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("CoverImageId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -130,6 +130,41 @@ namespace Web.Migrations
                     b.ToTable("draftQuestions", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.DraftTicket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("CoverImageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("DraftEventId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QrCodeSize")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QrCodeX")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QrCodeY")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("draftTickets", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Entities.Event", b =>
                 {
                     b.Property<int>("Id")
@@ -149,8 +184,8 @@ namespace Web.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("CoverId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("CoverId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CryptoKey")
                         .IsRequired()
@@ -182,8 +217,7 @@ namespace Web.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("CoverId")
-                        .IsUnique();
+                    b.HasIndex("CoverId");
 
                     b.HasIndex("OwnerId");
 
@@ -195,6 +229,9 @@ namespace Web.Migrations
                     b.Property<Guid>("Customer")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("InspectorName")
+                        .HasColumnType("text");
 
                     b.Property<bool>("Paid")
                         .ValueGeneratedOnAdd()
@@ -250,6 +287,9 @@ namespace Web.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<Guid?>("CoverId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("EventId")
                         .HasColumnType("integer");
 
@@ -260,7 +300,18 @@ namespace Web.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("integer");
 
+                    b.Property<int>("QrCodeSize")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QrCodeX")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QrCodeY")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CoverId");
 
                     b.HasIndex("EventId");
 
@@ -333,11 +384,9 @@ namespace Web.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserFile", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -526,8 +575,8 @@ namespace Web.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.UserFile", "Cover")
-                        .WithOne("Event")
-                        .HasForeignKey("Domain.Entities.Event", "CoverId")
+                        .WithMany()
+                        .HasForeignKey("CoverId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.User", "Owner")
@@ -567,11 +616,18 @@ namespace Web.Migrations
 
             modelBuilder.Entity("Domain.Entities.Ticket", b =>
                 {
+                    b.HasOne("Domain.Entities.UserFile", "Cover")
+                        .WithMany()
+                        .HasForeignKey("CoverId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("Domain.Entities.Event", "Event")
                         .WithMany("Tickets")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
+
+                    b.Navigation("Cover");
 
                     b.Navigation("Event");
                 });
@@ -672,12 +728,6 @@ namespace Web.Migrations
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Navigation("OwnedEvents");
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserFile", b =>
-                {
-                    b.Navigation("Event")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

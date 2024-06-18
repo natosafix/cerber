@@ -8,10 +8,6 @@ extension ContextExtensions on BuildContext {
   }
 
   bool isLight() {
-    return MediaQuery.of(this).platformBrightness == Brightness.light;
-  }
-
-  Color appBarForegroundColor() {
-    return isLight() ? Colors.black : Colors.white;
+    return MediaQuery.platformBrightnessOf(this) == Brightness.light;
   }
 }

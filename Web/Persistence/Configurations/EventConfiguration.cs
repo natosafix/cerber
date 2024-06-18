@@ -29,6 +29,7 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
         //     .WithMany(category => category.Events)
         //     .HasForeignKey(@event => @event.CategoryId)
         //     .OnDelete(DeleteBehavior.SetNull);
+        // builder.Navigation(e => e.Category).AutoInclude();
 
         builder.HasOne(@event => @event.Owner)
             .WithMany(user => user.OwnedEvents)
@@ -41,8 +42,11 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
 
         builder.HasMany(@event => @event.Inspectors)
             .WithMany(user => user.InspectedEvents);
-
-        // builder.Navigation(e => e.Category).AutoInclude();
+        
+        builder.HasOne(@event => @event.Cover)
+            .WithMany()
+            .HasForeignKey(@event => @event.CoverId)
+            .OnDelete(DeleteBehavior.SetNull);
         builder.Navigation(e => e.Cover).AutoInclude();
     }
 }

@@ -11,10 +11,9 @@ extension EventMapper on EventApiResponse {
       description: description,
       city: city,
       address: address,
-      startDate: from,
-      endDate: to,
-      photoUrl: "${Constants.eventsRepositoryBaseUrl}/files/${cover.id}/download",
-      // category: category.name,
+      startDate: from.toLocal(),
+      endDate: to.toLocal(),
+      photoUrl: cover != null ? "${Constants.eventsRepositoryBaseUrl}/files/${cover!.id}/download" : null,
       lastDownloaded: null,
       cryptoKey: cryptoKey,
     );

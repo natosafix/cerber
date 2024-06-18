@@ -23,13 +23,13 @@ class _EventsService implements EventsService {
     int offset,
     int limit,
   ) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'offset': offset,
       r'limit': limit,
     };
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<EventApiResponse>>(Options(
       method: 'GET',
@@ -56,10 +56,10 @@ class _EventsService implements EventsService {
 
   @override
   Future<List<VisitorApiResponse>> getVisitors(int eventId) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'eventId': eventId};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<VisitorApiResponse>>(Options(
       method: 'GET',
@@ -86,10 +86,10 @@ class _EventsService implements EventsService {
 
   @override
   Future<VisitorApiResponse> getVisitor(String id) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<VisitorApiResponse>(Options(
       method: 'GET',
@@ -113,10 +113,10 @@ class _EventsService implements EventsService {
 
   @override
   Future<List<QuestionApiResponse>> getQuestions(int eventId) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'eventId': eventId};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<QuestionApiResponse>>(Options(
       method: 'GET',
@@ -144,7 +144,7 @@ class _EventsService implements EventsService {
   @override
   Future<String> sendAnswers(
       SendAnswersApiRequest sendAnswersApiRequest) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
@@ -171,10 +171,10 @@ class _EventsService implements EventsService {
 
   @override
   Future<List<TicketApiResponse>> getTickets(int eventId) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'eventId': eventId};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<TicketApiResponse>>(Options(
       method: 'GET',

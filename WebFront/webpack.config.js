@@ -18,6 +18,7 @@ module.exports = {
         quizCongrats: './Content/Entries/Pages/QuizCongrats.tsx',
         errorPage: './Content/Entries/Pages/ErrorPage.tsx',
         paymentFailed: './Content/Entries/Pages/PaymentFail.tsx',
+        myEvents: './Content/Entries/Pages/MyEvents.tsx',
     },
     output: {
         path: OUTPUT_PATH,

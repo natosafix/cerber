@@ -7,26 +7,22 @@ part 'event_api_response.g.dart';
 class EventApiResponse {
   final int id;
   final String name;
-  // final String shortDescription;
   final String description;
   final String city;
   final String address;
   final DateTime from;
   final DateTime to;
-  // final CategoryApiResponse category;
-  final CoverApiResponse cover;
+  final CoverApiResponse? cover;
   final String cryptoKey;
 
   EventApiResponse({
     required this.id,
     required this.name,
-    // required this.shortDescription,
     required this.description,
     required this.city,
     required this.address,
     required this.from,
     required this.to,
-    // required this.category,
     required this.cover,
     required this.cryptoKey,
   });

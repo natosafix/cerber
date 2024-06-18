@@ -4,6 +4,7 @@ import 'package:project/domain/models/answer.dart';
 import 'package:project/domain/models/question.dart';
 import 'package:project/domain/models/visitor.dart';
 import 'package:project/utils/extensions/fast_hash_x.dart';
+import 'package:uuid/uuid.dart';
 
 part 'visitor_collection.g.dart';
 
@@ -23,15 +24,27 @@ class VisitorCollection {
 
   DateTime? qrCodeScannedTime;
 
+  bool? isGenerated;
+
   VisitorCollection({
     required this.visitorId,
     required this.eventId,
     required this.answersIds,
     required this.ticketId,
     required this.qrCodeScannedTime,
+    this.isGenerated,
   });
 
-  static Visitor toModel(VisitorCollection visitor, TicketCollection ticket, Map<Question, Answer> answers) {
+  VisitorCollection.autoId({
+    required this.eventId,
+    required this.answersIds,
+    required this.ticketId,
+    required this.qrCodeScannedTime,
+    this.isGenerated,
+  }) : visitorId = const Uuid().v4();
+
+  static Visitor toModel(
+      VisitorCollection visitor, TicketCollection ticket, Map<Question, Answer> answers) {
     return Visitor(
       id: visitor.visitorId,
       questionsMap: answers,

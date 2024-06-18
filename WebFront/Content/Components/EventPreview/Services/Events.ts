@@ -10,7 +10,31 @@ export const getEvents = async (count: number): Promise<IEvent[] | null> => {
             return null;
         }
 
-        const response = await axios.get<IEvent[]>(Route.GET_EVENTS(count));
+        const response = await axios.get<IEvent[]>(Route.GET_OWNED_EVENTS(count));
+
+        const eventsCount = response.data.length;
+
+        if (eventsCount < 6) {
+            shouldSendNextRequest = false;
+        }
+
+        return await Promise.all(
+            response.data.map(async (event: IEvent) => {
+                return await fetchEventCover(event);
+            }),
+        );
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getIncomingEvents = async (count: number): Promise<IEvent[] | null> => {
+    try {
+        if (!shouldSendNextRequest) {
+            return null;
+        }
+
+        const response = await axios.get<IEvent[]>(Route.GET_INCOMING_EVENTS(count));
 
         const eventsCount = response.data.length;
 
@@ -124,7 +148,7 @@ export const deleteInspector = async (event: IEvent, username: string) => {
 
 export const getInspectors = async (event: IEvent) => {
     try {
-        const response = await axios.get<string[]>(Route.GET_INSPECTORS(event));
+        const response = await axios.get<string[]>(Route.GET_INSPECTORS(event.id));
         return response.data;
     } catch (error) {}
 };

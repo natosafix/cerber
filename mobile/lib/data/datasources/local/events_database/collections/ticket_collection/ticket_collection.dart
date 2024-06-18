@@ -11,7 +11,7 @@ class TicketCollection {
   @Index()
   final int eventId;
 
-  final double price;
+  final int price;
   final String name;
 
   TicketCollection({

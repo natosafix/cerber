@@ -90,4 +90,16 @@ public class EventsRepository : IEventsRepository
 
        return new PageList<Event>(events ?? new List<Event>(), offset, limit);
    }
+   
+   public async Task<PageList<Event>> GetIncoming(int offset, int limit)
+   {
+       var events = await dbContext.Events
+           .Where(e => e.From.CompareTo(DateTimeOffset.UtcNow) > 0)
+           .OrderBy(e => e.From)
+           .Skip(offset)
+           .Take(limit)
+           .ToListAsync();
+
+       return new PageList<Event>(events ?? new List<Event>(), offset, limit);
+   }
 }

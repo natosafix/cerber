@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:project/data/datasources/local/events_database/collections/answer_collection/answer_collection.dart';
 import 'package:project/data/datasources/local/events_database/collections/event_collection/event_collection.dart';
@@ -10,26 +9,16 @@ import 'package:project/data/datasources/local/events_database/events_database.d
 import 'package:project/domain/models/event.dart';
 import 'package:project/domain/models/filled_answer.dart';
 import 'package:project/domain/models/question.dart';
+import 'package:project/domain/models/new_visitor_id.dart';
 import 'package:project/domain/models/ticket.dart';
 import 'package:project/domain/models/visitor.dart';
-import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
-import 'package:project/domain/repositories/authentication_repository/authentication_status.dart';
-import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/domain/repositories/local_events_repository.dart';
-import 'package:project/utils/locator.dart';
 import 'package:project/utils/result.dart';
-import 'package:uuid/uuid.dart';
 
 class LocalEventsRepositoryImpl implements LocalEventsRepository {
   LocalEventsRepositoryImpl({
     required EventsDatabase eventsDatabase,
-  }) : _eventsDatabase = eventsDatabase {
-    locator<AuthenticationRepository>().authenticationStatus.listen((status) {
-      if (status == AuthenticationStatus.unauthenticated) {
-        deleteAllData();
-      }
-    });
-  }
+  }) : _eventsDatabase = eventsDatabase;
 
   final EventsDatabase _eventsDatabase;
 
@@ -81,7 +70,8 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
         .toList();
     await _eventsDatabase.addAnswers(answers);
 
-    final visitorsCollections = visitors.map((e) => VisitorCollection.fromModel(e, eventId)).toList();
+    final visitorsCollections =
+        visitors.map((e) => VisitorCollection.fromModel(e, eventId)).toList();
     await _eventsDatabase.addVisitors(visitorsCollections);
 
     await _eventsDatabase.updateLastDownloaded(eventId);
@@ -115,14 +105,15 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
   }
 
   @override
-  Future<List<Question>> getQuestions(int eventId) async {
+  Future<Result<List<Question>, Exception>> getQuestions(int eventId) async {
     final questions = await _eventsDatabase.getQuestions(eventId);
-    return questions.map((e) => QuestionCollection.toModel(e)).toList();
+    return Success(questions.map((e) => QuestionCollection.toModel(e)).toList());
   }
 
   @override
   Future<void> saveQuestions(List<Question> questions, int eventId) async {
-    final questionsCollections = questions.map((e) => QuestionCollection.fromModel(e, eventId)).toList();
+    final questionsCollections =
+        questions.map((e) => QuestionCollection.fromModel(e, eventId)).toList();
     await _eventsDatabase.addQuestions(questionsCollections);
   }
 
@@ -159,30 +150,49 @@ class LocalEventsRepositoryImpl implements LocalEventsRepository {
     List<FilledAnswer> filledAnswers,
     int eventId,
   ) async {
-    final random = Random.secure();
-
-    final answers = <AnswerCollection>[];
-    for (final filledAnswer in filledAnswers) {
-      answers.add(AnswerCollection(
-        id: random.nextInt(1 << 32),
-        answers: filledAnswer.answers,
-        questionId: filledAnswer.questionId,
-      ));
-    }
+    final answers = [
+      for (final filledAnswer in filledAnswers)
+        AnswerCollection.autoId(
+          answers: filledAnswer.answers,
+          questionId: filledAnswer.questionId,
+        ),
+    ];
 
     await _eventsDatabase.addAnswers(answers);
 
-    final uuid = const Uuid().v4();
-
-    final visitor = VisitorCollection(
-      visitorId: uuid,
+    final visitor = VisitorCollection.autoId(
       eventId: eventId,
       answersIds: answers.map((e) => e.id).toList(),
       ticketId: ticketId,
       qrCodeScannedTime: DateTime.now(),
+      isGenerated: true,
     );
     await _eventsDatabase.addVisitors([visitor]);
 
-    return uuid;
+    return NewVisitorId(visitor.visitorId);
+  }
+
+  @override
+  Future<List<Visitor>> getGeneratedVisitors(int eventId) async {
+    final List<VisitorCollection> visitors = await _eventsDatabase.getGeneratedVisitors(eventId);
+
+    final result = <Visitor>[];
+
+    for (final visitorCollection in visitors) {
+      final Visitor? model = await findVisitor(visitorCollection.visitorId, eventId);
+      result.add(model!);
+    }
+
+    return result;
+  }
+
+  @override
+  Future<void> setVisitorSynced(String oldId, String newId, int eventId) async {
+    await _eventsDatabase.setVisitorSynced(oldId, newId, eventId);
+  }
+
+  @override
+  Stream<int> watchGeneratedVisitorsCount(int eventId) async* {
+    yield* _eventsDatabase.generatedVisitorsCountStream(eventId);
   }
 }

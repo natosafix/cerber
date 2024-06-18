@@ -8,6 +8,6 @@ part of 'category_api_response.dart';
 
 CategoryApiResponse _$CategoryApiResponseFromJson(Map<String, dynamic> json) =>
     CategoryApiResponse(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
     );

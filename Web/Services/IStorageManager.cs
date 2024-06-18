@@ -1,9 +1,10 @@
-﻿namespace Web.Services;
+﻿using Domain.Entities;
+
+namespace Web.Services;
 
 public interface IStorageManager
 {
-    Task<byte[]> Get(string path);
-    Stream GetFileStream(string path);
-    Task Save(IFormFile file, string path);
-    void Remove(string path);
+    Task<byte[]> Get(UserFile userFile);
+    Task Save(IFormFile file, UserFile userFile);
+    Task Remove(UserFile userFile);
 }

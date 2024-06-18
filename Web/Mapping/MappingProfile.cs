@@ -12,15 +12,16 @@ public class MappingProfile : Profile
     {
         // Dto to Entity
         CreateMap<CreateEventDto, Event>();
-        CreateMap<CreateTicketDto, Ticket>();
         CreateMap<CreateOrderDto, Order>();
         CreateMap<CreateAnswerDto, Answer>().Configure();
         CreateMap<CreateQuestionDto, Question>();
         CreateMap<DraftQuestionDto, DraftQuestion>().Configure();
         CreateMap<DraftEventCoverDto, DraftEvent>();
+        CreateMap<CreateTicketDto, DraftTicket>().Configure();
 
         // Entity to Dto
         CreateMap<Event, EventResponseDto>();
+        CreateMap<Event, SecuredEventResponseDto>();
         CreateMap<Ticket, TicketResponseDto>();
         CreateMap<Question, QuestionResponseDto>().Configure();
         CreateMap<Order, OrderResponseDto>();
@@ -31,5 +32,6 @@ public class MappingProfile : Profile
         // Draft to Clean
         CreateMap<DraftEvent, Event>().Configure();
         CreateMap<DraftQuestion, Question>().Configure();
+        CreateMap<DraftTicket, Ticket>().Configure();
     }
 }

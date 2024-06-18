@@ -5,13 +5,15 @@ import { PasswordInput } from './Inputs/PasswordInput';
 import { login } from '../EventPreview/Services/Events';
 import { ValidationContainer } from '@skbkontur/react-ui-validations';
 import styles from './Login.scss';
-import { Route } from '../../Utility/Constants';
+import { GetLoadingButtonStyle, Route } from '../../Utility/Constants';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { ClosingAlert } from '../../Entries/Shared/Alert/ClosingAlert';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-
+    const [loading, setLoading] = useState<boolean>(false);
     const validWrapper = useRef<ValidationContainer>(null);
 
     if (get_cookie('CerberAuth')) {
@@ -41,7 +43,8 @@ const Login = () => {
     return (
         <ValidationContainer ref={validWrapper}>
             <div className={styles.mainWrapper}>
-                {error && <label className={styles.errorLabel}>{error}</label>}
+                {error && <ClosingAlert type="error" setError={setError} error={error} />}
+
                 <label className={styles.registerLabel}>Вход</label>
                 <div className={styles.formContainer}>
                     <div className={styles.question}>
@@ -50,7 +53,16 @@ const Login = () => {
                     <div className={styles.question}>
                         <PasswordInput onChange={setPassword} />
                     </div>
-                    <button onClick={handleLogin}>Войти</button>
+                    <LoadingButton
+                        className={styles.button}
+                        sx={GetLoadingButtonStyle('black')}
+                        loading={loading}
+                        variant="contained"
+                        color="success"
+                        onClick={handleLogin}
+                    >
+                        Войти
+                    </LoadingButton>
                 </div>
                 <div>
                     <p>

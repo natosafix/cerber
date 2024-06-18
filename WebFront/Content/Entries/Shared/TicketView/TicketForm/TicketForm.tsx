@@ -13,7 +13,7 @@ interface RectangleProps {
     children?: ReactNode;
 }
 
-const Rectangle: React.FC<RectangleProps> = ({
+export const TicketForm: React.FC<RectangleProps> = ({
     backgroundColor,
     borderColor,
     borderWidth,
@@ -33,6 +33,7 @@ const Rectangle: React.FC<RectangleProps> = ({
                     backgroundColor: `${borderColor}`,
                     clipPath: `polygon(${polygon})`,
                     margin: `${margin}`,
+                    borderRadius: '10px',
                 }}
             >
                 <Box
@@ -44,6 +45,7 @@ const Rectangle: React.FC<RectangleProps> = ({
                         height: `${height - 2 * borderWidth}px`,
                         background: backgroundColor,
                         clipPath: `polygon(${polygon})`,
+                        borderRadius: '10px',
                     }}
                 >
                     {children}
@@ -52,5 +54,3 @@ const Rectangle: React.FC<RectangleProps> = ({
         </Box>
     );
 };
-
-export default Rectangle;

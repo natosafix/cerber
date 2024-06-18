@@ -27,6 +27,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(minLength) => "Must have at least ${minLength} characters";
 
+  static String m3(count) => "Unsynced visitors: ${count}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "add": MessageLookupByLibrary.simpleMessage("Add"),
@@ -48,6 +50,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "failedToReadQrCode":
             MessageLookupByLibrary.simpleMessage("Failed to read QR code"),
         "fillTheForm": MessageLookupByLibrary.simpleMessage("Fill the form"),
+        "form": MessageLookupByLibrary.simpleMessage("Form"),
         "formattedDateTime": m0,
         "invalidEmailAddress":
             MessageLookupByLibrary.simpleMessage("Invalid email address"),
@@ -79,6 +82,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "This QR code has already been scanned"),
         "questionsEmpty":
             MessageLookupByLibrary.simpleMessage("Questionnaire is empty"),
+        "retry": MessageLookupByLibrary.simpleMessage("Retry"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "scanVisitorsQrCode":
             MessageLookupByLibrary.simpleMessage("Scan visitor\'\'s QR code"),
@@ -87,7 +91,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
         "somethingWentWrong":
             MessageLookupByLibrary.simpleMessage("Something went wrong..."),
+        "sync": MessageLookupByLibrary.simpleMessage("Sync"),
+        "ticket": MessageLookupByLibrary.simpleMessage("Ticket"),
+        "unsyncedVisitors": m3,
         "visitors": MessageLookupByLibrary.simpleMessage("Visitors"),
+        "visitorsInformation":
+            MessageLookupByLibrary.simpleMessage("Visitor Information"),
         "when": MessageLookupByLibrary.simpleMessage("When"),
         "where": MessageLookupByLibrary.simpleMessage("Where"),
         "youHaveNoEvents": MessageLookupByLibrary.simpleMessage(

@@ -8,8 +8,8 @@ part of 'answer_api_response.dart';
 
 AnswerApiResponse _$AnswerApiResponseFromJson(Map<String, dynamic> json) =>
     AnswerApiResponse(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       content:
           (json['content'] as List<dynamic>).map((e) => e as String).toList(),
-      questionId: json['questionId'] as int,
+      questionId: (json['questionId'] as num).toInt(),
     );

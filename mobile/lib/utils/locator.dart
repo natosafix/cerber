@@ -17,23 +17,38 @@ import 'package:project/data/datasources/remote/authentication_service/authentic
 import 'package:project/data/datasources/remote/events_service/events_service.dart';
 import 'package:project/data/datasources/remote/events_service/interceptor.dart';
 import 'package:project/data/repositories/authentication_repository_impl.dart';
-import 'package:project/data/repositories/compound_events_repository_impl.dart';
 import 'package:project/data/repositories/local_events_repository_impl.dart';
 import 'package:project/data/repositories/mock/mock_auth_repo.dart';
 import 'package:project/data/repositories/mock/mock_events_repo.dart';
 import 'package:project/data/repositories/remote_events_repository_impl.dart';
 import 'package:project/domain/repositories/authentication_repository/authentication_repository.dart';
-import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
-import 'package:project/domain/repositories/events_repository.dart';
 import 'package:project/domain/repositories/local_events_repository.dart';
 import 'package:project/domain/repositories/remote_events_repository.dart';
+import 'package:project/domain/usecases/add_new_visitor_usecase.dart';
+import 'package:project/domain/usecases/authentication/check_authentication_status_usecase.dart';
+import 'package:project/domain/usecases/authentication/log_in_usecase.dart';
+import 'package:project/domain/usecases/authentication/log_out_usecase.dart';
+import 'package:project/domain/usecases/authentication/sign_up_usecase.dart';
+import 'package:project/domain/usecases/authentication/watch_authentication_status_usecase.dart';
+import 'package:project/domain/usecases/download_database_usecase.dart';
+import 'package:project/domain/usecases/find_visitor_usecase.dart';
+import 'package:project/domain/usecases/generate_new_qr_code_usecase.dart';
+import 'package:project/domain/usecases/get_events_usecase.dart';
+import 'package:project/domain/usecases/get_questions_usecase.dart';
+import 'package:project/domain/usecases/get_tickets_usecase.dart';
+import 'package:project/domain/usecases/process_qr_code_usecase.dart';
+import 'package:project/domain/usecases/send_generated_visitors_usecase.dart';
+import 'package:project/domain/usecases/watch_event_usecase.dart';
+import 'package:project/domain/usecases/watch_generated_visitors_count_usecase.dart';
 import 'package:project/utils/cryptor/cryptor.dart';
 import 'package:project/utils/cryptor/cryptor_impl.dart';
+import 'package:project/utils/geocoder/geocoder.dart';
+import 'package:project/utils/geocoder/geocoder_impl.dart';
 import 'package:project/utils/network_checker/network_checker.dart';
 import 'package:project/utils/network_checker/network_checker_impl.dart';
 import 'package:project/utils/constants/constants.dart';
 
-class _MyHttpOverrides extends HttpOverrides {
+class _BadCertificateIgnoringHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
@@ -45,8 +60,8 @@ final locator = GetIt.instance;
 
 const _mockRepos = false;
 
-void setupLocator() async {
-  if (kDebugMode) HttpOverrides.global = _MyHttpOverrides();
+Future<void> setupLocator() async {
+  if (kDebugMode) HttpOverrides.global = _BadCertificateIgnoringHttpOverrides();
 
   locator.registerSingleton<FlutterSecureStorage>(
     const FlutterSecureStorage(
@@ -56,9 +71,11 @@ void setupLocator() async {
 
   locator.registerSingleton<NetworkChecker>(NetworkCheckerImpl());
 
-  locator.registerSingleton<Cryptor>(CryptorImpl());
+  locator.registerLazySingleton<Cryptor>(() => CryptorImpl());
 
-  locator.registerSingletonAsync<LocalEventsRepository>(() async {
+  locator.registerLazySingleton<Geocoder>(() => GeocoderImpl());
+
+  locator.registerSingleton<LocalEventsRepository>(await () async {
     final dir = await getApplicationDocumentsDirectory();
     final isar = await Isar.open(
       [
@@ -72,7 +89,7 @@ void setupLocator() async {
     );
     final eventsDatabase = EventsDatabase(isar: isar);
     return LocalEventsRepositoryImpl(eventsDatabase: eventsDatabase);
-  });
+  }());
 
   locator.registerLazySingleton<Dio>(
     () => Dio(
@@ -108,18 +125,23 @@ void setupLocator() async {
     );
   }
 
-  locator.registerSingletonAsync<CompoundEventsRepository>(() async {
-    final localEventsRepo = await locator.getAsync<LocalEventsRepository>();
-    final compoundRepo = CompoundEventsRepositoryImpl(
-      remoteEventsRepository: locator<RemoteEventsRepository>(),
-      localEventsRepository: localEventsRepo,
-    );
-    return compoundRepo;
-  });
+  locator.registerSingleton<CheckAuthenticationStatusUsecase>(CheckAuthenticationStatusUsecase());
+  locator.registerSingleton<LogInUsecase>(LogInUsecase());
+  locator.registerSingleton<LogOutUsecase>(LogOutUsecase());
+  locator.registerSingleton<SignUpUsecase>(SignUpUsecase());
+  locator.registerSingleton<WatchAuthenticationStatusUsecase>(WatchAuthenticationStatusUsecase());
 
-  locator.registerSingletonAsync<EventsRepository>(
-    () async => await locator.getAsync<CompoundEventsRepository>(),
-  );
+  locator.registerSingleton<AddNewVisitorUsecase>(AddNewVisitorUsecase());
+  locator.registerSingleton<DownloadDatabaseUsecase>(DownloadDatabaseUsecase());
+  locator.registerSingleton<FindVisitorUsecase>(FindVisitorUsecase());
+  locator.registerSingleton<GenerateNewQrCodeUsecase>(GenerateNewQrCodeUsecase());
+  locator.registerSingleton<GetEventsUsecase>(GetEventsUsecase());
+  locator.registerSingleton<GetQuestionsUsecase>(GetQuestionsUsecase());
+  locator.registerSingleton<GetTicketsUsecase>(GetTicketsUsecase());
+  locator.registerSingleton<ProcessQrCodeUsecase>(ProcessQrCodeUsecase());
+  locator.registerSingleton<SendGeneratedVisitorsUsecase>(SendGeneratedVisitorsUsecase());
+  locator.registerSingleton<WatchEventUsecase>(WatchEventUsecase());
+  locator.registerSingleton<WatchGeneratedVisitorsCountUsecase>(WatchGeneratedVisitorsCountUsecase());
 
   DioCacheManager.initialize(locator<Dio>());
 }

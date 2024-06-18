@@ -6,7 +6,7 @@ public class DraftEvent
 
     public string OwnerId { get; set; }
 
-    public int? CoverImageId { get; set; }
+    public Guid? CoverImageId { get; set; }
 
     public string? Title { get; set; }
 

@@ -17,7 +17,7 @@ onDomContentLoaded(() => {
             <Page>
                 <SkeletonTheme baseColor="#f2f2f2" highlightColor="#b3b3b3">
                     <EventsProvider>
-                        <EventPreview />
+                        <EventPreview isPrivate={false} />
                     </EventsProvider>
                 </SkeletonTheme>
             </Page>,

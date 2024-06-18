@@ -4,7 +4,7 @@ namespace Web.Dtos;
 
 public class DraftEventCoverDto : IValidatableObject
 {
-    public int? CoverImageId { get; set; }
+    public Guid? CoverImageId { get; set; }
 
     [Required] public string? Title { get; set; }
 

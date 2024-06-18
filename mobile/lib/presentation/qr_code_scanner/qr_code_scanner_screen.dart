@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:project/domain/models/event.dart';
-import 'package:project/domain/repositories/compound_events_repository/compound_events_repository.dart';
 import 'package:project/l10n/generated/l10n.dart';
 import 'package:project/presentation/qr_code_scanner/qr_code_scanner_bloc/qr_code_scanner_bloc.dart';
 import 'package:project/presentation/qr_code_scanner/scanner_overlay/scanner_overlay.dart';
-import 'package:project/presentation/questions/questions_screen/questions_screen.dart';
+import 'package:project/presentation/questions/questions_filler/questions_filler_screen.dart';
+import 'package:project/presentation/questions/questions_viewer/questions_viewer_screen.dart';
+import 'package:project/presentation/widgets/flat_app_bar.dart';
 import 'package:project/utils/extensions/context_x.dart';
-import 'package:project/utils/locator.dart';
 import 'package:vibration/vibration.dart';
 
-class QrCodeScannerScreen extends StatelessWidget {
-  QrCodeScannerScreen({required this.event, super.key});
+class QrCodeScannerScreen extends StatefulWidget {
+  const QrCodeScannerScreen({required this.event, super.key});
 
   final Event event;
 
@@ -20,13 +20,30 @@ class QrCodeScannerScreen extends StatelessWidget {
     return MaterialPageRoute(builder: (context) => QrCodeScannerScreen(event: event));
   }
 
+  @override
+  State<QrCodeScannerScreen> createState() => _QrCodeScannerScreenState();
+}
+
+class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
   final scannerController = MobileScannerController(
-    detectionTimeoutMs: 1500,
+    detectionTimeoutMs: 1000,
   );
+
+  late final bool hasVibrator;
+
+  @override
+  void initState() {
+    _checkVibrator();
+    super.initState();
+  }
+
+  void _checkVibrator() async {
+    hasVibrator = await Vibration.hasVibrator() ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery.sizeOf(context);
     final scanWindowPosition = Offset(screenSize.width * 0.5, screenSize.height * 0.4);
     final scanWindowDimension = screenSize.width * 0.6;
     final scanWindow = Rect.fromCircle(
@@ -35,16 +52,12 @@ class QrCodeScannerScreen extends StatelessWidget {
     );
 
     return BlocProvider(
-      create: (context) => QrCodeScannerBloc(
-        event: event,
-        compoundEventsRepository: locator<CompoundEventsRepository>(),
-      ),
+      create: (context) => QrCodeScannerBloc(event: widget.event),
       child: BlocListener<QrCodeScannerBloc, QrCodeScannerState>(
         listener: _stateChanged,
         child: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
+          appBar: FlatAppBar(
+            foregroundColor: Colors.white,
             actions: [
               IconButton(
                 onPressed: () {
@@ -60,10 +73,11 @@ class QrCodeScannerScreen extends StatelessWidget {
           ),
           extendBodyBehindAppBar: true,
           floatingActionButton: ValueListenableBuilder(
-            valueListenable: scannerController.torchState,
+            valueListenable: scannerController,
             builder: (context, state, child) {
-              final icon = state == TorchState.on ? Icons.flash_off : Icons.flash_on;
-              final bgColor = state == TorchState.on ? Colors.yellow : Colors.grey;
+              final torchState = state.torchState;
+              final icon = torchState == TorchState.on ? Icons.flash_off : Icons.flash_on;
+              final bgColor = torchState == TorchState.on ? Colors.yellow : Colors.grey;
               return CircleAvatar(
                 backgroundColor: bgColor,
                 radius: 30,
@@ -95,11 +109,10 @@ class QrCodeScannerScreen extends StatelessWidget {
     );
   }
 
-  void _onDetectQrCode(BuildContext context, BarcodeCapture capture) async {
+  void _onDetectQrCode(BuildContext context, BarcodeCapture capture) {
     context.read<QrCodeScannerBloc>().add(QrCodeScanned(capture: capture));
 
-    final hasVibrator = await Vibration.hasVibrator();
-    if (hasVibrator != null && hasVibrator) {
+    if (hasVibrator) {
       Vibration.vibrate();
     }
   }
@@ -107,21 +120,45 @@ class QrCodeScannerScreen extends StatelessWidget {
   void _stateChanged(BuildContext context, QrCodeScannerState scannerState) {
     switch (scannerState) {
       case VisitorExists(visitor: final visitor):
-        Navigator.of(context).push(QuestionsScreen.route(visitor, event));
+        final screen = QuestionsViewerScreen(
+          questionsMap: visitor.questionsMap,
+          selectedTicket: visitor.ticket,
+          isQrCodeAlreadyScanned: visitor.qrCodeScannedTime != null,
+        );
+        _pushScreen(screen);
       case NoSuchVisitorExists():
-        context.showSnackbar(L10n.current.failedToFindSuchVisitor);
+        _showMessage(L10n.current.failedToFindSuchVisitor);
       case BoughtTicketOnSpot():
-        context.showSnackbar(L10n.current.boughtTicketOnSpot);
+        _showMessage(L10n.current.boughtTicketOnSpot);
+      case BadQrCodeFormat():
+        _showMessage(L10n.current.badQrCodeFormat);
+      case FailedToReadQrCode():
+        _showMessage(L10n.current.failedToReadQrCode);
       case InitialState():
         break;
-      case BadQrCodeFormat():
-        context.showSnackbar(L10n.current.badQrCodeFormat);
-      case FailedToReadQrCode():
-        context.showSnackbar(L10n.current.failedToReadQrCode);
     }
   }
 
   void _addPressed(BuildContext context) {
-    Navigator.of(context).push(QuestionsScreen.route(null, event));
+    final screen = QuestionsFillerScreen(event: widget.event);
+    _pushScreen(screen);
+  }
+
+  void _pushScreen(Widget screen) async {
+    scannerController.stop();
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => screen),
+    );
+    scannerController.start();
+  }
+
+  void _showMessage(String message) {
+    context.showSnackbar(message);
+  }
+
+  @override
+  void dispose() {
+    scannerController.dispose();
+    super.dispose();
   }
 }

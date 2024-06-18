@@ -8,9 +8,14 @@ import { Gapped } from '@skbkontur/react-ui';
 import { Box } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { GetLoadingButtonStyle } from '../../Utility/Constants';
 
-export const EventPreview = () => {
-    const { events, fetchEvents, haveMore } = useEvents();
+interface EventPreviewProps {
+    isPrivate: boolean;
+}
+
+export const EventPreview: React.FC<EventPreviewProps> = ({ isPrivate }) => {
+    const { events, fetchEvents, haveMore } = useEvents(isPrivate);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -35,7 +40,7 @@ export const EventPreview = () => {
         <div ref={containerRef}>
             <MaxWidthWrapper>
                 <Gapped vertical={true}>
-                    <EventCreateButton />
+                    {isPrivate && <EventCreateButton />}
 
                     <Events loading={loading} events={events} />
                     <Box className={styles.loadMoreButton}>
