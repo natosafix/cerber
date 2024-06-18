@@ -45,7 +45,7 @@ class QuestionsListWidget extends StatelessWidget {
               child: switch (question.questionType) {
                 QuestionType.oneLineText => TextInput(
                     label: question.question,
-                    initialValue: answer.answers.first,
+                    initialValue: answer.answers[0],
                     onChanged:
                         onTextChanged == null ? null : (value) => onTextChanged!(question, value),
                   ),
@@ -53,7 +53,7 @@ class QuestionsListWidget extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: _midInputsPadding + 8),
                     child: MultilineTextInput(
                       label: question.question,
-                      initialValue: answer.answers.first,
+                      initialValue: answer.answers[0],
                       onChanged:
                           onTextChanged == null ? null : (value) => onTextChanged!(question, value),
                     ),
@@ -61,7 +61,7 @@ class QuestionsListWidget extends StatelessWidget {
                 QuestionType.radio => RadioInput(
                     label: question.question,
                     options: question.options,
-                    selectedOption: null,
+                    selectedOption: answer.answers.isNotEmpty ? answer.answers[0] : null,
                     onChanged:
                         onRadioChanged == null ? null : (value) => onRadioChanged!(question, value),
                   ),

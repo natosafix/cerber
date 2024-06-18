@@ -9,6 +9,6 @@ abstract class Constants {
   // static const authenticationRepositoryBaseUrl = 'https://localhost:7061/auth';
   // static const eventsRepositoryBaseUrl = 'https://localhost:7061';
 
-  static const authenticationRepositoryBaseUrl = 'https://9c94-188-16-33-9.ngrok-free.app/auth';
-  static const eventsRepositoryBaseUrl = 'https://9c94-188-16-33-9.ngrok-free.app';
+  static const authenticationRepositoryBaseUrl = 'http://158.160.91.73/auth';
+  static const eventsRepositoryBaseUrl = 'http://158.160.91.73';
 }

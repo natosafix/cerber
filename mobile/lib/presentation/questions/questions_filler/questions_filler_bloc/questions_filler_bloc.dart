@@ -57,7 +57,7 @@ class QuestionsFillerBloc extends Bloc<QuestionsFillerEvent, QuestionsFillerStat
 
     final Map<Question, Answer> questionsMap = {};
 
-    for (final question in getQuestionsResult.success) {
+    for (final Question question in getQuestionsResult.success) {
       final List<String> answers = switch (question.questionType) {
         QuestionType.oneLineText || QuestionType.multiLineText => [''],
         QuestionType.radio || QuestionType.checkbox => [],
