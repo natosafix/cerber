@@ -1,9 +1,17 @@
 ﻿import * as React from 'react';
-import { Button, Gapped } from '@skbkontur/react-ui';
+import { Gapped } from '@skbkontur/react-ui';
 import styles from './header.scss';
 import { getUserInfo } from '../../../Helpers/UserInfoHelper';
 import { Route } from '../../../Utility/Constants';
 import { MaxWidthWrapper } from '../Wrappers/MaxWidthWrapper';
+import { Button, SxProps, Theme } from '@mui/material';
+const buttonStyle: SxProps<Theme> = {
+    color: '#000000',
+    fontWeight: 'bold',
+    '&:hover': {
+        backgroundColor: 'rgb(124,124,124, 0.1)',
+    },
+};
 
 export const Header: React.FC = () => {
     const [userName, setUserName] = React.useState('');
@@ -11,6 +19,10 @@ export const Header: React.FC = () => {
 
     const handleClickLogo = () => {
         window.location.href = Route.INDEX;
+    };
+
+    const handleClickMyEvents = () => {
+        window.location.href = Route.MY_EVENTS;
     };
 
     const handleClickLogOut = () => {
@@ -39,25 +51,27 @@ export const Header: React.FC = () => {
         <div className={styles.headerWrapper}>
             <MaxWidthWrapper>
                 <div className={styles.headerSpaceBetweenWrapper}>
-                    <p className={styles.logo} onClick={handleClickLogo}>
-                        CERBER
-                    </p>
+                    <Gapped gap={20} verticalAlign={'middle'}>
+                        <p className={styles.logo} onClick={handleClickLogo}>
+                            CERBER
+                        </p>
 
-                    <Button size={'medium'} use={'text'} onClick={handleClickLogo}>
-                        {'Мероприятия'}
-                    </Button>
-                    {userName && (
-                        <Button size={'medium'} use={'text'} onClick={handleClickLogo}>
-                            Мои мероприятия
+                        <Button sx={buttonStyle} size={'medium'} onClick={handleClickLogo}>
+                            {'Мероприятия'}
                         </Button>
-                    )}
+                        {userName && (
+                            <Button size={'medium'} sx={buttonStyle} onClick={handleClickMyEvents}>
+                                Мои мероприятия
+                            </Button>
+                        )}
+                    </Gapped>
                     <Gapped gap={20} verticalAlign={'middle'}>
                         {userName && (
-                            <Button size={'medium'} use={'text'}>
+                            <Button sx={buttonStyle} size={'medium'}>
                                 {userName}
                             </Button>
                         )}
-                        <Button size={'medium'} onClick={handleClickLogOut}>
+                        <Button sx={buttonStyle} size={'medium'} onClick={handleClickLogOut}>
                             {buttonText}
                         </Button>
                     </Gapped>

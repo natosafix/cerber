@@ -28,6 +28,30 @@ export const getEvents = async (count: number): Promise<IEvent[] | null> => {
     }
 };
 
+export const getIncomingEvents = async (count: number): Promise<IEvent[] | null> => {
+    try {
+        if (!shouldSendNextRequest) {
+            return null;
+        }
+
+        const response = await axios.get<IEvent[]>(Route.GET_INCOMING_EVENTS(count));
+
+        const eventsCount = response.data.length;
+
+        if (eventsCount < 6) {
+            shouldSendNextRequest = false;
+        }
+
+        return await Promise.all(
+            response.data.map(async (event: IEvent) => {
+                return await fetchEventCover(event);
+            }),
+        );
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const createDraft = async () => {
     try {
         await axios.post(`/createDraft`);

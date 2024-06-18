@@ -9,8 +9,12 @@ import { Box } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-export const EventPreview = () => {
-    const { events, fetchEvents, haveMore } = useEvents();
+interface EventPreviewProps {
+    isPrivate: boolean;
+}
+
+export const EventPreview: React.FC<EventPreviewProps> = ({ isPrivate }) => {
+    const { events, fetchEvents, haveMore } = useEvents(isPrivate);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const containerRef = useRef<HTMLDivElement>(null);

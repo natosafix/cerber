@@ -14,9 +14,15 @@ public class HomeController : Controller
         this.logger = logger;
     }
 
-    [Authorize]
     [HttpGet("/[controller]/index")]
     public IActionResult Index()
+    {
+        return View();
+    }
+    
+    [Authorize]
+    [HttpGet("/[controller]/myEvents")]
+    public IActionResult My()
     {
         return View();
     }

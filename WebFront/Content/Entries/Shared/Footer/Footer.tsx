@@ -29,7 +29,7 @@ export default function Footer() {
                 </Typography>
                 <Typography variant="body2" color="text.secondary" align="center">
                     {'Copyright © '}
-                    <Link color="inherit" href="/home/login">
+                    <Link color="inherit" href="/home/index">
                         Cerber
                     </Link>{' '}
                     {new Date().getFullYear()}

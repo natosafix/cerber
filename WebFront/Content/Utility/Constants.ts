@@ -3,6 +3,7 @@ import { IEvent } from '../Components/EventPreview/Models/IEvent';
 export const Route = {
     INDEX: '/home/index',
     LOGIN: '/home/login',
+    MY_EVENTS: '/home/myEvents',
     REGISTER: '/home/register',
     DRAFT: '/eventAdmin/draft',
     PREVIEW: (id: number) => `/home/preview/${id}`,
